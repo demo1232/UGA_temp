@@ -26,24 +26,50 @@
 
         </LinearLayout>
 
-    <FrameLayout
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/VDarkGray">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    </FrameLayout>
+            <include
+                android:id="@+id/auto_refresh_progress_main"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/auto_refresh_progress_bar"/>
 
-    <include
-            layout="@layout/bottom_nav_bar"
-            />
+        </LinearLayout>
 
-    <include
-        android:id="@+id/llToast"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/toast_layout"/>
+
+            <FrameLayout
+                android:id="@+id/container"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@color/VDarkGray">
+
+           </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <include
+                    layout="@layout/bottom_nav_bar"
+                    />
+            </FrameLayout>
+
+            <include
+                android:id="@+id/llToast"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/toast_layout"/>
+
+        </FrameLayout>
+
+
 
         <!--<FrameLayout-->
             <!--android:id="@+id/container_body"-->

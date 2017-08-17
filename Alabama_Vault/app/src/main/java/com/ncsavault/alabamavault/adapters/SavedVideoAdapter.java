@@ -37,17 +37,18 @@ public class SavedVideoAdapter extends RecyclerView.Adapter<SavedVideoAdapter.Sa
      private ArrayList<VideoDTO> mFavoriteVideoList = new ArrayList<>();
     ImageLoader imageLoader;
     public DisplayImageOptions options;
-    private VideoDetailAdapter.VideoClickListener mVideoClickListener;
+    private SavedClickListener mSavedClickListener;
 
-    public interface VideoClickListener
+    public interface SavedClickListener
     {
-        void onClick(VideoDetailAdapter.VideoViewHolder videoViewHolder,int position);
+        void onClick(SavedVideoAdapter.SavedVideoViewHolder videoViewHolder,int position);
     }
-    public SavedVideoAdapter(Context context,ArrayList<VideoDTO> favoriteVideoList) {
+
+    public SavedVideoAdapter(Context context,ArrayList<VideoDTO> favoriteVideoList,SavedClickListener savedClickListener) {
         super();
         this.mContext = context;
         mFavoriteVideoList = favoriteVideoList;
-       // mVideoClickListener = videoClickListener;
+        mSavedClickListener = savedClickListener;
 
         options = new DisplayImageOptions.Builder()
                 .cacheOnDisk(true).resetViewBeforeLoading(true)
@@ -73,7 +74,7 @@ public class SavedVideoAdapter extends RecyclerView.Adapter<SavedVideoAdapter.Sa
     }
 
     @Override
-    public void onBindViewHolder(final SavedVideoAdapter.SavedVideoViewHolder viewHolder, int position) {
+    public void onBindViewHolder(final SavedVideoViewHolder viewHolder, int position) {
 
         VideoDTO newVideoDto = mFavoriteVideoList.get(position);
 
@@ -122,6 +123,8 @@ public class SavedVideoAdapter extends RecyclerView.Adapter<SavedVideoAdapter.Sa
             viewHolder.savedVideoImageView.setImageResource(R.drawable.saved_video_img);
         else
             viewHolder.savedVideoImageView.setImageResource(R.drawable.video_save);
+
+        mSavedClickListener.onClick(viewHolder,position);
 
     }
 

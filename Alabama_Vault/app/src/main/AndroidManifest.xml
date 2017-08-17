@@ -55,49 +55,49 @@
             android:name=".views.LoginPasswordActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
-            android:theme="@style/VaultTheme" />
+            android:theme="@style/VaultTheme"></activity>
         <activity
             android:name=".views.UploadPhotoActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
-            android:theme="@style/VaultTheme" />
+            android:theme="@style/VaultTheme"></activity>
         <activity
             android:name=".views.UserProfileActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/VaultTheme"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity
             android:name=".views.ChangePasswordActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
-            android:theme="@style/VaultTheme" />
+            android:theme="@style/VaultTheme"></activity>
         <activity
             android:name=".views.ContactActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/VaultTheme"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".views.SplashActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/VaultTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:windowSoftInputMode="adjustPan"></activity>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+             <activity
+             android:name=".views.SplashActivity"
+             android:exported="true"
+             android:configChanges="keyboardHidden|orientation|screenSize"
+             android:screenOrientation="portrait"
+             android:theme="@style/VaultTheme">
+             <intent-filter>
+             <action android:name="android.intent.action.MAIN" />
+             <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
+             <intent-filter>
+             <action android:name="android.intent.action.VIEW" />
+             <category android:name="android.intent.category.DEFAULT" />
+             <category android:name="android.intent.category.BROWSABLE" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+             <data android:scheme="alabamavault"/>
+             </intent-filter>
+             </activity>
 
-                <data android:scheme="alabamavault" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".views.LoginEmailActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -118,22 +118,22 @@
             android:name=".views.ForgotPasswordActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
-            android:theme="@style/VaultTheme" />
+            android:theme="@style/VaultTheme"></activity>
         <activity
             android:name=".views.RegistrationActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
-            android:theme="@style/VaultTheme" />
+            android:theme="@style/VaultTheme"></activity>
         <activity
             android:name=".views.VerificationEmailActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
-            android:theme="@style/VaultTheme" />
+            android:theme="@style/VaultTheme"></activity>
         <activity
             android:name=".views.VideoInfoActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensor"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"></activity>
 
         <!-- Include the AdActivity configChanges and theme. -->
         <activity
@@ -203,6 +203,7 @@
         <service
             android:name=".service.VideoDataService"
             android:enabled="true" />
+
         <service
             android:name=".service.TrendingFeaturedVideoService"
             android:enabled="true" />
@@ -231,20 +232,15 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensor"
             android:theme="@style/AppTheme_1">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
         <activity
-            android:name=".views.VideoDetailActivity"
-            android:theme="@style/AppTheme_1" />
-        <activity
-            android:name=".views.VideoSearchActivity"
-            android:theme="@style/AppTheme_1"></activity>
+            android:theme="@style/AppTheme_1"
+            android:name=".views.VideoDetailActivity"></activity>
     </application>
 
 </manifest>

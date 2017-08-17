@@ -111,7 +111,6 @@ public class GlobalConstants {
     public static final String GET_VIDEO_DATA = BASE_URL + "/Playlist/GetVideo";
 
     public static final String GET_TRENDING_PLAYLIST_URL = BASE_URL + "/playlist/GetTrendingPlayListInfo?";
-
     //User specific API calls
     public static final String VALIDATE_EMAIL_URL = BASE_URL + "/MobileUsers/validateEmail?emailID=";
     public static final String VALIDATE_USERNAME_URL = BASE_URL + "/MobileUsers/IsUserAvailable?UserName=";
@@ -274,8 +273,6 @@ public class GlobalConstants {
     public static final String YOUR_PASSWORD_HAS_BEEN_REGISTERED_SUCCESSFULLY = "Your password has been reset successfully";
     public static final String YOUR_EMAIL_HAS_BEEN_VERIFIED_SUCCESSFULLY = "Your email has been verified successfully";
     public static final String NO_RECORDS_FOUND = "NO FAVORITE VIDEO FOUND";
-
-    public static final String NO_VIDEOS_FOUND = "NO RECORD FOUND";
 
     public static final String[] FACEBOOK_PERMISSION = {"public_profile","email","user_friends"};
     public static final String NOTIFICATION_RECEIVE = "notificationReceive";

@@ -48,7 +48,6 @@ import com.ncsavault.alabamavault.views.AbstractView;
 import com.ncsavault.alabamavault.views.HomeScreen;
 import com.ncsavault.alabamavault.views.MainActivity;
 import com.ncsavault.alabamavault.views.VideoInfoActivity;
-import com.ncsavault.alabamavault.views.VideoSearchActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -143,7 +142,6 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
         long tabId = AppController.getInstance().getModelFacade().getLocalModel().getTabId();
         tabBannerDTO = VaultDatabaseHelper.getInstance(getActivity()).getLocalTabBannerDataByTabId(Long.valueOf(tabId));
 
-
         if (videoUrl != null || (videoId != null && videoId != "0")) {
             if (videoUrl == null) {
                 videoUrl = videoId;
@@ -192,18 +190,6 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
             progressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(mContext.getResources(),
                     R.drawable.progress_large_material, null));
         }
-
-        ((HomeScreen)getActivity()).imageViewSearch.setVisibility(View.VISIBLE);
-        ((HomeScreen)getActivity()).imageViewLogo.setVisibility(View.VISIBLE);
-        ((HomeScreen)getActivity()).imageViewSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(getActivity().getApplicationContext(), VideoSearchActivity.class);
-                intent.putExtra("Fragment", "HomeFragment");
-                startActivity(intent);
-            }
-        });
-
     }
 
     PullRefreshLayout.OnRefreshListener refreshListener = new PullRefreshLayout.OnRefreshListener() {
@@ -637,7 +623,8 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
 
                     if (VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getVideoCount() > 0) {
                         mRecyclerViewItems.clear();
-                        mRecyclerViewItems.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getVideoList(GlobalConstants.OKF_FEATURED));
+                        mRecyclerViewItems.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).
+                                getVideoList(GlobalConstants.OKF_FEATURED));
 
                     }
                     if (VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getTrendingVideoCount() > 0) {

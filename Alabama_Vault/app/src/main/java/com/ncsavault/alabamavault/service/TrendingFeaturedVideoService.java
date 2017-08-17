@@ -9,6 +9,8 @@ import android.util.Log;
 
 import com.ncsavault.alabamavault.controllers.AppController;
 import com.ncsavault.alabamavault.database.VaultDatabaseHelper;
+import com.ncsavault.alabamavault.dto.CatagoriesTabDao;
+import com.ncsavault.alabamavault.dto.PlaylistDto;
 import com.ncsavault.alabamavault.dto.VideoDTO;
 import com.ncsavault.alabamavault.fragments.views.FeaturedFragment;
 import com.ncsavault.alabamavault.fragments.views.HomeFragment;
@@ -25,7 +27,8 @@ public class TrendingFeaturedVideoService extends Service {
 
     ArrayList<VideoDTO> arrayListVideos = new ArrayList<VideoDTO>();
     ArrayList<String> apiUrls = new ArrayList<>();
-
+    ArrayList<PlaylistDto> playlistDtoArrayList = new ArrayList<>();
+    ArrayList<VideoDTO> arrayListVideoData = new ArrayList<>();
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
         //apiUrls = intent.getStringArrayListExtra("apiUrls");
@@ -60,7 +63,6 @@ public class TrendingFeaturedVideoService extends Service {
                             e.printStackTrace();
                         }
 
-
                         arrayListVideos.clear();
                         System.out.println("tabBannerDTO thread end ");
 
@@ -71,6 +73,48 @@ public class TrendingFeaturedVideoService extends Service {
                 broadCastIntent.setAction(HomeFragment.HomeResponseReceiver.ACTION_RESP);
                 broadCastIntent.addCategory(Intent.CATEGORY_DEFAULT);
                 sendBroadcast(broadCastIntent);
+
+                ArrayList<CatagoriesTabDao> catagoriesListData = new ArrayList<>();
+                String categoriesUrl = GlobalConstants.CATEGORIES_TAB_URL + "userid=" + AppController.getInstance().getModelFacade().getLocalModel()
+                        .getUserId();
+
+                catagoriesListData.addAll(AppController.getInstance().getServiceManager()
+                        .getVaultService().getCategoriesData(categoriesUrl));
+                VaultDatabaseHelper.getInstance(getApplicationContext()).insertCategoriesTabData(catagoriesListData);
+                for (CatagoriesTabDao catagoriesTabDao : catagoriesListData) {
+//                    CatagoriesTabDao localCatoriesData = VaultDatabaseHelper.getInstance(getApplicationContext())
+//                            .getLocalCategoriesDataByCategoriesId(catagoriesTabDao.getCategoriesId());
+                   // if (localCatoriesData != null) {
+                        //if (localCatoriesData.getCategories_modified() != catagoriesTabDao.getCategories_modified()) {
+
+                            try {
+                                String PlaylistUrl = GlobalConstants.CATEGORIES_PLAYLIST_URL + "userid=" + AppController.getInstance().getModelFacade()
+                                        .getLocalModel().getUserId() + "&nav_tab_id="
+                                        + catagoriesTabDao.getCategoriesId();
+
+                                playlistDtoArrayList.clear();
+                                playlistDtoArrayList.addAll(AppController.getInstance().getServiceManager().
+                                        getVaultService().getPlaylistData(PlaylistUrl));
+
+                                    VaultDatabaseHelper.getInstance(getApplicationContext()).
+                                            insertPlaylistTabData(playlistDtoArrayList,catagoriesTabDao.getCategoriesId());
+
+                                for (PlaylistDto playlistDto : playlistDtoArrayList) {
+                                    String videoUrl = GlobalConstants.PLAYLIST_VIDEO_URL + "userid=" + AppController.getInstance().getModelFacade()
+                                            .getLocalModel().getUserId() + "&playlistid=" + playlistDto.getPlaylistId();
+                                    arrayListVideoData.clear();
+                                    arrayListVideoData.addAll(AppController.getInstance().getServiceManager().
+                                            getVaultService().getNewVideoData(videoUrl));
+
+                                    VaultDatabaseHelper.getInstance(getApplicationContext()).
+                                            insertVideosInDatabase(arrayListVideoData);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                      //  }
+                  //  }
+                }
 
                 stopSelf();
             }

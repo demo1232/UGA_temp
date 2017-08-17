@@ -816,7 +816,8 @@ public class FavoritesFragment extends BaseFragment {
                         }
                     }
                     favoriteVideoList.clear();
-                    favoriteVideoList.addAll(VaultDatabaseHelper.getInstance(mActivity.getApplicationContext()).getFavouriteVideosArrayList());
+                    favoriteVideoList.addAll(VaultDatabaseHelper.getInstance(mActivity.getApplicationContext())
+                            .getFavouriteVideosArrayList());
                     System.out.println("favoriteVideoList size onpost : " + favoriteVideoList.size());
                     Collections.sort(favoriteVideoList, new Comparator<VideoDTO>() {
 

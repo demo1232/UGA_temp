@@ -28,13 +28,14 @@ public class PlaylistDatabaseTable {
     public static final String KEY_PLAYLIST_LONG_DESC = "playlist_long_desc";
     public static final String KEY_PLAYLIST_TAGS = "playlist_tags";
     public static final String KEY_PLAYLIST_REFERENCE_ID = "playlist_reference_id";
+    public static final String KEY_CATEGEROIES_ID = "cateroies_id";
 
 
     public static final String CREATE_PLAYLIST = "CREATE TABLE "
             + PLAYLIST_DATA_TABLE + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             KEY_PLAYLIST_NAME + " TEXT," + KEY_PLAYLIST_ID + " INTEGER," + KEY_PLAYLIST_THUMB_URL
             + " TEXT," + KEY_PLAYLIST_SHORT_DESC + " TEXT," + KEY_PLAYLIST_LONG_DESC + " TEXT," +
-            KEY_PLAYLIST_TAGS + " TEXT," + KEY_PLAYLIST_REFERENCE_ID + " TEXT )";
+            KEY_PLAYLIST_TAGS + " TEXT," + KEY_PLAYLIST_REFERENCE_ID + " TEXT," + KEY_CATEGEROIES_ID + " INTEGER )";
 
     public static void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_PLAYLIST);
@@ -55,39 +56,88 @@ public class PlaylistDatabaseTable {
         return sInstance;
     }
 
-    public void insertPlaylistTabData(ArrayList<PlaylistDto> playlistDtoArrayList, SQLiteDatabase database) {
+    public boolean isPlaylistAvailableInDB(SQLiteDatabase database,long playlistId) {
+        // TODO Auto-generated method stub
+        int count = 0;
+        database.enableWriteAheadLogging();
+        String query = "select * from " + PLAYLIST_DATA_TABLE + " where " + KEY_PLAYLIST_ID + " = " + playlistId;
+//                + " and " + VideoTable.KEY_PLAYLIST_REFERENCE_ID + " = ? ";
+        Cursor cursor = database.rawQuery(query, null);
+        count = cursor.getCount();
+        cursor.close();
+        if (count > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public void insertPlaylistTabData(ArrayList<PlaylistDto> playlistDtoArrayList, SQLiteDatabase database,long categoriesId) {
         try {
             database.enableWriteAheadLogging();
             ContentValues initialValues;
 
             for (PlaylistDto playlistDto : playlistDtoArrayList) {
-
-                if (!isPlayListAvailableInDB(playlistDto.getPlaylistId(), database)) {
+                if(!isPlaylistAvailableInDB(database,playlistDto.getPlaylistId())) {
                     initialValues = new ContentValues();
-                    initialValues.put(VideoTable.KEY_PLAYLIST_NAME, playlistDto.getPlaylistName());
-                    initialValues.put(VideoTable.KEY_PLAYLIST_ID, playlistDto.getPlaylistId());
-                    initialValues.put(VideoTable.KEY_PLAYLIST_THUMB_URL, playlistDto.getPlaylistThumbnailUrl());
-                    initialValues.put(VideoTable.KEY_PLAYLIST_SHORT_DESC, playlistDto.getPlaylistShortDescription());
-                    initialValues.put(VideoTable.KEY_PLAYLIST_LONG_DESC, playlistDto.getPlaylistLongDescription());
-                    initialValues.put(VideoTable.KEY_PLAYLIST_TAGS, playlistDto.getPlaylistTags());
-                    initialValues.put(VideoTable.KEY_PLAYLIST_REFERENCE_ID, playlistDto.getPlaylistReferenceId());
+                    initialValues.put(KEY_PLAYLIST_NAME, playlistDto.getPlaylistName());
+                    initialValues.put(KEY_PLAYLIST_ID, playlistDto.getPlaylistId());
+                    initialValues.put(KEY_PLAYLIST_THUMB_URL, playlistDto.getPlaylistThumbnailUrl());
+                    initialValues.put(KEY_PLAYLIST_SHORT_DESC, playlistDto.getPlaylistShortDescription());
+                    initialValues.put(KEY_PLAYLIST_LONG_DESC, playlistDto.getPlaylistLongDescription());
+                    initialValues.put(KEY_PLAYLIST_TAGS, playlistDto.getPlaylistTags());
+                    initialValues.put(KEY_PLAYLIST_REFERENCE_ID, playlistDto.getPlaylistReferenceId());
+                    initialValues.put(KEY_CATEGEROIES_ID, categoriesId);
 
                     database.insert(PLAYLIST_DATA_TABLE, null, initialValues);
+                }else
+                {
+                    ContentValues updateInitialValues = new ContentValues();
+                    updateInitialValues.put(KEY_PLAYLIST_NAME, playlistDto.getPlaylistName());
+                    updateInitialValues.put(KEY_PLAYLIST_ID, playlistDto.getPlaylistId());
+                    updateInitialValues.put(KEY_PLAYLIST_THUMB_URL, playlistDto.getPlaylistThumbnailUrl());
+                    updateInitialValues.put(KEY_PLAYLIST_SHORT_DESC, playlistDto.getPlaylistShortDescription());
+                    updateInitialValues.put(KEY_PLAYLIST_LONG_DESC, playlistDto.getPlaylistLongDescription());
+                    updateInitialValues.put(KEY_PLAYLIST_TAGS, playlistDto.getPlaylistTags());
+                    updateInitialValues.put(KEY_PLAYLIST_REFERENCE_ID, playlistDto.getPlaylistReferenceId());
+                    updateInitialValues.put(KEY_CATEGEROIES_ID, categoriesId);
 
-                } else {
-                    ContentValues contentValues = new ContentValues();
-                    contentValues.put(VideoTable.KEY_PLAYLIST_NAME, playlistDto.getPlaylistName());
-                    contentValues.put(VideoTable.KEY_PLAYLIST_THUMB_URL, playlistDto.getPlaylistThumbnailUrl());
-                    contentValues.put(VideoTable.KEY_PLAYLIST_SHORT_DESC, playlistDto.getPlaylistShortDescription());
-                    contentValues.put(VideoTable.KEY_PLAYLIST_LONG_DESC, playlistDto.getPlaylistLongDescription());
-                    contentValues.put(VideoTable.KEY_PLAYLIST_TAGS, playlistDto.getPlaylistTags());
-                    contentValues.put(VideoTable.KEY_PLAYLIST_REFERENCE_ID, playlistDto.getPlaylistReferenceId());
-
-                    database.update(VideoTable.VIDEO_TABLE, contentValues, VideoTable.KEY_PLAYLIST_ID + "=?", new String[]{"" + playlistDto.getPlaylistId()});
+                    database.update(PLAYLIST_DATA_TABLE, updateInitialValues, KEY_PLAYLIST_ID + "=?",
+                            new String[]{"" + playlistDto.getPlaylistId()});
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public ArrayList<PlaylistDto> getLocalPlaylistDataByCategorieTab(SQLiteDatabase database,long categoriesId) {
+        try {
+            ArrayList<PlaylistDto> playlistDaoArrayList = new ArrayList<>();
+            database.enableWriteAheadLogging();
+            String selectQuery = "SELECT * FROM " + PLAYLIST_DATA_TABLE +" WHERE "+KEY_CATEGEROIES_ID+" = "+categoriesId;;
+            Cursor cursor = database.rawQuery(selectQuery, null);
+            PlaylistDto playlistDto = null;
+            if (cursor != null)
+                if (cursor.moveToFirst()) {
+                    do {
+                        playlistDto = new PlaylistDto();
+                        playlistDto.setPlaylistName(cursor.getString(cursor.getColumnIndex(KEY_PLAYLIST_NAME)));
+                        playlistDto.setPlaylistId(cursor.getLong(cursor.getColumnIndex(KEY_PLAYLIST_ID)));
+                        playlistDto.setPlaylistThumbnailUrl(cursor.getString(cursor.getColumnIndex(KEY_PLAYLIST_THUMB_URL)));
+                        playlistDto.setPlaylistShortDescription(cursor.getString(cursor.getColumnIndex(KEY_PLAYLIST_SHORT_DESC)));
+                        playlistDto.setPlaylistLongDescription(cursor.getString(cursor.getColumnIndex(KEY_PLAYLIST_LONG_DESC)));
+                        playlistDto.setPlaylistTags(cursor.getString(cursor.getColumnIndex(KEY_PLAYLIST_TAGS)));
+                        playlistDto.setPlaylistReferenceId(cursor.getString(cursor.getColumnIndex(KEY_PLAYLIST_REFERENCE_ID)));
+                        playlistDto.setCategoriesId(cursor.getLong(cursor.getColumnIndex(KEY_CATEGEROIES_ID)));
+                        playlistDaoArrayList.add(playlistDto);
+                    } while (cursor.moveToNext());
+                }
+
+            cursor.close();
+            return playlistDaoArrayList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<PlaylistDto>();
         }
     }
 
@@ -102,14 +152,14 @@ public class PlaylistDatabaseTable {
                 if (cursor.moveToFirst()) {
                     do {
                         playlistDto = new PlaylistDto();
-                        playlistDto.setPlaylistName(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_NAME)));
-                        playlistDto.setPlaylistId(cursor.getLong(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_ID)));
-                        playlistDto.setPlaylistThumbnailUrl(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_THUMB_URL)));
-                        playlistDto.setPlaylistShortDescription(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_SHORT_DESC)));
-                        playlistDto.setPlaylistLongDescription(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_LONG_DESC)));
-                        playlistDto.setPlaylistTags(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_TAGS)));
-                        playlistDto.setPlaylistReferenceId(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_REFERENCE_ID)));
-
+                        playlistDto.setPlaylistName(cursor.getString(cursor.getColumnIndex(KEY_PLAYLIST_NAME)));
+                        playlistDto.setPlaylistId(cursor.getLong(cursor.getColumnIndex(KEY_PLAYLIST_ID)));
+                        playlistDto.setPlaylistThumbnailUrl(cursor.getString(cursor.getColumnIndex(KEY_PLAYLIST_THUMB_URL)));
+                        playlistDto.setPlaylistShortDescription(cursor.getString(cursor.getColumnIndex(KEY_PLAYLIST_SHORT_DESC)));
+                        playlistDto.setPlaylistLongDescription(cursor.getString(cursor.getColumnIndex(KEY_PLAYLIST_LONG_DESC)));
+                        playlistDto.setPlaylistTags(cursor.getString(cursor.getColumnIndex(KEY_PLAYLIST_TAGS)));
+                        playlistDto.setPlaylistReferenceId(cursor.getString(cursor.getColumnIndex(KEY_PLAYLIST_REFERENCE_ID)));
+                        playlistDto.setCategoriesId(cursor.getLong(cursor.getColumnIndex(KEY_CATEGEROIES_ID)));
                         playlistDaoArrayList.add(playlistDto);
                     } while (cursor.moveToNext());
                 }
@@ -122,6 +172,35 @@ public class PlaylistDatabaseTable {
         }
     }
 
+    public PlaylistDto getLocalPlaylistDataByPlaylistId(SQLiteDatabase database, long playlistId){
+        try {
+            PlaylistDto playlistDto = null;
+            database.enableWriteAheadLogging();
+            String selectQuery = "SELECT * FROM "+PLAYLIST_DATA_TABLE+" WHERE "+KEY_PLAYLIST_ID+" = "+playlistId;
+            Cursor cursor = database.rawQuery(selectQuery, null);
+            if(cursor != null)
+                if (cursor.moveToFirst()) {
+                    do {
+                        playlistDto = new PlaylistDto();
+                        playlistDto.setPlaylistName(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_NAME)));
+                        playlistDto.setPlaylistId(cursor.getLong(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_ID)));
+                        playlistDto.setPlaylistThumbnailUrl(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_THUMB_URL)));
+                        playlistDto.setPlaylistShortDescription(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_SHORT_DESC)));
+                        playlistDto.setPlaylistLongDescription(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_LONG_DESC)));
+                        playlistDto.setPlaylistTags(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_TAGS)));
+                        playlistDto.setPlaylistReferenceId(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_REFERENCE_ID)));
+
+                    }while (cursor.moveToNext());
+                }
+
+            cursor.close();
+            return playlistDto;
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public void removeAllPlaylistTabData(SQLiteDatabase database) {
         try {
             database.enableWriteAheadLogging();
@@ -129,29 +208,6 @@ public class PlaylistDatabaseTable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * This method is used to check the playlist is available in database or not
-     * not----------
-     *
-     * @param playlistId
-     * @param sqLiteDatabase
-     * @return
-     */
-    public boolean isPlayListAvailableInDB(long playlistId, SQLiteDatabase sqLiteDatabase) {
-        // TODO Auto-generated method stub
-        int count = 0;
-        sqLiteDatabase.enableWriteAheadLogging();
-        String query = "select * from " + PlaylistDatabaseTable.PLAYLIST_DATA_TABLE + " where " + PlaylistDatabaseTable.KEY_PLAYLIST_ID + " = " + playlistId;
-//                + " and " + VideoTable.KEY_PLAYLIST_REFERENCE_ID + " = ? ";
-        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
-        count = cursor.getCount();
-        cursor.close();
-        if (count > 0) {
-            return true;
-        }
-        return false;
     }
 }
 

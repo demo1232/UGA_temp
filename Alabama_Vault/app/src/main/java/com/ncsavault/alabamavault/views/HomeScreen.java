@@ -2,15 +2,19 @@ package com.ncsavault.alabamavault.views;
 
 import android.animation.Animator;
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -21,33 +25,45 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.ncsavault.alabamavault.R;
 import com.ncsavault.alabamavault.bottomnavigation.BottomNavigationBar;
 import com.ncsavault.alabamavault.bottomnavigation.NavigationPage;
 import com.ncsavault.alabamavault.controllers.AppController;
+import com.ncsavault.alabamavault.database.VaultDatabaseHelper;
+import com.ncsavault.alabamavault.dto.CatagoriesTabDao;
+import com.ncsavault.alabamavault.dto.PlaylistDto;
+import com.ncsavault.alabamavault.dto.TabBannerDTO;
+import com.ncsavault.alabamavault.dto.VideoDTO;
 import com.ncsavault.alabamavault.fragments.views.BaseFragment;
 import com.ncsavault.alabamavault.fragments.views.CatagoriesFragment;
+import com.ncsavault.alabamavault.fragments.views.FeaturedFragment;
 import com.ncsavault.alabamavault.fragments.views.HomeFragment;
-import com.ncsavault.alabamavault.fragments.views.PlaylistFragment;
 import com.ncsavault.alabamavault.fragments.views.ProfileFragment;
 import com.ncsavault.alabamavault.fragments.views.SavedVideoFragment;
+import com.ncsavault.alabamavault.globalconstants.GlobalConstants;
+import com.ncsavault.alabamavault.models.BannerDataModel;
+import com.ncsavault.alabamavault.models.BaseModel;
+import com.ncsavault.alabamavault.service.TrendingFeaturedVideoService;
+import com.ncsavault.alabamavault.service.VideoDataService;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
  * Created by gauravkumar.singh on 5/16/2017.
  */
 
-public class HomeScreen extends AppCompatActivity implements  BottomNavigationBar.BottomNavigationMenuClickListener
+public class HomeScreen extends AppCompatActivity implements  BottomNavigationBar.BottomNavigationMenuClickListener,AbstractView
         ,OnFragmentToucheded {
     private static final String SELECTED_ITEM = "arg_selected_item";
 
@@ -83,11 +99,15 @@ public class HomeScreen extends AppCompatActivity implements  BottomNavigationBa
     Animation animation;
 
     public ImageView imageViewSearch;
-    public EditText editTextSearch;
-    public ImageView imageViewLogo;
+    EditText editTextSearch;
+    ImageView imageViewLogo;
     TextView textViewTitle1;
     TextView textViewTitle2;
+    boolean imageSearchSelected=false;
 
+    public static ProgressBar autoRefreshProgressBar;
+    private BannerDataModel mBannerDataModel;
+    Handler autoRefreshHandler = new Handler();
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -117,12 +137,252 @@ public class HomeScreen extends AppCompatActivity implements  BottomNavigationBa
         textViewTitle1 =(TextView)mToolbar.findViewById(R.id.toolbar_title_1);
         textViewTitle2= (TextView)mToolbar.findViewById(R.id.toolbar_title_2);
 
+        View autoRefreshView = findViewById(R.id.auto_refresh_progress_main);
+        autoRefreshProgressBar = (ProgressBar) autoRefreshView.findViewById(R.id.auto_refresh_progress_bar);
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            autoRefreshProgressBar.setIndeterminateDrawable(getResources().getDrawable(R.drawable.circle_progress_bar_lower));
+        } else {
+            autoRefreshProgressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.progress_large_material, null));
+        }
+
+        imageViewSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                if(!imageSearchSelected){
+                    editTextSearch.setVisibility(View.VISIBLE);
+                    imageViewSearch.setImageResource(R.drawable.close);
+                    textViewTitle1.setVisibility(View.VISIBLE);
+                    textViewTitle2.setVisibility(View.GONE);
+                    imageSearchSelected=true;
+                }else{
+                    editTextSearch.setVisibility(View.GONE);
+                    imageViewSearch.setImageResource(R.drawable.search);
+                    imageViewSearch.setTag(R.drawable.close);
+                    textViewTitle1.setVisibility(View.VISIBLE);
+                    textViewTitle2.setVisibility(View.VISIBLE);
+                    imageSearchSelected=false;
+                }
+
+            }
+        });
+
 
         loadBottomNavigationItems();
 
         AppController.getInstance().setCurrentActivity(activity);
+        autoRefresh();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
+        fragment.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void autoRefresh() {
+        autoRefreshHandler.postDelayed(autoRefreshRunnable, GlobalConstants.AUTO_REFRESH_INTERVAL);
 
     }
+
+    private Runnable autoRefreshRunnable = new Runnable() {
+        @Override
+        public void run() {
+
+            System.out.println("auto refresh time : " + Calendar.getInstance().getTime());
+            loadAutoRefreshData();
+        }
+    };
+
+    ArrayList<String> listUrl = new ArrayList<>();
+
+    public void loadAutoRefreshData() {
+        try {
+            if (autoRefreshProgressBar != null) {
+
+                if (autoRefreshProgressBar.isShown()) {
+
+                    return;
+                }
+                autoRefreshProgressBar.setVisibility(View.VISIBLE);
+            }
+
+             stopService(new Intent(HomeScreen.this, TrendingFeaturedVideoService.class));
+
+            listUrl.add(GlobalConstants.CATEGORIES_TAB_URL);
+            listUrl.add(GlobalConstants.CATEGORIES_PLAYLIST_URL);
+            listUrl.add(GlobalConstants.PLAYLIST_VIDEO_URL);
+
+            AutoRefreshData autoRefreshData = new AutoRefreshData();
+            autoRefreshData.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    ArrayList<VideoDTO> arrayListFeatured = new ArrayList<>();
+    ArrayList<PlaylistDto> playlistDtoArrayList = new ArrayList<>();
+    ArrayList<VideoDTO> arrayListVideos = new ArrayList<>();
+    private class AutoRefreshData extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            ArrayList<TabBannerDTO> arrayListBanner = new ArrayList<TabBannerDTO>();
+            Intent broadCastIntent = new Intent();
+            try {
+                arrayListBanner.addAll(AppController.getInstance().getServiceManager().getVaultService().getAllTabBannerData());
+                File imageFile;
+                for (TabBannerDTO bDTO : arrayListBanner) {
+                    TabBannerDTO localBannerData = VaultDatabaseHelper.getInstance(getApplicationContext())
+                            .getLocalTabBannerDataByTabId(bDTO.getTabId());
+                    if (bDTO.getTabName().toLowerCase().contains((GlobalConstants.FEATURED).toLowerCase())) {
+                        AppController.getInstance().getModelFacade().getLocalModel().setTabId(bDTO.getTabId());
+                    }
+                    if (localBannerData != null) {
+                        if ((localBannerData.getBannerModified() != bDTO.getBannerModified()) ||
+                                (localBannerData.getBannerCreated() != bDTO.getBannerCreated())) {
+                            VaultDatabaseHelper.getInstance(getApplicationContext()).updateBannerData(bDTO);
+                        }
+
+                        if (localBannerData.getTabDataModified() != bDTO.getTabDataModified()) {
+                            VaultDatabaseHelper.getInstance(getApplicationContext()).updateTabData(bDTO);
+
+                            String url = GlobalConstants.FEATURED_API_URL + "userId=" + AppController.getInstance().
+                                    getModelFacade().getLocalModel().getUserId();
+                            try {
+                                arrayListFeatured.clear();
+                                arrayListFeatured.addAll(AppController.getInstance().getServiceManager().getVaultService().
+                                        getVideosListFromServer(url));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            VaultDatabaseHelper.getInstance(getApplicationContext()).insertVideosInDatabase(arrayListVideos);
+
+                            url = GlobalConstants.GET_TRENDING_PLAYLIST_URL + "userId=" + AppController.getInstance().
+                                    getModelFacade().getLocalModel().getUserId();
+                            ArrayList<VideoDTO> trendingArraylist = new ArrayList<>();
+                            trendingArraylist.clear();
+                            trendingArraylist.addAll(AppController.getInstance().getServiceManager().getVaultService().
+                                    getVideosListFromServer(url));
+                            VaultDatabaseHelper.getInstance(getApplicationContext()).
+                                    insertTrendingVideosInDatabase(trendingArraylist);
+
+                            imageFile = ImageLoader.getInstance().getDiscCache().get(localBannerData.getBannerURL());
+                            if (imageFile.exists()) {
+                                imageFile.delete();
+                            }
+                            MemoryCacheUtils.removeFromCache(localBannerData.getBannerURL(),
+                                    ImageLoader.getInstance().getMemoryCache());
+                            broadCastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                            arrayListVideos.clear();
+                        }
+
+                } else{
+                    VaultDatabaseHelper.getInstance(getApplicationContext()).insertTabBannerData(bDTO);
+                }
+            }
+
+                broadCastIntent.setAction(HomeFragment.HomeResponseReceiver.ACTION_RESP);
+                broadCastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                sendBroadcast(broadCastIntent);
+
+                SharedPreferences pref = AppController.getInstance().getApplicationContext().
+                        getSharedPreferences(GlobalConstants.PREF_PACKAGE_NAME, Context.MODE_PRIVATE);
+                long userId = pref.getLong(GlobalConstants.PREF_VAULT_USER_ID_LONG, 0);
+
+                ArrayList<CatagoriesTabDao> catagoriesListData = new ArrayList<>();
+                String categoriesUrl = GlobalConstants.CATEGORIES_TAB_URL + "userid=" + userId;
+
+                catagoriesListData.addAll(AppController.getInstance().getServiceManager()
+                        .getVaultService().getCategoriesData(categoriesUrl));
+
+                for (CatagoriesTabDao catagoriesTabDao : catagoriesListData) {
+                    CatagoriesTabDao localCatoriesData = VaultDatabaseHelper.getInstance(getApplicationContext())
+                            .getLocalCategoriesDataByCategoriesId(catagoriesTabDao.getCategoriesId());
+                    if (localCatoriesData != null) {
+                        if (localCatoriesData.getCategories_modified() != catagoriesTabDao.getCategories_modified()) {
+                            VaultDatabaseHelper.getInstance(getApplicationContext()).updateCategoriesData(catagoriesTabDao);
+                            try {
+
+                                String url = GlobalConstants.CATEGORIES_PLAYLIST_URL + "userid=" + userId + "&nav_tab_id="
+                                        + catagoriesTabDao.getCategoriesId();
+
+                                playlistDtoArrayList.clear();
+                                playlistDtoArrayList.addAll(AppController.getInstance().getServiceManager().
+                                        getVaultService().getPlaylistData(url));
+
+                                if(playlistDtoArrayList.size() >0) {
+                                    VaultDatabaseHelper.getInstance(getApplicationContext()).removeAllPlaylistTabData();
+                                    VaultDatabaseHelper.getInstance(getApplicationContext()).
+                                            insertPlaylistTabData(playlistDtoArrayList,catagoriesTabDao.getCategoriesId());
+                                }
+
+                                for (PlaylistDto playlistDto : playlistDtoArrayList) {
+                                    String videoUrl = GlobalConstants.PLAYLIST_VIDEO_URL + "userid=" + userId +
+                                            "&playlistid=" + playlistDto.getPlaylistId();
+                                    arrayListVideos.clear();
+                                    arrayListVideos.addAll(AppController.getInstance().getServiceManager().
+                                            getVaultService().getNewVideoData(videoUrl));
+
+                                    VaultDatabaseHelper.getInstance(getApplicationContext()).
+                                            insertVideosInDatabase(arrayListVideos);
+                                }
+
+
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+
+                        }
+                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return  null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if(autoRefreshProgressBar != null) {
+                autoRefreshProgressBar.setVisibility(View.GONE);
+            }
+            autoRefreshHandler.postDelayed(autoRefreshRunnable, GlobalConstants.AUTO_REFRESH_INTERVAL);
+
+        }
+    }
+
+
+    @Override
+    public void update() {
+
+        try {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (mBannerDataModel != null && mBannerDataModel.getState() == BaseModel.STATE_SUCCESS) {
+                        mBannerDataModel.unRegisterView(HomeScreen.this);
+                        if (autoRefreshProgressBar != null) {
+                            autoRefreshProgressBar.setVisibility(View.GONE);
+                        }
+                        autoRefreshHandler.postDelayed(autoRefreshRunnable, GlobalConstants.AUTO_REFRESH_INTERVAL);
+                    }
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -315,7 +575,6 @@ public class HomeScreen extends AppCompatActivity implements  BottomNavigationBa
             }
         }, 2000);
     }
-
 
 
 

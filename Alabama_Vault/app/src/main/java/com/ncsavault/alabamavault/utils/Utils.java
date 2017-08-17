@@ -58,6 +58,7 @@ import com.google.android.gms.ads.AdView;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import com.ncsavault.alabamavault.service.TrendingFeaturedVideoService;
+import com.ncsavault.alabamavault.views.HomeScreen;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -91,7 +92,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
@@ -444,24 +444,9 @@ public class Utils {
 
     public void registerWithGCM(final Activity mActivity) {
         prefs = mActivity.getSharedPreferences(GlobalConstants.PREF_PACKAGE_NAME, Context.MODE_PRIVATE);
-//        GCMRegistrar.checkDevice(mActivity.getApplicationContext());
-//        // Make sure the manifest permissions was properly set
-//        GCMRegistrar.checkManifest(mActivity.getApplicationContext());
 
-        // Register custom Broadcast receiver to show messages on activity
-        /*registerReceiver(mHandleMessageReceiver, new IntentFilter(
-                GlobalConstants.DISPLAY_MESSAGE_ACTION));*/
-
-        // Get GCM registration id
-   //     final String regId = GCMRegistrar.getRegistrationId(mActivity.getApplicationContext());
         refreshedToken = FirebaseInstanceId.getInstance().getToken();
 
-        // Check if regid already presents
-//        if (regId.equals("")) {
-//            // Register with GCM
-//            GCMRegistrar.register(mActivity.getApplicationContext(), GlobalConstants.GOOGLE_SENDER_ID);
-//        } else {
-        // Device is already registered on GCM Server
         mRegisterTask = new AsyncTask<Void, Void, Void>() {
 
             @Override
@@ -560,12 +545,7 @@ public class Utils {
         boolean isAllowed = prefs.getBoolean(GlobalConstants.PREF_IS_NOTIFICATION_ALLOW, false);
 
         switch_notification.setChecked(isAllowed);
-//        GCMRegistrar.checkDevice(mActivity.getApplicationContext());
-//        // Make sure the manifest permissions was properly set
-//        GCMRegistrar.checkManifest(mActivity.getApplicationContext());
-//
-//        // Get GCM registration id
-//        final String regId = GCMRegistrar.getRegistrationId(mActivity.getApplicationContext());
+
         refreshedToken = FirebaseInstanceId.getInstance().getToken();
         final String deviceId = Settings.Secure.getString(mActivity.getApplicationContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
@@ -622,6 +602,7 @@ public class Utils {
         progressDialog.show();
         progressDialog.setContentView(view);
     }
+
 
     public Bitmap decodeUri(Uri selectedImage, Activity context) throws FileNotFoundException {
 
@@ -1134,7 +1115,7 @@ public class Utils {
     }
 
     public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        final InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         if (inputMethodManager.isActive()) {
             if (activity.getCurrentFocus() != null) {
                 inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
@@ -1351,28 +1332,6 @@ public class Utils {
                 text.setVisibility(View.GONE);
             }
         }, 2000);
-    }
-
-
-    public static String convertSecondsToHMmSs(long millis) {
-        long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
-        millis -= TimeUnit.MINUTES.toMillis(minutes);
-        long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
-        String duration = "";
-        if (minutes > 60) {
-            // convert the minutes to Hours:Minutes:Seconds
-        } else {
-            /*
-             * if (minutes < 10) duration += "0" + minutes; else duration +=
-			 * minutes;
-			 */
-            duration += minutes;
-            if (seconds < 10)
-                duration += ":0" + seconds;
-            else
-                duration += ":" + seconds;
-        }
-        return duration;
     }
 
 

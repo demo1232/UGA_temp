@@ -54,9 +54,11 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
     }
 
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
 
     }
@@ -76,12 +78,12 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
         initViews(view);
 
 
-        if (catagoriesTabList.size() == 0) {
-            getCatagoriesData();
-        } else {
+//        if(catagoriesTabList.size()==0) {
+//            getCatagoriesData();
+//        }else
+//        {
             getCategoriesDateFromDatabase();
-        }
-
+//        }
 
     }
 
@@ -90,9 +92,9 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
         super.setUserVisibleHint(isVisibleToUser);
     }
 
-    private void initViews(View view) {
+    private void initViews(View view)
+    {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.catagories_recycler_view);
-        ((HomeScreen) getActivity()).imageViewSearch.setVisibility(View.GONE);
         progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             progressBar.setIndeterminateDrawable(mContext.getResources().getDrawable(R.drawable.circle_progress_bar_lower));
@@ -104,15 +106,14 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
 
 
     @Override
-    public void onClick(CatagoriesAdapter.CatagoriesAdapterViewHolder v, final long tabPosition) {
+    public void onClick(CatagoriesAdapter.CatagoriesAdapterViewHolder v,final long tabPosition) {
         v.playlistImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                playlistFragment = (PlaylistFragment) PlaylistFragment.newInstance(mContext, tabPosition);
-                FragmentManager manager = ((HomeScreen) mContext).getSupportFragmentManager();
+                playlistFragment =(PlaylistFragment) PlaylistFragment.newInstance(mContext, tabPosition);
+                FragmentManager manager =  ((HomeScreen)mContext).getSupportFragmentManager();
                 FragmentTransaction transaction = manager.beginTransaction();
-                transaction.replace(R.id.container, playlistFragment);
+                transaction.replace(R.id.container,playlistFragment);
                 transaction.addToBackStack(playlistFragment.getClass().getName());
                 transaction.commit();
             }
@@ -124,71 +125,74 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
         final AsyncTask<Void, Void, ArrayList<CatagoriesTabDao>> mDbTask =
                 new AsyncTask<Void, Void, ArrayList<CatagoriesTabDao>>() {
 
-                    @Override
-                    protected void onPreExecute() {
-                        super.onPreExecute();
-                        if (progressBar != null) {
-                            catagoriesTabList.clear();
-                            if (catagoriesTabList.size() == 0) {
-                                progressBar.setVisibility(View.VISIBLE);
-                            } else {
-                                progressBar.setVisibility(View.GONE);
-                            }
-                        }
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                if (progressBar != null) {
+                    catagoriesTabList.clear();
+                    if (catagoriesTabList.size() == 0) {
+                        progressBar.setVisibility(View.VISIBLE);
+                    } else {
+                        progressBar.setVisibility(View.GONE);
                     }
+                }
+            }
 
-                    @Override
-                    protected ArrayList<CatagoriesTabDao> doInBackground(Void... params) {
+            @Override
+            protected ArrayList<CatagoriesTabDao> doInBackground(Void... params) {
 
-                        try {
-                            SharedPreferences pref = AppController.getInstance().getApplicationContext().
-                                    getSharedPreferences(GlobalConstants.PREF_PACKAGE_NAME, Context.MODE_PRIVATE);
-                            long userId = pref.getLong(GlobalConstants.PREF_VAULT_USER_ID_LONG, 0);
-                            String url = GlobalConstants.CATEGORIES_TAB_URL + "userid=" + userId;
-                            catagoriesTabList.clear();
-                            catagoriesTabList.addAll(AppController.getInstance().getServiceManager().getVaultService().getCategoriesData(url));
+                try {
+                    SharedPreferences pref = AppController.getInstance().getApplicationContext().
+                            getSharedPreferences(GlobalConstants.PREF_PACKAGE_NAME, Context.MODE_PRIVATE);
+                    long userId = pref.getLong(GlobalConstants.PREF_VAULT_USER_ID_LONG, 0);
+                    String url = GlobalConstants.CATEGORIES_TAB_URL + "userid=" + userId;
+                    catagoriesTabList.clear();
+                    catagoriesTabList.addAll(AppController.getInstance().getServiceManager().getVaultService().getCategoriesData(url));
 
-                            VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).removeAllCategoriesTabData();
-                            VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).insertCategoriesTabData(catagoriesTabList);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        return catagoriesTabList;
+                    VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).removeAllCategoriesTabData();
+                    VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).insertCategoriesTabData(catagoriesTabList);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return catagoriesTabList;
+            }
+
+            @Override
+            protected void onPostExecute(ArrayList<CatagoriesTabDao> result) {
+                super.onPostExecute(result);
+
+                if (progressBar != null) {
+                    if (result.size() == 0) {
+                        progressBar.setVisibility(View.VISIBLE);
+                    } else {
+                        progressBar.setVisibility(View.GONE);
                     }
-
-                    @Override
-                    protected void onPostExecute(ArrayList<CatagoriesTabDao> result) {
-                        super.onPostExecute(result);
-
-                        if (progressBar != null) {
-                            if (result.size() == 0) {
-                                progressBar.setVisibility(View.VISIBLE);
-                            } else {
-                                progressBar.setVisibility(View.GONE);
-                            }
-                        }
+                }
 
 
-                        if (mRecyclerView != null) {
-                            mCatagoriesAdapter = new CatagoriesAdapter(mContext, CatagoriesFragment.this, result);
-                            mRecyclerView.setHasFixedSize(true);
-                            LinearLayoutManager llm = new LinearLayoutManager(mContext);
-                            llm.setOrientation(LinearLayoutManager.VERTICAL);
-                            mRecyclerView.setLayoutManager(llm);
-                            mRecyclerView.setAdapter(mCatagoriesAdapter);
-                        }
-                        // ------- addBannerImage---------------------
-                    }
-                };
+                if(mRecyclerView != null)
+                {
+                    mCatagoriesAdapter = new CatagoriesAdapter(mContext,CatagoriesFragment.this,result);
+                    mRecyclerView.setHasFixedSize(true);
+                    LinearLayoutManager llm = new LinearLayoutManager(mContext);
+                    llm.setOrientation(LinearLayoutManager.VERTICAL);
+                    mRecyclerView.setLayoutManager(llm);
+                    mRecyclerView.setAdapter(mCatagoriesAdapter);
+                }
+                // ------- addBannerImage---------------------
+            }
+        };
 
         mDbTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
 
-    private void getCategoriesDateFromDatabase() {
-        if (catagoriesTabList.size() > 0) {
+    private void getCategoriesDateFromDatabase()
+    {
+       // if(catagoriesTabList.size()>0) {
             catagoriesTabList.clear();
-            catagoriesTabList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getAllLocalCategoriesTabData());
+            catagoriesTabList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).
+                    getAllLocalCategoriesTabData());
 
 //        if(mCatagoriesAdapter != null)
 //        {
@@ -203,7 +207,7 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
             mRecyclerView.setAdapter(mCatagoriesAdapter);
 //        }
         }
-    }
+   // }
 
 }
 

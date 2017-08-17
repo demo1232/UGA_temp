@@ -71,7 +71,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     ImageLoader imageLoader;
     public static DisplayImageOptions options;
 
-    public ArrayList<VideoDTO> trendingVideoList = new ArrayList<>();
+    public ArrayList<VideoDTO> trendingVideoList=new ArrayList<>();
     BannerClickListener bannerClickListener;
     AsyncTask<Void, Void, Void> mPostTask;
     private boolean isFavoriteChecked;
@@ -81,7 +81,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public FilterSubtypesAdapter(Activity mContext, List<VideoDTO> albumList, ArrayList<VideoDTO> trendingVideoList, BannerClickListener bannerClickListener) {
         this.mContext = mContext;
         this.albumList = albumList;
-        this.trendingVideoList = trendingVideoList;
+        this.trendingVideoList=trendingVideoList;
         getScreenDimensions();
 //        screenSize  = mContext.getResources().getConfiguration().screenLayout &
 //                Configuration.SCREENLAYOUT_SIZE_MASK;
@@ -98,8 +98,9 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     }
 
-    public interface BannerClickListener {
-        void onClick(FilterSubtypesAdapter.BannerViewHolder videoViewHolder, int position);
+    public interface BannerClickListener
+    {
+        void onClick(FilterSubtypesAdapter.BannerViewHolder videoViewHolder,int position);
     }
 
 
@@ -180,34 +181,34 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 try {
                     final MyViewHolder vhHeader = (MyViewHolder) holder;
 //
-                    // if (albumList.size() > 0) {
+                   // if (albumList.size() > 0) {
 
-                    final VideoDTO videoDTO = (VideoDTO) albumList.get(position);
-                    com.nostra13.universalimageloader.core.ImageLoader.getInstance().
-                            displayImage(videoDTO.getVideoStillUrl(),
-                                    vhHeader.videoImage, options, new ImageLoadingListener() {
-                                        @Override
-                                        public void onLoadingStarted(String s, View view) {
-                                            vhHeader.progressBar.setVisibility(View.VISIBLE);
-                                        }
+                       final VideoDTO videoDTO = (VideoDTO) albumList.get(position);
+                        com.nostra13.universalimageloader.core.ImageLoader.getInstance().
+                                displayImage(videoDTO.getVideoStillUrl(),
+                                vhHeader.videoImage, options, new ImageLoadingListener() {
+                                    @Override
+                                    public void onLoadingStarted(String s, View view) {
+                                        vhHeader.progressBar.setVisibility(View.VISIBLE);
+                                    }
 
-                                        @Override
-                                        public void onLoadingFailed(String s, View view, FailReason failReason) {
-                                            vhHeader.progressBar.setVisibility(View.GONE);
-                                        }
+                                    @Override
+                                    public void onLoadingFailed(String s, View view, FailReason failReason) {
+                                        vhHeader.progressBar.setVisibility(View.GONE);
+                                    }
 
-                                        @Override
-                                        public void onLoadingComplete(String s, View view, Bitmap bitmap) {
-                                            vhHeader.progressBar.setVisibility(View.GONE);
-                                        }
+                                    @Override
+                                    public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                                        vhHeader.progressBar.setVisibility(View.GONE);
+                                    }
 
-                                        @Override
-                                        public void onLoadingCancelled(String s, View view) {
-                                            vhHeader.progressBar.setVisibility(View.GONE);
-                                        }
-                                    });
+                                    @Override
+                                    public void onLoadingCancelled(String s, View view) {
+                                        vhHeader.progressBar.setVisibility(View.GONE);
+                                    }
+                                });
 
-                    vhHeader.mVideoName.setText(videoDTO.getVideoName());
+                        vhHeader.mVideoName.setText(videoDTO.getVideoName());
 
                     vhHeader.videoImage.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -223,7 +224,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                         GlobalConstants.LIST_FRAGMENT = new VideoDetailFragment();
                                         GlobalConstants.LIST_ITEM_POSITION = position;
                                         mContext.startActivity(intent);
-                                        ((HomeScreen) mContext).overridePendingTransition(R.anim.slide_up_video_info,
+                                        ((HomeScreen)mContext).overridePendingTransition(R.anim.slide_up_video_info,
                                                 R.anim.nochange);
                                     } else {
                                         ((HomeScreen) mContext).showToastMessage(GlobalConstants.MSG_NO_INFO_AVAILABLE);
@@ -244,13 +245,13 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                             if (videoDTO.isVideoIsFavorite() && ((videoDTO
                                     .getVideoLongUrl().length() == 0 || videoDTO.getVideoLongUrl()
                                     .toLowerCase().equals("none")))) {
-                                markFavoriteStatus(vhHeader, position);
+                                markFavoriteStatus(vhHeader,position);
                             } else {
                                 if (videoDTO.getVideoLongUrl().length() > 0 && !videoDTO.getVideoLongUrl().toLowerCase().
                                         equals("none")) {
-                                    markFavoriteStatus(vhHeader, position);
+                                    markFavoriteStatus(vhHeader,position);
                                 } else {
-                                    ((HomeScreen) mContext).showToastMessage(GlobalConstants.MSG_NO_INFO_AVAILABLE);
+                                  ((HomeScreen) mContext).showToastMessage(GlobalConstants.MSG_NO_INFO_AVAILABLE);
                                     vhHeader.savedImage.setImageResource(R.drawable.video_save);
                                 }
                             }
@@ -259,7 +260,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                         }
                     });
 
-                    // }
+                   // }
 
 
                 } catch (Exception e) {
@@ -284,7 +285,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     private void setBanner(RecyclerView.ViewHolder holder, int position) {
         final BannerViewHolder viewholer = (BannerViewHolder) holder;
-        if (AppController.getInstance().getModelFacade().getLocalModel().isBannerActivated()) {
+        if(AppController.getInstance().getModelFacade().getLocalModel().isBannerActivated()) {
             VideoDTO videoDTO = albumList.get(position);
             viewholer.imageviewBanner.setVisibility(View.VISIBLE);
             viewholer.bannerLayout.setVisibility(View.VISIBLE);
@@ -295,7 +296,8 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     .into(viewholer.imageviewBanner);
 
             bannerClickListener.onClick((BannerViewHolder) holder, position);
-        } else {
+        }else
+        {
             viewholer.imageviewBanner.setVisibility(View.GONE);
             viewholer.bannerLayout.setVisibility(View.GONE);
         }
@@ -324,7 +326,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         if (isPositionBanner(position))
             return BANNER_VIEW;
 
-        if ((position + 1) % 3 == 0)
+        if ((position+1) % 3 == 0)
             return TYPE_HIGH;
 
         return TYPE_LOW;
@@ -369,13 +371,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 //        }
 
         // vhHeader.pager.setPageTransformer(false, new CarouselEffectTransformer(mContext,displayWidth));
-        try {
-            if (trendingVideoList.size() > 0) {
-                vhHeader.topTenText.setText(trendingVideoList.get(0).getVideoShortDescription());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
         HorizontalPagerAdapter adapter = new HorizontalPagerAdapter(mContext, trendingVideoList);
         vhHeader.pager.setAdapter(adapter);
         vhHeader.pager.setOffscreenPageLimit(adapter.getCount());
@@ -412,7 +408,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     protected class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView mVideoName;
-        public ImageView videoImage, savedImage;
+        public ImageView videoImage,savedImage;
         public ProgressBar progressBar;
 
         public MyViewHolder(View view) {
@@ -464,6 +460,8 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         vhHeader.adView.loadAd(request);
         // Load the Native Express ad.
     }
+
+
 
 
     public void markFavoriteStatus(final MyViewHolder viewHolder, final int pos) {
@@ -521,7 +519,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 //                                params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "video_favorite");
 //                                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params);
 
-                            } else {
+                            }else{
                                 VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).setFavoriteFlag
                                         (0, albumList.get(pos).getVideoId());
                             }
@@ -561,7 +559,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
                         Intent intent = new Intent(mContext, LoginEmailActivity.class);
                         mContext.startActivity(intent);
-                        ((HomeScreen) mContext).finish();
+                        ((HomeScreen)mContext).finish();
 //                        context.finish();
                     }
                 });

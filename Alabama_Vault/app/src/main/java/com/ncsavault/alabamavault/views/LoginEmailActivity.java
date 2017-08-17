@@ -373,24 +373,7 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
         imgTwitterLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                TwitterSession session = Twitter.getSessionManager().getActiveSession();
-//                TwitterAuthToken authToken = session.getAuthToken();
-//                String token = authToken.token;
-//                String secret = authToken.secret;
-//
-//                if (token != null) {
-//                    session = null;
-//                    authToken = null;
-//                }
-//
-//                if (session == null) {
-//                    twitterLoginButton.performClick();
-//                } else {
-//                    String twitterToken = prefs.getString(TWEET_AUTH_KEY, "");
-//                    String twitterSecret = prefs.getString(TWEET_AUTH_SECRET_KEY, "");
-//
-//
-//                }
+
                 Utils.getInstance().gethideKeyboard(LoginEmailActivity.this);
 
                 if (!edEmailBox.getText().toString().isEmpty()) {
@@ -1041,7 +1024,6 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
                             isFBLogin = true;
                             checkExistingUserOrNot(socialUser);
 
-
                         } catch (Exception e) {
                             LoginManager.getInstance().logOut();
                             // tvFacebookLogin.setText("Login with Facebook");
@@ -1239,7 +1221,6 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
 
                 @Override
                 protected void onPostExecute(String result) {
-
                     System.out.println("Result of post user data : " + result);
                     if (result != null) {
                         if (result.contains("existing_user")) {

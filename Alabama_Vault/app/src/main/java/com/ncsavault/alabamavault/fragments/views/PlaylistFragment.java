@@ -51,7 +51,6 @@ import com.ncsavault.alabamavault.views.AbstractView;
 import com.ncsavault.alabamavault.views.HomeScreen;
 import com.ncsavault.alabamavault.views.MainActivity;
 import com.ncsavault.alabamavault.views.VideoInfoActivity;
-import com.ncsavault.alabamavault.views.VideoSearchActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -100,6 +99,7 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
     }
 
     @Override
@@ -145,11 +145,11 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
             showBannerImage(bannerImageView,tabBannerDTO);
         }
 
-        if(playlistDtoDataList.size()==0) {
-            getPlaylistData(tabId);
-        }else {
+//        if(playlistDtoDataList.size()==0) {
+//            getPlaylistData(tabId);
+//        }else {
             getPlaylistDateFromDatabase();
-        }
+ //       }
     }
 
     private void initViews(View view)
@@ -175,16 +175,6 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
         if (bundle != null) {
             tabId  = bundle.getLong("tab_id", 0);
         }
-
-        ((HomeScreen)getActivity()).imageViewSearch.setVisibility(View.VISIBLE);
-        ((HomeScreen)getActivity()).imageViewSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(mContext, VideoSearchActivity.class);
-                intent.putExtra("Fragment", "PlaylistFragment");
-                mContext.startActivity(intent);
-            }
-        });
     }
 
     private void initListener()
@@ -403,9 +393,9 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
                     playlistDtoDataList.addAll(AppController.getInstance().getServiceManager().getVaultService().getPlaylistData(url));
 
                     if(playlistDtoDataList.size() >0) {
-//                        VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).removeAllPlaylistTabData();
+                        VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).removeAllPlaylistTabData();
                         VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).
-                                insertPlaylistTabData(playlistDtoDataList);
+                                insertPlaylistTabData(playlistDtoDataList,tabId);
                     }
 
 
@@ -464,10 +454,13 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
 
     private void getPlaylistDateFromDatabase()
     {
-        if(playlistDtoDataList.size()>0) {
+        //if(playlistDtoDataList.size()>0) {
             playlistDtoDataList.clear();
             playlistDtoDataList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext())
-                    .getAllLocalPlaylistTabData());
+                    .getLocalPlaylistDataByCategorieTab(tabId));
+
+//        playlistDtoDataList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext())
+//                .getAllLocalPlaylistTabData());
 
 //        if(mCatagoriesAdapter != null)
 //        {
@@ -503,7 +496,7 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
             });
 //        }
         }
-    }
+   // }
 
     public void showBannerImage(final ImageView bannerCacheableImageView, TabBannerDTO tabBannerDTO) {
         if (tabBannerDTO != null)
@@ -576,7 +569,7 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
 
                 VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).removeAllPlaylistTabData();
                 VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).insertPlaylistTabData
-                        (playlistDtoDataList);
+                        (playlistDtoDataList,tabId);
 
                 //Update Banner Data
                 if (tabBannerDTO != null) {

@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.ncsavault.alabamavault.dto.CatagoriesTabDao;
 import com.ncsavault.alabamavault.dto.PlaylistDto;
+import com.ncsavault.alabamavault.globalconstants.GlobalConstants;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 import com.ncsavault.alabamavault.dto.TabBannerDTO;
@@ -91,10 +92,9 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
 
     /**
      * Method to check number of videos from the VideoTable in database
-     *
      * @return
      */
-    public int getVideoCount() {
+    public int getVideoCount(){
         try {
             SQLiteDatabase database = this.getReadableDatabase();
             database.enableWriteAheadLogging();
@@ -114,10 +114,9 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
 
     /**
      * Method to check number of trending videos from the Trending VideoTable in database
-     *
      * @return
      */
-    public int getTrendingVideoCount() {
+    public int getTrendingVideoCount(){
         try {
             SQLiteDatabase database = this.getReadableDatabase();
             database.enableWriteAheadLogging();
@@ -135,7 +134,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public ArrayList<VideoDTO> getAllTrendingVideoList() {
+    public ArrayList<VideoDTO> getAllTrendingVideoList(){
         String selectOKFQuery = "SELECT * FROM " + TrendingVideoTable.TRENDING_VIDEO_TABLE;
         try {
             ArrayList<VideoDTO> videoDTOsArrayList = new ArrayList<VideoDTO>();
@@ -192,7 +191,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getReadableDatabase();
         database.enableWriteAheadLogging();
         String query = "select * from " + TrendingVideoTable.TRENDING_VIDEO_TABLE + " where " + TrendingVideoTable.KEY_VIDEO_ID + " = " + videoId;
-        Cursor cursor = database.rawQuery(query, null);
+        Cursor cursor = database.rawQuery(query,null);
         count = cursor.getCount();
         cursor.close();
         if (count > 0) {
@@ -213,7 +212,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
             for (VideoDTO videoDTO : listVideos) {
                 //if video is not available in database, execute INSERT
                 if (!isTrendingVideoAvailableInDB(videoDTO.getVideoId())) {
-                    if (videoDTO.getVideoShortDescription() != null && videoDTO.getVideoName() != null) {
+                    if(videoDTO.getVideoShortDescription() != null && videoDTO.getVideoName() != null) {
                         initialValues = new ContentValues();
                         initialValues.put(TrendingVideoTable.KEY_VIDEO_ID, videoDTO.getVideoId());
                         initialValues.put(TrendingVideoTable.KEY_VIDEO_NAME, videoDTO.getVideoName());
@@ -236,7 +235,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
                         initialValues.put(TrendingVideoTable.KEY_VIDEO_SOCIAL_URL, videoDTO.getVideoSocialUrl());
                         database.insert(TrendingVideoTable.TRENDING_VIDEO_TABLE, null, initialValues);
                     }
-                } else {      // Perform UPDATE query on available record
+                }else{      // Perform UPDATE query on available record
                     ContentValues updateExistingVideo = new ContentValues();
                     updateExistingVideo.put(TrendingVideoTable.KEY_VIDEO_ID, videoDTO.getVideoId());
                     updateExistingVideo.put(TrendingVideoTable.KEY_VIDEO_NAME, videoDTO.getVideoName());
@@ -269,7 +268,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public ArrayList<VideoDTO> getVideoListByTab(String tabIdentifier) {
+    public ArrayList<VideoDTO> getVideoListByTab(String tabIdentifier){
         try {
             ArrayList<VideoDTO> videoDTOsArrayList = new ArrayList<>();
             SQLiteDatabase database = this.getReadableDatabase();
@@ -319,13 +318,13 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public VideoDTO getVideoDataByVideoId(String videoId) {
+    public VideoDTO getVideoDataByVideoId(String videoId){
         try {
             SQLiteDatabase database = this.getReadableDatabase();
             database.enableWriteAheadLogging();
             String query = "SELECT * FROM "
                     + VideoTable.VIDEO_TABLE + " WHERE " + VideoTable.KEY_VIDEO_ID
-                    + " = " + videoId + " GROUP BY " + VideoTable.KEY_VIDEO_ID;
+                    + " = "+videoId+" GROUP BY "+ VideoTable.KEY_VIDEO_ID;
             Cursor cursor = database.rawQuery(query, null);
             VideoDTO videoDTO = null;
             if (cursor.moveToFirst()) {
@@ -369,7 +368,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public ArrayList<VideoDTO> getAllVideoList() {
+    public ArrayList<VideoDTO> getAllVideoList(){
         String selectOKFQuery = "SELECT * FROM " + VideoTable.VIDEO_TABLE;
         try {
             ArrayList<VideoDTO> videoDTOsArrayList = new ArrayList<VideoDTO>();
@@ -419,9 +418,9 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public ArrayList<VideoDTO> getVideoList(String referenceId) {
+    public ArrayList<VideoDTO> getVideoList(String referenceId){
         String selectOKFQuery = "SELECT * FROM " + VideoTable.VIDEO_TABLE
-                + " WHERE " + VideoTable.KEY_PLAYLIST_REFERENCE_ID + " LIKE '" + referenceId + "%'" + " GROUP BY " + VideoTable.KEY_PLAYLIST_ID + "," + VideoTable.KEY_VIDEO_ID + " ORDER BY " + VideoTable.KEY_VIDEO_NAME + " COLLATE NOCASE " + " ASC ";
+                + " WHERE " + VideoTable.KEY_PLAYLIST_REFERENCE_ID + " LIKE '"+referenceId+"%'" + " GROUP BY "+ VideoTable.KEY_PLAYLIST_ID +"," + VideoTable.KEY_VIDEO_ID  +" ORDER BY "+  VideoTable.KEY_VIDEO_NAME + " COLLATE NOCASE "+ " ASC ";
         try {
             ArrayList<VideoDTO> videoDTOsArrayList = new ArrayList<VideoDTO>();
             SQLiteDatabase database = this.getReadableDatabase();
@@ -471,9 +470,9 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public ArrayList<VideoDTO> getVideoListForGame(String referenceId) {
+    public ArrayList<VideoDTO> getVideoListForGame(String referenceId){
         String selectOKFQuery = "SELECT * FROM " + VideoTable.VIDEO_TABLE
-                + " WHERE " + VideoTable.KEY_PLAYLIST_REFERENCE_ID + " LIKE '" + referenceId + "%'" + " GROUP BY " + VideoTable.KEY_PLAYLIST_ID + "," + VideoTable.KEY_VIDEO_ID + " ORDER BY " + VideoTable.KEY_VIDEO_NAME + " COLLATE NOCASE " + " DESC ";
+                + " WHERE " + VideoTable.KEY_PLAYLIST_REFERENCE_ID + " LIKE '"+referenceId+"%'" + " GROUP BY "+ VideoTable.KEY_PLAYLIST_ID +"," + VideoTable.KEY_VIDEO_ID +" ORDER BY "+  VideoTable.KEY_VIDEO_NAME +" COLLATE NOCASE "+ " DESC ";
         try {
             ArrayList<VideoDTO> videoDTOsArrayList = new ArrayList<VideoDTO>();
             SQLiteDatabase database = this.getReadableDatabase();
@@ -521,7 +520,6 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
             return new ArrayList<VideoDTO>();
         }
     }
-
     /**
      * This method is used to get the favorites videos
      *
@@ -640,12 +638,12 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
 
     public int getFavoriteCount() {
         SQLiteDatabase database = this.getWritableDatabase();
-        int count = 0;
+        int count = 0 ;
         try {
             database.enableWriteAheadLogging();
-            String selectQuery = "SELECT * FROM " + VideoTable.VIDEO_TABLE + " WHERE " + VideoTable.KEY_VIDEO_IS_FAVORITE + "= 1";
+            String selectQuery = "SELECT * FROM "+VideoTable.VIDEO_TABLE + " WHERE " + VideoTable.KEY_VIDEO_IS_FAVORITE + "= 1" ;
             Cursor cursor = database.rawQuery(selectQuery, null);
-            if (cursor != null)
+            if(cursor != null)
                 count = cursor.getCount();
             cursor.close();
             return count;
@@ -709,14 +707,14 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
         return false;
     }
 
-    public boolean isChangeInData(VideoDTO newVideoObject) {
+    public boolean isChangeInData(VideoDTO newVideoObject){
         SQLiteDatabase database = this.getReadableDatabase();
         database.enableWriteAheadLogging();
         //Fetch Old Video Metadata from local database
         String query = "select * from " + VideoTable.VIDEO_TABLE + " where " + VideoTable.KEY_VIDEO_ID + " = " + newVideoObject.getVideoId();
-        Cursor cursor = database.rawQuery(query, null);
+        Cursor cursor = database.rawQuery(query,null);
         int count = cursor.getCount();
-        if (count > 0) {
+        if(count > 0){
             if (cursor.moveToFirst()) {
                 do {
                     if (!cursor.getString(cursor.getColumnIndex(VideoTable.KEY_VIDEO_NAME)).equals(newVideoObject.getVideoName())
@@ -729,7 +727,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
                             || !cursor.getString(cursor.getColumnIndex(VideoTable.KEY_VIDEO_TAGS)).equals(newVideoObject.getVideoTags())
                             || cursor.getLong(cursor.getColumnIndex(VideoTable.KEY_VIDEO_DURATION)) != newVideoObject.getVideoDuration())
                         return true;
-                } while (cursor.moveToNext());
+                }while(cursor.moveToNext());
             }
         }
         cursor.close();
@@ -738,16 +736,16 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
 
     public ArrayList<VideoDTO> getRelatedVideosArrayList(String videoTags, long videoId) {
         try {
-            if (videoTags != null) {
+            if(videoTags != null) {
                 String getRelatedVideos = "SELECT * FROM " + VideoTable.VIDEO_TABLE + " WHERE (";
                 String[] arrTags = videoTags.split(",");
-                for (int i = 0; i < arrTags.length; i++) {
-                    if (i == 0)
-                        getRelatedVideos = getRelatedVideos + VideoTable.KEY_VIDEO_TAGS + " like '%" + arrTags[i].trim() + "%' ";
-                    else if (i > 0 && i < arrTags.length)
-                        getRelatedVideos = getRelatedVideos + " or " + VideoTable.KEY_VIDEO_TAGS + " like '%" + arrTags[i].trim() + "%' ";
+                for(int i=0; i<arrTags.length; i++){
+                    if(i==0)
+                        getRelatedVideos = getRelatedVideos + VideoTable.KEY_VIDEO_TAGS + " like '%"+arrTags[i].trim()+"%' ";
+                    else if(i > 0 && i < arrTags.length)
+                        getRelatedVideos = getRelatedVideos + " or " + VideoTable.KEY_VIDEO_TAGS + " like '%"+arrTags[i].trim()+"%' ";
                 }
-                getRelatedVideos = getRelatedVideos + ") and " + VideoTable.KEY_VIDEO_ID + " != " + videoId + " GROUP BY " + VideoTable.KEY_VIDEO_ID + " ORDER BY " + VideoTable.KEY_VIDEO_NAME + " ASC";
+                getRelatedVideos = getRelatedVideos + ") and "+VideoTable.KEY_VIDEO_ID+" != " + videoId + " GROUP BY " + VideoTable.KEY_VIDEO_ID + " ORDER BY " + VideoTable.KEY_VIDEO_NAME + " ASC";
                 ArrayList<VideoDTO> arrayListNewVideoDTOs = new ArrayList<VideoDTO>();
                 SQLiteDatabase database = this.getWritableDatabase();
                 database.enableWriteAheadLogging();
@@ -790,7 +788,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
 
                 cursor.close();
                 return arrayListNewVideoDTOs;
-            } else {
+            }else{
                 return new ArrayList<VideoDTO>();
             }
         } catch (Exception e) {
@@ -800,38 +798,39 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public String trimAndRemoveSpecialCharacters(String videoAttribute) {
-        videoAttribute = videoAttribute.replace("'", "");
-        videoAttribute = videoAttribute.replace(":", "");
-        videoAttribute = videoAttribute.replace(";", "");
-        videoAttribute = videoAttribute.replace("-", "");
-        videoAttribute = videoAttribute.replace("_", "");
-        videoAttribute = videoAttribute.replace("#", "");
+    public String trimAndRemoveSpecialCharacters(String videoAttribute){
+        videoAttribute = videoAttribute.replace("'","");
+        videoAttribute = videoAttribute.replace(":","");
+        videoAttribute = videoAttribute.replace(";","");
+        videoAttribute = videoAttribute.replace("-","");
+        videoAttribute = videoAttribute.replace("_","");
+        videoAttribute = videoAttribute.replace("#","");
 
         return videoAttribute.trim();
     }
 
     public ArrayList<VideoDTO> getRelatedVideosArrayListByNameAndTag(String videoTags, String videoName, long videoId) {
         try {
-            if (videoTags != null) {
+            if(videoTags != null) {
                 String getRelatedVideos = "SELECT * FROM " + VideoTable.VIDEO_TABLE + " WHERE (";
                 String[] arrTags = videoTags.split(",");
                 String[] arrName = videoName.split(" ");
                 ArrayList<String> fetchedNames = new ArrayList<>();
-                for (int i = 0; i < arrName.length; i++) {
-                    if (arrName[i].length() >= 4)
+                for(int i=0; i<arrName.length; i++){
+                    if(arrName[i].length() >= 4)
                         fetchedNames.add(arrName[i]);
                 }
-                if (arrTags.length > 0) {
+                if(arrTags.length > 0) {
                     for (int i = 0; i < arrTags.length; i++) {
                         if (i == 0)
                             getRelatedVideos = getRelatedVideos + VideoTable.KEY_VIDEO_TAGS + " like '%" + arrTags[i].trim() + "%' ";
                         else if (i > 0 && i < arrTags.length)
                             getRelatedVideos = getRelatedVideos + " or " + VideoTable.KEY_VIDEO_TAGS + " like '%" + arrTags[i].trim() + "%' ";
                     }
-                    if (fetchedNames.size() == 0) {
+                    if(fetchedNames.size() == 0) {
                         getRelatedVideos = getRelatedVideos + ") and ";
-                    } else {
+                    }else
+                    {
                         getRelatedVideos = getRelatedVideos + ") and (";
                     }
                     for (int i = 0; i < fetchedNames.size(); i++) {
@@ -840,9 +839,11 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
                         else if (i > 0 && i < fetchedNames.size())
                             getRelatedVideos = getRelatedVideos + " or " + VideoTable.KEY_VIDEO_NAME + " like '%" + trimAndRemoveSpecialCharacters(fetchedNames.get(i)) + "%' ";
                     }
-                    if (fetchedNames.size() == 0) {
+                    if(fetchedNames.size() == 0)
+                    {
                         getRelatedVideos = getRelatedVideos + VideoTable.KEY_VIDEO_ID + " != " + videoId + " GROUP BY " + VideoTable.KEY_VIDEO_ID + " ORDER BY " + VideoTable.KEY_VIDEO_NAME + " ASC";
-                    } else {
+                    }else
+                    {
                         getRelatedVideos = getRelatedVideos + ") and " + VideoTable.KEY_VIDEO_ID + " != " + videoId + " GROUP BY " + VideoTable.KEY_VIDEO_ID + " ORDER BY " + VideoTable.KEY_VIDEO_NAME + " ASC";
                     }
                     ArrayList<VideoDTO> arrayListNewVideoDTOs = new ArrayList<VideoDTO>();
@@ -887,10 +888,10 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
 
                     cursor.close();
                     return arrayListNewVideoDTOs;
-                } else {
+                }else{
                     return new ArrayList<VideoDTO>();
                 }
-            } else {
+            }else{
                 return new ArrayList<VideoDTO>();
             }
         } catch (Exception e) {
@@ -912,7 +913,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
             for (VideoDTO videoDTO : listVideos) {
                 //if video is not available in database, execute INSERT
                 if (!isVideoAvailableInDB(videoDTO.getVideoId(), videoDTO.getPlaylistReferenceId())) {
-                    if (videoDTO.getVideoShortDescription() != null && videoDTO.getVideoName() != null) {
+                    if(videoDTO.getVideoShortDescription() != null && videoDTO.getVideoName() != null) {
                         initialValues = new ContentValues();
                         initialValues.put(VideoTable.KEY_VIDEO_ID, videoDTO.getVideoId());
                         initialValues.put(VideoTable.KEY_VIDEO_NAME, videoDTO.getVideoName());
@@ -934,7 +935,8 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
                         initialValues.put(VideoTable.KEY_VIDEO_INDEX, videoDTO.getVideoIndex());
 
                         initialValues.put(VideoTable.KEY_PLAYLIST_NAME, videoDTO.getPlaylistName());
-                        initialValues.put(VideoTable.KEY_PLAYLIST_ID, videoDTO.getPlaylistId());
+                        //initialValues.put(VideoTable.KEY_PLAYLIST_ID, videoDTO.getPlaylistReferenceId());
+                        initialValues.put(VideoTable.KEY_PLAYLIST_ID, GlobalConstants.OKF_FEATURED);
                         initialValues.put(VideoTable.KEY_PLAYLIST_THUMB_URL, videoDTO.getPlaylistThumbnailUrl());
                         initialValues.put(VideoTable.KEY_PLAYLIST_SHORT_DESC, videoDTO.getPlaylistShortDescription());
                         initialValues.put(VideoTable.KEY_PLAYLIST_LONG_DESC, videoDTO.getPlaylistLongDescription());
@@ -945,7 +947,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
 
                         checkVideoAvailabilityInOtherPlaylistAndUpdate(videoDTO);
                     }
-                } else {      // Perform UPDATE query on available record
+                }else{      // Perform UPDATE query on available record
                     ContentValues updateExistingVideo = new ContentValues();
                     updateExistingVideo.put(VideoTable.KEY_VIDEO_ID, videoDTO.getVideoId());
                     updateExistingVideo.put(VideoTable.KEY_VIDEO_NAME, videoDTO.getVideoName());
@@ -972,10 +974,12 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
                     updateExistingVideo.put(VideoTable.KEY_PLAYLIST_SHORT_DESC, videoDTO.getPlaylistShortDescription());
                     updateExistingVideo.put(VideoTable.KEY_PLAYLIST_LONG_DESC, videoDTO.getPlaylistLongDescription());
                     updateExistingVideo.put(VideoTable.KEY_PLAYLIST_TAGS, videoDTO.getPlaylistTags());
-                    updateExistingVideo.put(VideoTable.KEY_PLAYLIST_REFERENCE_ID, videoDTO.getPlaylistReferenceId());
+                    //updateExistingVideo.put(VideoTable.KEY_PLAYLIST_ID, videoDTO.getPlaylistReferenceId());
+                    updateExistingVideo.put(VideoTable.KEY_PLAYLIST_ID, GlobalConstants.OKF_FEATURED);
                     updateExistingVideo.put(VideoTable.KEY_VIDEO_SOCIAL_URL, videoDTO.getVideoSocialUrl());
 
-                    database.update(VideoTable.VIDEO_TABLE, updateExistingVideo, VideoTable.KEY_VIDEO_ID + "=?", new String[]{"" + videoDTO.getVideoId()});
+                    database.update(VideoTable.VIDEO_TABLE, updateExistingVideo, VideoTable.KEY_VIDEO_ID + "=?",
+                            new String[]{"" + videoDTO.getVideoId()});
                     checkVideoAvailabilityInOtherPlaylistAndUpdate(videoDTO);
                 }
             }
@@ -985,7 +989,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public void checkVideoAvailabilityInOtherPlaylistAndUpdate(VideoDTO videoDTO) {
+    public void checkVideoAvailabilityInOtherPlaylistAndUpdate(VideoDTO videoDTO){
         try {
             SQLiteDatabase database = this.getReadableDatabase();
             database.enableWriteAheadLogging();
@@ -1044,7 +1048,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
                     database.update(VideoTable.VIDEO_TABLE, updateExistingVideo, VideoTable.KEY_VIDEO_ID + "=?", new String[]{"" + videoDTO.getVideoId()});
                 }
             }
-        } catch (Exception e) {
+        }catch (Exception e){
             e.printStackTrace();
         }
     }
@@ -1074,39 +1078,39 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
     //***********************************************************************//
     //*******************TAB BANNER METHODS**********************************//
     //***********************************************************************//
-    public void insertTabBannerData(TabBannerDTO tabBannerDTO) {
+    public void insertTabBannerData(TabBannerDTO tabBannerDTO){
         TabBannerTable.getInstance().insertTabBannerData(tabBannerDTO, this.getWritableDatabase());
     }
 
-    public ArrayList<TabBannerDTO> getAllLocalTabBannerData() {
+    public ArrayList<TabBannerDTO> getAllLocalTabBannerData(){
         return TabBannerTable.getInstance().getAllLocalTabBannerData(this.getReadableDatabase());
     }
 
-    public TabBannerDTO getLocalTabBannerDataByBannerId(long bannerId) {
+    public TabBannerDTO getLocalTabBannerDataByBannerId(long bannerId){
         return TabBannerTable.getInstance().getLocalTabBannerDataByBannerId(this.getReadableDatabase(), bannerId);
     }
 
-    public int getTabBannerCount() {
+    public int getTabBannerCount(){
         return TabBannerTable.getInstance().getTabBannerCount(this.getWritableDatabase());
     }
 
-    public TabBannerDTO getLocalTabBannerDataByTabId(long tabId) {
+    public TabBannerDTO getLocalTabBannerDataByTabId(long tabId){
         return TabBannerTable.getInstance().getLocalTabBannerDataByTabId(this.getReadableDatabase(), tabId);
     }
 
-    public void updateBannerData(TabBannerDTO tabBannerDTO) {
+    public void updateBannerData(TabBannerDTO tabBannerDTO){
         TabBannerTable.getInstance().updateBannerData(this.getWritableDatabase(), tabBannerDTO);
     }
 
-    public void updateTabData(TabBannerDTO tabBannerDTO) {
+    public void updateTabData(TabBannerDTO tabBannerDTO){
         TabBannerTable.getInstance().updateTabData(this.getWritableDatabase(), tabBannerDTO);
     }
 
-    public void updateTabBannerData(TabBannerDTO tabBannerDTO) {
+    public void updateTabBannerData(TabBannerDTO tabBannerDTO){
         TabBannerTable.getInstance().updateTabBannerData(this.getWritableDatabase(), tabBannerDTO);
     }
 
-    public void removeAllTabBannerData() {
+    public void removeAllTabBannerData(){
         TabBannerTable.getInstance().removeAllTabBannerData(this.getWritableDatabase());
     }
 
@@ -1118,15 +1122,23 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
     //***********************************************************************//
     //*******************CATEGORIES METHODS**********************************//
     //***********************************************************************//
-    public void insertCategoriesTabData(ArrayList<CatagoriesTabDao> catagoriesTabDaoArrayList) {
-        CategoriesDatabaseTable.getInstance().insertCategoriesTabData(catagoriesTabDaoArrayList, this.getWritableDatabase());
+    public void insertCategoriesTabData(ArrayList<CatagoriesTabDao> catagoriesTabDaoArrayList){
+        CategoriesDatabaseTable.getInstance().insertCategoriesTabData(catagoriesTabDaoArrayList, this.getReadableDatabase());
     }
 
-    public ArrayList<CatagoriesTabDao> getAllLocalCategoriesTabData() {
+    public ArrayList<CatagoriesTabDao> getAllLocalCategoriesTabData(){
         return CategoriesDatabaseTable.getInstance().getAllLocalCategoriesData(this.getReadableDatabase());
     }
 
-    public void removeAllCategoriesTabData() {
+    public void updateCategoriesData(CatagoriesTabDao catagoriesTabDao){
+        CategoriesDatabaseTable.getInstance().updateCategoriesData(this.getWritableDatabase(), catagoriesTabDao);
+    }
+
+    public CatagoriesTabDao getLocalCategoriesDataByCategoriesId(long categoriesId){
+        return CategoriesDatabaseTable.getInstance().getLocalCategoriesDataByCategoriesId(this.getReadableDatabase(), categoriesId);
+    }
+
+    public void removeAllCategoriesTabData(){
         CategoriesDatabaseTable.getInstance().removeAllCategoriesTabData(this.getWritableDatabase());
     }
 
@@ -1138,15 +1150,23 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
     //***********************************************************************//
     //*******************PLAYLIST METHODS**********************************//
     //***********************************************************************//
-    public void insertPlaylistTabData(ArrayList<PlaylistDto> playlistDtoArrayList) {
-        PlaylistDatabaseTable.getInstance().insertPlaylistTabData(playlistDtoArrayList, this.getWritableDatabase());
+    public void insertPlaylistTabData(ArrayList<PlaylistDto> playlistDtoArrayList,long categoriesId){
+        PlaylistDatabaseTable.getInstance().insertPlaylistTabData(playlistDtoArrayList, this.getWritableDatabase(),categoriesId);
     }
 
-    public ArrayList<PlaylistDto> getAllLocalPlaylistTabData() {
+    public ArrayList<PlaylistDto> getAllLocalPlaylistTabData(){
         return PlaylistDatabaseTable.getInstance().getAllLocalPlaylistData(this.getReadableDatabase());
     }
 
-    public void removeAllPlaylistTabData() {
+    public PlaylistDto getLocalPlaylistDataByPlaylistId(long playlistId){
+        return PlaylistDatabaseTable.getInstance().getLocalPlaylistDataByPlaylistId(this.getReadableDatabase(), playlistId);
+    }
+
+    public ArrayList<PlaylistDto> getLocalPlaylistDataByCategorieTab(long categoriesId){
+        return PlaylistDatabaseTable.getInstance().getLocalPlaylistDataByCategorieTab(this.getReadableDatabase(), categoriesId);
+    }
+
+    public void removeAllPlaylistTabData(){
         PlaylistDatabaseTable.getInstance().removeAllPlaylistTabData(this.getWritableDatabase());
     }
 

@@ -143,7 +143,6 @@ public class UserProfileActivity extends PermissionActivity implements TextWatch
         setContentView(R.layout.user_profile_activity);
 //        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
-
         File cacheDir = StorageUtils.getCacheDirectory(UserProfileActivity.this);
         ImageLoaderConfiguration config;
         config = new ImageLoaderConfiguration.Builder(UserProfileActivity.this)
@@ -356,23 +355,6 @@ public class UserProfileActivity extends PermissionActivity implements TextWatch
                 loadUserDataFromServer();
             else
                 loadUserDataFromLocal();
-
-////            boolean isTwitter = prefs.getBoolean(TWITTER_LINKING, false);
-////            boolean isFacebook = prefs.getBoolean(FACEBOOK_LINKING, false);
-//
-//           // if (isTwitter) {
-//                TwitterSession session =
-//                        Twitter.getSessionManager().getActiveSession();
-//                if (session != null) {
-//                    tvTwitterStatus.setText("@" + session.getUserName());
-//                }
-//           // }
-//          //  if (isFacebook) {
-//                Profile fbProfile = Profile.getCurrentProfile();
-//                if (fbProfile != null) {
-//                    tvFacebookStatus.setText(fbProfile.getName());
-//                }
-//         //   }
 
             Profile fbProfile = Profile.getCurrentProfile();
             if (fbProfile != null) {
