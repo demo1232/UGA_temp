@@ -1,0 +1,55 @@
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/container_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <android.support.design.widget.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/appBar">
+
+                <include
+                    android:id="@+id/toolbar"
+                    layout="@layout/toolbar" />
+
+
+            </android.support.design.widget.AppBarLayout>
+
+        </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/VDarkGray">
+
+    </FrameLayout>
+
+    <include
+            layout="@layout/bottom_nav_bar"
+            />
+
+    <include
+        android:id="@+id/llToast"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/toast_layout"/>
+
+        <!--<FrameLayout-->
+            <!--android:id="@+id/container_body"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_weight="1" />-->
+
+
+    </LinearLayout>

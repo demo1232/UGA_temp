@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="E:\Company Projects\UGA\Android-Alabama-App\Alabama_Vault\indicatorlibrary\src\main\assets"/><source path="E:\Company Projects\UGA\Android-Alabama-App\Alabama_Vault\indicatorlibrary\build\generated\assets\shaders\release"/></dataSet><dataSet config="release"><source path="E:\Company Projects\UGA\Android-Alabama-App\Alabama_Vault\indicatorlibrary\src\release\assets"/></dataSet></merger>
