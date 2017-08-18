@@ -73,7 +73,7 @@ public class VideoSearchActivity extends AppCompatActivity implements VideoSearc
 
     private void initComponents() {
         mContext = this;
-        Utils.hideKeyboard(VideoSearchActivity.this);
+//        Utils.hideKeyboard(VideoSearchActivity.this);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.back));
         setSupportActionBar(mToolbar);

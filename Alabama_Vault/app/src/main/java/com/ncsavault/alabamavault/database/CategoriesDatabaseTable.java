@@ -6,6 +6,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.ncsavault.alabamavault.dto.CatagoriesTabDao;
+import com.ncsavault.alabamavault.dto.TabBannerDTO;
 
 
 import java.util.ArrayList;
@@ -25,12 +26,14 @@ public class CategoriesDatabaseTable {
     public static final String KEY_CATEGORIES_NAME = "categories_name";
     public static final String KEY_CATEGORIES_INDEX_POSITION = "categories_index_position";
     public static final String KEY_CATEGORIES_URL = "categories_url";
+    public static final String KEY_CATEGORIES_MODIFIED = "categories_modified";
+    public static final String KEY_CATEGORIES_KEYWORD = "categories_keyword";
 
 
     public static final String CREATE_CATEGORIES = "CREATE TABLE "
             + CATEGORIES_DATA_TABLE + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_CATEGEROIES_ID + " INTEGER," + KEY_CATEGORIES_NAME
             + " TEXT," + KEY_CATEGORIES_INDEX_POSITION + " INTEGER,"
-            + KEY_CATEGORIES_URL  + " TEXT )";
+            + KEY_CATEGORIES_URL  + " TEXT," + KEY_CATEGORIES_MODIFIED + " TEXT," + KEY_CATEGORIES_KEYWORD +" TEXT )";
 
     public static void onCreate(SQLiteDatabase db){
         db.execSQL(CREATE_CATEGORIES);
@@ -51,23 +54,71 @@ public class CategoriesDatabaseTable {
         return sInstance;
     }
 
+    public boolean isTabAvailableInDB(SQLiteDatabase database,long categoriesId) {
+        // TODO Auto-generated method stub
+        int count = 0;
+        database.enableWriteAheadLogging();
+        String query = "select * from " + CATEGORIES_DATA_TABLE + " where " + KEY_CATEGEROIES_ID + " = " + categoriesId;
+//                + " and " + VideoTable.KEY_PLAYLIST_REFERENCE_ID + " = ? ";
+        Cursor cursor = database.rawQuery(query, null);
+        count = cursor.getCount();
+        cursor.close();
+        if (count > 0) {
+            return true;
+        }
+        return false;
+    }
+
     public void insertCategoriesTabData(ArrayList<CatagoriesTabDao> catagoriesTabDaoArrayList, SQLiteDatabase database){
         try {
             database.enableWriteAheadLogging();
             ContentValues categoriesListValues;
 
             for (CatagoriesTabDao catagoriesTabDao : catagoriesTabDaoArrayList) {
-                categoriesListValues = new ContentValues();
-                categoriesListValues.put(KEY_CATEGEROIES_ID, catagoriesTabDao.getCategoriesId());
-                categoriesListValues.put(KEY_CATEGORIES_NAME, catagoriesTabDao.getCategoriesName());
-                categoriesListValues.put(KEY_CATEGORIES_INDEX_POSITION, catagoriesTabDao.getIndex_position());
-                categoriesListValues.put(KEY_CATEGORIES_URL, catagoriesTabDao.getCategoriesUrl());
+                if(!isTabAvailableInDB(database,catagoriesTabDao.getCategoriesId())) {
+                    categoriesListValues = new ContentValues();
+                    categoriesListValues.put(KEY_CATEGEROIES_ID, catagoriesTabDao.getCategoriesId());
+                    categoriesListValues.put(KEY_CATEGORIES_NAME, catagoriesTabDao.getCategoriesName());
+                    categoriesListValues.put(KEY_CATEGORIES_INDEX_POSITION, catagoriesTabDao.getIndex_position());
+                    categoriesListValues.put(KEY_CATEGORIES_URL, catagoriesTabDao.getCategoriesUrl());
+                    categoriesListValues.put(KEY_CATEGORIES_MODIFIED, catagoriesTabDao.getCategories_modified());
+                    categoriesListValues.put(KEY_CATEGORIES_KEYWORD, catagoriesTabDao.getCategoriesKeyword());
+                    database.insert(CATEGORIES_DATA_TABLE, null, categoriesListValues);
+                }else
+                {
+                    ContentValues updateCategoriesListValues = new ContentValues();
+                    updateCategoriesListValues.put(KEY_CATEGEROIES_ID, catagoriesTabDao.getCategoriesId());
+                    updateCategoriesListValues.put(KEY_CATEGORIES_NAME, catagoriesTabDao.getCategoriesName());
+                    updateCategoriesListValues.put(KEY_CATEGORIES_INDEX_POSITION, catagoriesTabDao.getIndex_position());
+                    updateCategoriesListValues.put(KEY_CATEGORIES_URL, catagoriesTabDao.getCategoriesUrl());
+                    updateCategoriesListValues.put(KEY_CATEGORIES_MODIFIED, catagoriesTabDao.getCategories_modified());
+                    updateCategoriesListValues.put(KEY_CATEGORIES_KEYWORD, catagoriesTabDao.getCategoriesKeyword());
 
-                database.insert(CATEGORIES_DATA_TABLE, null, categoriesListValues);
+                    database.update(CATEGORIES_DATA_TABLE, updateCategoriesListValues, KEY_CATEGEROIES_ID + "=?",
+                            new String[]{"" + catagoriesTabDao.getCategoriesId()});
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void updateCategoriesData(SQLiteDatabase database, CatagoriesTabDao catagoriesTabDao){
+        try {
+            database.enableWriteAheadLogging();
+            ContentValues categoriesListValues = new ContentValues();
+
+            categoriesListValues.put(KEY_CATEGORIES_NAME, catagoriesTabDao.getCategoriesName());
+            categoriesListValues.put(KEY_CATEGORIES_INDEX_POSITION, catagoriesTabDao.getIndex_position());
+            categoriesListValues.put(KEY_CATEGORIES_URL, catagoriesTabDao.getCategoriesUrl());
+            categoriesListValues.put(KEY_CATEGORIES_MODIFIED, catagoriesTabDao.getCategories_modified());
+            categoriesListValues.put(KEY_CATEGORIES_KEYWORD, catagoriesTabDao.getCategoriesKeyword());
+
+            database.update(CATEGORIES_DATA_TABLE, categoriesListValues, KEY_CATEGEROIES_ID + "=?", new String[]{"" + catagoriesTabDao.getCategoriesId()});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public ArrayList<CatagoriesTabDao> getAllLocalCategoriesData(SQLiteDatabase database){
@@ -85,6 +136,8 @@ public class CategoriesDatabaseTable {
                         categoriesTabDTO.setCategoriesName(cursor.getString(cursor.getColumnIndex(KEY_CATEGORIES_NAME)));
                         categoriesTabDTO.setIndex_position(cursor.getLong(cursor.getColumnIndex(KEY_CATEGORIES_INDEX_POSITION)));
                         categoriesTabDTO.setCategoriesUrl(cursor.getString(cursor.getColumnIndex(KEY_CATEGORIES_URL)));
+                        categoriesTabDTO.setCategories_modified(cursor.getLong(cursor.getColumnIndex(KEY_CATEGORIES_MODIFIED)));
+                        categoriesTabDTO.setCategoriesKeyword(cursor.getString(cursor.getColumnIndex(KEY_CATEGORIES_KEYWORD)));
 
                         catagoriesTabDaoArrayList.add(categoriesTabDTO);
                     }while (cursor.moveToNext());
@@ -92,6 +145,34 @@ public class CategoriesDatabaseTable {
 
             cursor.close();
             return catagoriesTabDaoArrayList;
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public CatagoriesTabDao getLocalCategoriesDataByCategoriesId(SQLiteDatabase database, long categoriesId){
+        try {
+            CatagoriesTabDao categoriesTabDTO = null;
+            database.enableWriteAheadLogging();
+            String selectQuery = "SELECT * FROM "+CATEGORIES_DATA_TABLE+" WHERE "+KEY_CATEGEROIES_ID+" = "+categoriesId;
+            Cursor cursor = database.rawQuery(selectQuery, null);
+            if(cursor != null)
+                if (cursor.moveToFirst()) {
+                    do {
+                        categoriesTabDTO = new CatagoriesTabDao();
+                        categoriesTabDTO.setCategoriesId(cursor.getLong(cursor.getColumnIndex(KEY_CATEGEROIES_ID)));
+                        categoriesTabDTO.setCategoriesName(cursor.getString(cursor.getColumnIndex(KEY_CATEGORIES_NAME)));
+                        categoriesTabDTO.setIndex_position(cursor.getLong(cursor.getColumnIndex(KEY_CATEGORIES_INDEX_POSITION)));
+                        categoriesTabDTO.setCategoriesUrl(cursor.getString(cursor.getColumnIndex(KEY_CATEGORIES_URL)));
+                        categoriesTabDTO.setCategories_modified(cursor.getLong(cursor.getColumnIndex(KEY_CATEGORIES_MODIFIED)));
+                        categoriesTabDTO.setCategoriesKeyword(cursor.getString(cursor.getColumnIndex(KEY_CATEGORIES_KEYWORD)));;
+
+                    }while (cursor.moveToNext());
+                }
+
+            cursor.close();
+            return categoriesTabDTO;
         } catch (NumberFormatException e) {
             e.printStackTrace();
             return null;

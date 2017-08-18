@@ -145,11 +145,11 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
             showBannerImage(bannerImageView,tabBannerDTO);
         }
 
-        if(playlistDtoDataList.size()==0) {
-            getPlaylistData(tabId);
-        }else {
+//        if(playlistDtoDataList.size()==0) {
+//            getPlaylistData(tabId);
+//        }else {
             getPlaylistDateFromDatabase();
-        }
+//        }
     }
 
     private void initViews(View view)
@@ -405,7 +405,7 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
                     if(playlistDtoDataList.size() >0) {
 //                        VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).removeAllPlaylistTabData();
                         VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).
-                                insertPlaylistTabData(playlistDtoDataList);
+                                insertPlaylistTabData(playlistDtoDataList,tabId);
                     }
 
 
@@ -464,10 +464,13 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
 
     private void getPlaylistDateFromDatabase()
     {
-        if(playlistDtoDataList.size()>0) {
+        //if(playlistDtoDataList.size()>0) {
             playlistDtoDataList.clear();
             playlistDtoDataList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext())
-                    .getAllLocalPlaylistTabData());
+                    .getLocalPlaylistDataByCategorieTab(tabId));
+
+//        playlistDtoDataList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext())
+//                .getAllLocalPlaylistTabData());
 
 //        if(mCatagoriesAdapter != null)
 //        {
@@ -503,7 +506,7 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
             });
 //        }
         }
-    }
+   // }
 
     public void showBannerImage(final ImageView bannerCacheableImageView, TabBannerDTO tabBannerDTO) {
         if (tabBannerDTO != null)
@@ -576,7 +579,7 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
 
                 VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).removeAllPlaylistTabData();
                 VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).insertPlaylistTabData
-                        (playlistDtoDataList);
+                        (playlistDtoDataList,tabId);
 
                 //Update Banner Data
                 if (tabBannerDTO != null) {

@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.ncsavault.alabamavault.dto.CatagoriesTabDao;
 import com.ncsavault.alabamavault.dto.PlaylistDto;
+import com.ncsavault.alabamavault.globalconstants.GlobalConstants;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 import com.ncsavault.alabamavault.dto.TabBannerDTO;
@@ -934,7 +935,8 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
                         initialValues.put(VideoTable.KEY_VIDEO_INDEX, videoDTO.getVideoIndex());
 
                         initialValues.put(VideoTable.KEY_PLAYLIST_NAME, videoDTO.getPlaylistName());
-                        initialValues.put(VideoTable.KEY_PLAYLIST_ID, videoDTO.getPlaylistId());
+                        //initialValues.put(VideoTable.KEY_PLAYLIST_ID, videoDTO.getPlaylistReferenceId());
+                        initialValues.put(VideoTable.KEY_PLAYLIST_ID, GlobalConstants.OKF_FEATURED);
                         initialValues.put(VideoTable.KEY_PLAYLIST_THUMB_URL, videoDTO.getPlaylistThumbnailUrl());
                         initialValues.put(VideoTable.KEY_PLAYLIST_SHORT_DESC, videoDTO.getPlaylistShortDescription());
                         initialValues.put(VideoTable.KEY_PLAYLIST_LONG_DESC, videoDTO.getPlaylistLongDescription());
@@ -972,7 +974,8 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
                     updateExistingVideo.put(VideoTable.KEY_PLAYLIST_SHORT_DESC, videoDTO.getPlaylistShortDescription());
                     updateExistingVideo.put(VideoTable.KEY_PLAYLIST_LONG_DESC, videoDTO.getPlaylistLongDescription());
                     updateExistingVideo.put(VideoTable.KEY_PLAYLIST_TAGS, videoDTO.getPlaylistTags());
-                    updateExistingVideo.put(VideoTable.KEY_PLAYLIST_REFERENCE_ID, videoDTO.getPlaylistReferenceId());
+                    //updateExistingVideo.put(VideoTable.KEY_PLAYLIST_ID, videoDTO.getPlaylistReferenceId());
+                    updateExistingVideo.put(VideoTable.KEY_PLAYLIST_ID, GlobalConstants.OKF_FEATURED);
                     updateExistingVideo.put(VideoTable.KEY_VIDEO_SOCIAL_URL, videoDTO.getVideoSocialUrl());
 
                     database.update(VideoTable.VIDEO_TABLE, updateExistingVideo, VideoTable.KEY_VIDEO_ID + "=?", new String[]{"" + videoDTO.getVideoId()});
@@ -1126,7 +1129,15 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
         return CategoriesDatabaseTable.getInstance().getAllLocalCategoriesData(this.getReadableDatabase());
     }
 
-    public void removeAllCategoriesTabData() {
+    public void updateCategoriesData(CatagoriesTabDao catagoriesTabDao){
+        CategoriesDatabaseTable.getInstance().updateCategoriesData(this.getWritableDatabase(), catagoriesTabDao);
+    }
+
+    public CatagoriesTabDao getLocalCategoriesDataByCategoriesId(long categoriesId){
+        return CategoriesDatabaseTable.getInstance().getLocalCategoriesDataByCategoriesId(this.getReadableDatabase(), categoriesId);
+    }
+
+    public void removeAllCategoriesTabData(){
         CategoriesDatabaseTable.getInstance().removeAllCategoriesTabData(this.getWritableDatabase());
     }
 
@@ -1138,15 +1149,23 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
     //***********************************************************************//
     //*******************PLAYLIST METHODS**********************************//
     //***********************************************************************//
-    public void insertPlaylistTabData(ArrayList<PlaylistDto> playlistDtoArrayList) {
-        PlaylistDatabaseTable.getInstance().insertPlaylistTabData(playlistDtoArrayList, this.getWritableDatabase());
+    public void insertPlaylistTabData(ArrayList<PlaylistDto> playlistDtoArrayList,long categoriesId){
+        PlaylistDatabaseTable.getInstance().insertPlaylistTabData(playlistDtoArrayList, this.getWritableDatabase(),categoriesId);
     }
 
     public ArrayList<PlaylistDto> getAllLocalPlaylistTabData() {
         return PlaylistDatabaseTable.getInstance().getAllLocalPlaylistData(this.getReadableDatabase());
     }
 
-    public void removeAllPlaylistTabData() {
+    public PlaylistDto getLocalPlaylistDataByPlaylistId(long playlistId){
+        return PlaylistDatabaseTable.getInstance().getLocalPlaylistDataByPlaylistId(this.getReadableDatabase(), playlistId);
+    }
+
+    public ArrayList<PlaylistDto> getLocalPlaylistDataByCategorieTab(long categoriesId){
+        return PlaylistDatabaseTable.getInstance().getLocalPlaylistDataByCategorieTab(this.getReadableDatabase(), categoriesId);
+    }
+
+    public void removeAllPlaylistTabData(){
         PlaylistDatabaseTable.getInstance().removeAllPlaylistTabData(this.getWritableDatabase());
     }
 

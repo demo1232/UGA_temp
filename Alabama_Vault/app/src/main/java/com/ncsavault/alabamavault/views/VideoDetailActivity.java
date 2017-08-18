@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.ncsavault.alabamavault.R;
+import com.ncsavault.alabamavault.adapters.SavedVideoAdapter;
 import com.ncsavault.alabamavault.adapters.VideoDetailAdapter;
 import com.ncsavault.alabamavault.controllers.AppController;
 import com.ncsavault.alabamavault.database.VaultDatabaseHelper;

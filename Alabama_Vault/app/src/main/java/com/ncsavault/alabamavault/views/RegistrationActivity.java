@@ -238,6 +238,16 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
         }else if(mEmailIdFB.getVisibility() == View.VISIBLE)
         {
             email = mEmailIdFB.getText().toString();
+        }else
+        {
+            if(twitter)
+            {
+                email = mEmailId.getText().toString();
+            }else
+            {
+                email = mEmailIdFB.getText().toString();
+            }
+
         }
         if (loginEmailModel != null) {
             loginEmailModel.unRegisterView(this);

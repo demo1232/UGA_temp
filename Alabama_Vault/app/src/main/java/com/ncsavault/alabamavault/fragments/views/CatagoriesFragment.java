@@ -76,11 +76,12 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
         initViews(view);
 
 
-        if (catagoriesTabList.size() == 0) {
-            getCatagoriesData();
-        } else {
+//        if(catagoriesTabList.size()==0) {
+//            getCatagoriesData();
+//        }else
+//        {
             getCategoriesDateFromDatabase();
-        }
+//        }
 
 
     }
@@ -185,10 +186,12 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
     }
 
 
-    private void getCategoriesDateFromDatabase() {
-        if (catagoriesTabList.size() > 0) {
+    private void getCategoriesDateFromDatabase()
+    {
+       // if(catagoriesTabList.size()>0) {
             catagoriesTabList.clear();
-            catagoriesTabList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getAllLocalCategoriesTabData());
+            catagoriesTabList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).
+                    getAllLocalCategoriesTabData());
 
 //        if(mCatagoriesAdapter != null)
 //        {
@@ -203,7 +206,7 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
             mRecyclerView.setAdapter(mCatagoriesAdapter);
 //        }
         }
-    }
+   // }
 
 }
 

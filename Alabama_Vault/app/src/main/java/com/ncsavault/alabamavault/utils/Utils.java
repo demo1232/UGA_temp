@@ -58,6 +58,7 @@ import com.google.android.gms.ads.AdView;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import com.ncsavault.alabamavault.service.TrendingFeaturedVideoService;
+import com.ncsavault.alabamavault.views.HomeScreen;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;

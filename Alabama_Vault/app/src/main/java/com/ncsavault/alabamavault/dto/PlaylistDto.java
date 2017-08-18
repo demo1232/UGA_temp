@@ -14,6 +14,15 @@ public class PlaylistDto {
     public String playlistShortDescription;
     public String playlistLongDescription;
     public String playlistTags;
+    public long CategoriesId;
+
+    public long getCategoriesId() {
+        return CategoriesId;
+    }
+
+    public void setCategoriesId(long categoriesId) {
+        CategoriesId = categoriesId;
+    }
 
     public long getPlaylistId() {
         return playlistId;

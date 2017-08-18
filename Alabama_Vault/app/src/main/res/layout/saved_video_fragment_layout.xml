@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <include
                 android:id="@+id/toolbar"
                 layout="@layout/toolbar" />
@@ -28,39 +29,74 @@
 
     </LinearLayout>
 
-
-
-    <com.baoyz.widget.PullRefreshLayout
+    <RelativeLayout
         android:layout_below="@+id/container_toolbar"
-        android:id="@+id/refresh_layout"
+        android:id="@+id/saved_view_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/saved_video_recycler_view"
+        <com.baoyz.widget.PullRefreshLayout
+            android:id="@+id/refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/LightGrey"
-            android:scrollbars="vertical" />
-    </com.baoyz.widget.PullRefreshLayout>
+            android:layout_height="wrap_content">
 
-    <ProgressBar
-        android:id="@+id/progressbar"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_centerInParent="true"
-        android:indeterminateDuration="1100"
-        android:visibility="gone" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/saved_video_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/LightGrey"
+                android:scrollbars="vertical" />
+        </com.baoyz.widget.PullRefreshLayout>
 
-    <TextView
-        android:id="@+id/tv_no_recored_found"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="NO FAVIROTE VIDEO FOUND"
-        android:textColor="@color/black"
-        android:textSize="20dp"
-        android:visibility="gone" />
+        <ProgressBar
+            android:id="@+id/progressbar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:indeterminateDuration="1100"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_no_recored_found"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="NO FAVIROTE VIDEO FOUND"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/saved_login_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv_login_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tv_login"
+            android:gravity="center"
+            android:text="PLEASE LOGIN TO ACCESS SAVED SCREEN"
+            android:textColor="@color/apptheme_color"
+            android:textSize="15dp" />
+
+        <Button
+            android:id="@+id/tv_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/button_shape_filled"
+            android:text="LOGIN"
+            android:textColor="@color/white" />
+
+    </RelativeLayout>
 
     <include
         android:id="@+id/llToast"

@@ -1,6 +1,7 @@
 package com.ncsavault.alabamavault.fragments.views;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -10,12 +11,18 @@ import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.baoyz.widget.PullRefreshLayout;
@@ -28,8 +35,11 @@ import com.ncsavault.alabamavault.controllers.AppController;
 import com.ncsavault.alabamavault.database.VaultDatabaseHelper;
 import com.ncsavault.alabamavault.dto.VideoDTO;
 import com.ncsavault.alabamavault.globalconstants.GlobalConstants;
+import com.ncsavault.alabamavault.service.TrendingFeaturedVideoService;
 import com.ncsavault.alabamavault.utils.Utils;
 import com.ncsavault.alabamavault.views.HomeScreen;
+import com.ncsavault.alabamavault.views.LoginEmailActivity;
+import com.ncsavault.alabamavault.views.VideoInfoActivity;
 import com.ncsavault.alabamavault.views.VideoSearchActivity;
 
 import java.util.ArrayList;
@@ -40,7 +50,7 @@ import java.util.Comparator;
  * Created by gauravkumar.singh on 6/12/2017.
  */
 
-public class SavedVideoFragment extends Fragment {
+public class SavedVideoFragment extends Fragment implements SavedVideoAdapter.SavedClickListener {
 
     private static Context mContext;
     RecyclerView mRecyclerView;
@@ -50,6 +60,9 @@ public class SavedVideoFragment extends Fragment {
     PullRefreshTask pullTask;
     private ProgressBar progressBar;
     private TextView tvNoRecoredFound;
+    private RelativeLayout savedViewLayout,savedLoginLayout;
+    SharedPreferences prefs;
+    private Button tvLoginButton;
 
     public static Fragment newInstance(Context context) {
         Fragment frag = new SavedVideoFragment();
@@ -69,6 +82,29 @@ public class SavedVideoFragment extends Fragment {
 
     }
 
+
+
+    private void initListener()
+    {
+        tvLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                SharedPreferences pref = mContext.getSharedPreferences(GlobalConstants.PREF_PACKAGE_NAME,
+                        Context.MODE_PRIVATE);
+                pref.edit().putLong(GlobalConstants.PREF_VAULT_USER_ID_LONG, 0).apply();
+                pref.edit().putString(GlobalConstants.PREF_VAULT_USER_NAME, "").apply();
+                pref.edit().putString(GlobalConstants.PREF_VAULT_USER_EMAIL, "").apply();
+
+                VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).removeAllRecords();
+                Intent intent = new Intent(mContext, LoginEmailActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                ((HomeScreen)mContext).finish();
+            }
+        });
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -76,6 +112,19 @@ public class SavedVideoFragment extends Fragment {
         if (refreshLayout != null) {
             refreshLayout.setEnabled(true);
             refreshLayout.setOnRefreshListener(refreshListener);
+        }
+
+        if (GlobalConstants.IS_RETURNED_FROM_PLAYER) {
+            if (mContext != null) {
+                favoriteVideoList.clear();
+                favoriteVideoList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).
+                        getFavouriteVideosArrayList());
+                System.out.println("favoriteVideoList size onResume: " + favoriteVideoList.size());
+                savedVideoAdapter = new SavedVideoAdapter(mContext, favoriteVideoList, SavedVideoFragment.this);
+                mRecyclerView.setAdapter(savedVideoAdapter);
+                savedVideoAdapter.notifyDataSetChanged();
+                GlobalConstants.IS_RETURNED_FROM_PLAYER = false;
+            }
         }
     }
 
@@ -100,17 +149,9 @@ public class SavedVideoFragment extends Fragment {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.saved_video_recycler_view);
         tvNoRecoredFound = (TextView) view.findViewById(R.id.tv_no_recored_found);
         progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
-
-        ((HomeScreen)getActivity()).imageViewSearch.setVisibility(View.VISIBLE);
-        ((HomeScreen)getActivity()).imageViewSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(mContext, VideoSearchActivity.class);
-                intent.putExtra("Fragment", "SavedVideoFragment");
-                mContext.startActivity(intent);
-            }
-        });
-
+        savedViewLayout = (RelativeLayout) view.findViewById(R.id.saved_view_layout);
+        savedLoginLayout = (RelativeLayout) view.findViewById(R.id.saved_login_layout);
+        tvLoginButton = (Button) view.findViewById(R.id.tv_login);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             progressBar.setIndeterminateDrawable(mContext.getResources().getDrawable(R.drawable.circle_progress_bar_lower));
@@ -124,7 +165,32 @@ public class SavedVideoFragment extends Fragment {
         refreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_RING);
         refreshLayout.setEnabled(false);
 
+        prefs = mContext.getSharedPreferences(GlobalConstants.PREF_PACKAGE_NAME, Context.MODE_PRIVATE);
+        long userId = prefs.getLong(GlobalConstants.PREF_VAULT_USER_ID_LONG, 0);
+
+        if(userId == GlobalConstants.DEFAULT_USER_ID)
+        {
+            savedLoginLayout.setVisibility(View.VISIBLE);
+            savedViewLayout.setVisibility(View.GONE);
+        }else
+        {
+            savedLoginLayout.setVisibility(View.GONE);
+            savedViewLayout.setVisibility(View.VISIBLE);
+        }
+
+        ((HomeScreen)getActivity()).imageViewSearch.setVisibility(View.VISIBLE);
+        ((HomeScreen)getActivity()).imageViewSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(mContext, VideoSearchActivity.class);
+                intent.putExtra("Fragment", "SavedVideoFragment");
+                mContext.startActivity(intent);
+            }
+        });
+
+        initListener();
         getFavoriteDataFromDataBase();
+
     }
 
     /**
@@ -167,7 +233,7 @@ public class SavedVideoFragment extends Fragment {
                             }
                         });
 
-                        savedVideoAdapter  = new SavedVideoAdapter(mContext,favoriteVideoList);
+                        savedVideoAdapter  = new SavedVideoAdapter(mContext,favoriteVideoList, SavedVideoFragment.this);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -214,6 +280,181 @@ public class SavedVideoFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onClick(final SavedVideoAdapter.SavedVideoViewHolder viewHolder, final int pos) {
+
+        viewHolder.videoRelativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("position : " + pos);
+                if (Utils.isInternetAvailable(mContext)) {
+                    if (favoriteVideoList.get(pos).getVideoLongUrl() != null) {
+                        if (favoriteVideoList.get(pos).getVideoLongUrl().length() > 0
+                                && !favoriteVideoList.get(pos).getVideoLongUrl().toLowerCase().equals("none")) {
+                            String videoCategory = GlobalConstants.FEATURED;
+                            GlobalConstants.IS_RETURNED_FROM_PLAYER = true;
+                            Intent intent = new Intent(mContext, VideoInfoActivity.class);
+                            intent.putExtra(GlobalConstants.KEY_CATEGORY, videoCategory);
+                            intent.putExtra(GlobalConstants.VIDEO_OBJ, favoriteVideoList.get(pos));
+                            GlobalConstants.LIST_FRAGMENT = new VideoDetailFragment();
+                            GlobalConstants.LIST_ITEM_POSITION = pos;
+                            startActivity(intent);
+                            ((HomeScreen)mContext).overridePendingTransition(R.anim.slide_up_video_info, R.anim.nochange);
+                        } else {
+                            ((HomeScreen) mContext).showToastMessage(GlobalConstants.MSG_NO_INFO_AVAILABLE);
+                        }
+                    } else {
+                        ((HomeScreen) mContext).showToastMessage(GlobalConstants.MSG_NO_INFO_AVAILABLE);
+                    }
+                } else {
+                    ((HomeScreen) mContext).showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
+                }
+            }
+        });
+
+//        viewHolder.mLayoutSavedImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                if (favoriteVideoList.get(pos).isVideoIsFavorite() && ((favoriteVideoList.get(pos)
+//                        .getVideoLongUrl().length() == 0 || favoriteVideoList.get(pos).getVideoLongUrl()
+//                        .toLowerCase().equals("none")))) {
+//                    markFavoriteStatus(viewHolder,pos);
+//                } else {
+//                    if (favoriteVideoList.get(pos).getVideoLongUrl().length() > 0 && !favoriteVideoList
+//                            .get(pos).getVideoLongUrl().toLowerCase().equals("none")) {
+//                        markFavoriteStatus(viewHolder,pos);
+//                    } else {
+//                        //gk ((MainActivity) context).showToastMessage(GlobalConstants.MSG_NO_INFO_AVAILABLE);
+//                        viewHolder.savedVideoImageView.setImageResource(R.drawable.video_save);
+//                    }
+//                }
+//
+//                savedVideoAdapter.notifyDataSetChanged();
+//            }
+//        });
+    }
+
+//    public void markFavoriteStatus(final VideoDetailAdapter.VideoViewHolder viewHolder, final int pos) {
+//        if (Utils.isInternetAvailable(mContext)) {
+//            if (AppController.getInstance().getModelFacade().getLocalModel().getUserId() ==
+//                    GlobalConstants.DEFAULT_USER_ID) {
+//                viewHolder.savedVideoImageView.setBackgroundResource(R.drawable.video_save);
+//                showConfirmLoginDialog(GlobalConstants.LOGIN_MESSAGE);
+//            } else {
+//                System.out.println("favorite position : " + pos);
+//                if (favoriteVideoList.get(pos).isVideoIsFavorite()) {
+//                    isFavoriteChecked = false;
+//                    VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).setFavoriteFlag
+//                            (0, favoriteVideoList.get(pos).getVideoId());
+//                    favoriteVideoList.get(pos).setVideoIsFavorite(false);
+//                    viewHolder.savedVideoImageView.setImageResource(R.drawable.video_save);
+//                } else {
+//                    isFavoriteChecked = true;
+//                    VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).setFavoriteFlag
+//                            (1, favoriteVideoList.get(pos).getVideoId());
+//                    favoriteVideoList.get(pos).setVideoIsFavorite(true);
+//                    viewHolder.savedVideoImageView.setImageResource(R.drawable.saved_video_img);
+//                }
+//
+//                mPostTask = new AsyncTask<Void, Void, Void>() {
+//                    @Override
+//                    protected void onPreExecute() {
+//                        super.onPreExecute();
+//                    }
+//
+//                    @Override
+//                    protected Void doInBackground(Void... params) {
+//                        try {
+//                            long userId = AppController.getInstance().getModelFacade().getLocalModel().getUserId();
+//                            postResult = AppController.getInstance().getServiceManager().getVaultService().
+//                                    postFavoriteStatus(userId, favoriteVideoList.get(pos).getVideoId(), playlistId,
+//                                            isFavoriteChecked);
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                        return null;
+//                    }
+//
+//                    @Override
+//                    protected void onPostExecute(Void result) {
+//                        try {
+//                            System.out.println("favorite position 111 : " + pos);
+//                            if (isFavoriteChecked) {
+//                                VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).setFavoriteFlag(1,
+//                                        videoDtoArrayList.get(pos).getVideoId());
+//                                // firebase analytics favoride video
+////                                params.putString(FirebaseAnalytics.Param.ITEM_ID, arrayListVideoDTOs.get(pos).getVideoName());
+////                                params.putString(FirebaseAnalytics.Param.ITEM_NAME, arrayListVideoDTOs.get(pos).getVideoName());
+////                                params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "video_favorite");
+////                                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params);
+//
+//                            }else{
+//                                VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).setFavoriteFlag
+//                                        (0, videoDtoArrayList.get(pos).getVideoId());
+//                            }
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                };
+//
+//                mPostTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//            }
+//        } else {
+//            ((HomeScreen) mContext).showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
+//            viewHolder.savedVideoImageView.setBackgroundResource(R.drawable.video_save);
+//        }
+//    }
+
+    public void showConfirmLoginDialog(String message) {
+        AlertDialog alertDialog = null;
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
+        alertDialogBuilder
+                .setMessage(message);
+        alertDialogBuilder.setTitle("Alert");
+        alertDialogBuilder.setPositiveButton("Ok",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+
+                        mContext.stopService(new Intent(mContext, TrendingFeaturedVideoService.class));
+
+                        VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).removeAllRecords();
+
+                        SharedPreferences prefs = mContext.getSharedPreferences(GlobalConstants.PREF_PACKAGE_NAME,
+                                Context.MODE_PRIVATE);
+                        prefs.edit().putLong(GlobalConstants.PREF_VAULT_USER_ID_LONG, 0).commit();
+//                        prefs.edit().putBoolean(GlobalConstants.PREF_PULL_OPTION_HEADER, false).commit();
+
+                        Intent intent = new Intent(mContext, LoginEmailActivity.class);
+                        mContext.startActivity(intent);
+                        ((HomeScreen)mContext).finish();
+//                        context.finish();
+                    }
+                });
+
+        alertDialogBuilder.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+
+                    }
+                });
+
+        alertDialog = alertDialogBuilder.create();
+        alertDialog.setCancelable(false);
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+        Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        nbutton.setAllCaps(false);
+        nbutton.setTextColor(mContext.getResources().getColor(R.color.apptheme_color));
+        Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        pbutton.setTextColor(mContext.getResources().getColor(R.color.apptheme_color));
+        pbutton.setAllCaps(false);
+    }
+
+
     public class PullRefreshTask extends AsyncTask<Void, Void, ArrayList<VideoDTO>> {
 
         @Override
@@ -258,7 +499,7 @@ public class SavedVideoFragment extends Fragment {
             super.onPostExecute(result);
 
               try {
-
+                  VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).setAllFavoriteStatusToFalse();
                 for (VideoDTO vidDto : result) {
                     if (VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).
                             checkVideoAvailability(vidDto.getVideoId())) {
@@ -281,7 +522,7 @@ public class SavedVideoFragment extends Fragment {
                 });
 
 
-                savedVideoAdapter  = new SavedVideoAdapter(mContext,favoriteVideoList);
+                savedVideoAdapter  = new SavedVideoAdapter(mContext,favoriteVideoList,SavedVideoFragment.this);
                 mRecyclerView.setHasFixedSize(true);
                 LinearLayoutManager llm = new LinearLayoutManager(mContext);
                 llm.setOrientation(LinearLayoutManager.VERTICAL);
