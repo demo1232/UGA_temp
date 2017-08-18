@@ -116,14 +116,20 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
         tvNoRecoredFound = (TextView) view.findViewById(R.id.tv_no_recored_found);
         progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
 
-        ((HomeScreen) mContext).mToolbar.setNavigationIcon(R.drawable.back);
-        ((HomeScreen) mContext).imageViewSearch.setVisibility(View.VISIBLE);
+        setToolbarIcons();
         ((HomeScreen) mContext).imageViewSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, VideoSearchActivity.class);
                 intent.putExtra("Fragment", "VideoDetailFragment");
                 mContext.startActivity(intent);
+            }
+        });
+
+        ((HomeScreen)mContext).imageViewBackNavigation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+             getActivity().onBackPressed();
             }
         });
 
@@ -148,6 +154,13 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
        // getVideoData(playlistId);
         getVideoDataFromDataBase(playlistId);
 
+    }
+
+    private void setToolbarIcons() {
+        ((HomeScreen)mContext).imageViewSearch.setVisibility(View.VISIBLE);
+        ((HomeScreen)mContext).imageViewLogo.setVisibility(View.VISIBLE);
+        ((HomeScreen)mContext).textViewEdit.setVisibility(View.INVISIBLE);
+        ((HomeScreen)mContext).imageViewBackNavigation.setVisibility(View.VISIBLE);
     }
 
     private void getVideoData(final long playlistId) {

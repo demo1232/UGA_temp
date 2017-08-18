@@ -193,17 +193,24 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
                     R.drawable.progress_large_material, null));
         }
 
-        ((HomeScreen)getActivity()).imageViewSearch.setVisibility(View.VISIBLE);
-        ((HomeScreen)getActivity()).imageViewLogo.setVisibility(View.VISIBLE);
-        ((HomeScreen)getActivity()).imageViewSearch.setOnClickListener(new View.OnClickListener() {
+        setToolbarIcons();
+
+        ((HomeScreen)mContext).imageViewSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getActivity().getApplicationContext(), VideoSearchActivity.class);
+                Intent intent=new Intent(mContext, VideoSearchActivity.class);
                 intent.putExtra("Fragment", "HomeFragment");
                 startActivity(intent);
             }
         });
 
+    }
+
+    private void setToolbarIcons() {
+        ((HomeScreen)mContext).imageViewSearch.setVisibility(View.VISIBLE);
+        ((HomeScreen)mContext).imageViewLogo.setVisibility(View.VISIBLE);
+        ((HomeScreen)mContext).textViewEdit.setVisibility(View.INVISIBLE);
+        ((HomeScreen)mContext).imageViewBackNavigation.setVisibility(View.INVISIBLE);
     }
 
     PullRefreshLayout.OnRefreshListener refreshListener = new PullRefreshLayout.OnRefreshListener() {

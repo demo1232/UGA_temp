@@ -57,6 +57,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 import com.nostra13.universalimageloader.utils.StorageUtils;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -66,8 +67,8 @@ import java.util.List;
  * Created by gauravkumar.singh on 5/16/2017.
  */
 
-public class HomeScreen extends AppCompatActivity implements  BottomNavigationBar.BottomNavigationMenuClickListener,AbstractView
-        ,OnFragmentToucheded {
+public class HomeScreen extends AppCompatActivity implements BottomNavigationBar.BottomNavigationMenuClickListener, AbstractView
+        , OnFragmentToucheded {
     private static final String SELECTED_ITEM = "arg_selected_item";
 
     private int mSelectedItem;
@@ -92,7 +93,7 @@ public class HomeScreen extends AppCompatActivity implements  BottomNavigationBa
     private String navigationPageArray[] = {"Home", "Catagories", "Saved", "Settings"};
 
     private Fragment navigationPageFragment[] = {HomeFragment.newInstance(this), CatagoriesFragment.newInstance(this),
-            SavedVideoFragment.newInstance(this), ProfileFragment.newInstance(this,20,20)};
+            SavedVideoFragment.newInstance(this), ProfileFragment.newInstance(this, 20, 20)};
     public SearchView searchView;
 
     private int[] bottomTabIcons = {R.drawable.home_icon, R.drawable.categories, R.drawable.video_save,
@@ -102,11 +103,10 @@ public class HomeScreen extends AppCompatActivity implements  BottomNavigationBa
     Animation animation;
 
     public ImageView imageViewSearch;
+    public ImageView imageViewBackNavigation;
     public EditText editTextSearch;
     public ImageView imageViewLogo;
-    TextView textViewTitle1;
-    TextView textViewTitle2;
-    boolean imageSearchSelected=false;
+    public TextView textViewEdit;
 
     public static ProgressBar autoRefreshProgressBar;
     private BannerDataModel mBannerDataModel;
@@ -122,8 +122,26 @@ public class HomeScreen extends AppCompatActivity implements  BottomNavigationBa
         activity = this;
         loadUniversalImageLoader();
 
+        initializeToolbarIcons();
+
+        View autoRefreshView = findViewById(R.id.auto_refresh_progress_main);
+        autoRefreshProgressBar = (ProgressBar) autoRefreshView.findViewById(R.id.auto_refresh_progress_bar);
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            autoRefreshProgressBar.setIndeterminateDrawable(getResources().getDrawable(R.drawable.circle_progress_bar_lower));
+        } else {
+            autoRefreshProgressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.progress_large_material, null));
+        }
+
+        loadBottomNavigationItems();
+
+        AppController.getInstance().setCurrentActivity(activity);
+        autoRefresh();
+    }
+
+    private void initializeToolbarIcons() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        AppBarLayout appBarLayout = (AppBarLayout)findViewById(R.id.appBar);
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appBar);
         appBarLayout.setExpanded(false, true);
 
         // mToolbar.setTitle("UGAVAULT");
@@ -137,47 +155,10 @@ public class HomeScreen extends AppCompatActivity implements  BottomNavigationBa
         imageViewSearch = (ImageView) mToolbar.findViewById(R.id.imageview_search);
         editTextSearch = (EditText) mToolbar.findViewById(R.id.editText_search);
         imageViewLogo = (ImageView) mToolbar.findViewById(R.id.imageview_logo);
-        textViewTitle1 =(TextView)mToolbar.findViewById(R.id.toolbar_title_1);
-        textViewTitle2= (TextView)mToolbar.findViewById(R.id.toolbar_title_2);
-
-        View autoRefreshView = findViewById(R.id.auto_refresh_progress_main);
-        autoRefreshProgressBar = (ProgressBar) autoRefreshView.findViewById(R.id.auto_refresh_progress_bar);
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            autoRefreshProgressBar.setIndeterminateDrawable(getResources().getDrawable(R.drawable.circle_progress_bar_lower));
-        } else {
-            autoRefreshProgressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.progress_large_material, null));
-        }
-
-        imageViewSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                if(!imageSearchSelected){
-                    editTextSearch.setVisibility(View.VISIBLE);
-                    imageViewSearch.setImageResource(R.drawable.close);
-                    textViewTitle1.setVisibility(View.VISIBLE);
-                    textViewTitle2.setVisibility(View.GONE);
-                    imageSearchSelected=true;
-                }else{
-                    editTextSearch.setVisibility(View.GONE);
-                    imageViewSearch.setImageResource(R.drawable.search);
-                    imageViewSearch.setTag(R.drawable.close);
-                    textViewTitle1.setVisibility(View.VISIBLE);
-                    textViewTitle2.setVisibility(View.VISIBLE);
-                    imageSearchSelected=false;
-                }
-
-            }
-        });
-
-
-        loadBottomNavigationItems();
-
-        AppController.getInstance().setCurrentActivity(activity);
-        autoRefresh();
+        textViewEdit = (TextView) findViewById(R.id.textview_edit);
+        imageViewBackNavigation = (ImageView) findViewById(R.id.imageview_back);
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -213,7 +194,7 @@ public class HomeScreen extends AppCompatActivity implements  BottomNavigationBa
                 autoRefreshProgressBar.setVisibility(View.VISIBLE);
             }
 
-             stopService(new Intent(HomeScreen.this, TrendingFeaturedVideoService.class));
+            stopService(new Intent(HomeScreen.this, TrendingFeaturedVideoService.class));
 
             listUrl.add(GlobalConstants.CATEGORIES_TAB_URL);
             listUrl.add(GlobalConstants.CATEGORIES_PLAYLIST_URL);
@@ -229,6 +210,7 @@ public class HomeScreen extends AppCompatActivity implements  BottomNavigationBa
     ArrayList<VideoDTO> arrayListFeatured = new ArrayList<>();
     ArrayList<PlaylistDto> playlistDtoArrayList = new ArrayList<>();
     ArrayList<VideoDTO> arrayListVideos = new ArrayList<>();
+
     private class AutoRefreshData extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
@@ -282,10 +264,10 @@ public class HomeScreen extends AppCompatActivity implements  BottomNavigationBa
                             arrayListVideos.clear();
                         }
 
-                } else{
-                    VaultDatabaseHelper.getInstance(getApplicationContext()).insertTabBannerData(bDTO);
+                    } else {
+                        VaultDatabaseHelper.getInstance(getApplicationContext()).insertTabBannerData(bDTO);
+                    }
                 }
-            }
 
                 broadCastIntent.setAction(HomeFragment.HomeResponseReceiver.ACTION_RESP);
                 broadCastIntent.addCategory(Intent.CATEGORY_DEFAULT);
@@ -316,9 +298,9 @@ public class HomeScreen extends AppCompatActivity implements  BottomNavigationBa
                                 playlistDtoArrayList.addAll(AppController.getInstance().getServiceManager().
                                         getVaultService().getPlaylistData(url));
 
-                                if(playlistDtoArrayList.size() >0) {
+                                if (playlistDtoArrayList.size() > 0) {
                                    VaultDatabaseHelper.getInstance(getApplicationContext()).
-                                            insertPlaylistTabData(playlistDtoArrayList,catagoriesTabDao.getCategoriesId());
+                                            insertPlaylistTabData(playlistDtoArrayList, catagoriesTabDao.getCategoriesId());
                                 }
 
                                 for (PlaylistDto playlistDto : playlistDtoArrayList) {
@@ -331,7 +313,6 @@ public class HomeScreen extends AppCompatActivity implements  BottomNavigationBa
                                     VaultDatabaseHelper.getInstance(getApplicationContext()).
                                             insertVideosInDatabase(arrayListVideos);
                                 }
-
 
 
                             } catch (Exception e) {
@@ -347,13 +328,13 @@ public class HomeScreen extends AppCompatActivity implements  BottomNavigationBa
                 e.printStackTrace();
             }
 
-            return  null;
+            return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            if(autoRefreshProgressBar != null) {
+            if (autoRefreshProgressBar != null) {
                 autoRefreshProgressBar.setVisibility(View.GONE);
             }
             autoRefreshHandler.postDelayed(autoRefreshRunnable, GlobalConstants.AUTO_REFRESH_INTERVAL);
@@ -395,42 +376,41 @@ public class HomeScreen extends AppCompatActivity implements  BottomNavigationBa
     public void onFragmentTouched(Fragment fragment, float x, float y) {
 
 
-            if (fragment instanceof BaseFragment) {
+        if (fragment instanceof BaseFragment) {
 
-             final BaseFragment theFragment = (BaseFragment) fragment;
+            final BaseFragment theFragment = (BaseFragment) fragment;
 
-                Animator unreveal = theFragment.prepareUnrevealAnimator(x, y);
+            Animator unreveal = theFragment.prepareUnrevealAnimator(x, y);
 
-                unreveal.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                    }
+            unreveal.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                }
 
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        // remove the fragment only when the animation finishes
-                        //  getFragmentManager().beginTransaction().remove(theFragment).commit();
-                        //to prevent flashing the fragment before removing it, execute pending transactions inmediately
-                        getFragmentManager().executePendingTransactions();
-                    }
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    // remove the fragment only when the animation finishes
+                    //  getFragmentManager().beginTransaction().remove(theFragment).commit();
+                    //to prevent flashing the fragment before removing it, execute pending transactions inmediately
+                    getFragmentManager().executePendingTransactions();
+                }
 
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-                    }
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                }
 
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-                    }
-                });
-                unreveal.start();
-            }
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+                }
+            });
+            unreveal.start();
+        }
 
 
     }
 
 
-    private void loadUniversalImageLoader()
-    {
+    private void loadUniversalImageLoader() {
         File cacheDir = StorageUtils.getCacheDirectory(HomeScreen.this);
         ImageLoaderConfiguration config;
         config = new ImageLoaderConfiguration.Builder(HomeScreen.this)
@@ -457,7 +437,7 @@ public class HomeScreen extends AppCompatActivity implements  BottomNavigationBa
         List<NavigationPage> navigationPages = new ArrayList<>();
         for (int i = 0; i < navigationPageArray.length; i++) {
             NavigationPage bottomNavagationPage = new NavigationPage(navigationPageArray[i],
-                    ContextCompat.getDrawable(this,bottomTabIcons[i]),
+                    ContextCompat.getDrawable(this, bottomTabIcons[i]),
                     navigationPageFragment[i]);
             navigationPages.add(bottomNavagationPage);
         }
@@ -534,8 +514,7 @@ public class HomeScreen extends AppCompatActivity implements  BottomNavigationBa
     }
 
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() > 0) {
             getFragmentManager().popBackStack();
         } else {
@@ -577,8 +556,6 @@ public class HomeScreen extends AppCompatActivity implements  BottomNavigationBa
             }
         }, 2000);
     }
-
-
 
 
 }

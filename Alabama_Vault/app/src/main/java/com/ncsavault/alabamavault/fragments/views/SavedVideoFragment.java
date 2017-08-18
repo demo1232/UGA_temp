@@ -181,7 +181,8 @@ public class SavedVideoFragment extends Fragment implements SavedVideoAdapter.Sa
             savedViewLayout.setVisibility(View.VISIBLE);
         }
 
-        ((HomeScreen)getActivity()).imageViewSearch.setVisibility(View.VISIBLE);
+        setToolbarIcons();
+
         ((HomeScreen)getActivity()).imageViewSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -194,6 +195,13 @@ public class SavedVideoFragment extends Fragment implements SavedVideoAdapter.Sa
         initListener();
         getFavoriteDataFromDataBase();
 
+    }
+
+    private void setToolbarIcons() {
+        ((HomeScreen)mContext).imageViewSearch.setVisibility(View.VISIBLE);
+        ((HomeScreen)mContext).imageViewLogo.setVisibility(View.VISIBLE);
+        ((HomeScreen)mContext).textViewEdit.setVisibility(View.INVISIBLE);
+        ((HomeScreen)mContext).imageViewBackNavigation.setVisibility(View.INVISIBLE);
     }
 
     /**

@@ -100,10 +100,10 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
     private static Context mContext;
     private SwitchCompat mSwitchCompat;
     OnFragmentTouched listener;
-    private ImageView mPlayerBackgroundImage,mUserProfileImage;
-    private TextView mFirstName,mLastName,mEmailId,mTwitterEmailId,mFacebookEmailId,mPushNotification;
-    private EditText edFirstName,edLastName;
-    private Button mResetPasswordButton,mLogoutButton;
+    private ImageView mPlayerBackgroundImage, mUserProfileImage;
+    private TextView mFirstName, mLastName, mEmailId, mTwitterEmailId, mFacebookEmailId, mPushNotification;
+    private EditText edFirstName, edLastName;
+    private Button mResetPasswordButton, mLogoutButton;
     private DisplayImageOptions options;
     private User responseUser = null;
     ProgressDialog pDialog;
@@ -118,7 +118,8 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
     private final String[] MEDIA_AND_CAMERA_PERMISSIONS_LIST = {Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
 
-    private LinearLayout edLinearLayout,tvLinearLayout;
+    private LinearLayout edLinearLayout, tvLinearLayout;
+    private TwitterLoginButton twitterLoginButton;
     private TwitterLoginButton twitterLoginButton;
     private boolean isValidFields = true;
     private boolean isEditing = true;
@@ -151,7 +152,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView =  inflater.inflate(R.layout.user_profile_screen_layout, container, false);
+        View rootView = inflater.inflate(R.layout.user_profile_screen_layout, container, false);
 
         return rootView;
     }
@@ -169,7 +170,31 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
         mFacebookEmailId = (TextView) view.findViewById(R.id.facebook_email_id);
         mPushNotification = (TextView) view.findViewById(R.id.tv_push_view);
 
-        ((HomeScreen)getActivity()).imageViewSearch.setImageResource(R.drawable.setting);
+        setToolbarIcons();
+        ((HomeScreen) getActivity()).textViewEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (((HomeScreen) mContext).textViewEdit.getText().toString().equalsIgnoreCase("EDIT")) {
+                    ((HomeScreen) mContext).textViewEdit.setText("SAVE");
+
+                    edLinearLayout.setVisibility(View.VISIBLE);
+                    tvLinearLayout.setVisibility(View.GONE);
+
+                } else if (((HomeScreen) mContext).textViewEdit.getText().toString().equalsIgnoreCase("SAVE")) {
+                    ((HomeScreen) mContext).textViewEdit.setText("EDIT");
+                    edLinearLayout.setVisibility(View.GONE);
+                    tvLinearLayout.setVisibility(View.VISIBLE);
+                    mFirstName.setText(edFirstName.getText().toString());
+                    mLastName.setText(edLastName.getText().toString());
+
+                    updateUserData();
+
+
+                }
+            }
+        });
+
         mResetPasswordButton = (Button) view.findViewById(R.id.tv_reset_password);
         mLogoutButton = (Button) view.findViewById(R.id.tv_logout);
 
@@ -191,10 +216,10 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
         twitterLoginButton = (TwitterLoginButton) view.findViewById(R.id.twitter_login_button);
         circulerFrameLayout = (FrameLayout) view.findViewById(R.id.circuler_image_layout);
         scrollView = (ScrollView) view.findViewById(R.id.scroll_view);
-        loginViewLayout = (LinearLayout)view.findViewById(R.id.login_view_layout);
+        loginViewLayout = (LinearLayout) view.findViewById(R.id.login_view_layout);
         loginButton = (Button) view.findViewById(R.id.button_login);
 
-        int btnSize=mSwitchCompat.getWidth();
+        int btnSize = mSwitchCompat.getWidth();
         mSwitchCompat.setHeight(btnSize);
 
         prefs = context.getSharedPreferences(GlobalConstants.PREF_PACKAGE_NAME, Context.MODE_PRIVATE);
@@ -209,21 +234,18 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                 .imageScaleType(ImageScaleType.EXACTLY)
                 .build();
 
-        if(userId == GlobalConstants.DEFAULT_USER_ID)
-        {
+        if (userId == GlobalConstants.DEFAULT_USER_ID) {
             loginViewLayout.setVisibility(View.VISIBLE);
             circulerFrameLayout.setVisibility(View.GONE);
             scrollView.setVisibility(View.GONE);
-        }else
-        {
+        } else {
             loginViewLayout.setVisibility(View.GONE);
             circulerFrameLayout.setVisibility(View.VISIBLE);
             scrollView.setVisibility(View.VISIBLE);
 
             if (Utils.isInternetAvailable(mContext)) {
                 loadUserDataFromServer();
-            }
-            else {
+            } else {
                 loadUserDataFromLocal();
             }
             initData();
@@ -234,8 +256,15 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 
     }
 
-    private void initData()
-    {
+    private void setToolbarIcons() {
+        ((HomeScreen)mContext).imageViewSearch.setVisibility(View.INVISIBLE);
+        ((HomeScreen)mContext).imageViewLogo.setVisibility(View.VISIBLE);
+        ((HomeScreen)mContext).textViewEdit.setVisibility(View.VISIBLE);
+        ((HomeScreen)mContext).textViewEdit.setText("EDIT");
+        ((HomeScreen)mContext).imageViewBackNavigation.setVisibility(View.INVISIBLE);
+    }
+
+    private void initData() {
         Profile fbProfile = Profile.getCurrentProfile();
         if (fbProfile != null) {
             mFacebookEmailId.setText(fbProfile.getName());
@@ -252,8 +281,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
         }
     }
 
-    private void initListener()
-    {
+    private void initListener() {
         mUserProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -270,7 +298,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                     }
 
                 else
-                    ((HomeScreen)mContext).showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
+                    ((HomeScreen) mContext).showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
             }
         });
 
@@ -316,10 +344,9 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 
 
                     } else if (Profile.getCurrentProfile() == null) {
-                        LoginManager.getInstance().logInWithReadPermissions((HomeScreen)mContext,
+                        LoginManager.getInstance().logInWithReadPermissions((HomeScreen) mContext,
                                 Arrays.asList(GlobalConstants.FACEBOOK_PERMISSION));
-                    }else
-                    {
+                    } else {
 
                         LoginManager.getInstance().logOut();
                         mFacebookEmailId.setText("Link Facebook Account");
@@ -327,11 +354,12 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                     // LoginManager.getInstance().logInWithReadPermissions(UserProfileActivity.this, Arrays.asList("public_profile"));
 
                 } else {
-                    ((HomeScreen)mContext).showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
+                    ((HomeScreen) mContext).showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
                 }
             }
         });
 
+<<<<<<< .mine
         mTwitterEmailId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -378,6 +406,54 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
             }
         });
 
+=======
+        mTwitterEmailId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Utils.isInternetAvailable(mContext.getApplicationContext())) {
+
+                    boolean installedTwitterApp = checkIfAppInstalled("com.twitter.android");
+                    if (!installedTwitterApp) {
+
+                        String twitterPlayStoreUrl = "https://play.google.com/store/apps/details?id=com.twitter.android&hl=en";
+                        showConfirmSharingDialog("Twitter app is not installed would you like to install it now?", twitterPlayStoreUrl);
+
+
+                    } else {
+                        // prefs.edit().putBoolean(TWITTER_LINKING, true).apply();
+                        TwitterSession session =
+                                Twitter.getSessionManager().getActiveSession();
+                        if (session == null) {
+                            twitterLoginButton.performClick();
+                        } else {
+                            Twitter.logOut();
+                            mTwitterEmailId.setText("Link Twitter Accout");
+                        }
+                    }
+
+
+                } else {
+                    ((HomeScreen) mContext).showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
+                }
+            }
+        });
+
+        twitterLoginButton.setCallback(new Callback<TwitterSession>() {
+            @Override
+            public void success(Result<TwitterSession> twitterSessionResult) {
+
+//                Toast.makeText(ProfileUpdateActivity.this,"Twitter Login Done",Toast.LENGTH_SHORT).show();
+                mTwitterEmailId.setText("@" + twitterSessionResult.data.getUserName());
+            }
+
+            @Override
+            public void failure(TwitterException e) {
+
+            }
+        });
+
+
+>>>>>>> .theirs
         mLogoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -398,7 +474,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                 Intent intent = new Intent(mContext, LoginEmailActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                ((HomeScreen)mContext).finish();
+                ((HomeScreen) mContext).finish();
             }
         });
 
@@ -418,7 +494,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                 Intent intent = new Intent(mContext, LoginEmailActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                ((HomeScreen)mContext).finish();
+                ((HomeScreen) mContext).finish();
             }
         });
 
@@ -469,12 +545,10 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                     @Override
                     protected void onPostExecute(Void result) {
 
-                        if(isChecked)
-                        {
-                            ((HomeScreen)mContext).showToastMessage("Enable Push Notification");
-                        }else
-                        {
-                            ((HomeScreen)mContext).showToastMessage("Disable Push Notification");
+                        if (isChecked) {
+                            ((HomeScreen) mContext).showToastMessage("Enable Push Notification");
+                        } else {
+                            ((HomeScreen) mContext).showToastMessage("Disable Push Notification");
                         }
 
                     }
@@ -484,7 +558,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
             }
         });
 
-        ((HomeScreen)getActivity()).imageViewSearch.setOnClickListener(new View.OnClickListener() {
+        ((HomeScreen) getActivity()).imageViewSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -494,6 +568,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
     }
 
     private static CallbackManager callbackManager;
+
     public void initializeFacebookUtils() {
         FacebookSdk.sdkInitialize(mContext.getApplicationContext());
 
@@ -545,7 +620,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                     }
 
                     private void showAlert() {
-                        ((HomeScreen)mContext).showToastMessage(GlobalConstants.FACEBOOK_LOGIN_CANCEL);
+                        ((HomeScreen) mContext).showToastMessage(GlobalConstants.FACEBOOK_LOGIN_CANCEL);
                        /* new AlertDialog.Builder(ProfileUpdateActivity.this)
                                 .setTitle("Cancelled")
                                 .setMessage("Process was cancelled")
@@ -716,7 +791,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 
         pDialog = new ProgressDialog(mContext, R.style.CustomDialogTheme);
         pDialog.show();
-        pDialog.setContentView(Utils.getInstance().setViewToProgressDialog((HomeScreen)mContext));
+        pDialog.setContentView(Utils.getInstance().setViewToProgressDialog((HomeScreen) mContext));
         pDialog.setCanceledOnTouchOutside(false);
         pDialog.setCancelable(false);
 
@@ -735,7 +810,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 
         pDialog = new ProgressDialog(mContext, R.style.CustomDialogTheme);
         pDialog.show();
-        pDialog.setContentView(Utils.getInstance().setViewToProgressDialog((HomeScreen)mContext));
+        pDialog.setContentView(Utils.getInstance().setViewToProgressDialog((HomeScreen) mContext));
         pDialog.setCanceledOnTouchOutside(false);
         pDialog.setCancelable(false);
         if (responseUser != null) {
@@ -751,10 +826,10 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
             final String email = pref.getString(GlobalConstants.PREF_VAULT_USER_EMAIL, "");
             if (responseUser != null) {
                 if (selectedImageUri != null) {
-                    Bitmap selectedBitmap = Utils.getInstance().decodeUri(selectedImageUri, (HomeScreen)mContext);
+                    Bitmap selectedBitmap = Utils.getInstance().decodeUri(selectedImageUri, (HomeScreen) mContext);
                     selectedBitmap = Utils.getInstance().
                             rotateImageDetails(selectedBitmap, selectedImageUri,
-                                    (HomeScreen)mContext, sdImageMainDirectory);
+                                    (HomeScreen) mContext, sdImageMainDirectory);
                     String convertedImage = ConvertBitmapToBase64Format(selectedBitmap);
                     responseUser.setImageurl(convertedImage);
                 }
@@ -826,11 +901,11 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                     }
                 } else {
 //                                Toast.makeText(ProfileUpdateActivity.this, "Error loading information!!! Please try again later.", Toast.LENGTH_LONG).show();
-                    ((HomeScreen)mContext).showToastMessage("Error loading information");
+                    ((HomeScreen) mContext).showToastMessage("Error loading information");
                 }
             } else {
 //                            Toast.makeText(ProfileUpdateActivity.this, "Error loading information!!! Please try again later.", Toast.LENGTH_LONG).show();
-                ((HomeScreen)mContext).showToastMessage("Error loading information");
+                ((HomeScreen) mContext).showToastMessage("Error loading information");
             }
 
         } catch (Exception e) {
@@ -860,14 +935,15 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 
             if (selectedImageUri != null) {
                 try {
-                    Bitmap selectedBitmap = Utils.getInstance().decodeUri(selectedImageUri, (HomeScreen)mContext);
+                    Bitmap selectedBitmap = Utils.getInstance().decodeUri(selectedImageUri, (HomeScreen) mContext);
                     selectedBitmap = Utils.getInstance().rotateImageDetails(selectedBitmap,
-                            selectedImageUri, (HomeScreen)mContext, sdImageMainDirectory);
+                            selectedImageUri, (HomeScreen) mContext, sdImageMainDirectory);
 
                         /*Drawable drawable = new BitmapDrawable(getResources(), selectedBitmap);
                         imgUserProfile.setImageDrawable(drawable);*/
-
+                    ((HomeScreen)mContext).textViewEdit.setText("SAVE");
                     mUserProfileImage.setImageBitmap(selectedBitmap);
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -906,7 +982,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 
     @Override
     public void update() {
-        ((HomeScreen)mContext).runOnUiThread(new Runnable() {
+        ((HomeScreen) mContext).runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (mUserProfileModel != null && mUserProfileModel.getState() == BaseModel.STATE_SUCCESS) {
@@ -914,9 +990,9 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                     try {
                         pDialog.dismiss();
                         if (mUserProfileModel.getUserProfileResult()) {
-                            ((HomeScreen )mContext).showToastMessage("Profile updated successfully");
+                            ((HomeScreen) mContext).showToastMessage("Profile updated successfully");
                         } else {
-                            ((HomeScreen )mContext).showToastMessage("Error updating information");
+                            ((HomeScreen) mContext).showToastMessage("Error updating information");
                             loadUserDataFromLocal();
                         }
                         final File root = new File(Environment.getExternalStorageDirectory() +
@@ -1008,19 +1084,35 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                                                 });
                             }
                         } else {
+<<<<<<< .mine
                             ((HomeScreen)mContext).showToastMessage("Error loading information");
+=======
+                            ((HomeScreen) mContext).showToastMessage("Error loading information");
+>>>>>>> .theirs
                         }
                     } else {
+<<<<<<< .mine
                         ((HomeScreen)mContext).showToastMessage("Error loading information");
+=======
+                        ((HomeScreen) mContext).showToastMessage("Error loading information");
+>>>>>>> .theirs
                     }
 
                 } else {
+<<<<<<< .mine
                     ((HomeScreen)mContext).showToastMessage(GlobalConstants.MSG_CONNECTION_TIMEOUT);
+=======
+                    ((HomeScreen) mContext).showToastMessage(GlobalConstants.MSG_CONNECTION_TIMEOUT);
+>>>>>>> .theirs
 
                 }
 
             } else {
+<<<<<<< .mine
                 ((HomeScreen)mContext).showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
+=======
+                ((HomeScreen) mContext).showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
+>>>>>>> .theirs
             }
             pDialog.dismiss();
         } catch (Exception e) {
@@ -1046,13 +1138,14 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                         if (!isValidText(edFirstName.getText().toString())) {
                             isValidFields = false;
 //                            edFirstName.setError("Invalid! Minimum 3 characters");
-                            ((HomeScreen)mContext).showToastMessage("First Name should have minimum 3 characters");
+                            ((HomeScreen) mContext).showToastMessage("First Name should have minimum 3 characters");
                         } else if (!isValidText(edLastName.getText().toString())) {
                             isValidFields = false;
 //                            edLastName.setError("Invalid! Minimum 3 characters");
-                            ((HomeScreen)mContext).showToastMessage("Last Name should have minimum 3 characters");
+                            ((HomeScreen) mContext).showToastMessage("Last Name should have minimum 3 characters");
                         }
 
+<<<<<<< .mine
                         //gk if (isValidFields) {
                         Utils.getInstance().gethideKeyboard((HomeScreen)mContext);
                         //tvEditHeader.setText("Edit");
@@ -1117,4 +1210,70 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 
 
 
+=======
+                        //gk if (isValidFields) {
+                        Utils.getInstance().gethideKeyboard((HomeScreen) mContext);
+                        //tvEditHeader.setText("Edit");
+
+                        mFirstName.setText(edFirstName.getText().toString());
+                        mLastName.setText(edLastName.getText().toString());
+                        //tvBio.setText(edBio.getText().toString());
+
+                        edFirstName.setVisibility(View.GONE);
+                        edLastName.setVisibility(View.GONE);
+
+                        //edBio.setVisibility(View.GONE);
+                        isEditing = false;
+                        edFirstName.setBackground(null);
+                        edLastName.setBackground(null);
+                        //edBio.setBackground(null);
+
+                        mFirstName.setVisibility(View.VISIBLE);
+                        mLastName.setVisibility(View.VISIBLE);
+                        //tvBio.setVisibility(View.VISIBLE);
+//                            isEdited = false;
+                        //make a server call for updating the data along with video
+                        updateUserData();
+                        // }
+                        isValidFields = true;
+                        alertDialog.dismiss();
+                    }
+                });
+        alertDialogBuilder.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        final File root = new File(Environment.getExternalStorageDirectory() + File.separator + GlobalConstants.PROFILE_PIC_DIRECTORY + File.separator);
+                        if (root != null) {
+                            if (root.listFiles() != null) {
+                                for (File childFile : root.listFiles()) {
+                                    if (childFile != null) {
+                                        if (childFile.exists())
+                                            childFile.delete();
+                                    }
+
+                                }
+                                if (root.exists())
+                                    root.delete();
+                            }
+                        }
+
+                    }
+                });
+
+        alertDialog = alertDialogBuilder.create();
+        alertDialog.setCancelable(false);
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+        Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        nbutton.setAllCaps(false);
+        nbutton.setTextColor(getResources().getColor(R.color.apptheme_color));
+        Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        pbutton.setTextColor(getResources().getColor(R.color.apptheme_color));
+        pbutton.setAllCaps(false);
+    }
+
+
+
+>>>>>>> .theirs
 }

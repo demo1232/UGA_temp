@@ -96,7 +96,7 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
 //            getCatagoriesData();
 //        }else
 //        {
-            getCategoriesDateFromDatabase();
+        getCategoriesDateFromDatabase();
 //        }
 
 
@@ -177,7 +177,7 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
 
     private void initViews(View view) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.catagories_recycler_view);
-        ((HomeScreen) getActivity()).imageViewSearch.setVisibility(View.GONE);
+        setToolbarIcons();
         progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
 
         refreshLayout = (PullRefreshLayout) view.findViewById(R.id.refresh_layout);
@@ -191,6 +191,13 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
             System.out.println("progress bar not showing ");
             progressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.progress_large_material, null));
         }
+    }
+
+    private void setToolbarIcons() {
+        ((HomeScreen)mContext).imageViewSearch.setVisibility(View.INVISIBLE);
+        ((HomeScreen)mContext).imageViewLogo.setVisibility(View.VISIBLE);
+        ((HomeScreen)mContext).textViewEdit.setVisibility(View.INVISIBLE);
+        ((HomeScreen)mContext).imageViewBackNavigation.setVisibility(View.INVISIBLE);
     }
 
 
@@ -276,27 +283,26 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
     }
 
 
-    private void getCategoriesDateFromDatabase()
-    {
-       // if(catagoriesTabList.size()>0) {
-            catagoriesTabList.clear();
-            catagoriesTabList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).
-                    getAllLocalCategoriesTabData());
+    private void getCategoriesDateFromDatabase() {
+        // if(catagoriesTabList.size()>0) {
+        catagoriesTabList.clear();
+        catagoriesTabList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).
+                getAllLocalCategoriesTabData());
 
 //        if(mCatagoriesAdapter != null)
 //        {
 //            mCatagoriesAdapter.notifyDataSetChanged();
 //        }else
 //        {
-            mCatagoriesAdapter = new CatagoriesAdapter(mContext, CatagoriesFragment.this, catagoriesTabList);
-            mRecyclerView.setHasFixedSize(true);
-            LinearLayoutManager llm = new LinearLayoutManager(mContext);
-            llm.setOrientation(LinearLayoutManager.VERTICAL);
-            mRecyclerView.setLayoutManager(llm);
-            mRecyclerView.setAdapter(mCatagoriesAdapter);
+        mCatagoriesAdapter = new CatagoriesAdapter(mContext, CatagoriesFragment.this, catagoriesTabList);
+        mRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(mContext);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(llm);
+        mRecyclerView.setAdapter(mCatagoriesAdapter);
 //        }
-        }
-   // }
+    }
+    // }
 
 }
 
