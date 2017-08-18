@@ -7,6 +7,12 @@
     android:background="@color/LightGrey"
     >
 
+
+    <com.baoyz.widget.PullRefreshLayout
+        android:id="@+id/refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/catagories_recycler_view"
             android:layout_width="match_parent"
@@ -14,6 +20,7 @@
             android:background="@color/LightGrey"
             android:scrollbars="vertical"
             />
+    </com.baoyz.widget.PullRefreshLayout>
 
         <FrameLayout
             android:id="@+id/container"

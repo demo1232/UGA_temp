@@ -1,11 +1,14 @@
 package com.ncsavault.alabamavault.dto;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
  * Created by aqeeb.pathan on 17-06-2015.
  */
 public class VideoDTO implements Serializable {
+
 
     private long videoId;
     private String videoName;

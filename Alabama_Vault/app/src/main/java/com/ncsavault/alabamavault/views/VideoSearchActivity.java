@@ -251,6 +251,9 @@ public class VideoSearchActivity extends AppCompatActivity implements VideoSearc
 
                         }
                     }
+                }else
+                {
+
                 }
             }
         });

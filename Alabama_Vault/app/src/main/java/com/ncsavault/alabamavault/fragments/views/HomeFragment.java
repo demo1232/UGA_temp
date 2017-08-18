@@ -637,7 +637,8 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
 
                     if (VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getVideoCount() > 0) {
                         mRecyclerViewItems.clear();
-                        mRecyclerViewItems.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getVideoList(GlobalConstants.OKF_FEATURED));
+                        mRecyclerViewItems.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).
+                                getVideoList(GlobalConstants.OKF_FEATURED));
 
                     }
                     if (VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getTrendingVideoCount() > 0) {

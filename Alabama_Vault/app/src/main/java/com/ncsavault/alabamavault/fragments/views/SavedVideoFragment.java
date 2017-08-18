@@ -63,6 +63,9 @@ public class SavedVideoFragment extends Fragment implements SavedVideoAdapter.Sa
     private RelativeLayout savedViewLayout,savedLoginLayout;
     SharedPreferences prefs;
     private Button tvLoginButton;
+    AsyncTask<Void, Void, Void> mPostTask;
+    private boolean isFavoriteChecked;
+    private String postResult;
 
     public static Fragment newInstance(Context context) {
         Fragment frag = new SavedVideoFragment();
@@ -312,100 +315,108 @@ public class SavedVideoFragment extends Fragment implements SavedVideoAdapter.Sa
             }
         });
 
-//        viewHolder.mLayoutSavedImage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                if (favoriteVideoList.get(pos).isVideoIsFavorite() && ((favoriteVideoList.get(pos)
-//                        .getVideoLongUrl().length() == 0 || favoriteVideoList.get(pos).getVideoLongUrl()
-//                        .toLowerCase().equals("none")))) {
-//                    markFavoriteStatus(viewHolder,pos);
-//                } else {
-//                    if (favoriteVideoList.get(pos).getVideoLongUrl().length() > 0 && !favoriteVideoList
-//                            .get(pos).getVideoLongUrl().toLowerCase().equals("none")) {
-//                        markFavoriteStatus(viewHolder,pos);
-//                    } else {
-//                        //gk ((MainActivity) context).showToastMessage(GlobalConstants.MSG_NO_INFO_AVAILABLE);
-//                        viewHolder.savedVideoImageView.setImageResource(R.drawable.video_save);
-//                    }
-//                }
-//
-//                savedVideoAdapter.notifyDataSetChanged();
-//            }
-//        });
+        viewHolder.mLayoutSavedImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (favoriteVideoList.get(pos).isVideoIsFavorite() && ((favoriteVideoList.get(pos)
+                        .getVideoLongUrl().length() == 0 || favoriteVideoList.get(pos).getVideoLongUrl()
+                        .toLowerCase().equals("none")))) {
+                    markFavoriteStatus(viewHolder,pos);
+                } else {
+                    if (favoriteVideoList.get(pos).getVideoLongUrl().length() > 0 && !favoriteVideoList
+                            .get(pos).getVideoLongUrl().toLowerCase().equals("none")) {
+                        markFavoriteStatus(viewHolder,pos);
+                    } else {
+                        //gk ((MainActivity) context).showToastMessage(GlobalConstants.MSG_NO_INFO_AVAILABLE);
+                        viewHolder.savedVideoImageView.setImageResource(R.drawable.video_save);
+                    }
+                }
+
+                savedVideoAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
-//    public void markFavoriteStatus(final VideoDetailAdapter.VideoViewHolder viewHolder, final int pos) {
-//        if (Utils.isInternetAvailable(mContext)) {
-//            if (AppController.getInstance().getModelFacade().getLocalModel().getUserId() ==
-//                    GlobalConstants.DEFAULT_USER_ID) {
-//                viewHolder.savedVideoImageView.setBackgroundResource(R.drawable.video_save);
-//                showConfirmLoginDialog(GlobalConstants.LOGIN_MESSAGE);
-//            } else {
-//                System.out.println("favorite position : " + pos);
-//                if (favoriteVideoList.get(pos).isVideoIsFavorite()) {
-//                    isFavoriteChecked = false;
-//                    VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).setFavoriteFlag
-//                            (0, favoriteVideoList.get(pos).getVideoId());
-//                    favoriteVideoList.get(pos).setVideoIsFavorite(false);
-//                    viewHolder.savedVideoImageView.setImageResource(R.drawable.video_save);
-//                } else {
-//                    isFavoriteChecked = true;
-//                    VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).setFavoriteFlag
-//                            (1, favoriteVideoList.get(pos).getVideoId());
-//                    favoriteVideoList.get(pos).setVideoIsFavorite(true);
-//                    viewHolder.savedVideoImageView.setImageResource(R.drawable.saved_video_img);
-//                }
-//
-//                mPostTask = new AsyncTask<Void, Void, Void>() {
-//                    @Override
-//                    protected void onPreExecute() {
-//                        super.onPreExecute();
-//                    }
-//
-//                    @Override
-//                    protected Void doInBackground(Void... params) {
-//                        try {
-//                            long userId = AppController.getInstance().getModelFacade().getLocalModel().getUserId();
-//                            postResult = AppController.getInstance().getServiceManager().getVaultService().
-//                                    postFavoriteStatus(userId, favoriteVideoList.get(pos).getVideoId(), playlistId,
-//                                            isFavoriteChecked);
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                        return null;
-//                    }
-//
-//                    @Override
-//                    protected void onPostExecute(Void result) {
-//                        try {
-//                            System.out.println("favorite position 111 : " + pos);
-//                            if (isFavoriteChecked) {
-//                                VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).setFavoriteFlag(1,
-//                                        videoDtoArrayList.get(pos).getVideoId());
-//                                // firebase analytics favoride video
-////                                params.putString(FirebaseAnalytics.Param.ITEM_ID, arrayListVideoDTOs.get(pos).getVideoName());
-////                                params.putString(FirebaseAnalytics.Param.ITEM_NAME, arrayListVideoDTOs.get(pos).getVideoName());
-////                                params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "video_favorite");
-////                                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params);
-//
-//                            }else{
-//                                VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).setFavoriteFlag
-//                                        (0, videoDtoArrayList.get(pos).getVideoId());
-//                            }
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                };
-//
-//                mPostTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-//            }
-//        } else {
-//            ((HomeScreen) mContext).showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
-//            viewHolder.savedVideoImageView.setBackgroundResource(R.drawable.video_save);
-//        }
-//    }
+    public void markFavoriteStatus(final SavedVideoAdapter.SavedVideoViewHolder viewHolder, final int pos) {
+        if (Utils.isInternetAvailable(mContext)) {
+            if (AppController.getInstance().getModelFacade().getLocalModel().getUserId() ==
+                    GlobalConstants.DEFAULT_USER_ID) {
+                viewHolder.savedVideoImageView.setBackgroundResource(R.drawable.video_save);
+                showConfirmLoginDialog(GlobalConstants.LOGIN_MESSAGE);
+            } else {
+                System.out.println("favorite position : " + pos);
+                if (favoriteVideoList.get(pos).isVideoIsFavorite()) {
+                    isFavoriteChecked = false;
+                    favoriteVideoList.remove(pos);
+                    savedVideoAdapter.notifyDataSetChanged();
+                    if(favoriteVideoList.size() == 0)
+                    {
+                        tvNoRecoredFound.setText(GlobalConstants.NO_RECORDS_FOUND);
+                    }
+                    VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).setFavoriteFlag
+                            (0, favoriteVideoList.get(pos).getVideoId());
+                    favoriteVideoList.get(pos).setVideoIsFavorite(false);
+                    viewHolder.savedVideoImageView.setImageResource(R.drawable.video_save);
+
+
+                } else {
+                    isFavoriteChecked = true;
+                    VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).setFavoriteFlag
+                            (1, favoriteVideoList.get(pos).getVideoId());
+                    favoriteVideoList.get(pos).setVideoIsFavorite(true);
+                    viewHolder.savedVideoImageView.setImageResource(R.drawable.saved_video_img);
+                }
+
+                mPostTask = new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected void onPreExecute() {
+                        super.onPreExecute();
+                    }
+
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        try {
+                            long userId = AppController.getInstance().getModelFacade().getLocalModel().getUserId();
+                            postResult = AppController.getInstance().getServiceManager().getVaultService().
+                                    postFavoriteStatus(userId, favoriteVideoList.get(pos).getVideoId(), favoriteVideoList.get(pos).getPlaylistId(),
+                                            isFavoriteChecked);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void result) {
+                        try {
+                            System.out.println("favorite position 111 : " + pos);
+                            if (isFavoriteChecked) {
+                                VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).setFavoriteFlag(1,
+                                        favoriteVideoList.get(pos).getVideoId());
+                                // firebase analytics favoride video
+//                                params.putString(FirebaseAnalytics.Param.ITEM_ID, arrayListVideoDTOs.get(pos).getVideoName());
+//                                params.putString(FirebaseAnalytics.Param.ITEM_NAME, arrayListVideoDTOs.get(pos).getVideoName());
+//                                params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "video_favorite");
+//                                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params);
+
+                            }else{
+                                VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).setFavoriteFlag
+                                        (0, favoriteVideoList.get(pos).getVideoId());
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+
+                mPostTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            }
+        } else {
+            ((HomeScreen) mContext).showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
+            viewHolder.savedVideoImageView.setBackgroundResource(R.drawable.video_save);
+        }
+    }
 
     public void showConfirmLoginDialog(String message) {
         AlertDialog alertDialog = null;

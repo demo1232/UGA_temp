@@ -145,7 +145,9 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
         if (bundle != null) {
             playlistId = bundle.getLong("playlist_id", 0);
         }
-        getVideoData(playlistId);
+       // getVideoData(playlistId);
+        getVideoDataFromDataBase(playlistId);
+
     }
 
     private void getVideoData(final long playlistId) {
@@ -214,6 +216,30 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
         };
 
         mDbTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    private void getVideoDataFromDataBase(long playlistId)
+    {
+
+
+        videoDtoArrayList.clear();
+        videoDtoArrayList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).
+                getVideoDataByPlaylistId(playlistId));
+
+        if (videoDtoArrayList.size() == 0) {
+            tvNoRecoredFound.setVisibility(View.VISIBLE);
+            tvNoRecoredFound.setText(GlobalConstants.NO_RECORDS_FOUND);
+        } else {
+            tvNoRecoredFound.setVisibility(View.GONE);
+        }
+
+
+        videoDetailAdapter = new VideoDetailAdapter(mContext, videoDtoArrayList, VideoDetailFragment.this);
+        mRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(mContext);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(llm);
+        mRecyclerView.setAdapter(videoDetailAdapter);
     }
 
     @Override

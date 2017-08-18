@@ -317,8 +317,7 @@ public class HomeScreen extends AppCompatActivity implements  BottomNavigationBa
                                         getVaultService().getPlaylistData(url));
 
                                 if(playlistDtoArrayList.size() >0) {
-                                    VaultDatabaseHelper.getInstance(getApplicationContext()).removeAllPlaylistTabData();
-                                    VaultDatabaseHelper.getInstance(getApplicationContext()).
+                                   VaultDatabaseHelper.getInstance(getApplicationContext()).
                                             insertPlaylistTabData(playlistDtoArrayList,catagoriesTabDao.getCategoriesId());
                                 }
 

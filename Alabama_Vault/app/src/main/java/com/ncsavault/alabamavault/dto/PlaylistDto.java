@@ -1,10 +1,14 @@
 package com.ncsavault.alabamavault.dto;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
 /**
  * Created by gauravkumar.singh on 8/11/2017.
  */
 
-public class PlaylistDto {
+public class PlaylistDto implements Serializable{
 
     public long playlistId;
     public String playlistName;
