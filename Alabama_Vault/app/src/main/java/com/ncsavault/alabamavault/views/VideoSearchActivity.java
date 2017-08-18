@@ -51,9 +51,12 @@ public class VideoSearchActivity extends AppCompatActivity implements VideoSearc
     RecyclerView recyclerViewSearch;
     VideoSearchAdapter videoSearchAdapter;
     public Toolbar mToolbar;
+
     public ImageView imageviewSearch;
     public EditText editTextSearch;
     public ImageView imageviewLogo;
+    public ImageView imageViewBackNavigation;
+
     TextView textviewNoVideoFound;
     ArrayList<Object> objects;
     Animation animation;
@@ -74,23 +77,17 @@ public class VideoSearchActivity extends AppCompatActivity implements VideoSearc
     private void initComponents() {
         mContext = this;
 //        Utils.hideKeyboard(VideoSearchActivity.this);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.back));
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appBar);
-        appBarLayout.setExpanded(false, true);
+
         //toolbar.setNavigationIcon(R.drawable.ic_toolbar);
-        mToolbar.setTitle("");
-        mToolbar.setSubtitle("");
-        imageviewSearch = (ImageView) mToolbar.findViewById(R.id.imageview_search);
-        recyclerViewSearch = (RecyclerView) findViewById(R.id.recycler_view_search);
-        textviewNoVideoFound = (TextView) findViewById(R.id.textView_recordsNotFound);
-        editTextSearch = (EditText) mToolbar.findViewById(R.id.editText_search);
-        editTextSearch.setVisibility(View.VISIBLE);
-        imageviewLogo = (ImageView) mToolbar.findViewById(R.id.imageview_logo);
-        imageviewLogo.setVisibility(View.GONE);
+
+        initializeToolbar();
+
+        imageViewBackNavigation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         fragment = getIntent().getStringExtra("Fragment");
 
@@ -129,6 +126,30 @@ public class VideoSearchActivity extends AppCompatActivity implements VideoSearc
         });
 
         AppController.getInstance().setCurrentActivity(this);
+    }
+
+    private void initializeToolbar() {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.back));
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appBar);
+        appBarLayout.setExpanded(false, true);
+
+        mToolbar.setTitle("");
+        mToolbar.setSubtitle("");
+
+        recyclerViewSearch = (RecyclerView) findViewById(R.id.recycler_view_search);
+        textviewNoVideoFound = (TextView) findViewById(R.id.textView_recordsNotFound);
+        editTextSearch = (EditText) mToolbar.findViewById(R.id.editText_search);
+        imageviewSearch = (ImageView) mToolbar.findViewById(R.id.imageview_search);
+        editTextSearch.setVisibility(View.VISIBLE);
+        imageviewSearch.setVisibility(View.INVISIBLE);
+        imageviewLogo = (ImageView) mToolbar.findViewById(R.id.imageview_logo);
+        imageviewLogo.setVisibility(View.INVISIBLE);
+        imageViewBackNavigation=(ImageView)mToolbar.findViewById(R.id.imageview_back);
+        imageViewBackNavigation.setVisibility(View.VISIBLE);
     }
 
 

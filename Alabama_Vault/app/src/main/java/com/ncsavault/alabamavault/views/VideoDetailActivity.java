@@ -61,6 +61,8 @@ public class VideoDetailActivity extends AppCompatActivity implements VideoDetai
     public ImageView imageviewSearch;
     public EditText editTextSearch;
     public ImageView imageviewLogo;
+    public ImageView imageViewBackNavigation;
+    public TextView textViewEdit;
     LinearLayout linearLayoutToolBar;
 
     @Override
@@ -73,36 +75,9 @@ public class VideoDetailActivity extends AppCompatActivity implements VideoDetai
 
     private void initComponenents() {
         mContext = this;
-        linearLayoutToolBar = (LinearLayout) findViewById(R.id.container_toolbar);
-        linearLayoutToolBar.setVisibility(View.VISIBLE);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setNavigationIcon(R.drawable.back);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed(); // Implemented by activity
-            }
-        });
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appBar);
-        appBarLayout.setExpanded(false, true);
-        //toolbar.setNavigationIcon(R.drawable.ic_toolbar);
-        mToolbar.setTitle("");
-        mToolbar.setSubtitle("");
-        imageviewSearch = (ImageView) mToolbar.findViewById(R.id.imageview_search);
-        editTextSearch = (EditText) mToolbar.findViewById(R.id.editText_search);
-        editTextSearch.setVisibility(View.GONE);
-        imageviewLogo = (ImageView) mToolbar.findViewById(R.id.imageview_logo);
 
+        initializeToolbar();
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.saved_video_recycler_view);
-
-        tvNoRecoredFound = (TextView) findViewById(R.id.tv_no_recored_found);
-        progressBar = (ProgressBar) findViewById(R.id.progressbar);
-
-        imageviewSearch.setVisibility(View.VISIBLE);
         imageviewSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,6 +86,19 @@ public class VideoDetailActivity extends AppCompatActivity implements VideoDetai
                 mContext.startActivity(intent);
             }
         });
+
+        imageViewBackNavigation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.saved_video_recycler_view);
+
+        tvNoRecoredFound = (TextView) findViewById(R.id.tv_no_recored_found);
+        progressBar = (ProgressBar) findViewById(R.id.progressbar);
+
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             progressBar.setIndeterminateDrawable(getResources().getDrawable(R.drawable.circle_progress_bar_lower));
@@ -127,6 +115,31 @@ public class VideoDetailActivity extends AppCompatActivity implements VideoDetai
         playlistId = getIntent().getLongExtra("playlistId", 0);
 
         getVideoData(playlistId);
+
+    }
+
+    private void initializeToolbar() {
+        linearLayoutToolBar = (LinearLayout) findViewById(R.id.container_toolbar);
+        linearLayoutToolBar.setVisibility(View.VISIBLE);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+//        mToolbar.setNavigationIcon(R.drawable.back);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appBar);
+        appBarLayout.setExpanded(false, true);
+        //toolbar.setNavigationIcon(R.drawable.ic_toolbar);
+        mToolbar.setTitle("");
+        mToolbar.setSubtitle("");
+        imageviewSearch = (ImageView) mToolbar.findViewById(R.id.imageview_search);
+        imageViewBackNavigation = (ImageView) mToolbar.findViewById(R.id.imageview_back);
+        editTextSearch = (EditText) mToolbar.findViewById(R.id.editText_search);
+        textViewEdit= (TextView) mToolbar.findViewById(R.id.textview_edit);
+        textViewEdit.setVisibility(View.INVISIBLE);
+        editTextSearch.setVisibility(View.INVISIBLE);
+        imageviewLogo = (ImageView) mToolbar.findViewById(R.id.imageview_logo);
+        imageviewSearch.setVisibility(View.VISIBLE);
+        imageViewBackNavigation.setVisibility(View.VISIBLE);
 
     }
 

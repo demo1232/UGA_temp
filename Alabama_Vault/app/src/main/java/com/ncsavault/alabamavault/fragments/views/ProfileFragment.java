@@ -14,11 +14,13 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
@@ -33,11 +35,15 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -48,6 +54,7 @@ import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ncsavault.alabamavault.R;
@@ -70,6 +77,11 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 import org.json.JSONObject;
 
@@ -88,10 +100,10 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
     private static Context mContext;
     private SwitchCompat mSwitchCompat;
     OnFragmentTouched listener;
-    private ImageView mPlayerBackgroundImage,mUserProfileImage;
-    private TextView mFirstName,mLastName,mEmailId,mTwitterEmailId,mFacebookEmailId,mPushNotification;
-    private EditText edFirstName,edLastName;
-    private Button mResetPasswordButton,mLogoutButton;
+    private ImageView mPlayerBackgroundImage, mUserProfileImage;
+    private TextView mFirstName, mLastName, mEmailId, mTwitterEmailId, mFacebookEmailId, mPushNotification;
+    private EditText edFirstName, edLastName;
+    private Button mResetPasswordButton, mLogoutButton;
     private DisplayImageOptions options;
     private User responseUser = null;
     ProgressDialog pDialog;
@@ -106,9 +118,18 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
     private final String[] MEDIA_AND_CAMERA_PERMISSIONS_LIST = {Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
 
-    private LinearLayout edLinearLayout,tvLinearLayout;
+    private LinearLayout edLinearLayout, tvLinearLayout;
+    private TwitterLoginButton twitterLoginButton;
     private boolean isValidFields = true;
     private boolean isEditing = true;
+    AsyncTask<Void, Void, Void> mPermissionChangeTask;
+    String refreshedToken;
+    private String result;
+    SharedPreferences prefs;
+    private FrameLayout circulerFrameLayout;
+    private ScrollView scrollView;
+    private LinearLayout loginViewLayout;
+    private Button loginButton;
 
     public static Fragment newInstance(Context context, int centerX, int centerY) {
         mContext = context;
@@ -121,12 +142,16 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView =  inflater.inflate(R.layout.user_profile_screen_layout, container, false);
+        View rootView = inflater.inflate(R.layout.user_profile_screen_layout, container, false);
 
         return rootView;
     }
@@ -144,13 +169,36 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
         mFacebookEmailId = (TextView) view.findViewById(R.id.facebook_email_id);
         mPushNotification = (TextView) view.findViewById(R.id.tv_push_view);
 
+        setToolbarIcons();
+        ((HomeScreen) getActivity()).textViewEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (((HomeScreen) mContext).textViewEdit.getText().toString().equalsIgnoreCase("EDIT")) {
+                    ((HomeScreen) mContext).textViewEdit.setText("SAVE");
+
+                    edLinearLayout.setVisibility(View.VISIBLE);
+                    tvLinearLayout.setVisibility(View.GONE);
+
+                } else if (((HomeScreen) mContext).textViewEdit.getText().toString().equalsIgnoreCase("SAVE")) {
+                    ((HomeScreen) mContext).textViewEdit.setText("EDIT");
+                    edLinearLayout.setVisibility(View.GONE);
+                    tvLinearLayout.setVisibility(View.VISIBLE);
+                    mFirstName.setText(edFirstName.getText().toString());
+                    mLastName.setText(edLastName.getText().toString());
+
+                    updateUserData();
+
+
+                }
+            }
+        });
+
         mResetPasswordButton = (Button) view.findViewById(R.id.tv_reset_password);
         mLogoutButton = (Button) view.findViewById(R.id.tv_logout);
 
         edFirstName = (EditText) view.findViewById(R.id.ed_first_name);
         edLastName = (EditText) view.findViewById(R.id.ed_last_name);
-
-        ((HomeScreen)getActivity()).imageViewSearch.setVisibility(View.GONE);
 
         pBar = (ProgressBar) view.findViewById(R.id.progressbar);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -164,6 +212,20 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
         edLinearLayout = (LinearLayout) view.findViewById(R.id.edit_linear_layout);
         tvLinearLayout = (LinearLayout) view.findViewById(R.id.text_linear_layout);
 
+        twitterLoginButton = (TwitterLoginButton) view.findViewById(R.id.twitter_login_button);
+        circulerFrameLayout = (FrameLayout) view.findViewById(R.id.circuler_image_layout);
+        scrollView = (ScrollView) view.findViewById(R.id.scroll_view);
+        loginViewLayout = (LinearLayout) view.findViewById(R.id.login_view_layout);
+        loginButton = (Button) view.findViewById(R.id.button_login);
+
+        int btnSize = mSwitchCompat.getWidth();
+        mSwitchCompat.setHeight(btnSize);
+
+        prefs = context.getSharedPreferences(GlobalConstants.PREF_PACKAGE_NAME, Context.MODE_PRIVATE);
+        boolean isAllowed = prefs.getBoolean(GlobalConstants.PREF_IS_NOTIFICATION_ALLOW, false);
+        long userId = prefs.getLong(GlobalConstants.PREF_VAULT_USER_ID_LONG, 0);
+        mSwitchCompat.setChecked(isAllowed);
+
         options = new DisplayImageOptions.Builder()
                 .cacheOnDisk(true).resetViewBeforeLoading(true)
                 .cacheInMemory(true)
@@ -171,42 +233,71 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                 .imageScaleType(ImageScaleType.EXACTLY)
                 .build();
 
+        if (userId == GlobalConstants.DEFAULT_USER_ID) {
+            loginViewLayout.setVisibility(View.VISIBLE);
+            circulerFrameLayout.setVisibility(View.GONE);
+            scrollView.setVisibility(View.GONE);
+        } else {
+            loginViewLayout.setVisibility(View.GONE);
+            circulerFrameLayout.setVisibility(View.VISIBLE);
+            scrollView.setVisibility(View.VISIBLE);
 
-        if (Utils.isInternetAvailable(mContext))
-            loadUserDataFromServer();
+            if (Utils.isInternetAvailable(mContext)) {
+                loadUserDataFromServer();
+            } else {
+                loadUserDataFromLocal();
+            }
+            initData();
+            initializeFacebookUtils();
+        }
 
-        initializeFacebookUtils();
         initListener();
 
     }
 
-    private void initData()
-    {
+    private void setToolbarIcons() {
+        ((HomeScreen)mContext).imageViewSearch.setVisibility(View.INVISIBLE);
+        ((HomeScreen)mContext).imageViewLogo.setVisibility(View.VISIBLE);
+        ((HomeScreen)mContext).textViewEdit.setVisibility(View.VISIBLE);
+        ((HomeScreen)mContext).textViewEdit.setText("EDIT");
+        ((HomeScreen)mContext).imageViewBackNavigation.setVisibility(View.INVISIBLE);
+    }
+
+    private void initData() {
         Profile fbProfile = Profile.getCurrentProfile();
         if (fbProfile != null) {
             mFacebookEmailId.setText(fbProfile.getName());
         }
+
+        TwitterSession session =
+                Twitter.getSessionManager().getActiveSession();
+
+        if (session != null) {
+//                TwitterAuthToken authToken = session.getAuthToken();
+//                String token = authToken.token;
+//                String secret = authToken.secret;
+            mTwitterEmailId.setText("@" + session.getUserName());
+        }
     }
 
-    private void initListener()
-    {
+    private void initListener() {
         mUserProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Utils.isInternetAvailable(mContext))
                     try {
                         //Marshmallow permissions for write external storage.
-                      //gk  if (haveAllMustPermissions(writeExternalStorage, PERMISSION_REQUEST_MUST)) {
+                        //gk  if (haveAllMustPermissions(writeExternalStorage, PERMISSION_REQUEST_MUST)) {
 
-                            openImageIntent();
+                        openImageIntent();
 
-                    //gk    }
+                        //gk    }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
                 else
-                    ((HomeScreen)mContext).showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
+                    ((HomeScreen) mContext).showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
             }
         });
 
@@ -241,12 +332,17 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
             public void onClick(View v) {
                 if (Utils.isInternetAvailable(mContext.getApplicationContext())) {
 
-                    // prefs.edit().putBoolean(FACEBOOK_LINKING, true).apply();
-                    if (Profile.getCurrentProfile() == null) {
-                        LoginManager.getInstance().logInWithReadPermissions((HomeScreen)mContext,
+                    boolean installedFacebookApp = checkIfAppInstalled("com.facebook.katana");
+                    if (!installedFacebookApp) {
+
+                        String facebookPlayStoreUrl = "https://play.google.com/store/apps/details?id=com.facebook.katana&hl=en";
+                        showConfirmSharingDialog("Facebook app is not installed would you like to install it now?", facebookPlayStoreUrl);
+
+
+                    } else if (Profile.getCurrentProfile() == null) {
+                        LoginManager.getInstance().logInWithReadPermissions((HomeScreen) mContext,
                                 Arrays.asList(GlobalConstants.FACEBOOK_PERMISSION));
-                    }else
-                    {
+                    } else {
 
                         LoginManager.getInstance().logOut();
                         mFacebookEmailId.setText("Link Facebook Account");
@@ -254,8 +350,53 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                     // LoginManager.getInstance().logInWithReadPermissions(UserProfileActivity.this, Arrays.asList("public_profile"));
 
                 } else {
-                    ((HomeScreen)mContext).showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
+                    ((HomeScreen) mContext).showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
                 }
+            }
+        });
+
+        mTwitterEmailId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Utils.isInternetAvailable(mContext.getApplicationContext())) {
+
+                    boolean installedTwitterApp = checkIfAppInstalled("com.twitter.android");
+                    if (!installedTwitterApp) {
+
+                        String twitterPlayStoreUrl = "https://play.google.com/store/apps/details?id=com.twitter.android&hl=en";
+                        showConfirmSharingDialog("Twitter app is not installed would you like to install it now?", twitterPlayStoreUrl);
+
+
+                    } else {
+                        // prefs.edit().putBoolean(TWITTER_LINKING, true).apply();
+                        TwitterSession session =
+                                Twitter.getSessionManager().getActiveSession();
+                        if (session == null) {
+                            twitterLoginButton.performClick();
+                        } else {
+                            Twitter.logOut();
+                            mTwitterEmailId.setText("Link Twitter Accout");
+                        }
+                    }
+
+
+                } else {
+                    ((HomeScreen) mContext).showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
+                }
+            }
+        });
+
+        twitterLoginButton.setCallback(new Callback<TwitterSession>() {
+            @Override
+            public void success(Result<TwitterSession> twitterSessionResult) {
+
+//                Toast.makeText(ProfileUpdateActivity.this,"Twitter Login Done",Toast.LENGTH_SHORT).show();
+                mTwitterEmailId.setText("@" + twitterSessionResult.data.getUserName());
+            }
+
+            @Override
+            public void failure(TwitterException e) {
+
             }
         });
 
@@ -279,12 +420,101 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                 Intent intent = new Intent(mContext, LoginEmailActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+                ((HomeScreen) mContext).finish();
+            }
+        });
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mContext.stopService(new Intent(mContext, TrendingFeaturedVideoService.class));
+
+                SharedPreferences pref = mContext.getSharedPreferences(GlobalConstants.PREF_PACKAGE_NAME,
+                        Context.MODE_PRIVATE);
+                pref.edit().putLong(GlobalConstants.PREF_VAULT_USER_ID_LONG, 0).apply();
+                pref.edit().putString(GlobalConstants.PREF_VAULT_USER_NAME, "").apply();
+                pref.edit().putString(GlobalConstants.PREF_VAULT_USER_EMAIL, "").apply();
+
+                VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).removeAllRecords();
+                Intent intent = new Intent(mContext, LoginEmailActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                ((HomeScreen) mContext).finish();
+            }
+        });
+
+        mSwitchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
+
+                refreshedToken = FirebaseInstanceId.getInstance().getToken();
+                final String deviceId = Settings.Secure.getString(context.getApplicationContext().getContentResolver(),
+                        Settings.Secure.ANDROID_ID);
+
+                mPermissionChangeTask = new AsyncTask<Void, Void, Void>() {
+
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        Log.i("Sync Dialog", "Device Id : " + deviceId);
+                        System.out.println("Registration Id in Toggle Setting Dialog : " + refreshedToken);
+                        if (isChecked) {
+                            if (refreshedToken != "") {
+                                result = AppController.getInstance().getServiceManager().getVaultService().
+                                        sendPushNotificationRegistration(GlobalConstants.PUSH_REGISTER_URL, refreshedToken, deviceId, isChecked);
+                                if (result != null) {
+                                    if (result.toLowerCase().contains("success")) {
+//                                        GCMRegistrar.setRegisteredOnServer(mActivity.getApplicationContext(),
+//                                                true);
+                                        prefs.edit().putBoolean(GlobalConstants.PREF_IS_NOTIFICATION_ALLOW, true).commit();
+                                    }
+                                }
+                            } else {
+                                Utils.getInstance().registerWithGCM(context);
+                            }
+
+                        } else {
+                            result = AppController.getInstance().getServiceManager().getVaultService().
+                                    sendPushNotificationRegistration(GlobalConstants.PUSH_REGISTER_URL, refreshedToken, deviceId, isChecked);
+                            if (result != null) {
+                                if (result.toLowerCase().contains("success")) {
+                                    prefs.edit().putBoolean(GlobalConstants.PREF_IS_NOTIFICATION_ALLOW, false).commit();
+                                }
+                            }
+
+                        }
+                        System.out.println("Result of Push Registration Url : " + result);
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void result) {
+
+                        if (isChecked) {
+                            ((HomeScreen) mContext).showToastMessage("Enable Push Notification");
+                        } else {
+                            ((HomeScreen) mContext).showToastMessage("Disable Push Notification");
+                        }
+
+                    }
+                };
+
+                mPermissionChangeTask.execute();
+            }
+        });
+
+        ((HomeScreen) getActivity()).imageViewSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 
     }
 
     private static CallbackManager callbackManager;
+
     public void initializeFacebookUtils() {
         FacebookSdk.sdkInitialize(mContext.getApplicationContext());
 
@@ -336,7 +566,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                     }
 
                     private void showAlert() {
-                        ((HomeScreen)mContext).showToastMessage(GlobalConstants.FACEBOOK_LOGIN_CANCEL);
+                        ((HomeScreen) mContext).showToastMessage(GlobalConstants.FACEBOOK_LOGIN_CANCEL);
                        /* new AlertDialog.Builder(ProfileUpdateActivity.this)
                                 .setTitle("Cancelled")
                                 .setMessage("Process was cancelled")
@@ -507,7 +737,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 
         pDialog = new ProgressDialog(mContext, R.style.CustomDialogTheme);
         pDialog.show();
-        pDialog.setContentView(Utils.getInstance().setViewToProgressDialog((HomeScreen)mContext));
+        pDialog.setContentView(Utils.getInstance().setViewToProgressDialog((HomeScreen) mContext));
         pDialog.setCanceledOnTouchOutside(false);
         pDialog.setCancelable(false);
 
@@ -526,14 +756,14 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 
         pDialog = new ProgressDialog(mContext, R.style.CustomDialogTheme);
         pDialog.show();
-        pDialog.setContentView(Utils.getInstance().setViewToProgressDialog((HomeScreen)mContext));
+        pDialog.setContentView(Utils.getInstance().setViewToProgressDialog((HomeScreen) mContext));
         pDialog.setCanceledOnTouchOutside(false);
         pDialog.setCancelable(false);
         if (responseUser != null) {
-           //gk responseUser.setUsername(username);
+            //gk responseUser.setUsername(username);
             responseUser.setFname(edFirstName.getText().toString());
             responseUser.setLname(edLastName.getText().toString());
-           //gk responseUser.setBiotext(tvBio.getText().toString());
+            //gk responseUser.setBiotext(tvBio.getText().toString());
         }
 
         try {
@@ -542,10 +772,10 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
             final String email = pref.getString(GlobalConstants.PREF_VAULT_USER_EMAIL, "");
             if (responseUser != null) {
                 if (selectedImageUri != null) {
-                    Bitmap selectedBitmap = Utils.getInstance().decodeUri(selectedImageUri, (HomeScreen)mContext);
+                    Bitmap selectedBitmap = Utils.getInstance().decodeUri(selectedImageUri, (HomeScreen) mContext);
                     selectedBitmap = Utils.getInstance().
                             rotateImageDetails(selectedBitmap, selectedImageUri,
-                                    (HomeScreen)mContext, sdImageMainDirectory);
+                                    (HomeScreen) mContext, sdImageMainDirectory);
                     String convertedImage = ConvertBitmapToBase64Format(selectedBitmap);
                     responseUser.setImageurl(convertedImage);
                 }
@@ -565,8 +795,74 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 
     }
 
+    public void loadUserDataFromLocal() {
+        try {
+            responseUser = AppController.getInstance().getModelFacade().getLocalModel().getUserData();
+            if (responseUser != null) {
+                if (responseUser.getUserID() > 0) {
+                    mFirstName.setText(responseUser.getFname());
+                    mLastName.setText(responseUser.getLname());
+
+                    edFirstName.setText(responseUser.getFname());
+                    edLastName.setText(responseUser.getLname());
+
+                    if (!responseUser.getFlagStatus().toLowerCase().equals("vt")) {
+                        //tvChangePassword.setVisibility(View.GONE);
+//                        tvEditHeader.setVisibility(View.GONE);
+//                        edBio.setVisibility(View.GONE);
+                    } else {
+                        // tvEditHeader.setVisibility(View.VISIBLE);
+//                        tvEditHeader.setVisibility(View.VISIBLE);
+//                        edBio.setVisibility(View.VISIBLE);
+                    }
+
+                    if (responseUser.getImageurl().length() > 0) {
+                        com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(responseUser.getImageurl(),
+                                mUserProfileImage, options, new SimpleImageLoadingListener() {
+                                    @Override
+                                    public void onLoadingStarted(String imageUri, View view) {
+                                        pBar.setVisibility(View.VISIBLE);
+                                        try {
+                                            mUserProfileImage.setImageDrawable(getResources().getDrawable(R.drawable.camera_background));
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                                        pBar.setVisibility(View.GONE);
+                                        try {
+                                            mUserProfileImage.setImageDrawable(getResources().getDrawable(R.drawable.camera_background));
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                                        pBar.setVisibility(View.GONE);
+                                    }
+                                });
+                    }
+                } else {
+//                                Toast.makeText(ProfileUpdateActivity.this, "Error loading information!!! Please try again later.", Toast.LENGTH_LONG).show();
+                    ((HomeScreen) mContext).showToastMessage("Error loading information");
+                }
+            } else {
+//                            Toast.makeText(ProfileUpdateActivity.this, "Error loading information!!! Please try again later.", Toast.LENGTH_LONG).show();
+                ((HomeScreen) mContext).showToastMessage("Error loading information");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         if (resultCode == -1) {
 
             switch (requestCode) {
@@ -585,14 +881,15 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 
             if (selectedImageUri != null) {
                 try {
-                    Bitmap selectedBitmap = Utils.getInstance().decodeUri(selectedImageUri, (HomeScreen)mContext);
+                    Bitmap selectedBitmap = Utils.getInstance().decodeUri(selectedImageUri, (HomeScreen) mContext);
                     selectedBitmap = Utils.getInstance().rotateImageDetails(selectedBitmap,
-                            selectedImageUri, (HomeScreen)mContext, sdImageMainDirectory);
+                            selectedImageUri, (HomeScreen) mContext, sdImageMainDirectory);
 
                         /*Drawable drawable = new BitmapDrawable(getResources(), selectedBitmap);
                         imgUserProfile.setImageDrawable(drawable);*/
-
+                    ((HomeScreen)mContext).textViewEdit.setText("SAVE");
                     mUserProfileImage.setImageBitmap(selectedBitmap);
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -602,6 +899,11 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 
         if (callbackManager != null) {
             callbackManager.onActivityResult(requestCode, resultCode, data);
+        }
+
+        if (twitterLoginButton != null) {
+            twitterLoginButton.onActivityResult(requestCode, resultCode,
+                    data);
         }
 
     }
@@ -626,7 +928,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 
     @Override
     public void update() {
-        ((HomeScreen)mContext).runOnUiThread(new Runnable() {
+        ((HomeScreen) mContext).runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (mUserProfileModel != null && mUserProfileModel.getState() == BaseModel.STATE_SUCCESS) {
@@ -634,10 +936,10 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                     try {
                         pDialog.dismiss();
                         if (mUserProfileModel.getUserProfileResult()) {
-                            ((HomeScreen )mContext).showToastMessage("Profile updated successfully");
+                            ((HomeScreen) mContext).showToastMessage("Profile updated successfully");
                         } else {
-                            ((HomeScreen )mContext).showToastMessage("Error updating information");
-                           //gk loadUserDataFromLocal();
+                            ((HomeScreen) mContext).showToastMessage("Error updating information");
+                            loadUserDataFromLocal();
                         }
                         final File root = new File(Environment.getExternalStorageDirectory() +
                                 File.separator + GlobalConstants.PROFILE_PIC_DIRECTORY + File.separator);
@@ -680,7 +982,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 
                             AppController.getInstance().getModelFacade().getLocalModel().
                                     storeUserDataInPreferences(responseUser);
-                          //  username = responseUser.getUsername();
+                            //  username = responseUser.getUsername();
                             mFirstName.setText(responseUser.getFname());
                             mLastName.setText(responseUser.getLname());
 
@@ -698,49 +1000,49 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                             if (responseUser.getImageurl().length() > 0) {
                                 com.nostra13.universalimageloader.core.ImageLoader.getInstance().
                                         displayImage(responseUser.getImageurl(), mUserProfileImage, options,
-                                        new SimpleImageLoadingListener() {
-                                    @Override
-                                    public void onLoadingStarted(String imageUri, View view) {
-                                        pBar.setVisibility(View.VISIBLE);
-                                        try {
-                                            mUserProfileImage.setImageDrawable(getResources().
-                                                    getDrawable(R.drawable.camera_background));
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
+                                                new SimpleImageLoadingListener() {
+                                                    @Override
+                                                    public void onLoadingStarted(String imageUri, View view) {
+                                                        pBar.setVisibility(View.VISIBLE);
+                                                        try {
+                                                            mUserProfileImage.setImageDrawable(getResources().
+                                                                    getDrawable(R.drawable.camera_background));
+                                                        } catch (Exception e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
 
-                                    @Override
-                                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                                        pBar.setVisibility(View.GONE);
-                                        try {
-                                            mUserProfileImage.setImageDrawable(getResources().
-                                                    getDrawable(R.drawable.camera_background));
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
+                                                    @Override
+                                                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                                                        pBar.setVisibility(View.GONE);
+                                                        try {
+                                                            mUserProfileImage.setImageDrawable(getResources().
+                                                                    getDrawable(R.drawable.camera_background));
+                                                        } catch (Exception e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
 
-                                    @Override
-                                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                                        pBar.setVisibility(View.GONE);
-                                    }
-                                });
+                                                    @Override
+                                                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                                                        pBar.setVisibility(View.GONE);
+                                                    }
+                                                });
                             }
                         } else {
-                          // GK showToastMessage("Error loading information");
+                            ((HomeScreen) mContext).showToastMessage("Error loading information");
                         }
                     } else {
-                       //GK showToastMessage("Error loading information");
+                        ((HomeScreen) mContext).showToastMessage("Error loading information");
                     }
 
                 } else {
-                    //GK showToastMessage(GlobalConstants.MSG_CONNECTION_TIMEOUT);
+                    ((HomeScreen) mContext).showToastMessage(GlobalConstants.MSG_CONNECTION_TIMEOUT);
 
                 }
 
             } else {
-                //GK showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
+                ((HomeScreen) mContext).showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
             }
             pDialog.dismiss();
         } catch (Exception e) {
@@ -750,6 +1052,90 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 
     }
 
+    private boolean isValidText(String str) {
+        return str != null && str.length() >= 3;
+    }
+
+    public void showConfirmationDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
+        alertDialogBuilder
+                .setMessage("Do you want to save changes you made?");
+        alertDialogBuilder.setTitle("Alert");
+        alertDialogBuilder.setPositiveButton("Save",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        if (!isValidText(edFirstName.getText().toString())) {
+                            isValidFields = false;
+//                            edFirstName.setError("Invalid! Minimum 3 characters");
+                            ((HomeScreen) mContext).showToastMessage("First Name should have minimum 3 characters");
+                        } else if (!isValidText(edLastName.getText().toString())) {
+                            isValidFields = false;
+//                            edLastName.setError("Invalid! Minimum 3 characters");
+                            ((HomeScreen) mContext).showToastMessage("Last Name should have minimum 3 characters");
+                        }
+
+                        //gk if (isValidFields) {
+                        Utils.getInstance().gethideKeyboard((HomeScreen) mContext);
+                        //tvEditHeader.setText("Edit");
+
+                        mFirstName.setText(edFirstName.getText().toString());
+                        mLastName.setText(edLastName.getText().toString());
+                        //tvBio.setText(edBio.getText().toString());
+
+                        edFirstName.setVisibility(View.GONE);
+                        edLastName.setVisibility(View.GONE);
+
+                        //edBio.setVisibility(View.GONE);
+                        isEditing = false;
+                        edFirstName.setBackground(null);
+                        edLastName.setBackground(null);
+                        //edBio.setBackground(null);
+
+                        mFirstName.setVisibility(View.VISIBLE);
+                        mLastName.setVisibility(View.VISIBLE);
+                        //tvBio.setVisibility(View.VISIBLE);
+//                            isEdited = false;
+                        //make a server call for updating the data along with video
+                        updateUserData();
+                        // }
+                        isValidFields = true;
+                        alertDialog.dismiss();
+                    }
+                });
+        alertDialogBuilder.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        final File root = new File(Environment.getExternalStorageDirectory() + File.separator + GlobalConstants.PROFILE_PIC_DIRECTORY + File.separator);
+                        if (root != null) {
+                            if (root.listFiles() != null) {
+                                for (File childFile : root.listFiles()) {
+                                    if (childFile != null) {
+                                        if (childFile.exists())
+                                            childFile.delete();
+                                    }
+
+                                }
+                                if (root.exists())
+                                    root.delete();
+                            }
+                        }
+
+                    }
+                });
+
+        alertDialog = alertDialogBuilder.create();
+        alertDialog.setCancelable(false);
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+        Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        nbutton.setAllCaps(false);
+        nbutton.setTextColor(getResources().getColor(R.color.apptheme_color));
+        Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        pbutton.setTextColor(getResources().getColor(R.color.apptheme_color));
+        pbutton.setAllCaps(false);
+    }
 
 
 }

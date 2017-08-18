@@ -176,7 +176,7 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
             tabId  = bundle.getLong("tab_id", 0);
         }
 
-        ((HomeScreen)getActivity()).imageViewSearch.setVisibility(View.VISIBLE);
+        setToolbarIcons();
         ((HomeScreen)getActivity()).imageViewSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,6 +185,19 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
                 mContext.startActivity(intent);
             }
         });
+        ((HomeScreen)mContext).imageViewBackNavigation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+    }
+
+    private void setToolbarIcons() {
+        ((HomeScreen)mContext).imageViewSearch.setVisibility(View.VISIBLE);
+        ((HomeScreen)mContext).imageViewLogo.setVisibility(View.VISIBLE);
+        ((HomeScreen)mContext).textViewEdit.setVisibility(View.INVISIBLE);
+        ((HomeScreen)mContext).imageViewBackNavigation.setVisibility(View.VISIBLE);
     }
 
     private void initListener()
