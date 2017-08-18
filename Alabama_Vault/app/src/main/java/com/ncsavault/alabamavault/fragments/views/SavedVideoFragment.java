@@ -356,17 +356,17 @@ public class SavedVideoFragment extends Fragment implements SavedVideoAdapter.Sa
                 System.out.println("favorite position : " + pos);
                 if (favoriteVideoList.get(pos).isVideoIsFavorite()) {
                     isFavoriteChecked = false;
-                    favoriteVideoList.remove(pos);
-                    savedVideoAdapter.notifyDataSetChanged();
-                    if(favoriteVideoList.size() == 0)
-                    {
-                        tvNoRecoredFound.setText(GlobalConstants.NO_RECORDS_FOUND);
-                    }
+
                     VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).setFavoriteFlag
                             (0, favoriteVideoList.get(pos).getVideoId());
                     favoriteVideoList.get(pos).setVideoIsFavorite(false);
                     viewHolder.savedVideoImageView.setImageResource(R.drawable.video_save);
-
+//                    favoriteVideoList.remove(pos);
+//                    savedVideoAdapter.notifyDataSetChanged();
+//                    if(favoriteVideoList.size() == 0)
+//                    {
+//                        tvNoRecoredFound.setText(GlobalConstants.NO_RECORDS_FOUND);
+//                    }
 
                 } else {
                     isFavoriteChecked = true;

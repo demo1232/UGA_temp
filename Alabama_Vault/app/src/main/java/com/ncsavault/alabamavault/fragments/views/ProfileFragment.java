@@ -120,7 +120,6 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 
     private LinearLayout edLinearLayout, tvLinearLayout;
     private TwitterLoginButton twitterLoginButton;
-    private TwitterLoginButton twitterLoginButton;
     private boolean isValidFields = true;
     private boolean isEditing = true;
     AsyncTask<Void, Void, Void> mPermissionChangeTask;
@@ -323,9 +322,6 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 //                        updateUserData();
 //                    }
 //                }
-//                Intent mailClient = new Intent(Intent.ACTION_VIEW);
-//                mailClient.setClassName("com.google.android.gm", "com.google.android.gm.ConversationListActivity");
-//                ((HomeScreen)mContext).startActivity(mailClient);
                 AppController.getInstance().handleEvent(AppDefines.EVENT_ID_CHANGE_PASSWORD_SCREEN);
 
             }
@@ -359,54 +355,6 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
             }
         });
 
-<<<<<<< .mine
-        mTwitterEmailId.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Utils.isInternetAvailable(mContext.getApplicationContext())) {
-
-                    boolean installedTwitterApp = checkIfAppInstalled("com.twitter.android");
-                    if (!installedTwitterApp) {
-
-                        String twitterPlayStoreUrl = "https://play.google.com/store/apps/details?id=com.twitter.android&hl=en";
-                        showConfirmSharingDialog("Twitter app is not installed would you like to install it now?", twitterPlayStoreUrl);
-
-
-                    } else {
-                        // prefs.edit().putBoolean(TWITTER_LINKING, true).apply();
-                        TwitterSession session =
-                                Twitter.getSessionManager().getActiveSession();
-                        if (session == null) {
-                            twitterLoginButton.performClick();
-                        }else
-                        {
-                            Twitter.logOut();
-                            mTwitterEmailId.setText("Link Twitter Accout");
-                        }
-                    }
-
-
-                } else {
-                    ((HomeScreen)mContext).showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
-                }
-            }
-        });
-
-        twitterLoginButton.setCallback(new Callback<TwitterSession>() {
-            @Override
-            public void success(Result<TwitterSession> twitterSessionResult) {
-
-//                Toast.makeText(ProfileUpdateActivity.this,"Twitter Login Done",Toast.LENGTH_SHORT).show();
-                mTwitterEmailId.setText("@" + twitterSessionResult.data.getUserName());
-            }
-
-            @Override
-            public void failure(TwitterException e) {
-
-            }
-        });
-
-=======
         mTwitterEmailId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -452,8 +400,6 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
             }
         });
 
-
->>>>>>> .theirs
         mLogoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1084,35 +1030,19 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                                                 });
                             }
                         } else {
-<<<<<<< .mine
-                            ((HomeScreen)mContext).showToastMessage("Error loading information");
-=======
                             ((HomeScreen) mContext).showToastMessage("Error loading information");
->>>>>>> .theirs
                         }
                     } else {
-<<<<<<< .mine
-                        ((HomeScreen)mContext).showToastMessage("Error loading information");
-=======
                         ((HomeScreen) mContext).showToastMessage("Error loading information");
->>>>>>> .theirs
                     }
 
                 } else {
-<<<<<<< .mine
-                    ((HomeScreen)mContext).showToastMessage(GlobalConstants.MSG_CONNECTION_TIMEOUT);
-=======
                     ((HomeScreen) mContext).showToastMessage(GlobalConstants.MSG_CONNECTION_TIMEOUT);
->>>>>>> .theirs
 
                 }
 
             } else {
-<<<<<<< .mine
-                ((HomeScreen)mContext).showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
-=======
                 ((HomeScreen) mContext).showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
->>>>>>> .theirs
             }
             pDialog.dismiss();
         } catch (Exception e) {
@@ -1145,72 +1075,6 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                             ((HomeScreen) mContext).showToastMessage("Last Name should have minimum 3 characters");
                         }
 
-<<<<<<< .mine
-                        //gk if (isValidFields) {
-                        Utils.getInstance().gethideKeyboard((HomeScreen)mContext);
-                        //tvEditHeader.setText("Edit");
-
-                        mFirstName.setText(edFirstName.getText().toString());
-                        mLastName.setText(edLastName.getText().toString());
-                        //tvBio.setText(edBio.getText().toString());
-
-                        edFirstName.setVisibility(View.GONE);
-                        edLastName.setVisibility(View.GONE);
-
-                        //edBio.setVisibility(View.GONE);
-                        isEditing = false;
-                        edFirstName.setBackground(null);
-                        edLastName.setBackground(null);
-                        //edBio.setBackground(null);
-
-                        mFirstName.setVisibility(View.VISIBLE);
-                        mLastName.setVisibility(View.VISIBLE);
-                        //tvBio.setVisibility(View.VISIBLE);
-//                            isEdited = false;
-                        //make a server call for updating the data along with video
-                        updateUserData();
-                        // }
-                        isValidFields = true;
-                        alertDialog.dismiss();
-                    }
-                });
-        alertDialogBuilder.setNegativeButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        final File root = new File(Environment.getExternalStorageDirectory() + File.separator + GlobalConstants.PROFILE_PIC_DIRECTORY + File.separator);
-                        if (root != null) {
-                            if (root.listFiles() != null) {
-                                for (File childFile : root.listFiles()) {
-                                    if (childFile != null) {
-                                        if (childFile.exists())
-                                            childFile.delete();
-                                    }
-
-                                }
-                                if (root.exists())
-                                    root.delete();
-                            }
-                        }
-
-                    }
-                });
-
-        alertDialog = alertDialogBuilder.create();
-        alertDialog.setCancelable(false);
-        alertDialog.setCanceledOnTouchOutside(false);
-        alertDialog.show();
-        Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        nbutton.setAllCaps(false);
-        nbutton.setTextColor(getResources().getColor(R.color.apptheme_color));
-        Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-        pbutton.setTextColor(getResources().getColor(R.color.apptheme_color));
-        pbutton.setAllCaps(false);
-    }
-
-
-
-=======
                         //gk if (isValidFields) {
                         Utils.getInstance().gethideKeyboard((HomeScreen) mContext);
                         //tvEditHeader.setText("Edit");
@@ -1274,6 +1138,4 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
     }
 
 
-
->>>>>>> .theirs
 }
