@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -164,7 +165,7 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
         @Override
         protected void onPostExecute(final ArrayList<CatagoriesTabDao> result) {
             super.onPostExecute(result);
-           try{
+            try {
 
             if (mRecyclerView != null) {
                 mCatagoriesAdapter = new CatagoriesAdapter(mContext, CatagoriesFragment.this, catagoriesTabList);
@@ -176,6 +177,9 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
                 mRecyclerView.removeOnItemTouchListener(disable);
             }
                refreshLayout.setRefreshing(false);
+
+                refreshLayout.setRefreshing(false);
+
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -208,19 +212,19 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
     }
 
     private void setToolbarIcons() {
-        ((HomeScreen)mContext).imageViewSearch.setVisibility(View.INVISIBLE);
-        ((HomeScreen)mContext).imageViewLogo.setVisibility(View.VISIBLE);
-        ((HomeScreen)mContext).textViewEdit.setVisibility(View.INVISIBLE);
-        ((HomeScreen)mContext).imageViewBackNavigation.setVisibility(View.INVISIBLE);
+        ((HomeScreen) mContext).imageViewSearch.setVisibility(View.INVISIBLE);
+        ((HomeScreen) mContext).imageViewLogo.setVisibility(View.VISIBLE);
+        ((HomeScreen) mContext).textViewEdit.setVisibility(View.INVISIBLE);
+        ((HomeScreen) mContext).imageViewBackNavigation.setVisibility(View.INVISIBLE);
     }
 
 
     @Override
-    public void onClick(CatagoriesAdapter.CatagoriesAdapterViewHolder v, final long tabPosition) {
+    public void onClick(CatagoriesAdapter.CatagoriesAdapterViewHolder v, final long tabPosition, final String categoryName) {
         v.playlistImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                GlobalConstants.CATEGORYNAME = categoryName;
                 playlistFragment = (PlaylistFragment) PlaylistFragment.newInstance(mContext, tabPosition);
                 FragmentManager manager = ((HomeScreen) mContext).getSupportFragmentManager();
                 FragmentTransaction transaction = manager.beginTransaction();

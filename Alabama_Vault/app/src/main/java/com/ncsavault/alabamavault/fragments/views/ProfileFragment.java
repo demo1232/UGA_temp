@@ -257,11 +257,11 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
     }
 
     private void setToolbarIcons() {
-        ((HomeScreen)mContext).imageViewSearch.setVisibility(View.INVISIBLE);
-        ((HomeScreen)mContext).imageViewLogo.setVisibility(View.VISIBLE);
-        ((HomeScreen)mContext).textViewEdit.setVisibility(View.VISIBLE);
-        ((HomeScreen)mContext).textViewEdit.setText("EDIT");
-        ((HomeScreen)mContext).imageViewBackNavigation.setVisibility(View.INVISIBLE);
+        ((HomeScreen) mContext).imageViewSearch.setVisibility(View.INVISIBLE);
+        ((HomeScreen) mContext).imageViewLogo.setVisibility(View.VISIBLE);
+        ((HomeScreen) mContext).textViewEdit.setVisibility(View.VISIBLE);
+        ((HomeScreen) mContext).textViewEdit.setText("EDIT");
+        ((HomeScreen) mContext).imageViewBackNavigation.setVisibility(View.INVISIBLE);
     }
 
     private void initData() {
@@ -425,7 +425,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
             @Override
             public void onClick(View v) {
                 Twitter.logOut();
-
+                GlobalConstants.CATEGORYNAME = "";
                 mContext.stopService(new Intent(mContext, TrendingFeaturedVideoService.class));
 //                VideoDataFetchingService.isServiceRunning = false;
                 if (LoginManager.getInstance() != null) {
@@ -908,7 +908,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 
                         /*Drawable drawable = new BitmapDrawable(getResources(), selectedBitmap);
                         imgUserProfile.setImageDrawable(drawable);*/
-                    ((HomeScreen)mContext).textViewEdit.setText("SAVE");
+                    ((HomeScreen) mContext).textViewEdit.setText("SAVE");
                     mUserProfileImage.setImageBitmap(selectedBitmap);
 
 

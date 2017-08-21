@@ -102,8 +102,8 @@ import retrofit2.Call;
  */
 public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener, AbstractView {
 
-    private EditText edEmailBox,edPassword;
-    private TextView tvSkipLogin,createNewAccount,tvForgotPassword;
+    private EditText edEmailBox, edPassword;
+    private TextView tvSkipLogin, createNewAccount, tvForgotPassword;
     private Button tvNextLogin;
     private LinearLayout ll_header_image, ll_facebook_login;
     private ImageView tvFacebookLogin;
@@ -156,7 +156,7 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
             // firebaseAuth();
             registerFacebookCallbackManager();
 
-          //  setContentView(R.layout.login_email_activity);
+            //  setContentView(R.layout.login_email_activity);
             setContentView(R.layout.login_screen_layout);
 
             initAllDataRequiredInEmailActivity();
@@ -439,7 +439,7 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
         edEmailBox.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_GO) {
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
                     // do your stuff here
                     checkEmailAndProceed();
                     //return true;
@@ -455,7 +455,7 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
                 isSocialUser = false;
                 Utils.getInstance().gethideKeyboard(LoginEmailActivity.this);
 
-                        checkEmailAndProceed();
+                checkEmailAndProceed();
 
 
             }
@@ -471,10 +471,10 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!s.toString().isEmpty()) {
                     //ll_facebook_login.setVisibility(View.GONE);
-                   // tvNextLogin.setVisibility(View.VISIBLE);
+                    // tvNextLogin.setVisibility(View.VISIBLE);
                 } else {
                     // ll_facebook_login.setVisibility(View.VISIBLE);
-                   // tvNextLogin.setVisibility(View.GONE);
+                    // tvNextLogin.setVisibility(View.GONE);
                 }
             }
 
@@ -487,7 +487,7 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
         createNewAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              AppController.getInstance().handleEvent(AppDefines.EVENT_ID_UPLOAD_PHOTO_SCREEN);
+                AppController.getInstance().handleEvent(AppDefines.EVENT_ID_UPLOAD_PHOTO_SCREEN);
                 overridePendingTransition(R.anim.rightin, R.anim.leftout);
             }
         });
@@ -495,13 +495,13 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
         tvForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isValidEmail(edEmailBox.getText().toString())) {
+//                if (isValidEmail(edEmailBox.getText().toString())) {
                     Intent intent = new Intent(LoginEmailActivity.this, ForgotPasswordActivity.class);
-                    intent.putExtra("key", true);
+//                    intent.putExtra("key", true);
                     intent.putExtra("email_id", edEmailBox.getText().toString());
                     startActivity(intent);
                     overridePendingTransition(R.anim.slide_up_video_info, R.anim.nochange);
-                }
+//                }
 
             }
         });
@@ -599,7 +599,7 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
 
     public void checkEmailAndProceed() {
         if (Utils.isInternetAvailable(this)) {
-            if (isValidEmail(edEmailBox.getText().toString())) {
+            if (isValidEmail(edEmailBox.getText().toString().trim())) {
                 Utils.getInstance().gethideKeyboard(this);
 
                 pDialog = new ProgressDialog(LoginEmailActivity.this, R.style.CustomDialogTheme);
@@ -608,7 +608,7 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
                 pDialog.setCanceledOnTouchOutside(false);
                 pDialog.setCancelable(false);
 
-                String email = edEmailBox.getText().toString();
+                String email = edEmailBox.getText().toString().trim();
                 AppController.getInstance().getModelFacade().getLocalModel().setEmailId(email);
                 AppController.getInstance().getModelFacade().getLocalModel().storeEmailId(email);
 
@@ -638,17 +638,17 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
             Pattern pattern = Pattern.compile(EMAIL_PATTERN);
             Matcher matcher = pattern.matcher(email);
             if (!matcher.matches()) {
-                showToastMessage("Invalid Email");
+                showToastMessage("Please enter valid email id");
                 return false;
             } else
                 return matcher.matches();
         }
     }
 
-    public void showAlertDialog(String loginType,String emailId) {
+    public void showAlertDialog(String loginType, String emailId) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder
-                .setMessage("We see that you have previously used this email address, "+emailId+", with "+ loginType +" login, would you like to update your profile with this new login method?");
+                .setMessage("We see that you have previously used this email address, " + emailId + ", with " + loginType + " login, would you like to update your profile with this new login method?");
 
         alertDialogBuilder.setPositiveButton("Ok",
                 new DialogInterface.OnClickListener() {
@@ -822,7 +822,7 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
                                       pDialog.dismiss();
                                       loginEmailModel.unRegisterView(LoginEmailActivity.this);
                                       if (Utils.isInternetAvailable(LoginEmailActivity.this)) {
-                                          if(isValidPassword(edPassword.getText().toString())) {
+                                          if (isValidPassword(edPassword.getText().toString())) {
                                               if (loginEmailModel != null) {
                                                   String emailId = AppController.getInstance().getModelFacade().getLocalModel().getEmailId();
                                                   if (loginEmailModel.getLoginResult().toLowerCase().contains("fb_exists")) {
@@ -836,7 +836,7 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
                                                       // if (!isSocialUser) {
 
                                                       HashMap<String, String> stringHashMap = new HashMap<>();
-                                                      stringHashMap.put("email", edEmailBox.getText().toString());
+                                                      stringHashMap.put("email", edEmailBox.getText().toString().trim());
                                                       stringHashMap.put("status", loginEmailModel.getLoginResult());
                                                       AppController.getInstance().getModelFacade().getLocalModel().
                                                               setRegisterEmailId(edEmailBox.getText().toString());
@@ -877,7 +877,7 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
 
                                                   }
                                               }
-                                              }
+                                          }
 
 
                                       } else {
@@ -895,7 +895,7 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
 
                                                   if (fbProfile != null || userId > 0) {
 
-                                                     AppController.getInstance().handleEvent(AppDefines.EVENT_ID_HOME_SCREEN);
+                                                      AppController.getInstance().handleEvent(AppDefines.EVENT_ID_HOME_SCREEN);
 
                                                       overridePendingTransition(R.anim.slideup, R.anim.nochange);
                                                       finish();
@@ -981,7 +981,7 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
                         if (response.getReturnStatus() != null) {
                             if (response.getReturnStatus().toLowerCase().contains("vt_exists") || response.getReturnStatus().toLowerCase().contains("false")) {
                                 pDialog.dismiss();
-                                showAlertDialog("Vault",response.getEmailID());
+                                showAlertDialog("Vault", response.getEmailID());
                             } else if (response.getReturnStatus().toLowerCase().contains("fb_exists") /*|| response.getReturnStatus().toLowerCase().contains("" +
                                                     "")*/) {
                                 pDialog.dismiss();
@@ -997,10 +997,10 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
 
                             } else if (response.getReturnStatus().toLowerCase().contains("tw_exists")) {
                                 pDialog.dismiss();
-                                showAlertDialog("Twitter",response.getEmailID());
+                                showAlertDialog("Twitter", response.getEmailID());
                             } else if (response.getReturnStatus().toLowerCase().contains("gm_exists")) {
                                 pDialog.dismiss();
-                                showAlertDialog("Google",response.getEmailID());
+                                showAlertDialog("Google", response.getEmailID());
                             }
                         } else {
                             pDialog.dismiss();
@@ -1306,14 +1306,14 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
                                         isFBLogin = false;
                                         overrideUserData(socialUser);
                                     } else {
-                                        showAlertDialog("Facebook",socialUser.getEmailID());
+                                        showAlertDialog("Facebook", socialUser.getEmailID());
                                     }
                                 } else if (response.getReturnStatus().toLowerCase().contains("tw_exists")) {
-                                    showAlertDialog("Twitter",socialUser.getEmailID());
+                                    showAlertDialog("Twitter", socialUser.getEmailID());
                                 } else if (response.getReturnStatus().toLowerCase().contains("gm_exists")) {
-                                    showAlertDialog("Google",socialUser.getEmailID());
+                                    showAlertDialog("Google", socialUser.getEmailID());
                                 } else if (response.getReturnStatus().toLowerCase().contains("vt_exists")) {
-                                    showAlertDialog("Vault",socialUser.getEmailID());
+                                    showAlertDialog("Vault", socialUser.getEmailID());
                                 }
 //                                if (socialUser.getEmailID() != null) {
 //                                    pDialog.dismiss();
@@ -1409,16 +1409,16 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
                             if (response.getReturnStatus() != null) {
                                 if (response.getReturnStatus().toLowerCase().contains("vt_exists") || response.getReturnStatus().toLowerCase().contains("false")) {
                                     pDialog.dismiss();
-                                    showAlertDialog("Vault",vaultUser.getEmailID());
+                                    showAlertDialog("Vault", vaultUser.getEmailID());
                                 } else if (response.getReturnStatus().toLowerCase().contains("gm_exists")) {
                                     pDialog.dismiss();
-                                    showAlertDialog("Google",vaultUser.getEmailID());
+                                    showAlertDialog("Google", vaultUser.getEmailID());
                                 } else if (response.getReturnStatus().toLowerCase().contains("tw_exists")) {
                                     pDialog.dismiss();
-                                    showAlertDialog("Twitter",vaultUser.getEmailID());
+                                    showAlertDialog("Twitter", vaultUser.getEmailID());
                                 } else if (response.getReturnStatus().toLowerCase().contains("fb_exists")) {
                                     pDialog.dismiss();
-                                    showAlertDialog("Facebook",vaultUser.getEmailID());
+                                    showAlertDialog("Facebook", vaultUser.getEmailID());
                                 }
                             } else {
                                 pDialog.dismiss();
@@ -1519,6 +1519,7 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
         }
         return false;
     }
+
     public void loginVaultUser() {
         if (Utils.isInternetAvailable(this)) {
             if (isValidPassword(edPassword.getText().toString())) {
@@ -1532,7 +1533,7 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
                 pDialog.setContentView(Utils.getInstance().setViewToProgressDialog(LoginEmailActivity.this));
                 pDialog.setCanceledOnTouchOutside(false);
                 password = edPassword.getText().toString();
-                email    = edEmailBox.getText().toString();
+                email = edEmailBox.getText().toString().trim();
 
                 if (loginEmailModel != null) {
                     loginEmailModel.unRegisterView(this);
@@ -1601,10 +1602,10 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
                             params.putString("vt_exist", "vt_exist");
                             mFirebaseAnalytics.logEvent("vt_exist", params);
                         } else {
-//                                        edPassword.setError("Password is incorrect!");
+                          showToastMessage(GlobalConstants.ENTERRED_PASSWORD_WRONG);
                             //gk showToastMessage("Password is incorrect!");
 
-                            AppController.getInstance().getModelFacade().getLocalModel().setOverride(true);
+                           /* AppController.getInstance().getModelFacade().getLocalModel().setOverride(true);
                             HashMap<String, String> hashMap = new HashMap<>();
                             hashMap.put("email_id", edEmailBox.getText().toString());
                             SharedPreferences pref = AppController.getInstance().getApplication().
@@ -1616,11 +1617,14 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
                                 pref.edit().putBoolean(GlobalConstants.PREF_VAULT_FLAG_STATUS, true).commit();
                             } else {
                                 AppController.getInstance().getModelFacade().getLocalModel().setSelectImageBitmap(null);
-                            }
-                            AppController.getInstance().getModelFacade()
+                            }*/
+
+
+                          /*  AppController.getInstance().getModelFacade()
                                     .getLocalModel().setMailChimpRegisterUser(false);
                             AppController.getInstance().handleEvent(AppDefines.EVENT_ID_UPLOAD_PHOTO_SCREEN, hashMap);
-                            overridePendingTransition(R.anim.rightin, R.anim.leftout);
+                            overridePendingTransition(R.anim.rightin, R.anim.leftout);*/
+
                         }
                     }
                 } else {

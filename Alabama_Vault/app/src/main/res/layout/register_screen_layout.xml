@@ -180,7 +180,7 @@
         android:layout_height="45dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Gender"
+        android:hint="Gender"
         android:paddingLeft="20dp"
         android:editable="false"
         android:focusable="false"

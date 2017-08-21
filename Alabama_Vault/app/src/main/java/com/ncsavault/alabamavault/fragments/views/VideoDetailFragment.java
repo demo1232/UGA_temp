@@ -131,10 +131,10 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
             }
         });
 
-        ((HomeScreen)mContext).imageViewBackNavigation.setOnClickListener(new View.OnClickListener() {
+        ((HomeScreen) mContext).imageViewBackNavigation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             getActivity().onBackPressed();
+                getActivity().onBackPressed();
             }
         });
 
@@ -156,16 +156,16 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
         if (bundle != null) {
             playlistId = bundle.getLong("playlist_id", 0);
         }
-       // getVideoData(playlistId);
+        // getVideoData(playlistId);
         getVideoDataFromDataBase(playlistId);
 
     }
 
     private void setToolbarIcons() {
-        ((HomeScreen)mContext).imageViewSearch.setVisibility(View.VISIBLE);
-        ((HomeScreen)mContext).imageViewLogo.setVisibility(View.VISIBLE);
-        ((HomeScreen)mContext).textViewEdit.setVisibility(View.INVISIBLE);
-        ((HomeScreen)mContext).imageViewBackNavigation.setVisibility(View.VISIBLE);
+        ((HomeScreen) mContext).imageViewSearch.setVisibility(View.VISIBLE);
+        ((HomeScreen) mContext).imageViewLogo.setVisibility(View.VISIBLE);
+        ((HomeScreen) mContext).textViewEdit.setVisibility(View.INVISIBLE);
+        ((HomeScreen) mContext).imageViewBackNavigation.setVisibility(View.VISIBLE);
     }
 
     private void getVideoData(final long playlistId) {
@@ -236,8 +236,7 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
         mDbTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    private void getVideoDataFromDataBase(long playlistId)
-    {
+    private void getVideoDataFromDataBase(long playlistId) {
 
 
         videoDtoArrayList.clear();

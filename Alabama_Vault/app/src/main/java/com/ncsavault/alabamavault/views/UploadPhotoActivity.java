@@ -131,18 +131,18 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
     private EditText mFirstName;
     private EditText mLastName;
     private EditText mEmailId;
-    private EditSpinner mGender;
+    private EditText mGender;
     private EditText mPassword;
     private EditText mConfirmPassword;
     private EditText mYOB;
     private ProgressBar pBar;
-    private Button mRegistertionButton,mSignUpButton;
+    private Button mRegistertionButton, mSignUpButton;
     private WheelView yearWheel;
     private VerticalScrollview scrollView;
     private View view;
     private TextInputLayout mInputTypePassword;
     private TextInputLayout getmInputTypeConPassword;
-    private TextView mBackButton,tvUploadPhoto,tvAlreadyRegistered,tvSignUpWithoutProfile;
+    private TextView mBackButton, tvUploadPhoto, tvAlreadyRegistered, tvSignUpWithoutProfile;
     private boolean wheelScrolled = false;
     private FirebaseAnalytics mFirebaseAnalytics;
     Bundle params = new Bundle();
@@ -229,6 +229,7 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
                 getResources().getStringArray(R.array.gender_selection));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mEditSpinner.setAdapter(adapter);
+        Utils.getInstance().gethideKeyboard(UploadPhotoActivity.this);
     }
 
     @Override
@@ -244,7 +245,7 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
         mFirstName = (EditText) findViewById(R.id.fname);
         mLastName = (EditText) findViewById(R.id.lname);
         mEmailId = (EditText) findViewById(R.id.Email);
-        mGender = (EditSpinner) findViewById(R.id.edit_spinner);
+        mGender = (EditText) findViewById(R.id.edit_spinner);
         mPassword = (EditText) findViewById(R.id.password);
         mConfirmPassword = (EditText) findViewById(R.id.confirm_pass);
         mRegistertionButton = (Button) findViewById(R.id.btn_signup);
@@ -275,7 +276,7 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
 
         mProfileImage = (ImageView) findViewById(R.id.imgUserProfile);
         mSignUpButton = (Button) findViewById(R.id.tv_signup_button);
-        tvUploadPhoto =(TextView) findViewById(R.id.upload_phototextView);
+        tvUploadPhoto = (TextView) findViewById(R.id.upload_phototextView);
 
 
         tvAlreadyRegistered = (TextView) findViewById(R.id.tv_already_registered);
@@ -426,7 +427,6 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
             e.printStackTrace();
         }
     }
-
 
 
     private boolean isDeleteKey = true;
@@ -826,9 +826,9 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 checkYearWheelVisibility();
-                mGender.showDropDown();
+                Utils.hideSoftKeyboard(UploadPhotoActivity.this);
+                mEditSpinner.showDropDown();
                 //mGender.requestFocus();
-                Utils.getInstance().gethideKeyboard(UploadPhotoActivity.this);
                 return false;
             }
         });
@@ -891,7 +891,7 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
 
                 checkEmailAndProceed();
 
-               }
+            }
         });
 
         tvAlreadyRegistered.setOnClickListener(new View.OnClickListener() {
@@ -1064,10 +1064,15 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        finish();
-        storeAllRegistrationDetail();
-        overridePendingTransition(R.anim.leftin, R.anim.rightout);
+
+        if (mFirstName.getVisibility() == View.VISIBLE) {
+            super.onBackPressed();
+            finish();
+        } else {
+            storeAllRegistrationDetail();
+            naviagteBackToRegistration();
+            overridePendingTransition(R.anim.leftin, R.anim.rightout);
+        }
     }
 
     private void storeAllRegistrationDetail() {
@@ -1589,19 +1594,19 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
                         if (Utils.isInternetAvailable(UploadPhotoActivity.this)) {
                             if (loginEmailModel.getLoginResult().toLowerCase().contains("vt_exists")) {
 
-                                showAlertDialog("Vault",email);
+                                showAlertDialog("Vault", email);
 
                             } else if (loginEmailModel.getLoginResult().toLowerCase().contains("fb_exists")) {
 
-                                showAlertDialog("Facebook",email);
+                                showAlertDialog("Facebook", email);
 
                             } else if (loginEmailModel.getLoginResult().toLowerCase().contains("tw_exists")) {
 
-                                showAlertDialog("Twitter",email);
+                                showAlertDialog("Twitter", email);
 
                             } else if (loginEmailModel.getLoginResult().toLowerCase().contains("gm_exists")) {
 
-                                showAlertDialog("Google",email);
+                                showAlertDialog("Google", email);
 
                             } else {
                                 fName = mFirstName.getText().toString().trim().substring(0, 1).toUpperCase()
@@ -1630,6 +1635,7 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
 
     private LoginEmailModel loginEmailModel;
     String email = "";
+
     public void checkEmailAndProceed() {
         if (Utils.isInternetAvailable(this)) {
 
@@ -1690,7 +1696,7 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
                         finish();
                         //gk if (!VideoDataService.isServiceRunning)
                         startService(new Intent(UploadPhotoActivity.this, TrendingFeaturedVideoService.class));
-                            //startService(new Intent(UploadPhotoActivity.this, VideoDataService.class));
+                        //startService(new Intent(UploadPhotoActivity.this, VideoDataService.class));
                     }
                 }
 
@@ -1747,14 +1753,14 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
                     if (mVaultUserDataModel.getmVaultUserResult().toLowerCase().contains("vt_exists")
                             || mVaultUserDataModel.getmVaultUserResult().toLowerCase().contains("false")) {
 
-                        showAlertDialog("Vault",response.getEmailID());
+                        showAlertDialog("Vault", response.getEmailID());
 
                     } else if (mVaultUserDataModel.getmVaultUserResult().toLowerCase().contains("fb_exists")) {
-                        showAlertDialog("Facebook",response.getEmailID());
+                        showAlertDialog("Facebook", response.getEmailID());
                     } else if (mVaultUserDataModel.getmVaultUserResult().toLowerCase().contains("tw_exists")) {
-                        showAlertDialog("Twitter",response.getEmailID());
+                        showAlertDialog("Twitter", response.getEmailID());
                     } else if (mVaultUserDataModel.getmVaultUserResult().toLowerCase().contains("gm_exists")) {
-                        showAlertDialog("Google",response.getEmailID());
+                        showAlertDialog("Google", response.getEmailID());
                     } else {
                         if (response.getReturnStatus().toLowerCase().equals("true") || response.getReturnStatus().toLowerCase().equals("vt_exists")) {
                             SharedPreferences pref = getSharedPreferences(GlobalConstants.PREF_PACKAGE_NAME, Context.MODE_PRIVATE);
@@ -1854,16 +1860,16 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
                             if (response.getReturnStatus() != null) {
                                 if (response.getReturnStatus().toLowerCase().contains("vt_exists") || response.getReturnStatus().toLowerCase().contains("false")) {
                                     pDialog.dismiss();
-                                    showAlertDialog("Vault",response.getEmailID());
+                                    showAlertDialog("Vault", response.getEmailID());
                                 } else if (response.getReturnStatus().toLowerCase().contains("gm_exists")) {
                                     pDialog.dismiss();
-                                    showAlertDialog("Google",response.getEmailID());
+                                    showAlertDialog("Google", response.getEmailID());
                                 } else if (response.getReturnStatus().toLowerCase().contains("tw_exists")) {
                                     pDialog.dismiss();
-                                    showAlertDialog("Twitter",response.getEmailID());
+                                    showAlertDialog("Twitter", response.getEmailID());
                                 } else if (response.getReturnStatus().toLowerCase().contains("fb_exists")) {
                                     pDialog.dismiss();
-                                    showAlertDialog("Facebook",response.getEmailID());
+                                    showAlertDialog("Facebook", response.getEmailID());
                                 }
                             } else {
                                 pDialog.dismiss();
@@ -1890,10 +1896,10 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
         mLoginTask.execute();
     }
 
-    public void showAlertDialog(String loginType,final String emailId) {
+    public void showAlertDialog(String loginType, final String emailId) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder
-                .setMessage("We see that you have previously used this email address, "+emailId+", with "+ loginType +" login, would you like to update your profile with this new login method?");
+                .setMessage("We see that you have previously used this email address, " + emailId + ", with " + loginType + " login, would you like to update your profile with this new login method?");
 
         alertDialogBuilder.setPositiveButton("Ok",
                 new DialogInterface.OnClickListener() {
@@ -1901,11 +1907,11 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
                     public void onClick(DialogInterface arg0, int arg1) {
                         alertDialog.dismiss();
 
-                            AppController.getInstance().getModelFacade().getLocalModel().setOverride(false);
-                            AppController.getInstance().getModelFacade().getLocalModel().setUser(setAllVaultUserData(""));
-                            showAlert(emailId);
+                        AppController.getInstance().getModelFacade().getLocalModel().setOverride(false);
+                        AppController.getInstance().getModelFacade().getLocalModel().setUser(setAllVaultUserData(""));
+                        showAlert(emailId);
 
-                      //GK  overrideUserData(vaultUser);
+                        //GK  overrideUserData(vaultUser);
                     }
                 });
 
@@ -1977,7 +1983,7 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
         mConfirmPassword.setVisibility(View.GONE);
         mRegistertionButton.setVisibility(View.GONE);
         tvAlreadyRegistered.setVisibility(View.GONE);
-            //tvHeader.setText("Register");
+        //tvHeader.setText("Register");
 
         mProfileImage.setAnimation(rightInAnimation);
         mSignUpButton.setAnimation(rightInAnimation);
@@ -1988,6 +1994,47 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
         mSignUpButton.setVisibility(View.VISIBLE);
         tvUploadPhoto.setVisibility(View.VISIBLE);
         tvSignUpWithoutProfile.setVisibility(View.VISIBLE);
-        }
+    }
+
+
+    private void naviagteBackToRegistration() {
+
+        leftOutAnimation = AnimationUtils.loadAnimation(UploadPhotoActivity.this, R.anim.leftin);
+        rightInAnimation = AnimationUtils.loadAnimation(UploadPhotoActivity.this, R.anim.rightout);
+
+        mFirstName.setAnimation(rightInAnimation);
+        mLastName.setAnimation(rightInAnimation);
+        mYOB.setAnimation(rightInAnimation);
+        mGender.setAnimation(rightInAnimation);
+        mEmailId.setAnimation(rightInAnimation);
+        mUserName.setAnimation(rightInAnimation);
+        mPassword.setAnimation(rightInAnimation);
+        mConfirmPassword.setAnimation(rightInAnimation);
+        mRegistertionButton.setAnimation(rightInAnimation);
+        tvAlreadyRegistered.setAnimation(rightInAnimation);
+
+        mFirstName.setVisibility(View.VISIBLE);
+        mLastName.setVisibility(View.VISIBLE);
+        mYOB.setVisibility(View.VISIBLE);
+        mGender.setVisibility(View.VISIBLE);
+        mEmailId.setVisibility(View.VISIBLE);
+        mUserName.setVisibility(View.VISIBLE);
+        mPassword.setVisibility(View.VISIBLE);
+        mConfirmPassword.setVisibility(View.VISIBLE);
+        mRegistertionButton.setVisibility(View.VISIBLE);
+        tvAlreadyRegistered.setVisibility(View.VISIBLE);
+        //tvHeader.setText("Register");
+
+        mProfileImage.setAnimation(leftOutAnimation);
+        mSignUpButton.setAnimation(leftOutAnimation);
+        tvUploadPhoto.setAnimation(leftOutAnimation);
+        tvSignUpWithoutProfile.setAnimation(leftOutAnimation);
+
+        mProfileImage.setVisibility(View.GONE);
+        mSignUpButton.setVisibility(View.GONE);
+        tvUploadPhoto.setVisibility(View.GONE);
+        tvSignUpWithoutProfile.setVisibility(View.GONE);
+
+    }
 
 }

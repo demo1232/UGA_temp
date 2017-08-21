@@ -281,6 +281,10 @@ public class GlobalConstants {
     public static final String NOTIFICATION_RECEIVE = "notificationReceive";
     public static final String NOTIFICATION_FOREGROUND = "notificationForeground";
     public static final String NOTIFICATION_OPEN = "notificationOpen";
-    public static final String NOT_REGISTERED = "Your Email are not registered. Please registered your email.";
+    public static final String NOT_REGISTERED = "Your email is not registered. Please registered your email.";
     public static final String ENTER_EMAIL_AND_PASSWORD = "Please Enter Email and Password!";
+
+    public static final String ENTERRED_PASSWORD_WRONG = "entered password is wrong";
+
+    public static String CATEGORYNAME = "";
 }
