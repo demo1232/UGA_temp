@@ -15,6 +15,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -50,7 +51,9 @@ public class ForgotPasswordActivity extends BaseActivity {
     ProgressDialog pDialog;
     private String verificationCodeValue;
     private LinearLayout childBlockLinearLayout, verificationLinearLayout;
-    private TextView tvResetPassword, tvSaveTextView;
+    private TextView tvResetPassword;
+
+    private Button tvSaveTextView;
     private Animation animation;
     private CheckBox chkChangePassword;
     private long userId;
@@ -74,14 +77,14 @@ public class ForgotPasswordActivity extends BaseActivity {
 
         registeredEmailId = (EditText) findViewById(R.id.ed_registered_email_id);
         if (getIntent() != null) {
-            boolean isValue = getIntent().getBooleanExtra("key", false);
+//            boolean isValue = getIntent().getBooleanExtra("key", false);
             String emailId = getIntent().getStringExtra("email_id");
 
 
-            if (isValue) {
+//            if (isValue) {
                 registeredEmailId.setText(emailId);
-                isValue = false;
-            }
+//                isValue = false;
+//            }
         }
        // tvHeaderText = (TextView) findViewById(R.id.tv_header_text);
         nextButtonTextView = (Button) findViewById(R.id.tv_next);
@@ -93,7 +96,7 @@ public class ForgotPasswordActivity extends BaseActivity {
 
         childBlockLinearLayout = (LinearLayout) findViewById(R.id.child_block);
        // tvResetPassword = (TextView) findViewById(R.id.tv_reset_password);
-        tvSaveTextView = (TextView) findViewById(R.id.tv_save);
+        tvSaveTextView = (Button) findViewById(R.id.tv_save);
 
         newPasswordEditText = (EditText) findViewById(R.id.ed_new_password);
         confirmPasswordEditText = (EditText) findViewById(R.id.ed_confirm_password);
@@ -161,12 +164,10 @@ public class ForgotPasswordActivity extends BaseActivity {
             }
         });
 
-        verificationCode.setOnKeyListener(new View.OnKeyListener() {
-
+        verificationCode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-
-                if (keyCode == KeyEvent.KEYCODE_ENTER) {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     if (verificationCode.getText().toString().equals(verificationCodeValue)) {
                         checkConfirmPasswordAndProceed();
                     } else if (verificationCode.getText().toString().equals("")) {
@@ -174,12 +175,25 @@ public class ForgotPasswordActivity extends BaseActivity {
                     } else {
                         showToastMessage("Entered code is either invalid or expired.");
                     }
-                    return true;
-                } else {
-                    return false;
                 }
+
+                return false;
+
+
             }
         });
+
+//            @Override
+//            public boolean onKey(View v, int keyCode, KeyEvent event) {
+//
+//                if (keyCode == KeyEvent.KEYCODE_D) {
+//
+//                    return true;
+//                } else {
+//                    return false;
+//                }
+//            }
+//        });
 
         tvSaveTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -428,7 +442,7 @@ public class ForgotPasswordActivity extends BaseActivity {
 
     private void checkEmailIdAndProceed() {
 
-        if (/*tvVerificationCode.getVisibility() == View.GONE &&*/ tvSubmitButton.getVisibility() == View.GONE) {
+//        if (/*tvVerificationCode.getVisibility() == View.GONE &&*/ tvSubmitButton.getVisibility() == View.GONE) {
             leftOutAnimation = AnimationUtils.loadAnimation(ForgotPasswordActivity.this, R.anim.leftout);
             rightInAnimation = AnimationUtils.loadAnimation(ForgotPasswordActivity.this, R.anim.rightin);
 
@@ -461,7 +475,7 @@ public class ForgotPasswordActivity extends BaseActivity {
             tvSubmitButton.setVisibility(View.VISIBLE);
             tvResendCode.setVisibility(View.VISIBLE);
             tvCancel.setVisibility(View.VISIBLE);
-        }
+//        }
 
     }
 

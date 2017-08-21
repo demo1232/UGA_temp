@@ -36,14 +36,14 @@ public class CatagoriesAdapter extends RecyclerView.Adapter<CatagoriesAdapter.Ca
 
     public Context mContext;
     private OnClickInterface mOnClickInterface;
-    private ArrayList<CatagoriesTabDao> mCatagoriesTabList = new ArrayList<>();
+    public ArrayList<CatagoriesTabDao> mCatagoriesTabList = new ArrayList<>();
     ImageLoader imageLoader;
     public DisplayImageOptions options;
 
 
     public interface OnClickInterface
     {
-        void onClick(CatagoriesAdapterViewHolder v,long tabPosition);
+        void onClick(CatagoriesAdapterViewHolder v,long tabPosition, String categoryName);
     }
 
 
@@ -110,7 +110,7 @@ public class CatagoriesAdapter extends RecyclerView.Adapter<CatagoriesAdapter.Ca
 
         viewHolder.playlistTabNametextView.setText(catagoriesTabName);
 
-        mOnClickInterface.onClick(viewHolder,categoriesId);
+        mOnClickInterface.onClick(viewHolder,categoriesId, catagoriesTabName);
     }
 
 

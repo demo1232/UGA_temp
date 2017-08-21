@@ -454,7 +454,7 @@ public class Utils {
                 GlobalConstants.DISPLAY_MESSAGE_ACTION));*/
 
         // Get GCM registration id
-   //     final String regId = GCMRegistrar.getRegistrationId(mActivity.getApplicationContext());
+        //     final String regId = GCMRegistrar.getRegistrationId(mActivity.getApplicationContext());
         refreshedToken = FirebaseInstanceId.getInstance().getToken();
 
         // Check if regid already presents
@@ -507,7 +507,7 @@ public class Utils {
                 GlobalConstants.DISPLAY_MESSAGE_ACTION));*/
 
         // Get GCM registration id
-      //  final String regId = GCMRegistrar.getRegistrationId(mActivity.getApplicationContext());
+        //  final String regId = GCMRegistrar.getRegistrationId(mActivity.getApplicationContext());
         refreshedToken = FirebaseInstanceId.getInstance().getToken();
 
         // Check if regid already presents
@@ -1049,8 +1049,8 @@ public class Utils {
                                         context.startActivity(intent);
                                         context.overridePendingTransition(R.anim.slideup, R.anim.nochange);
                                         context.finish();
-                                       // if (!VideoDataService.isServiceRunning)
-                                            context.startService(new Intent(context, TrendingFeaturedVideoService.class));
+                                        // if (!VideoDataService.isServiceRunning)
+                                        context.startService(new Intent(context, TrendingFeaturedVideoService.class));
                                         progressDialog.dismiss();
                                         mMailChimpTask = null;
                                     }
@@ -1075,7 +1075,7 @@ public class Utils {
                         context.overridePendingTransition(R.anim.slideup, R.anim.nochange);
                         context.finish();
                         //if (!VideoDataService.isServiceRunning)
-                            context.startService(new Intent(context, TrendingFeaturedVideoService.class));
+                        context.startService(new Intent(context, TrendingFeaturedVideoService.class));
                     }
                 });
 
@@ -1329,7 +1329,7 @@ public class Utils {
         adView.loadAd(adRequest);
     }
 
-    public void showToastMessage(final Activity activity,String message,View viewId) {
+    public void showToastMessage(final Activity activity, String message, View viewId) {
         //View includedLayout = findViewById(R.id.llToast);
 
         final TextView text = (TextView) viewId.findViewById(R.id.tv_toast_message);
@@ -1356,28 +1356,48 @@ public class Utils {
 
 
     public static String convertSecondsToHMmSs(long millis) {
-        long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
+    /*    long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
         millis -= TimeUnit.MINUTES.toMillis(minutes);
         long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
         String duration = "";
         if (minutes > 60) {
             // convert the minutes to Hours:Minutes:Seconds
         } else {
-            /*
+            *//*
              * if (minutes < 10) duration += "0" + minutes; else duration +=
 			 * minutes;
-			 */
+			 *//*
             duration += minutes;
             if (seconds < 10)
                 duration += ":0" + seconds;
             else
                 duration += ":" + seconds;
         }
+        return duration;*/
+
+        String duration = "";
+        int min = 0;
+        int sec = 0;
+        String hrStr = "";
+        String mnStr = "";
+        String secStr = "";
+        int hr = (int) ((millis / (1000 * 60 * 60)) % 24);
+        if (hr > 0) {
+            min = (int) ((millis / (1000 * 60)) % 60);
+            sec = (int) (millis / 1000) % 60;
+            hrStr = (hr < 10 ? "0" : "") + hr;
+            mnStr = (min < 10 ? "0" : "") + min;
+            secStr = (sec < 10 ? "0" : "") + sec;
+            duration = hrStr + ":" + mnStr + ":" + secStr;
+        } else {
+            min = (int) ((millis / (1000) / 60));
+            sec = (int) (millis / 1000) % 60;
+            mnStr = (min < 10 ? "0" : "") + min;
+            secStr = (sec < 10 ? "0" : "") + sec;
+            duration = mnStr + ":" + secStr;
+        }
         return duration;
     }
-
-
-
 
 
 }

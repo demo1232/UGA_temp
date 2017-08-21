@@ -20,6 +20,7 @@ import com.ncsavault.alabamavault.controllers.AppController;
 
 import com.ncsavault.alabamavault.database.VaultDatabaseHelper;
 import com.ncsavault.alabamavault.dto.VideoDTO;
+import com.ncsavault.alabamavault.utils.Utils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -115,7 +116,7 @@ public class VideoDetailAdapter extends RecyclerView.Adapter<VideoDetailAdapter.
         viewHolder.videoDescriptionTextView.setText(videDescription);
 
         if(videoDuration != 0) {
-            viewHolder.videoDurationTextView.setText(convertSecondsToHMmSs(videoDuration));
+            viewHolder.videoDurationTextView.setText(Utils.convertSecondsToHMmSs(videoDuration));
         }
 
         if (newVideoDto.isVideoIsFavorite()) {

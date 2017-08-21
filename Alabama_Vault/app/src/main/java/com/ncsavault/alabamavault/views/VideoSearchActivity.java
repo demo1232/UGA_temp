@@ -148,7 +148,7 @@ public class VideoSearchActivity extends AppCompatActivity implements VideoSearc
         imageviewSearch.setVisibility(View.INVISIBLE);
         imageviewLogo = (ImageView) mToolbar.findViewById(R.id.imageview_logo);
         imageviewLogo.setVisibility(View.INVISIBLE);
-        imageViewBackNavigation=(ImageView)mToolbar.findViewById(R.id.imageview_back);
+        imageViewBackNavigation = (ImageView) mToolbar.findViewById(R.id.imageview_back);
         imageViewBackNavigation.setVisibility(View.VISIBLE);
     }
 
@@ -167,14 +167,26 @@ public class VideoSearchActivity extends AppCompatActivity implements VideoSearc
 
                 try {
                     if (fragment.equalsIgnoreCase("HomeFragment") || fragment.equalsIgnoreCase("VideoDetailFragment")) {
+                        if (fragment.equalsIgnoreCase("HomeFragment")) {
+                            editTextSearch.setHint("Videos" + " Name " + "(" + "Users Input Filters" + ")");
+                            editTextSearch.setHintTextColor(mContext.getResources().getColor(R.color.apptheme_color));
+                        }
+                        if (fragment.equalsIgnoreCase("VideoDetailFragment")) {
+                            editTextSearch.setHint(GlobalConstants.CATEGORYNAME + " Name " + "(" + "Users Input Filters" + ")");
+                            editTextSearch.setHintTextColor(mContext.getResources().getColor(R.color.apptheme_color));
+                        }
                         objects = new ArrayList<Object>();
                         objects.addAll((VaultDatabaseHelper.getInstance(VideoSearchActivity.this).getAllVideoList()));
 
 
                     } else if (fragment.equalsIgnoreCase("PlayListFragment")) {
+                        editTextSearch.setHint(GlobalConstants.CATEGORYNAME + "(" + "Users Input Filters" + ")");
+                        editTextSearch.setHintTextColor(mContext.getResources().getColor(R.color.apptheme_color));
                         objects = new ArrayList<Object>();
                         objects.addAll(VaultDatabaseHelper.getInstance(VideoSearchActivity.this).getAllLocalPlaylistTabData());
                     } else if (fragment.equalsIgnoreCase("SavedVideoFragment")) {
+                        editTextSearch.setHint("Saved " + "(" + "Users Input Filters" + ")");
+                        editTextSearch.setHintTextColor(mContext.getResources().getColor(R.color.apptheme_color));
                         objects = new ArrayList<Object>();
                         objects.addAll(VaultDatabaseHelper.getInstance(VideoSearchActivity.this).getFavouriteVideosArrayList());
                     }
@@ -272,8 +284,7 @@ public class VideoSearchActivity extends AppCompatActivity implements VideoSearc
 
                         }
                     }
-                }else
-                {
+                } else {
 
                 }
             }

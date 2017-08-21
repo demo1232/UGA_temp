@@ -227,6 +227,7 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
                 getResources().getStringArray(R.array.gender_selection));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mEditSpinner.setAdapter(adapter);
+        Utils.getInstance().gethideKeyboard(RegistrationActivity.this);
     }
 
     private void facebookLogin(User socialUserData, String registerUser) {
