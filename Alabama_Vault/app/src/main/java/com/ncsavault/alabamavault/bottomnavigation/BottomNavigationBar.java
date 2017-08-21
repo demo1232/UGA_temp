@@ -154,7 +154,10 @@ public class BottomNavigationBar implements View.OnClickListener {
             this.mImageViewBar3.setColorFilter(ContextCompat.getColor(mContext, R.color.apptheme_color));
             this.mTextViewBar3.setTextColor(ContextCompat.getColor(mContext, R.color.apptheme_color));
             return;
-        } else {
+        } else if (view.getId() == R.id.linearLayoutBar4) {
+            this.mViewBar4.setVisibility(View.VISIBLE);
+            this.mImageViewBar4.setColorFilter(ContextCompat.getColor(mContext, R.color.apptheme_color));
+            this.mTextViewBar4.setTextColor(ContextCompat.getColor(mContext, R.color.apptheme_color));
             return;
         }
 

@@ -16,6 +16,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -27,6 +28,8 @@ import com.ncsavault.alabamavault.R;
 import com.ncsavault.alabamavault.adapters.VideoDetailAdapter;
 import com.ncsavault.alabamavault.controllers.AppController;
 
+import com.ncsavault.alabamavault.customviews.CustomGridLayoutManager;
+import com.ncsavault.alabamavault.customviews.RecyclerViewDisabler;
 import com.ncsavault.alabamavault.database.VaultDatabaseHelper;
 import com.ncsavault.alabamavault.dto.VideoDTO;
 import com.ncsavault.alabamavault.globalconstants.GlobalConstants;
@@ -59,6 +62,7 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
     PullRefreshTask pullTask;
     long playlistId = 0;
     private TextView tvNoRecoredFound;
+    RecyclerView.OnItemTouchListener disable;
 
     public static Fragment newInstance(Context context, long playlistId) {
         Fragment videoDetailFragment = new VideoDetailFragment();
@@ -113,6 +117,7 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.saved_video_recycler_view);
+        disable = new RecyclerViewDisabler();
         tvNoRecoredFound = (TextView) view.findViewById(R.id.tv_no_recored_found);
         progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
 
@@ -438,10 +443,10 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
             super.onPreExecute();
             if (mRecyclerView != null) {
                 mRecyclerView.setEnabled(false);
+                mRecyclerView.addOnItemTouchListener(disable);
             }
 
             refreshLayout.setRefreshing(true);
-
         }
 
         @Override
@@ -456,6 +461,21 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
                 videoDtoArrayList.addAll(AppController.getInstance().getServiceManager().
                         getVaultService().getNewVideoData(url));
 
+                for(VideoDTO videoDTO :videoDtoArrayList)
+                {
+                    VideoDTO localVideoDTO = VaultDatabaseHelper.getInstance(mContext)
+                            .getVideoDataByVideoId(String.valueOf(videoDTO.getVideoId()));
+
+                    if(localVideoDTO != null)
+                    {
+                        if(localVideoDTO.getVedioList_modified() != videoDTO.getVedioList_modified()) {
+                            VaultDatabaseHelper.getInstance(mContext).
+                                    insertVideosInDatabase(videoDtoArrayList);
+                        }
+                    }
+
+                }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -467,18 +487,19 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
             super.onPostExecute(result);
             try {
 
-                if (result.size() == 0) {
+                if (videoDtoArrayList.size() == 0) {
                     tvNoRecoredFound.setVisibility(View.VISIBLE);
                     tvNoRecoredFound.setText(GlobalConstants.NO_RECORDS_FOUND);
                 } else {
                     tvNoRecoredFound.setVisibility(View.GONE);
                 }
-                videoDetailAdapter = new VideoDetailAdapter(mContext, result, VideoDetailFragment.this);
+                videoDetailAdapter = new VideoDetailAdapter(mContext, videoDtoArrayList, VideoDetailFragment.this);
                 mRecyclerView.setHasFixedSize(true);
                 LinearLayoutManager llm = new LinearLayoutManager(mContext);
                 llm.setOrientation(LinearLayoutManager.VERTICAL);
                 mRecyclerView.setLayoutManager(llm);
                 mRecyclerView.setAdapter(videoDetailAdapter);
+                mRecyclerView.removeOnItemTouchListener(disable);
                 refreshLayout.setRefreshing(false);
 
             } catch (Exception e) {

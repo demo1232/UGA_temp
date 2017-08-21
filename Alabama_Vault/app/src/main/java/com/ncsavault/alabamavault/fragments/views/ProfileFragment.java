@@ -43,6 +43,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.facebook.CallbackManager;
@@ -322,7 +323,27 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 //                        updateUserData();
 //                    }
 //                }
-                AppController.getInstance().handleEvent(AppDefines.EVENT_ID_CHANGE_PASSWORD_SCREEN);
+//                String[] mailAray = new String[fSelectedMemberArray.size()];
+//                for (int i = 0; i < fSelectedMemberArray.size(); i++) {
+//                    mailAray[i] = fSelectedMemberArray.get(i).getEmail();
+//                }
+
+                Intent intent = null;
+                intent = new Intent(Intent.ACTION_SENDTO);
+                intent.setData(Uri.parse("mailto:gsingh@delaplex.in"));
+                intent.setPackage("com.google.android.gm");
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Hello");
+                intent.putExtra(Intent.EXTRA_TEXT, "Gaurav");
+                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    try {
+                        startActivity(Intent.createChooser(intent, "Choose an email client"));
+                    } catch (ActivityNotFoundException anfe) {
+                        anfe.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), "No such app found", Toast.LENGTH_SHORT).show();
+                }
+             //   AppController.getInstance().handleEvent(AppDefines.EVENT_ID_CHANGE_PASSWORD_SCREEN);
 
             }
         });

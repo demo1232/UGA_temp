@@ -168,6 +168,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
 //                    videoDTO.setVideoIndex(cursor.getInt(cursor.getColumnIndex(VideoTable.KEY_VIDEO_INDEX)));
                     videoDTO.setVideoSocialUrl(cursor.getString(cursor.getColumnIndex(TrendingVideoTable.KEY_VIDEO_SOCIAL_URL)));
 
+
                     videoDTOsArrayList.add(videoDTO);
                 } while (cursor.moveToNext());
             }
@@ -307,7 +308,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
                     videoDTO.setPlaylistTags(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_TAGS)));
                     videoDTO.setPlaylistReferenceId(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_REFERENCE_ID)));
                     videoDTO.setVideoSocialUrl(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_VIDEO_SOCIAL_URL)));
-
+                    videoDTO.setVedioList_modified(cursor.getLong(cursor.getColumnIndex(VideoTable.KEY_VIDEO_MODIFIED)));
 
                     videoDTOsArrayList.add(videoDTO);
                 } while (cursor.moveToNext());
@@ -359,6 +360,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
                     videoDTO.setPlaylistTags(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_TAGS)));
                     videoDTO.setPlaylistReferenceId(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_REFERENCE_ID)));
                     videoDTO.setVideoSocialUrl(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_VIDEO_SOCIAL_URL)));
+                    videoDTO.setVedioList_modified(cursor.getLong(cursor.getColumnIndex(VideoTable.KEY_VIDEO_MODIFIED)));
 
                 } while (cursor.moveToNext());
             }
@@ -408,6 +410,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
                     videoDTO.setPlaylistTags(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_TAGS)));
                     videoDTO.setPlaylistReferenceId(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_REFERENCE_ID)));
                     videoDTO.setVideoSocialUrl(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_VIDEO_SOCIAL_URL)));
+                    videoDTO.setVedioList_modified(cursor.getLong(cursor.getColumnIndex(VideoTable.KEY_VIDEO_MODIFIED)));
 
                     videoDTOsArrayList.add(videoDTO);
                 } while (cursor.moveToNext());
@@ -459,6 +462,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
                     videoDTO.setPlaylistTags(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_TAGS)));
                     videoDTO.setPlaylistReferenceId(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_REFERENCE_ID)));
                     videoDTO.setVideoSocialUrl(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_VIDEO_SOCIAL_URL)));
+                    videoDTO.setVedioList_modified(cursor.getLong(cursor.getColumnIndex(VideoTable.KEY_VIDEO_MODIFIED)));
 
                     videoDTOsArrayList.add(videoDTO);
                 } while (cursor.moveToNext());
@@ -511,6 +515,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
                     videoDTO.setPlaylistTags(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_TAGS)));
                     videoDTO.setPlaylistReferenceId(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_REFERENCE_ID)));
                     videoDTO.setVideoSocialUrl(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_VIDEO_SOCIAL_URL)));
+                    videoDTO.setVedioList_modified(cursor.getLong(cursor.getColumnIndex(VideoTable.KEY_VIDEO_MODIFIED)));
 
                     videoDTOsArrayList.add(videoDTO);
                 } while (cursor.moveToNext());
@@ -564,6 +569,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
                     videoDTO.setPlaylistTags(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_TAGS)));
                     videoDTO.setPlaylistReferenceId(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_REFERENCE_ID)));
                     videoDTO.setVideoSocialUrl(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_VIDEO_SOCIAL_URL)));
+                    videoDTO.setVedioList_modified(cursor.getLong(cursor.getColumnIndex(VideoTable.KEY_VIDEO_MODIFIED)));
 
                     videoDTOsArrayList.add(videoDTO);
                 } while (cursor.moveToNext());
@@ -618,6 +624,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
                     videoDTO.setPlaylistTags(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_TAGS)));
                     videoDTO.setPlaylistReferenceId(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_REFERENCE_ID)));
                     videoDTO.setVideoSocialUrl(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_VIDEO_SOCIAL_URL)));
+                    videoDTO.setVedioList_modified(cursor.getLong(cursor.getColumnIndex(VideoTable.KEY_VIDEO_MODIFIED)));
 
                     arrayListNewVideoDTOs.add(videoDTO);
                 } while (cursor.moveToNext());
@@ -995,6 +1002,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
                         initialValues.put(VideoTable.KEY_PLAYLIST_TAGS, videoDTO.getPlaylistTags());
                         initialValues.put(VideoTable.KEY_PLAYLIST_REFERENCE_ID, videoDTO.getPlaylistReferenceId());
                         initialValues.put(VideoTable.KEY_VIDEO_SOCIAL_URL, videoDTO.getVideoSocialUrl());
+                        initialValues.put(VideoTable.KEY_VIDEO_MODIFIED,videoDTO.getVedioList_modified());
                         database.insert(VideoTable.VIDEO_TABLE, null, initialValues);
 
                         checkVideoAvailabilityInOtherPlaylistAndUpdate(videoDTO);
@@ -1028,6 +1036,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
                     updateExistingVideo.put(VideoTable.KEY_PLAYLIST_TAGS, videoDTO.getPlaylistTags());
                     updateExistingVideo.put(VideoTable.KEY_PLAYLIST_ID, videoDTO.getPlaylistId());
                     updateExistingVideo.put(VideoTable.KEY_VIDEO_SOCIAL_URL, videoDTO.getVideoSocialUrl());
+                    updateExistingVideo.put(VideoTable.KEY_VIDEO_MODIFIED,videoDTO.getVedioList_modified());
 
                     database.update(VideoTable.VIDEO_TABLE, updateExistingVideo, VideoTable.KEY_VIDEO_ID + "=?", new String[]{"" + videoDTO.getVideoId()});
                     checkVideoAvailabilityInOtherPlaylistAndUpdate(videoDTO);
@@ -1095,6 +1104,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
                     else
                         updateExistingVideo.put(VideoTable.KEY_VIDEO_IS_FAVORITE, 0);
 //                                updateExistingVideo.put(VideoTable.KEY_VIDEO_INDEX, videoDTO.getVideoIndex());
+                    updateExistingVideo.put(VideoTable.KEY_VIDEO_MODIFIED,videoDTO.getVedioList_modified());
                     database.update(VideoTable.VIDEO_TABLE, updateExistingVideo, VideoTable.KEY_VIDEO_ID + "=?", new String[]{"" + videoDTO.getVideoId()});
                 }
             }
@@ -1214,6 +1224,10 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
 
     public ArrayList<PlaylistDto> getLocalPlaylistDataByCategorieTab(long categoriesId){
         return PlaylistDatabaseTable.getInstance().getLocalPlaylistDataByCategorieTab(this.getReadableDatabase(), categoriesId);
+    }
+
+    public void updatePlaylistData(PlaylistDto playlistDto,long categoriesId){
+        PlaylistDatabaseTable.getInstance().updatePlaylistData(this.getReadableDatabase(),playlistDto, categoriesId);
     }
 
     public void removeAllPlaylistTabData(){

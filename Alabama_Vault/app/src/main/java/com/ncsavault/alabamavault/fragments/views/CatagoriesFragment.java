@@ -25,6 +25,7 @@ import com.ncsavault.alabamavault.R;
 import com.ncsavault.alabamavault.adapters.CatagoriesAdapter;
 import com.ncsavault.alabamavault.adapters.SavedVideoAdapter;
 import com.ncsavault.alabamavault.controllers.AppController;
+import com.ncsavault.alabamavault.customviews.RecyclerViewDisabler;
 import com.ncsavault.alabamavault.database.VaultDatabaseHelper;
 import com.ncsavault.alabamavault.dto.CatagoriesTabDao;
 import com.ncsavault.alabamavault.dto.TabBannerDTO;
@@ -52,6 +53,7 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
     PlaylistFragment playlistFragment;
     private PullRefreshLayout refreshLayout;
     PullRefreshTask pullTask;
+    RecyclerView.OnItemTouchListener disable;
 
     public static Fragment newInstance(Context context) {
         Fragment frag = new CatagoriesFragment();
@@ -124,6 +126,7 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
             super.onPreExecute();
             if (mRecyclerView != null) {
                 mRecyclerView.setEnabled(false);
+                mRecyclerView.addOnItemTouchListener(disable);
             }
 
             refreshLayout.setRefreshing(true);
@@ -140,8 +143,18 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
                 catagoriesTabList.clear();
                 catagoriesTabList.addAll(AppController.getInstance().getServiceManager().getVaultService().getCategoriesData(url));
 
-                VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).removeAllCategoriesTabData();
-                VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).insertCategoriesTabData(catagoriesTabList);
+                for (CatagoriesTabDao catagoriesTabDao : catagoriesTabList) {
+                    CatagoriesTabDao localCatoriesData = VaultDatabaseHelper.getInstance(mContext)
+                            .getLocalCategoriesDataByCategoriesId(catagoriesTabDao.getCategoriesId());
+                    if (localCatoriesData != null) {
+                        if (localCatoriesData.getCategories_modified() != catagoriesTabDao.getCategories_modified()) {
+
+                            VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).removeAllCategoriesTabData();
+                            VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).insertCategoriesTabData(catagoriesTabList);
+                        }
+                    }
+                }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -160,9 +173,9 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
                 llm.setOrientation(LinearLayoutManager.VERTICAL);
                 mRecyclerView.setLayoutManager(llm);
                 mRecyclerView.setAdapter(mCatagoriesAdapter);
+                mRecyclerView.removeOnItemTouchListener(disable);
             }
                refreshLayout.setRefreshing(false);
-
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -177,6 +190,7 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
 
     private void initViews(View view) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.catagories_recycler_view);
+        disable = new RecyclerViewDisabler();
         setToolbarIcons();
         progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
 

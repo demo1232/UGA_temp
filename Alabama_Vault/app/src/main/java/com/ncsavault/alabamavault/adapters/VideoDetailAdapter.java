@@ -168,12 +168,19 @@ public class VideoDetailAdapter extends RecyclerView.Adapter<VideoDetailAdapter.
     }
 
     public String convertSecondsToHMmSs(long millis) {
+        long hrs = TimeUnit.MILLISECONDS.toHours(millis);
         long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
         millis -= TimeUnit.MINUTES.toMillis(minutes);
         long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
         String duration = "";
         if (minutes > 60) {
             // convert the minutes to Hours:Minutes:Seconds
+            duration += hrs;
+            if (minutes < 10)
+                duration += ":0" + minutes;
+            else
+                duration += ":" + minutes;
+
         } else {
             /*
              * if (minutes < 10) duration += "0" + minutes; else duration +=

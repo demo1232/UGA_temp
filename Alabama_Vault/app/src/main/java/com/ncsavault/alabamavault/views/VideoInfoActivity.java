@@ -37,6 +37,7 @@ import android.support.v4.view.ViewPager;
 import android.transition.Transition;
 import android.util.Log;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.Window;
@@ -154,7 +155,7 @@ public class VideoInfoActivity extends PermissionActivity implements VideoPlayer
     private boolean goToSettingsScreen = false;
     private MusicIntentReceiver myReceiver;
     private boolean isBackToSplashScreen = false;
-    long videoCurrentPostion = 0;
+    static long videoCurrentPostion = 0;
     boolean isFirstTimeEntry = false;
     private AdView mAdView;
     private ProgressDialog pDialog;
@@ -169,6 +170,7 @@ public class VideoInfoActivity extends PermissionActivity implements VideoPlayer
     private String videoName;
     private FirebaseAnalytics mFirebaseAnalytics;
     Bundle params = new Bundle();
+    TextView mVideoDescription;
 
     @Override
     protected void onStart() {
@@ -388,6 +390,12 @@ public class VideoInfoActivity extends PermissionActivity implements VideoPlayer
         try {
             if (videoView != null) {
                 videoView.onPause();
+                if (videoView != null) {
+                    videoCurrentPostion = videoView.getPosition();
+                }
+            }
+            if (linearLayout != null && linearLayout.getVisibility() == View.VISIBLE) {
+                linearLayout.setVisibility(View.GONE);
             }
             if (myReceiver != null) {
                 //gk    unregisterReceiver(myReceiver);
@@ -402,6 +410,7 @@ public class VideoInfoActivity extends PermissionActivity implements VideoPlayer
         super.onResume();
         try {
             if (videoView != null) {
+                videoView.seek(videoCurrentPostion);
                 videoView.onResume();
             }
 
@@ -699,7 +708,8 @@ public class VideoInfoActivity extends PermissionActivity implements VideoPlayer
         tvVideoName = (TextView) findViewById(R.id.tv_video_name);
         imgToggleButton = (ImageView) findViewById(R.id.imgToggleButton);
 //        viewPager = (ViewPager) findViewById(R.id.pager);
-//        viewPagerRelativeView = (RelativeLayout) findViewById(R.id.relative_view_pager);
+        viewPagerRelativeView = (RelativeLayout) findViewById(R.id.relative_view_pager);
+        mVideoDescription = (TextView) findViewById(R.id.tv_video_description);
 //        circleIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
 //        circleIndicator.setPageColor(getResources().getColor(R.color.app_dark_grey));
 //        circleIndicator.setStrokeColor(Color.parseColor("#999999"));
@@ -724,6 +734,9 @@ public class VideoInfoActivity extends PermissionActivity implements VideoPlayer
 
     void initData() {
 
+        if(videoObject != null) {
+            mVideoDescription.setText(videoObject.getVideoLongDescription());
+        }
         myReceiver = new MusicIntentReceiver();
         IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
         registerReceiver(myReceiver, filter);
@@ -1028,37 +1041,37 @@ public class VideoInfoActivity extends PermissionActivity implements VideoPlayer
                             imgToggleButton.setBackgroundResource(R.drawable.saved_video_img);
                         }
 
-//                        mPostTask = new AsyncTask<Void, Void, Void>() {
-//                            @Override
-//                            protected void onPreExecute() {
-//                                super.onPreExecute();
-//                            }
-//
-//                            @Override
-//                            protected Void doInBackground(Void... params) {
-//                                try {
-//                                    postResult = AppController.getInstance().getServiceManager()
-//                                            .getVaultService().postFavoriteStatus(AppController.getInstance()
-//                                                    .getModelFacade().getLocalModel().
-//                                            getUserId(), videoObject.getVideoId(), videoObject.getPlaylistId(), isFavoriteChecked);
-//                                } catch (Exception e) {
-//                                    e.printStackTrace();
-//                                }
-//                                return null;
-//                            }
-//
-//                            @Override
-//                            protected void onPostExecute(Void result) {
-//                                System.out.println("Result of POST request : " + postResult);
-//                                if (isFavoriteChecked)
-//                                    VaultDatabaseHelper.getInstance(context.getApplicationContext()).setFavoriteFlag(1, videoObject.getVideoId());
-//                                else
-//                                    VaultDatabaseHelper.getInstance(context.getApplicationContext()).setFavoriteFlag(0, videoObject.getVideoId());
-//                            }
-//                        };
-//
-////                        mPostTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-//                        mPostTask.execute();
+                        mPostTask = new AsyncTask<Void, Void, Void>() {
+                            @Override
+                            protected void onPreExecute() {
+                                super.onPreExecute();
+                            }
+
+                            @Override
+                            protected Void doInBackground(Void... params) {
+                                try {
+                                    postResult = AppController.getInstance().getServiceManager()
+                                            .getVaultService().postFavoriteStatus(AppController.getInstance()
+                                                    .getModelFacade().getLocalModel().
+                                            getUserId(), videoObject.getVideoId(), videoObject.getPlaylistId(), isFavoriteChecked);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                return null;
+                            }
+
+                            @Override
+                            protected void onPostExecute(Void result) {
+                                System.out.println("Result of POST request : " + postResult);
+                                if (isFavoriteChecked)
+                                    VaultDatabaseHelper.getInstance(context.getApplicationContext()).setFavoriteFlag(1, videoObject.getVideoId());
+                                else
+                                    VaultDatabaseHelper.getInstance(context.getApplicationContext()).setFavoriteFlag(0, videoObject.getVideoId());
+                            }
+                        };
+
+//                        mPostTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        mPostTask.execute();
                     }
                 } else {
                     showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
@@ -1067,19 +1080,17 @@ public class VideoInfoActivity extends PermissionActivity implements VideoPlayer
             }
         });
 
-//        viewPagerRelativeView.setOnClickListener(new View.OnClickListener()
-//
-//                                                 {
-//                                                     @Override
-//                                                     public void onClick(View v) {
-//                                                         if (linearLayout != null && linearLayout.getVisibility() == View.VISIBLE) {
-//                                                             linearLayout.setVisibility(View.GONE);
-//                                                             // exitReveal1(linearLayout);
-//                                                         }
-//                                                     }
-//                                                 }
-//
-//        );
+        viewPagerRelativeView.setOnClickListener(new View.OnClickListener()
+             {
+                 @Override
+                 public void onClick(View v) {
+                     if (linearLayout != null && linearLayout.getVisibility() == View.VISIBLE) {
+                         linearLayout.setVisibility(View.GONE);
+                     }
+                 }
+             }
+
+        );
     }
 
 

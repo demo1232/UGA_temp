@@ -133,7 +133,7 @@
             android:name=".views.VideoInfoActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensor"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/PlayerTheme" />
 
         <!-- Include the AdActivity configChanges and theme. -->
         <activity
@@ -229,7 +229,7 @@
         <activity
             android:name=".views.HomeScreen"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="sensor"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme_1">
 
             <!-- <intent-filter> -->
@@ -244,6 +244,7 @@
             android:theme="@style/AppTheme_1" />
         <activity
             android:name=".views.VideoSearchActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme_1"></activity>
     </application>
 

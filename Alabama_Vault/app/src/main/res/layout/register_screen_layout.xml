@@ -182,10 +182,11 @@
         android:inputType="textPersonName"
         android:text="Gender"
         android:paddingLeft="20dp"
+        android:editable="false"
+        android:focusable="false"
         android:textColor="@color/white"
         android:textColorHint="@color/Gray"
         android:background="@drawable/rounded_border_edittext"
-        app:layout_constraintBottom_toTopOf="@+id/Email_FB"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="@+id/guideline8"
         app:layout_constraintRight_toLeftOf="@+id/guideline17"
@@ -201,57 +202,67 @@
         tools:layout_editor_absoluteY="383dp"
         tools:layout_editor_absoluteX="0dp" />
 
-    <EditText
-        android:id="@+id/Email"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:ems="10"
-        android:paddingLeft="20dp"
-        android:textColor="@color/white"
-        android:textColorHint="@color/Gray"
-        android:background="@drawable/rounded_border_edittext"
-        android:inputType="textPersonName"
-        android:hint="E-Mail"
-        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
-        app:layout_constraintRight_toLeftOf="@+id/guideline17"
-        app:layout_constraintTop_toBottomOf="@+id/yob"
-        app:layout_constraintHorizontal_bias="0.0"
-        android:visibility="gone"/>
 
-    <EditText
-        android:id="@+id/Email_FB"
+    <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:ems="10"
-        android:paddingLeft="20dp"
-        android:textColor="@color/white"
-        android:textColorHint="@color/Gray"
-        android:background="@drawable/rounded_border_edittext"
-        android:inputType="textPersonName"
-        android:hint="E-Mail"
-        android:editable="false"
-        android:textIsSelectable="false"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_layout"
+        android:orientation="vertical"
         app:layout_constraintLeft_toLeftOf="@+id/guideline16"
         app:layout_constraintRight_toLeftOf="@+id/guideline17"
-        app:layout_constraintTop_toBottomOf="@+id/yob"
-        app:layout_constraintHorizontal_bias="0.0"
-        android:visibility="visible"/>
+        app:layout_constraintTop_toBottomOf="@+id/edit_spinner"
+        >
 
-    <EditText
-        android:id="@+id/username"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Username"
-        android:background="@drawable/rounded_border_edittext"
-        android:textColorHint="@color/Gray"
-        android:paddingLeft="20dp"
-        android:textColor="@color/white"
-        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
-        app:layout_constraintRight_toLeftOf="@+id/guideline17"
-        app:layout_constraintTop_toBottomOf="@+id/Email_FB"
-        android:visibility="visible"/>
+        <EditText
+            android:id="@+id/Email"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:ems="10"
+            android:paddingLeft="20dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/Gray"
+            android:background="@drawable/rounded_border_edittext"
+            android:inputType="textPersonName"
+            android:hint="E-Mail"
+            app:layout_constraintHorizontal_bias="0.0"
+            android:visibility="gone"/>
+
+        <EditText
+            android:id="@+id/Email_FB"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:ems="10"
+            android:paddingLeft="20dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/Gray"
+            android:background="@drawable/rounded_border_edittext"
+            android:inputType="textPersonName"
+            android:hint="E-Mail"
+            android:editable="false"
+            android:enabled="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:textIsSelectable="false"
+            app:layout_constraintHorizontal_bias="0.0"
+            android:visibility="visible"/>
+
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="Username"
+            android:background="@drawable/rounded_border_edittext"
+            android:textColorHint="@color/Gray"
+            android:paddingLeft="20dp"
+            android:textColor="@color/white"
+            android:visibility="visible"/>
+
+
+    </LinearLayout>
+
+
 
 
     <LinearLayout

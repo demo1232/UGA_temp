@@ -188,6 +188,8 @@
         android:paddingLeft="20dp"
         android:textColor="@color/white"
         android:textColorHint="@color/Gray"
+        android:editable="false"
+        android:focusable="false"
         android:background="@drawable/rounded_border_edittext"
         app:layout_constraintBottom_toTopOf="@+id/Email"
         app:layout_constraintHorizontal_bias="1.0"

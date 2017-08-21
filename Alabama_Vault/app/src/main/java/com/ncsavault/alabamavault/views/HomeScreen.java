@@ -283,46 +283,67 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
                 catagoriesListData.addAll(AppController.getInstance().getServiceManager()
                         .getVaultService().getCategoriesData(categoriesUrl));
 
-                for (CatagoriesTabDao catagoriesTabDao : catagoriesListData) {
-                    CatagoriesTabDao localCatoriesData = VaultDatabaseHelper.getInstance(getApplicationContext())
-                            .getLocalCategoriesDataByCategoriesId(catagoriesTabDao.getCategoriesId());
-                    if (localCatoriesData != null) {
-                        if (localCatoriesData.getCategories_modified() != catagoriesTabDao.getCategories_modified()) {
-                            VaultDatabaseHelper.getInstance(getApplicationContext()).updateCategoriesData(catagoriesTabDao);
-                            try {
+    for (CatagoriesTabDao catagoriesTabDao : catagoriesListData) {
+        CatagoriesTabDao localCatoriesData = VaultDatabaseHelper.getInstance(getApplicationContext())
+                .getLocalCategoriesDataByCategoriesId(catagoriesTabDao.getCategoriesId());
+        if (localCatoriesData != null) {
+            if (localCatoriesData.getCategories_modified() != catagoriesTabDao.getCategories_modified()) {
+                VaultDatabaseHelper.getInstance(getApplicationContext()).updateCategoriesData(catagoriesTabDao);
+                try {
 
-                                String url = GlobalConstants.CATEGORIES_PLAYLIST_URL + "userid=" + userId + "&nav_tab_id="
-                                        + catagoriesTabDao.getCategoriesId();
+                    String url = GlobalConstants.CATEGORIES_PLAYLIST_URL + "userid=" + userId + "&nav_tab_id="
+                            + catagoriesTabDao.getCategoriesId();
 
-                                playlistDtoArrayList.clear();
-                                playlistDtoArrayList.addAll(AppController.getInstance().getServiceManager().
-                                        getVaultService().getPlaylistData(url));
+                    playlistDtoArrayList.clear();
+                    playlistDtoArrayList.addAll(AppController.getInstance().getServiceManager().
+                            getVaultService().getPlaylistData(url));
 
-                                if (playlistDtoArrayList.size() > 0) {
-                                   VaultDatabaseHelper.getInstance(getApplicationContext()).
-                                            insertPlaylistTabData(playlistDtoArrayList, catagoriesTabDao.getCategoriesId());
+                    for (PlaylistDto playlistDto : playlistDtoArrayList) {
+                        PlaylistDto localPlaylistDto = VaultDatabaseHelper.getInstance(getApplicationContext())
+                                .getLocalPlaylistDataByPlaylistId(playlistDto.getPlaylistId());
+
+                        if (localPlaylistDto != null) {
+                            if (localPlaylistDto.getPlaylist_modified() != playlistDto.getPlaylist_modified()) {
+                                VaultDatabaseHelper.getInstance(getApplicationContext()).
+                                        insertPlaylistTabData(playlistDtoArrayList, catagoriesTabDao.getCategoriesId());
+
+                                String videoUrl = GlobalConstants.PLAYLIST_VIDEO_URL + "userid=" + userId +
+                                        "&playlistid=" + playlistDto.getPlaylistId();
+                                arrayListVideos.clear();
+                                arrayListVideos.addAll(AppController.getInstance().getServiceManager().
+                                        getVaultService().getNewVideoData(videoUrl));
+
+                                for(VideoDTO videoDTO :arrayListVideos)
+                                {
+                                    VideoDTO localVideoDTO = VaultDatabaseHelper.getInstance(getApplicationContext())
+                                            .getVideoDataByVideoId(String.valueOf(videoDTO.getVideoId()));
+
+                                    if(localVideoDTO != null)
+                                    {
+                                        if(localVideoDTO.getVedioList_modified() != videoDTO.getVedioList_modified()) {
+                                            VaultDatabaseHelper.getInstance(getApplicationContext()).
+                                                    insertVideosInDatabase(arrayListVideos);
+                                        }
+                                    }
+
                                 }
 
-                                for (PlaylistDto playlistDto : playlistDtoArrayList) {
-                                    String videoUrl = GlobalConstants.PLAYLIST_VIDEO_URL + "userid=" + userId +
-                                            "&playlistid=" + playlistDto.getPlaylistId();
-                                    arrayListVideos.clear();
-                                    arrayListVideos.addAll(AppController.getInstance().getServiceManager().
-                                            getVaultService().getNewVideoData(videoUrl));
-
-                                    VaultDatabaseHelper.getInstance(getApplicationContext()).
-                                            insertVideosInDatabase(arrayListVideos);
-                                }
-
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
                             }
-
-
                         }
                     }
+
+
+
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+
+
+            }
+        }
+    }
 
             } catch (Exception e) {
                 e.printStackTrace();

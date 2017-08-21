@@ -29,13 +29,14 @@ public class PlaylistDatabaseTable {
     public static final String KEY_PLAYLIST_TAGS = "playlist_tags";
     public static final String KEY_PLAYLIST_REFERENCE_ID = "playlist_reference_id";
     public static final String KEY_CATEGEROIES_ID = "cateroies_id";
-
+    public static final String KEY_PLAYLIST_MODIFIED = "playlist_modified";
 
     public static final String CREATE_PLAYLIST = "CREATE TABLE "
             + PLAYLIST_DATA_TABLE + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             KEY_PLAYLIST_NAME + " TEXT," + KEY_PLAYLIST_ID + " INTEGER," + KEY_PLAYLIST_THUMB_URL
             + " TEXT," + KEY_PLAYLIST_SHORT_DESC + " TEXT," + KEY_PLAYLIST_LONG_DESC + " TEXT," +
-            KEY_PLAYLIST_TAGS + " TEXT," + KEY_PLAYLIST_REFERENCE_ID + " TEXT," + KEY_CATEGEROIES_ID + " INTEGER )";
+            KEY_PLAYLIST_TAGS + " TEXT," + KEY_PLAYLIST_REFERENCE_ID + " TEXT," + KEY_CATEGEROIES_ID + " INTEGER,"
+            + KEY_PLAYLIST_MODIFIED + " INTEGER  )";
 
     public static void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_PLAYLIST);
@@ -87,6 +88,7 @@ public class PlaylistDatabaseTable {
                     initialValues.put(KEY_PLAYLIST_TAGS, playlistDto.getPlaylistTags());
                     initialValues.put(KEY_PLAYLIST_REFERENCE_ID, playlistDto.getPlaylistReferenceId());
                     initialValues.put(KEY_CATEGEROIES_ID, categoriesId);
+                    initialValues.put(KEY_PLAYLIST_MODIFIED, playlistDto.getPlaylist_modified());
 
                     database.insert(PLAYLIST_DATA_TABLE, null, initialValues);
                 }else
@@ -100,11 +102,33 @@ public class PlaylistDatabaseTable {
                     updateInitialValues.put(KEY_PLAYLIST_TAGS, playlistDto.getPlaylistTags());
                     updateInitialValues.put(KEY_PLAYLIST_REFERENCE_ID, playlistDto.getPlaylistReferenceId());
                     updateInitialValues.put(KEY_CATEGEROIES_ID, categoriesId);
+                    updateInitialValues.put(KEY_PLAYLIST_MODIFIED, playlistDto.getPlaylist_modified());
 
                     database.update(PLAYLIST_DATA_TABLE, updateInitialValues, KEY_PLAYLIST_ID + "=?",
                             new String[]{"" + playlistDto.getPlaylistId()});
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updatePlaylistData(SQLiteDatabase database, PlaylistDto playlistDto,long categoriesId){
+        try {
+            database.enableWriteAheadLogging();
+            ContentValues updateInitialValues = new ContentValues();
+            updateInitialValues.put(KEY_PLAYLIST_NAME, playlistDto.getPlaylistName());
+            updateInitialValues.put(KEY_PLAYLIST_ID, playlistDto.getPlaylistId());
+            updateInitialValues.put(KEY_PLAYLIST_THUMB_URL, playlistDto.getPlaylistThumbnailUrl());
+            updateInitialValues.put(KEY_PLAYLIST_SHORT_DESC, playlistDto.getPlaylistShortDescription());
+            updateInitialValues.put(KEY_PLAYLIST_LONG_DESC, playlistDto.getPlaylistLongDescription());
+            updateInitialValues.put(KEY_PLAYLIST_TAGS, playlistDto.getPlaylistTags());
+            updateInitialValues.put(KEY_PLAYLIST_REFERENCE_ID, playlistDto.getPlaylistReferenceId());
+            updateInitialValues.put(KEY_CATEGEROIES_ID, categoriesId);
+            updateInitialValues.put(KEY_PLAYLIST_MODIFIED, playlistDto.getPlaylist_modified());
+
+            database.update(PLAYLIST_DATA_TABLE, updateInitialValues, KEY_PLAYLIST_ID + "=?",
+                    new String[]{"" + playlistDto.getPlaylistId()});
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -129,6 +153,8 @@ public class PlaylistDatabaseTable {
                         playlistDto.setPlaylistTags(cursor.getString(cursor.getColumnIndex(KEY_PLAYLIST_TAGS)));
                         playlistDto.setPlaylistReferenceId(cursor.getString(cursor.getColumnIndex(KEY_PLAYLIST_REFERENCE_ID)));
                         playlistDto.setCategoriesId(cursor.getLong(cursor.getColumnIndex(KEY_CATEGEROIES_ID)));
+                        playlistDto.setPlaylist_modified(cursor.getLong(cursor.getColumnIndex(KEY_PLAYLIST_MODIFIED)));
+
                         playlistDaoArrayList.add(playlistDto);
                     } while (cursor.moveToNext());
                 }
@@ -160,6 +186,8 @@ public class PlaylistDatabaseTable {
                         playlistDto.setPlaylistTags(cursor.getString(cursor.getColumnIndex(KEY_PLAYLIST_TAGS)));
                         playlistDto.setPlaylistReferenceId(cursor.getString(cursor.getColumnIndex(KEY_PLAYLIST_REFERENCE_ID)));
                         playlistDto.setCategoriesId(cursor.getLong(cursor.getColumnIndex(KEY_CATEGEROIES_ID)));
+                        playlistDto.setPlaylist_modified(cursor.getLong(cursor.getColumnIndex(KEY_PLAYLIST_MODIFIED)));
+
                         playlistDaoArrayList.add(playlistDto);
                     } while (cursor.moveToNext());
                 }
@@ -189,6 +217,8 @@ public class PlaylistDatabaseTable {
                         playlistDto.setPlaylistLongDescription(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_LONG_DESC)));
                         playlistDto.setPlaylistTags(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_TAGS)));
                         playlistDto.setPlaylistReferenceId(cursor.getString(cursor.getColumnIndex(VideoTable.KEY_PLAYLIST_REFERENCE_ID)));
+                        playlistDto.setCategoriesId(cursor.getLong(cursor.getColumnIndex(KEY_CATEGEROIES_ID)));
+                        playlistDto.setPlaylist_modified(cursor.getLong(cursor.getColumnIndex(KEY_PLAYLIST_MODIFIED)));
 
                     }while (cursor.moveToNext());
                 }

@@ -1362,6 +1362,11 @@ public class Utils {
         String duration = "";
         if (minutes > 60) {
             // convert the minutes to Hours:Minutes:Seconds
+            duration = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millis),
+                    TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),
+                    TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
+            System.out.println(duration);
+            return duration;
         } else {
             /*
              * if (minutes < 10) duration += "0" + minutes; else duration +=

@@ -716,6 +716,7 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
                         String password = mPassword.getText().toString().replace(" ", "");
                         mPassword.setText(password);
                     }
+                    Utils.getInstance().gethideKeyboard(UploadPhotoActivity.this);
 
                     if (isValidPassword(mPassword.getText().toString())) {
 
@@ -736,6 +737,7 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
                         String password = mConfirmPassword.getText().toString().replace(" ", "");
                         mConfirmPassword.setText(password);
                     }
+                    Utils.getInstance().gethideKeyboard(UploadPhotoActivity.this);
                     if (isValidPassword(mConfirmPassword.getText().toString())) {
 
                     }
@@ -825,7 +827,7 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
             public boolean onTouch(View v, MotionEvent event) {
                 checkYearWheelVisibility();
                 mGender.showDropDown();
-                //  mGender.requestFocus();
+                //mGender.requestFocus();
                 Utils.getInstance().gethideKeyboard(UploadPhotoActivity.this);
                 return false;
             }
@@ -1010,7 +1012,6 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
                     {
                         if (isValidEmail(emailId)) {
                             checkEmailIdAndProceed();
-
 //                            fName = mFirstName.getText().toString().trim().substring(0, 1).toUpperCase() + mFirstName.getText().toString().trim().substring(1);
 //                            lName = mLastName.getText().toString().trim().substring(0, 1).toUpperCase() + mLastName.getText().toString().trim().substring(1);
 //                            if (!AppController.getInstance().getModelFacade().getLocalModel().isOverride()) {
@@ -1091,7 +1092,8 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
     }
 
     private void getAllRegistrationDetail() {
-        SharedPreferences pref = AppController.getInstance().getApplication().getSharedPreferences(GlobalConstants.PREF_PACKAGE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences pref = AppController.getInstance().getApplication().
+                getSharedPreferences(GlobalConstants.PREF_PACKAGE_NAME, Context.MODE_PRIVATE);
         boolean isStatus = pref.getBoolean(GlobalConstants.PREF_VAULT_FLAG_STATUS, false);
         if (isStatus) {
             mUserName.setText(pref.getString(GlobalConstants.PREF_VAULT_USER_DATA, ""));
@@ -1218,6 +1220,8 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
 //                AppController.getInstance().getModelFacade().getLocalModel().setOverride(false);
 //                overrideUserData(vaultUser);
 //            } else {
+            AppController.getInstance().getModelFacade()
+                    .getLocalModel().setMailChimpRegisterUser(false);
             mVaultUserDataModel = AppController.getInstance().getModelFacade().getRemoteModel().getUserDataModel();
             mVaultUserDataModel.registerView(this);
             mVaultUserDataModel.setProgressDialog(pDialog);
@@ -1451,7 +1455,8 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
         getUserChooserOptions();
     }
 
-    public void showConfirmLoginDialog(String mailChimpMessage, final String firstName, final String lastName, final String emailId) {
+    public void showConfirmLoginDialog(String mailChimpMessage, final String firstName, final String lastName,
+                                       final String emailId) {
         AlertDialog alertDialog = null;
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         LinearLayout layout = new LinearLayout(this);
@@ -1599,8 +1604,10 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
                                 showAlertDialog("Google",email);
 
                             } else {
-                                fName = mFirstName.getText().toString().trim().substring(0, 1).toUpperCase() + mFirstName.getText().toString().trim().substring(1);
-                                lName = mLastName.getText().toString().trim().substring(0, 1).toUpperCase() + mLastName.getText().toString().trim().substring(1);
+                                fName = mFirstName.getText().toString().trim().substring(0, 1).toUpperCase()
+                                        + mFirstName.getText().toString().trim().substring(1);
+                                lName = mLastName.getText().toString().trim().substring(0, 1).toUpperCase()
+                                        + mLastName.getText().toString().trim().substring(1);
 
 
                                 showConfirmLoginDialog(GlobalConstants.DO_YOU_WANT_TO_JOIN_OUR_MAILING_LIST, fName,

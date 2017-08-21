@@ -590,9 +590,18 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
                 playlistDtoDataList.clear();
                 playlistDtoDataList.addAll(AppController.getInstance().getServiceManager().getVaultService().getPlaylistData(url));
 
-                VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).removeAllPlaylistTabData();
-                VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).insertPlaylistTabData
-                        (playlistDtoDataList,tabId);
+                for (PlaylistDto playlistDto : playlistDtoDataList) {
+                    PlaylistDto localPlaylistDto = VaultDatabaseHelper.getInstance(mContext)
+                            .getLocalPlaylistDataByPlaylistId(playlistDto.getPlaylistId());
+
+                    if (localPlaylistDto != null) {
+                        if (localPlaylistDto.getPlaylist_modified() != playlistDto.getPlaylist_modified()) {
+                            VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).removeAllPlaylistTabData();
+                            VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).insertPlaylistTabData
+                                    (playlistDtoDataList,tabId);
+                        }
+                    }
+                }
 
                 //Update Banner Data
                 if (tabBannerDTO != null) {

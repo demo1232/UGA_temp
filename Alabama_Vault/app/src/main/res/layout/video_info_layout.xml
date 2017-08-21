@@ -171,7 +171,7 @@
                         android:text="Will fit the image for the entire background. That means it will stretch the image to fill that background entirely even if the image size is too small."
                         android:layout_alignParentTop="true"
                         android:textColor="@color/black"
-                        android:textSize="20sp" />
+                        android:textSize="15dp" />
 
                 </LinearLayout>
 

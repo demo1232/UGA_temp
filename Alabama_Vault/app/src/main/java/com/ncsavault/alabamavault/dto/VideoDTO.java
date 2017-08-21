@@ -33,7 +33,15 @@ public class VideoDTO implements Serializable {
     private String playlistTags;
     private String playlistReferenceId;
     private String videoSocialUrl;
+    private long vedioList_modified;
 
+    public long getVedioList_modified() {
+        return vedioList_modified;
+    }
+
+    public void setVedioList_modified(long vedioList_modified) {
+        this.vedioList_modified = vedioList_modified;
+    }
 
     public long getVideoId() {
         return videoId;

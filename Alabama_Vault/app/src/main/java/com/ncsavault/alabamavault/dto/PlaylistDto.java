@@ -19,6 +19,16 @@ public class PlaylistDto implements Serializable{
     public String playlistLongDescription;
     public String playlistTags;
     public long CategoriesId;
+    public long playlist_modified;
+
+
+    public long getPlaylist_modified() {
+        return playlist_modified;
+    }
+
+    public void setPlaylist_modified(long playlist_modified) {
+        this.playlist_modified = playlist_modified;
+    }
 
     public long getCategoriesId() {
         return CategoriesId;

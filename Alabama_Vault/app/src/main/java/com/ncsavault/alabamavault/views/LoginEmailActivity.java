@@ -9,12 +9,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.text.Editable;
@@ -47,6 +49,8 @@ import com.ncsavault.alabamavault.models.FBLoginModel;
 import com.ncsavault.alabamavault.models.FetchingAllDataModel;
 import com.ncsavault.alabamavault.models.LoginEmailModel;
 import com.ncsavault.alabamavault.models.LoginPasswordModel;
+import com.ncsavault.alabamavault.models.MailChimpDataModel;
+import com.ncsavault.alabamavault.models.UserDataModel;
 import com.ncsavault.alabamavault.service.TrendingFeaturedVideoService;
 import com.ncsavault.alabamavault.utils.Utils;
 import com.facebook.CallbackManager;
@@ -80,6 +84,7 @@ import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 import org.json.JSONObject;
 
+import java.io.File;
 import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -561,6 +566,23 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
                 fbLoginModel = null;
             }
 
+            if (mVaultUserDataModel != null) {
+                mVaultUserDataModel.unRegisterView(this);
+                mVaultUserDataModel = null;
+            }
+
+            if (mMailChimpModelData != null) {
+                mMailChimpModelData.unRegisterView(this);
+                mMailChimpModelData = null;
+            }
+
+            if (mLoginPasswordModel != null) {
+                mLoginPasswordModel.unRegisterView(this);
+                mLoginPasswordModel = null;
+            }
+
+
+
 
             if (fetchingAllDataModel != null) {
                 fetchingAllDataModel.unRegisterView(this);
@@ -639,7 +661,7 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
                         if (!isSocialUser) {
 
 
-                            loginVaultUser();
+                            fetchInitialRecordsForAll();
 
                         } else {
                             AppController.getInstance().getModelFacade().getLocalModel().setOverride(true);
@@ -905,6 +927,19 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
 
                                       mLoginPasswordModel.unRegisterView(LoginEmailActivity.this);
                                       loadEmailAndPasswordData();
+                                  } else if (mMailChimpModelData != null && mMailChimpModelData.getState() ==
+                                          BaseModel.STATE_SUCCESS_MAIL_CHIMP) {
+                                      mMailChimpModelData.unRegisterView(LoginEmailActivity.this);
+                                      if (!Utils.isInternetAvailable(LoginEmailActivity.this) && pDialog.isShowing()) {
+                                          showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
+                                      } else {
+                                          storeDataOnServer("Y");
+                                      }
+                                      pDialog.dismiss();
+                                  }else if (mVaultUserDataModel != null && mVaultUserDataModel.getState() ==
+                                          BaseModel.STATE_SUCCESS_VAULTUSER_DATA) {
+                                      mVaultUserDataModel.unRegisterView(LoginEmailActivity.this);
+                                      loadvaultUserData();
                                   }
 
                               } catch (
@@ -1544,8 +1579,25 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
                             pref.edit().putString(GlobalConstants.PREF_VAULT_USER_EMAIL, edEmailBox.getText().toString()).apply();
                             pref.edit().putBoolean(GlobalConstants.PREF_VAULT_SKIP_LOGIN, false).apply();
 
+
                             // createAccount(email, edPassword.getText().toString());
-                            fetchInitialRecordsForAll();
+                            if(!AppController.getInstance().getModelFacade()
+                                    .getLocalModel().getMailChimpRegisterUser())
+                            {
+                               String fName = pref.getString(GlobalConstants.PREF_VAULT_FIRST_NAME, "");
+                               String lName= pref.getString(GlobalConstants.PREF_VAULT_LAST_NAME, "");
+                                fName = fName.trim().substring(0, 1).toUpperCase()
+                                        + fName.trim().substring(1);
+                                lName = lName.trim().substring(0, 1).toUpperCase()
+                                        + lName.trim().substring(1);
+
+                                showConfirmLoginDialog(GlobalConstants.DO_YOU_WANT_TO_JOIN_OUR_MAILING_LIST,fName,
+                                        lName,response.getEmailID());
+                            }else
+                            {
+                                fetchInitialRecordsForAll();
+                            }
+
                             params.putString("vt_exist", "vt_exist");
                             mFirebaseAnalytics.logEvent("vt_exist", params);
                         } else {
@@ -1591,6 +1643,212 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
                 System.out.println("On Post :Exception Occur");
                 pDialog.dismiss();
             }
+        }
+    }
+
+    public void showConfirmLoginDialog(String mailChimpMessage, final String firstName, final String lastName,
+                                       final String emailId) {
+        AlertDialog alertDialog = null;
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        LinearLayout layout = new LinearLayout(this);
+        TextView message = new TextView(this);
+        //message.setGravity(Gravity.CENTER);
+        message.setPadding(75, 50, 5, 10);
+        message.setTextSize(17);
+        message.setText(mailChimpMessage);
+        message.setTextColor(getResources().getColor(R.color.gray));
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.addView(message);
+        alertDialogBuilder.setTitle("Join our Mailing List?");
+        alertDialogBuilder.setView(layout);
+//        alertDialogBuilder
+//                .setMessage(message);
+//        alertDialogBuilder.setTitle("Join our Mailing list?");
+        alertDialogBuilder.setPositiveButton("No Thanks",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        AppController.getInstance().getModelFacade().getLocalModel().setMailChimpRegisterUser(false);
+                        storeDataOnServer("N");
+
+                    }
+                });
+
+        alertDialogBuilder.setNegativeButton("Yes! Keep me Updated",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+
+                        if (Utils.isInternetAvailable(LoginEmailActivity.this)) {
+
+                            loadData(emailId, firstName, lastName);
+
+                        } else {
+                            showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
+                        }
+                    }
+                });
+
+        alertDialog = alertDialogBuilder.create();
+        alertDialog.setCancelable(false);
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+        Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        nbutton.setAllCaps(false);
+        nbutton.setTextColor(Color.GRAY);
+        Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        pbutton.setTextColor(getResources().getColor(R.color.apptheme_color));
+        pbutton.setAllCaps(false);
+    }
+    private MailChimpDataModel mMailChimpModelData;
+    /**
+     * Method used for load mail chimp data from server
+     *
+     * @param email
+     * @param firstName
+     * @param lastName
+     */
+    public void loadData(String email, String firstName, String lastName) {
+
+        pDialog = new ProgressDialog(LoginEmailActivity.this, R.style.CustomDialogTheme);
+        pDialog.show();
+        pDialog.setContentView(Utils.getInstance().setViewToProgressDialog(LoginEmailActivity.this));
+        pDialog.setCanceledOnTouchOutside(false);
+
+
+        if (mLoginPasswordModel != null) {
+            mLoginPasswordModel.unRegisterView(this);
+            mLoginPasswordModel = null;
+        }
+        if (mMailChimpModelData != null) {
+            mMailChimpModelData.unRegisterView(this);
+        }
+        mMailChimpModelData = AppController.getInstance().getModelFacade().getRemoteModel().
+                getMailChimpDataModel();
+        mMailChimpModelData.registerView(this);
+        mMailChimpModelData.setProgressDialog(pDialog);
+        mMailChimpModelData.loadMailChimpData(null, email, firstName, lastName);
+    }
+
+    private UserDataModel mVaultUserDataModel;
+    public void storeDataOnServer(final String registerUserValue) {
+
+        try {
+            pDialog = new ProgressDialog(LoginEmailActivity.this, R.style.CustomDialogTheme);
+            pDialog.show();
+            pDialog.setContentView(Utils.getInstance().setViewToProgressDialog(LoginEmailActivity.this));
+            pDialog.setCanceledOnTouchOutside(false);
+            pDialog.setCancelable(false);
+
+            User vaultUser = setAllVaultUserData(registerUserValue);
+
+            if (mLoginPasswordModel != null) {
+                mLoginPasswordModel.unRegisterView(this);
+                mLoginPasswordModel = null;
+            }
+            if (mMailChimpModelData != null) {
+                mMailChimpModelData.unRegisterView(this);
+                mMailChimpModelData = null;
+            }
+
+
+            mVaultUserDataModel = AppController.getInstance().getModelFacade().getRemoteModel().getUserDataModel();
+            mVaultUserDataModel.registerView(this);
+            mVaultUserDataModel.setProgressDialog(pDialog);
+            mVaultUserDataModel.loadVaultData(vaultUser);
+//            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private User setAllVaultUserData(String registerUserValue) {
+        User vaultUser = new User();
+        try {
+            SharedPreferences pref = getSharedPreferences(GlobalConstants.PREF_PACKAGE_NAME, MODE_PRIVATE);
+            String fName = pref.getString(GlobalConstants.PREF_VAULT_FIRST_NAME, "");
+            String lName= pref.getString(GlobalConstants.PREF_VAULT_LAST_NAME, "");
+            String userName= pref.getString(GlobalConstants.PREF_VAULT_USER_NAME, "");
+            String emailId= pref.getString(GlobalConstants.PREF_VAULT_EMAIL, "");
+            String passwod= pref.getString(GlobalConstants.PREF_VAULT_PASSWORD, "");
+            String profileImage= pref.getString(GlobalConstants.PREF_VAULT_IMAGE_URL, "");
+            String gender= pref.getString(GlobalConstants.PREF_VAULT_GENDER, "");
+            String yob = pref.getString(GlobalConstants.PREF_VAULT_AGE, "");
+
+            if (profileImage.length()>0) {
+                vaultUser.setImageurl(profileImage);
+            } else {
+                vaultUser.setImageurl("");
+            }
+
+            vaultUser.setFname(fName.trim());
+            vaultUser.setLname(lName.trim());
+            vaultUser.setEmailID(emailId.trim());
+            vaultUser.setUsername(userName.trim());
+            vaultUser.setPasswd(passwod.trim());
+            vaultUser.setGender(gender.trim());
+            if (yob.length() > 0) {
+                vaultUser.setAge(Integer.parseInt(yob));
+            }
+            vaultUser.setFlagStatus("vt");
+            vaultUser.setAppID(GlobalConstants.APP_ID);
+            vaultUser.setAppVersion(GlobalConstants.APP_VERSION);
+            vaultUser.setDeviceType(GlobalConstants.DEVICE_TYPE);
+            vaultUser.setIsRegisteredUser(registerUserValue);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return vaultUser;
+    }
+
+    private void loadvaultUserData() {
+        if (!Utils.isInternetAvailable(LoginEmailActivity.this) && pDialog.isShowing()) {
+            pDialog.dismiss();
+            showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
+
+        } else {
+            try {
+                pDialog.dismiss();
+                Gson gson = new Gson();
+                Type classType = new TypeToken<APIResponse>() {
+                }.getType();
+                APIResponse response = gson.fromJson(mVaultUserDataModel.getmVaultUserResult().trim(), classType);
+
+                if (response != null) {
+                    if (mVaultUserDataModel.getmVaultUserResult().toLowerCase().contains("vt_exists")
+                            || mVaultUserDataModel.getmVaultUserResult().toLowerCase().contains("false")) {
+
+                        showAlertDialog("Vault",response.getEmailID());
+
+                    } else if (mVaultUserDataModel.getmVaultUserResult().toLowerCase().contains("fb_exists")) {
+                        showAlertDialog("Facebook",response.getEmailID());
+                    } else if (mVaultUserDataModel.getmVaultUserResult().toLowerCase().contains("tw_exists")) {
+                        showAlertDialog("Twitter",response.getEmailID());
+                    } else if (mVaultUserDataModel.getmVaultUserResult().toLowerCase().contains("gm_exists")) {
+                        showAlertDialog("Google",response.getEmailID());
+                    } else {
+                        if (response.getReturnStatus().toLowerCase().equals("true") || response.getReturnStatus().toLowerCase().equals("vt_exists")) {
+                            SharedPreferences pref = getSharedPreferences(GlobalConstants.PREF_PACKAGE_NAME, Context.MODE_PRIVATE);
+                            pref.edit().putLong(GlobalConstants.PREF_VAULT_USER_ID_LONG, response.getUserID()).apply();
+                            pref.edit().putString(GlobalConstants.PREF_VAULT_USER_EMAIL, response.getEmailID()).apply();
+
+                            fetchInitialRecordsForAll();
+
+
+                        } else {
+                            Toast.makeText(LoginEmailActivity.this, response.getReturnStatus(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                pDialog.dismiss();
+            }
+
         }
     }
 
