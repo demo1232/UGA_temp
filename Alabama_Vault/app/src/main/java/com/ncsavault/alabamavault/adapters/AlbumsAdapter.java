@@ -36,6 +36,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private ArrayList<PlaylistDto> mPlaylistDtoArrayList = new ArrayList<>();
     ImageLoader imageLoader;
     public DisplayImageOptions options;
+    
     PlaylistDataClickListener mPlaylistDataClickListener;
 
     public interface PlaylistDataClickListener
