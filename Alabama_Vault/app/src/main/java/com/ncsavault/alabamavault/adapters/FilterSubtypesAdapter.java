@@ -1,5 +1,6 @@
 package com.ncsavault.alabamavault.adapters;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -20,15 +21,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.NativeExpressAdView;
 import com.ncsavault.alabamavault.R;
 import com.ncsavault.alabamavault.controllers.AppController;
 import com.ncsavault.alabamavault.database.VaultDatabaseHelper;
@@ -76,9 +81,12 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     AsyncTask<Void, Void, Void> mPostTask;
     private boolean isFavoriteChecked;
     private String postResult;
+    private AdsResumeListener mAdsResumeListener;
 
 
-    public FilterSubtypesAdapter(Activity mContext, List<VideoDTO> albumList, ArrayList<VideoDTO> trendingVideoList, BannerClickListener bannerClickListener) {
+
+    public FilterSubtypesAdapter(Activity mContext, List<VideoDTO> albumList, ArrayList<VideoDTO> trendingVideoList,
+                                 BannerClickListener bannerClickListener/*,AdsResumeListener adsResumeListener*/) {
         this.mContext = mContext;
         this.albumList = albumList;
         this.trendingVideoList = trendingVideoList;
@@ -94,12 +102,18 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 .build();
         imageLoader = AppController.getInstance().getImageLoader();
         this.bannerClickListener = bannerClickListener;
+      //  this.mAdsResumeListener = adsResumeListener;
 
 
     }
 
     public interface BannerClickListener {
         void onClick(FilterSubtypesAdapter.BannerViewHolder videoViewHolder, int position);
+    }
+
+    public interface AdsResumeListener
+    {
+        void onResume();
     }
 
 
@@ -207,6 +221,20 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                         }
                                     });
 
+                    int aspectHeight = (displayWidth * 9) / 16;
+                    int bottomAspectHeight = (displayWidth * ((int) 2.25)) / 16;
+
+                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                            aspectHeight);
+                    lp.setMargins(18,0,18,0);
+                    vhHeader.videoImage.setLayoutParams(lp);
+
+//                    RelativeLayout.LayoutParams bottomLayout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+//                            bottomAspectHeight);
+//                    bottomLayout.setMargins(15,0,15,0);
+//
+//                    vhHeader.videoNameLayout.setLayoutParams(bottomLayout);
+
                     vhHeader.mVideoName.setText(videoDTO.getVideoName());
 
                     vhHeader.videoImage.setOnClickListener(new View.OnClickListener() {
@@ -268,7 +296,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
                 break;
             case TYPE_HIGH:
-                adMobBannerAdvertising(holder);
+                adMobBannerAdvertising(holder,position);
                 break;
             case HEADER_VIEW:
                 setHorizentalPager(holder);
@@ -414,12 +442,14 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public TextView mVideoName;
         public ImageView videoImage, savedImage;
         public ProgressBar progressBar;
+        public RelativeLayout videoNameLayout;
 
         public MyViewHolder(View view) {
             super(view);
             mVideoName = (TextView) view.findViewById(R.id.video_name);
             videoImage = (ImageView) view.findViewById(R.id.video_image);
             savedImage = (ImageView) view.findViewById(R.id.saved_imageview);
+            videoNameLayout = (RelativeLayout) view.findViewById(R.id.video_name_layout);
 
             progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -433,11 +463,15 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     public class SubtypeViewHolder extends RecyclerView.ViewHolder {
 
-        public AdView adView;
+       // public AdView adView;
+        public NativeExpressAdView adView;
+        public LinearLayout adViewLayout;
 
         public SubtypeViewHolder(View itemView) {
             super(itemView);
-            adView = (AdView) itemView.findViewById(R.id.adView);
+           // adView = (AdView) itemView.findViewById(R.id.adView);
+           // adView = (NativeExpressAdView) itemView.findViewById(R.id.adView);
+            adViewLayout = (LinearLayout) itemView.findViewById(R.id.adView_layout);
         }
 
     }
@@ -455,13 +489,20 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     }
 
-    public void adMobBannerAdvertising(RecyclerView.ViewHolder holder) {
+    public void adMobBannerAdvertising(RecyclerView.ViewHolder holder,int postion) {
 
         SubtypeViewHolder vhHeader = (SubtypeViewHolder) holder;
-        AdRequest request = new AdRequest.Builder()
-                .addTestDevice("20B52AAB529851184340334B73A36E8B")
-                .build();
-        vhHeader.adView.loadAd(request);
+        VideoDTO videoAdMob = albumList.get(postion);
+        NativeExpressAdView mAdView = new NativeExpressAdView(mContext);
+        System.out.println("unit id get : "+videoAdMob.getVideoName());
+
+        mAdView.setAdSize(new AdSize(300,50));
+        mAdView.setAdUnitId(videoAdMob.getVideoName());
+        vhHeader.adViewLayout.addView(mAdView);
+         AdRequest request = new AdRequest.Builder()
+        .addTestDevice("20B52AAB529851184340334B73A36E8B")
+        .build();
+        mAdView.loadAd(request);
         // Load the Native Express ad.
     }
 
@@ -585,5 +626,6 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         pbutton.setTextColor(mContext.getResources().getColor(R.color.apptheme_color));
         pbutton.setAllCaps(false);
     }
+
 
 }

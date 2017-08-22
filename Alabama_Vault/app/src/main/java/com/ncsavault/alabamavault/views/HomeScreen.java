@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.MobileAds;
 import com.ncsavault.alabamavault.R;
 import com.ncsavault.alabamavault.bottomnavigation.BottomNavigationBar;
 import com.ncsavault.alabamavault.bottomnavigation.NavigationPage;
@@ -96,7 +97,7 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
             SavedVideoFragment.newInstance(this), ProfileFragment.newInstance(this, 20, 20)};
     public SearchView searchView;
 
-    private int[] bottomTabIcons = {R.drawable.home_icon, R.drawable.categories, R.drawable.video_save,
+    private int[] bottomTabIcons = {R.drawable.home_icon, R.drawable.categories, R.drawable.video_save_bottom,
             R.drawable.user_profile};
 
     public static Toolbar mToolbar;
@@ -113,6 +114,7 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
     Handler autoRefreshHandler = new Handler();
 
 
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +123,8 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
 
         activity = this;
         loadUniversalImageLoader();
+
+        MobileAds.initialize(this, GlobalConstants.ADMOB_APP_ID);
 
         initializeToolbarIcons();
 
@@ -283,13 +287,30 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
                 catagoriesListData.addAll(AppController.getInstance().getServiceManager()
                         .getVaultService().getCategoriesData(categoriesUrl));
 
-    for (CatagoriesTabDao catagoriesTabDao : catagoriesListData) {
-        CatagoriesTabDao localCatoriesData = VaultDatabaseHelper.getInstance(getApplicationContext())
-                .getLocalCategoriesDataByCategoriesId(catagoriesTabDao.getCategoriesId());
-        if (localCatoriesData != null) {
-            if (localCatoriesData.getCategories_modified() != catagoriesTabDao.getCategories_modified()) {
-                VaultDatabaseHelper.getInstance(getApplicationContext()).updateCategoriesData(catagoriesTabDao);
-                try {
+                for (CatagoriesTabDao catagoriesTabDao : catagoriesListData) {
+                    CatagoriesTabDao localCatoriesData = VaultDatabaseHelper.getInstance(getApplicationContext())
+                            .getLocalCategoriesDataByCategoriesId(catagoriesTabDao.getCategoriesId());
+                    if (localCatoriesData != null) {
+                        if (localCatoriesData.getCategories_modified() != catagoriesTabDao.getCategories_modified()) {
+                            VaultDatabaseHelper.getInstance(getApplicationContext()).updateCategoriesData(catagoriesTabDao);
+                            try {
+
+                                String videoUrl = GlobalConstants.VIDEO_LIST_BY_CATEGORIES_ID_URL + "userid=" + userId +
+                                        "&nav_tab_id=" + catagoriesTabDao.getCategoriesId();
+
+                                arrayListVideos.clear();
+                                arrayListVideos.addAll(AppController.getInstance().getServiceManager().
+                                        getVaultService().getNewVideoData(videoUrl));
+
+                                            VaultDatabaseHelper.getInstance(getApplicationContext()).
+                                                    insertVideosInDatabase(arrayListVideos);
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }
 
                     String url = GlobalConstants.CATEGORIES_PLAYLIST_URL + "userid=" + userId + "&nav_tab_id="
                             + catagoriesTabDao.getCategoriesId();
@@ -307,43 +328,10 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
                                 VaultDatabaseHelper.getInstance(getApplicationContext()).
                                         insertPlaylistTabData(playlistDtoArrayList, catagoriesTabDao.getCategoriesId());
 
-                                String videoUrl = GlobalConstants.PLAYLIST_VIDEO_URL + "userid=" + userId +
-                                        "&playlistid=" + playlistDto.getPlaylistId();
-                                arrayListVideos.clear();
-                                arrayListVideos.addAll(AppController.getInstance().getServiceManager().
-                                        getVaultService().getNewVideoData(videoUrl));
-
-                                for(VideoDTO videoDTO :arrayListVideos)
-                                {
-                                    VideoDTO localVideoDTO = VaultDatabaseHelper.getInstance(getApplicationContext())
-                                            .getVideoDataByVideoId(String.valueOf(videoDTO.getVideoId()));
-
-                                    if(localVideoDTO != null)
-                                    {
-                                        if(localVideoDTO.getVedioList_modified() != videoDTO.getVedioList_modified()) {
-                                            VaultDatabaseHelper.getInstance(getApplicationContext()).
-                                                    insertVideosInDatabase(arrayListVideos);
-                                        }
-                                    }
-
-                                }
-
                             }
                         }
                     }
-
-
-
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-
-            }
-        }
-    }
+               }
 
             } catch (Exception e) {
                 e.printStackTrace();

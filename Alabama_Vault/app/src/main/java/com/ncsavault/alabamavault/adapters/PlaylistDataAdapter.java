@@ -9,16 +9,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.NativeExpressAdView;
 import com.ncsavault.alabamavault.R;
 import com.ncsavault.alabamavault.controllers.AppController;
 import com.ncsavault.alabamavault.dto.PlaylistDto;
 import com.ncsavault.alabamavault.dto.TopTenVideoDto;
+import com.ncsavault.alabamavault.dto.VideoDTO;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -82,10 +86,12 @@ public class PlaylistDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public class NativeAdsViewHolder extends RecyclerView.ViewHolder{
 
         public AdView adView;
+        public LinearLayout adViewLayout;
 
         public NativeAdsViewHolder (View itemView) {
             super(itemView);
-            adView = (AdView) itemView.findViewById(R.id.adView);
+           // adView = (AdView) itemView.findViewById(R.id.adView);
+            adViewLayout = (LinearLayout) itemView.findViewById(R.id.adView_layout);
         }
 
     }
@@ -126,7 +132,7 @@ public class PlaylistDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 displayPlaylistData(holder,position);
                 break;
             case TYPE_AD:
-                adMobBannerAdvertising(holder);
+                adMobBannerAdvertising(holder,position);
                 break;
         }
     }
@@ -174,17 +180,23 @@ public class PlaylistDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     }
 
-    public void adMobBannerAdvertising(RecyclerView.ViewHolder holder) {
+    public void adMobBannerAdvertising(RecyclerView.ViewHolder holder,int position) {
 
 //        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 //        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 //        layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
 
         NativeAdsViewHolder vhHeader = (NativeAdsViewHolder)holder;
+        PlaylistDto playlistDto = mPlaylistDtoArrayList.get(position);
+        NativeExpressAdView mAdView = new NativeExpressAdView(mContext);
+
+        mAdView.setAdSize(new AdSize(300,50));
+        mAdView.setAdUnitId(playlistDto.getPlaylistName());
+        vhHeader.adViewLayout.addView(mAdView);
         AdRequest request = new AdRequest.Builder()
                 .addTestDevice("20B52AAB529851184340334B73A36E8B")
                 .build();
-        vhHeader.adView.loadAd(request);
+        mAdView.loadAd(request);
         // Load the Native Express ad.
     }
 

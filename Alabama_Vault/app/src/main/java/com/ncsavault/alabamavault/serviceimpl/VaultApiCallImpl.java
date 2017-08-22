@@ -366,6 +366,36 @@ public class VaultApiCallImpl extends VaultService implements VaultApiInterface 
         }
     }
 
+    @Override
+    public ArrayList<VideoDTO> getVideoListByCategory(String url) throws BusinessException {
+        try {
+            //
+            url = url.replaceAll(" ", "%20");
+            ArrayList<VideoDTO> newVideoDtoArrayList = new ArrayList<>();
+            try {
+                String result = getData(url);
+//        System.out.println("Response of url : "+result);
+                if (result == null) {
+//            if (result.contains("timeout"))
+                    return null;
+                }
+                Type classType = new TypeToken<ArrayList<VideoDTO>>() {
+                }.getType();
+                ArrayList<VideoDTO> response = gson.fromJson(result.trim(), classType);
+                newVideoDtoArrayList = response;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            System.out.println("Size of video list : " + newVideoDtoArrayList.size());
+
+            return newVideoDtoArrayList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     /**
      * API call with POST request for storing Favorite status on server
      *

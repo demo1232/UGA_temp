@@ -62,6 +62,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import static com.ncsavault.alabamavault.views.HomeScreen.mToolbar;
 
@@ -86,14 +87,6 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
 
     // A Native Express ad is placed in every nth position in the RecyclerView.
     public static final int ITEMS_PER_AD = 4;
-
-    // The Native Express ad height.
-    private static final int NATIVE_EXPRESS_AD_HEIGHT = 100;
-
-    private static final int NATIVE_EXPRESS_AD_WIDTH = 340;
-
-    // The Native Express ad unit ID.
-    private static final String AD_UNIT_ID = "ca-app-pub-6624530735885630/3536691501";
 
     // The RecyclerView that holds and displays Native Express ads and menu items.
     private RecyclerView mRecyclerView;
@@ -167,11 +160,16 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
             refreshLayout.setOnRefreshListener(refreshListener);
         }
 
+
+
         ArrayList<String> apiUrls = new ArrayList<>();
         apiUrls.add(GlobalConstants.FEATURED_API_URL);
         apiUrls.add(GlobalConstants.GET_TRENDING_PLAYLIST_URL);
         Intent intent = new Intent(context.getApplicationContext(), TrendingFeaturedVideoService.class);
         intent.putStringArrayListExtra("apiUrls", apiUrls);
+
+
+
 // Create the bundle to pass to the service.
 
 
@@ -465,7 +463,9 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
 
                     for (int i = 0; i < mRecyclerViewItems.size(); i++) {
                         if ((i + 1) % 3 == 0) {
-                            mRecyclerViewItems.add(i, new VideoDTO());
+                            VideoDTO videoAdMob = new VideoDTO();
+                            videoAdMob.setVideoName(getRandomId());
+                            mRecyclerViewItems.add(i, videoAdMob);
                         }
                     }
                     if (adapter != null) {
@@ -489,6 +489,14 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
                 e.printStackTrace();
             }
         }
+    }
+
+    private String getRandomId()
+    {
+        int i = new Random().nextInt(GlobalConstants.AD_UNIT_FOR_FEATURED.length);
+        String random = (GlobalConstants.AD_UNIT_FOR_FEATURED[i]);
+
+        return random;
     }
 
 
@@ -606,7 +614,9 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
             }
             for (int i = 0; i < mRecyclerViewItems.size(); i++) {
                 if ((i + 1) % 3 == 0) {
-                    mRecyclerViewItems.add(i, new VideoDTO());
+                    VideoDTO videoAdMob = new VideoDTO();
+                    videoAdMob.setVideoName(getRandomId());
+                    mRecyclerViewItems.add(i, videoAdMob);
                 }
             }
             adapter = new FilterSubtypesAdapter(mContext, mRecyclerViewItems, trendingArraylist, HomeFragment.this);
@@ -679,7 +689,9 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
                     }
                     for (int i = 0; i < mRecyclerViewItems.size(); i++) {
                         if ((i + 1) % 3 == 0) {
-                            mRecyclerViewItems.add(i, new VideoDTO());
+                            VideoDTO videoAdMob = new VideoDTO();
+                            videoAdMob.setVideoName(getRandomId());
+                            mRecyclerViewItems.add(i, videoAdMob);
                         }
                     }
                     adapter = new FilterSubtypesAdapter(mContext, mRecyclerViewItems, trendingArraylist, HomeFragment.this);

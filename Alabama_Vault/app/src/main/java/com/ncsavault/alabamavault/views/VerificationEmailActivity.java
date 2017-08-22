@@ -517,7 +517,7 @@ public class VerificationEmailActivity extends BaseActivity implements AbstractV
                     // boolean isJoinMailChimp = pref.getBoolean(GlobalConstants.PREF_JOIN_MAIL_CHIMP, false);
                     // pref.edit().putBoolean(GlobalConstants.PREF_JOIN_MAIL_CHIMP, false).commit();
                     if (fbProfile != null || userId > 0) {
-                        AppController.getInstance().handleEvent(AppDefines.EVENT_ID_MAIN_SCREEN);
+                        AppController.getInstance().handleEvent(AppDefines.EVENT_ID_HOME_SCREEN);
                         overridePendingTransition(R.anim.slideup, R.anim.nochange);
                         finish();
                        //gk if (!VideoDataService.isServiceRunning)

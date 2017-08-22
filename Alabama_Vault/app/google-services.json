@@ -15,19 +15,27 @@
       },
       "oauth_client": [
         {
+          "client_id": "1050882923963-elvro5hub29cg5888ta48hbdjn15p9nb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ncsavault.alabamavault",
+            "certificate_hash": "fe0b0ddeee1bee4def90c3febdd8632d3ba3c279"
+          }
+        },
+        {
+          "client_id": "1050882923963-6e2mm019p1vf6gg0l9oi3tuhbrvdhuga.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ncsavault.alabamavault",
+            "certificate_hash": "c25d89b38d4b466baeccd7b62677f2f5cdeb89aa"
+          }
+        },
+        {
           "client_id": "1050882923963-o3ep1m7nqkh9hlkagvn2qupvq1tb6hmt.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.ncsavault.alabamavault",
             "certificate_hash": "2a0cf7c99608a13e0132288a0d5d56d15cb12654"
-          }
-        },
-        {
-          "client_id": "1050882923963-hblq3ksj37it6c8vhvb9s16q2911saja.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.ncsavault.alabamavault",
-            "certificate_hash": "c25d89b38d4b466baeccd7b62677f2f5cdeb89aa"
           }
         },
         {
@@ -56,15 +64,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
+              "client_id": "1050882923963-c2vku479vlh7h42f59vcpv59qncurvrp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
               "client_id": "1050882923963-6vreiukecrh3dsrboq6co6u0chgugt3p.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.ncsavault.alabamavault"
               }
-            },
-            {
-              "client_id": "1050882923963-c2vku479vlh7h42f59vcpv59qncurvrp.apps.googleusercontent.com",
-              "client_type": 3
             }
           ]
         },

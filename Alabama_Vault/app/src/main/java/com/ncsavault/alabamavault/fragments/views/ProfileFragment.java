@@ -131,6 +131,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
     private ScrollView scrollView;
     private LinearLayout loginViewLayout;
     private Button loginButton;
+    private TextView mContactSupportView;
 
     public static Fragment newInstance(Context context, int centerX, int centerY) {
         mContext = context;
@@ -169,6 +170,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
         mTwitterEmailId = (TextView) view.findViewById(R.id.twitter_email_id);
         mFacebookEmailId = (TextView) view.findViewById(R.id.facebook_email_id);
         mPushNotification = (TextView) view.findViewById(R.id.tv_push_view);
+        mContactSupportView  = (TextView) view.findViewById(R.id.tv_support);
 
         setToolbarIcons();
         ((HomeScreen) getActivity()).textViewEdit.setOnClickListener(new View.OnClickListener() {
@@ -306,44 +308,8 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
             @Override
             public void onClick(View v) {
 
-//                if(isEditing)
-//                {
-//                    edLinearLayout.setVisibility(View.VISIBLE);
-//                    tvLinearLayout.setVisibility(View.GONE);
-//                    isEditing = false;
-//                    isValidFields = true;
-//                }else
-//                {
-//                    if(isValidFields) {
-//                        edLinearLayout.setVisibility(View.GONE);
-//                        tvLinearLayout.setVisibility(View.VISIBLE);
-//
-//                        mFirstName.setText(edFirstName.getText().toString());
-//                        mLastName.setText(edLastName.getText().toString());
-//                        updateUserData();
-//                    }
-//                }
-//                String[] mailAray = new String[fSelectedMemberArray.size()];
-//                for (int i = 0; i < fSelectedMemberArray.size(); i++) {
-//                    mailAray[i] = fSelectedMemberArray.get(i).getEmail();
-//                }
 
-                Intent intent = null;
-                intent = new Intent(Intent.ACTION_SENDTO);
-                intent.setData(Uri.parse("mailto:gsingh@delaplex.in"));
-                intent.setPackage("com.google.android.gm");
-                intent.putExtra(Intent.EXTRA_SUBJECT, "Hello");
-                intent.putExtra(Intent.EXTRA_TEXT, "Gaurav");
-                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    try {
-                        startActivity(Intent.createChooser(intent, "Choose an email client"));
-                    } catch (ActivityNotFoundException anfe) {
-                        anfe.printStackTrace();
-                    }
-                } else {
-                    Toast.makeText(getActivity(), "No such app found", Toast.LENGTH_SHORT).show();
-                }
-             //   AppController.getInstance().handleEvent(AppDefines.EVENT_ID_CHANGE_PASSWORD_SCREEN);
+                AppController.getInstance().handleEvent(AppDefines.EVENT_ID_CHANGE_PASSWORD_SCREEN);
 
             }
         });
@@ -529,6 +495,27 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
             @Override
             public void onClick(View v) {
 
+            }
+        });
+
+        mContactSupportView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = null;
+                intent = new Intent(Intent.ACTION_SENDTO);
+                intent.setData(Uri.parse("mailto:gsingh@delaplex.in"));
+                intent.setPackage("com.google.android.gm");
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Support");
+                //intent.putExtra(Intent.EXTRA_TEXT, "Gaurav");
+                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    try {
+                        startActivity(Intent.createChooser(intent, "Choose an email client"));
+                    } catch (ActivityNotFoundException anfe) {
+                        anfe.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), "No such app found", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

@@ -390,9 +390,9 @@ public class VideoInfoActivity extends PermissionActivity implements VideoPlayer
         try {
             if (videoView != null) {
                 videoView.onPause();
-                if (videoView != null) {
-                    videoCurrentPostion = videoView.getPosition();
-                }
+//                if (videoView != null) {
+//                    videoCurrentPostion = videoView.getPosition();
+//                }
             }
             if (linearLayout != null && linearLayout.getVisibility() == View.VISIBLE) {
                 linearLayout.setVisibility(View.GONE);
@@ -410,7 +410,6 @@ public class VideoInfoActivity extends PermissionActivity implements VideoPlayer
         super.onResume();
         try {
             if (videoView != null) {
-                videoView.seek(videoCurrentPostion);
                 videoView.onResume();
             }
 

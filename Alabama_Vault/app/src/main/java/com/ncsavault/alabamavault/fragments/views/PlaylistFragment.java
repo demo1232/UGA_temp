@@ -64,6 +64,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Random;
 
 /**
  * Created by gauravkumar.singh on 8/10/2017.
@@ -100,7 +101,6 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -151,6 +151,41 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
 //        }else {
         getPlaylistDateFromDatabase();
 //        }
+    }
+
+    private String getUnitId(ArrayList<PlaylistDto> playlistDtoDataList)
+    {
+        if(playlistDtoDataList != null && playlistDtoDataList.size()>0) {
+            if (playlistDtoDataList.get(0).getPlaylistReferenceId().toLowerCase().contains("featured")) {
+
+                return getRandomId(GlobalConstants.AD_UNIT_FOR_FEATURED);
+
+            } else if (playlistDtoDataList.get(0).getPlaylistReferenceId().toLowerCase().contains("games")) {
+
+                return getRandomId(GlobalConstants.AD_UNIT_FOR_GAMES);
+
+            } else if (playlistDtoDataList.get(0).getPlaylistReferenceId().toLowerCase().contains("player")) {
+
+                return getRandomId(GlobalConstants.AD_UNIT_FOR_PLAYER);
+
+            } else if (playlistDtoDataList.get(0).getPlaylistReferenceId().toLowerCase().contains("opponent")) {
+
+                return getRandomId(GlobalConstants.AD_UNIT_FOR_OPPONENT);
+
+            } else if (playlistDtoDataList.get(0).getPlaylistReferenceId().toLowerCase().contains("coach")) {
+
+                return getRandomId(GlobalConstants.AD_UNIT_FOR_COACHS);
+            }
+        }
+        return null;
+    }
+
+    private String getRandomId(String[] adUnit)
+    {
+        int i = new Random().nextInt(adUnit.length);
+        String random = (adUnit[i]);
+
+        return random;
     }
 
     private void initViews(View view) {
@@ -420,7 +455,6 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
                                 insertPlaylistTabData(playlistDtoDataList, tabId);
                     }
 
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -442,7 +476,10 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
 
                 for (int j = 0; j < playlistDtoDataList.size(); j++) {
                     if ((j + 1) % 5 == 0) {
-                        playlistDtoDataList.add(j, new PlaylistDto());
+                        String adUnitVault = getUnitId(playlistDtoDataList);
+                        PlaylistDto playlistDto = new PlaylistDto();
+                        playlistDto.setPlaylistName(adUnitVault);
+                        playlistDtoDataList.add(j, playlistDto);
                     }
                 }
 
@@ -488,7 +525,10 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
 //        {
         for (int j = 0; j < playlistDtoDataList.size(); j++) {
             if ((j + 1) % 5 == 0) {
-                playlistDtoDataList.add(j, new PlaylistDto());
+                String adUnitVault = getUnitId(playlistDtoDataList);
+                PlaylistDto playlistDto = new PlaylistDto();
+                playlistDto.setPlaylistName(adUnitVault);
+                playlistDtoDataList.add(j, playlistDto);
             }
         }
 
@@ -636,7 +676,10 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
                     if (result.size() > 0) {
                         for (int j = 0; j < playlistDtoDataList.size(); j++) {
                             if ((j + 1) % 5 == 0) {
-                                playlistDtoDataList.add(j, new PlaylistDto());
+                                String adUnitVault = getUnitId(playlistDtoDataList);
+                                PlaylistDto playlistDto = new PlaylistDto();
+                                playlistDto.setPlaylistName(adUnitVault);
+                                playlistDtoDataList.add(j, playlistDto);
                             }
                         }
 

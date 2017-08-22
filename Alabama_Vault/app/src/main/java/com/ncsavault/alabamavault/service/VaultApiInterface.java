@@ -45,4 +45,6 @@ public interface VaultApiInterface {
 
     public ArrayList<VideoDTO> getTrendingVideoData(String url) throws BusinessException;
 
+    public ArrayList<VideoDTO> getVideoListByCategory(String url) throws BusinessException;
+
 }

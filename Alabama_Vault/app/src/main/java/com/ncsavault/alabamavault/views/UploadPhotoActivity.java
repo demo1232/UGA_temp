@@ -1494,7 +1494,7 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
                     public void onClick(DialogInterface arg0, int arg1) {
 
                         if (Utils.isInternetAvailable(UploadPhotoActivity.this)) {
-
+                            AppController.getInstance().getModelFacade().getLocalModel().setMailChimpRegisterUser(true);
                             loadData(emailId, firstName, lastName);
 
                         } else {
@@ -1594,19 +1594,23 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
                         if (Utils.isInternetAvailable(UploadPhotoActivity.this)) {
                             if (loginEmailModel.getLoginResult().toLowerCase().contains("vt_exists")) {
 
-                                showAlertDialog("Vault", email);
+                                //showAlertDialog("Vault", email);
+                                showToastMessage(GlobalConstants.ALREADY_REGISTERED_EMAIL);
 
                             } else if (loginEmailModel.getLoginResult().toLowerCase().contains("fb_exists")) {
 
-                                showAlertDialog("Facebook", email);
+                                //showAlertDialog("Facebook", email);
+                                showToastMessage(GlobalConstants.ALREADY_REGISTERED_EMAIL);
 
                             } else if (loginEmailModel.getLoginResult().toLowerCase().contains("tw_exists")) {
 
-                                showAlertDialog("Twitter", email);
+                                //showAlertDialog("Twitter", email);
+                                showToastMessage(GlobalConstants.ALREADY_REGISTERED_EMAIL);
 
                             } else if (loginEmailModel.getLoginResult().toLowerCase().contains("gm_exists")) {
 
-                                showAlertDialog("Google", email);
+                                //showAlertDialog("Google", email);
+                                showToastMessage(GlobalConstants.ALREADY_REGISTERED_EMAIL);
 
                             } else {
                                 fName = mFirstName.getText().toString().trim().substring(0, 1).toUpperCase()

@@ -130,6 +130,7 @@ public class GlobalConstants {
     public static final String CATEGORIES_TAB_URL = BASE_URL + "/playlist/GetCategoriesData?";
     public static final String CATEGORIES_PLAYLIST_URL = BASE_URL + "/playlist/GetPlayListInfo?";
     public static final String PLAYLIST_VIDEO_URL = BASE_URL + "/playlist/GetVideoInfo?";
+    public static final String VIDEO_LIST_BY_CATEGORIES_ID_URL = BASE_URL + "/playlist/GetVideoListByCategory?";
 
     public static boolean IS_RETURNED_FROM_PLAYER = false;
 
@@ -287,4 +288,21 @@ public class GlobalConstants {
     public static final String ENTERRED_PASSWORD_WRONG = "entered password is wrong";
 
     public static String CATEGORYNAME = "";
+
+    public static final String ADMOB_APP_ID = "ca-app-pub-8848124662104437~3841802707";
+    public static final String AD_UNIT_FOR_FEATURED[] = {"ca-app-pub-8848124662104437/3755741718",
+           "ca-app-pub-8848124662104437/1840024816"};
+    public static final String AD_UNIT_FOR_GAMES[] = {"ca-app-pub-8848124662104437/9171364702",
+            "ca-app-pub-8848124662104437/4861773973"};
+    public static final String AD_UNIT_FOR_PLAYER[] = {"ca-app-pub-8848124662104437/2769607883",
+            "ca-app-pub-8848124662104437/5750994446"};
+    public static final String AD_UNIT_FOR_OPPONENT[] = {"ca-app-pub-8848124662104437/8923952697",
+            "ca-app-pub-8848124662104437/5531502590"};
+    public static final String AD_UNIT_FOR_COACHS[] = {"ca-app-pub-8848124662104437/6430663059",
+            "ca-app-pub-8848124662104437/5281232913"};
+
+
+    public static String ALREADY_REGISTERED_EMAIL = "";
+
+
 }
