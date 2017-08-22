@@ -226,7 +226,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
                     RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
                             aspectHeight);
-                    lp.setMargins(18,0,18,0);
+                    lp.setMargins(20,0,20,0);
                     vhHeader.videoImage.setLayoutParams(lp);
 
 //                    RelativeLayout.LayoutParams bottomLayout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,

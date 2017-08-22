@@ -13,8 +13,6 @@
             android:id="@+id/video_image"
             android:layout_width="match_parent"
             android:layout_height="210dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
             android:scaleType="fitXY"
             android:src="@drawable/vault_4"
             android:transitionName="contact_details"
