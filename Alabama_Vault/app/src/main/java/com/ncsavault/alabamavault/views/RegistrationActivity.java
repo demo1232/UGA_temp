@@ -106,12 +106,13 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
     private EditText mYOB;
     private ProgressBar pBar;
     private DisplayImageOptions options;
-    private Button mRegistertionButton,mSignUpButton;
+    private Button mRegistertionButton, mSignUpButton;
     private WheelView yearWheel;
     private VerticalScrollview scrollView;
     private View view;
     private View viewLayout;
-    private TextView mBackButton,tvUploadPhoto,tvAlreadyRegistered,tvSignUpWithoutProfile;;
+    private TextView mBackButton, tvUploadPhoto, tvAlreadyRegistered, tvSignUpWithoutProfile;
+    ;
     private boolean isBackToSplashScreen = false;
     private boolean askAgainForMustPermissions = false;
     private boolean goToSettingsScreen = false;
@@ -233,19 +234,14 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
     private void facebookLogin(User socialUserData, String registerUser) {
 
         String email = "";
-        if(mEmailId.getVisibility() == View.VISIBLE)
-        {
+        if (mEmailId.getVisibility() == View.VISIBLE) {
             email = mEmailId.getText().toString();
-        }else if(mEmailIdFB.getVisibility() == View.VISIBLE)
-        {
+        } else if (mEmailIdFB.getVisibility() == View.VISIBLE) {
             email = mEmailIdFB.getText().toString();
-        }else
-        {
-            if(twitter)
-            {
+        } else {
+            if (twitter) {
                 email = mEmailId.getText().toString();
-            }else
-            {
+            } else {
                 email = mEmailIdFB.getText().toString();
             }
 
@@ -303,6 +299,7 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
     }
 
     String mLogin;
+
     private void overrideUserData() {
         mLoginTask = new AsyncTask<Void, Void, String>() {
 
@@ -365,17 +362,17 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
                             if (response.getReturnStatus() != null) {
                                 if (response.getReturnStatus().toLowerCase().contains("vt_exists") || response.getReturnStatus().toLowerCase().contains("false")) {
                                     pDialog.dismiss();
-                                    showAlertDialog("Vault",response.getEmailID());
+                                    showAlertDialog("Vault", response.getEmailID());
                                 } else if (response.getReturnStatus().toLowerCase().contains("gm_exists")) {
                                     pDialog.dismiss();
-                                    showAlertDialog("Google",response.getEmailID());
+                                    showAlertDialog("Google", response.getEmailID());
 
                                 } else if (response.getReturnStatus().toLowerCase().contains("tw_exists")) {
                                     pDialog.dismiss();
-                                    showAlertDialog("Twitter",response.getEmailID());
+                                    showAlertDialog("Twitter", response.getEmailID());
                                 } else if (response.getReturnStatus().toLowerCase().contains("fb_exists")) {
                                     pDialog.dismiss();
-                                    showAlertDialog("Facebook",response.getEmailID());
+                                    showAlertDialog("Facebook", response.getEmailID());
                                 }
                             } else {
                                 pDialog.dismiss();
@@ -447,19 +444,19 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
                             if (response.getReturnStatus().toLowerCase().contains("vt_exists")
                                     || response.getReturnStatus().toLowerCase().contains("false")) {
                                 pDialog.dismiss();
-                                showAlertDialog("Vault",response.getEmailID());
+                                showAlertDialog("Vault", response.getEmailID());
                             } else if (response.getReturnStatus().toLowerCase().contains("fb_exists") /*|| response.getReturnStatus().toLowerCase().contains("" +
                                                     "")*/) {
                                 pDialog.dismiss();
-                                showAlertDialog("Facebook",response.getEmailID());
+                                showAlertDialog("Facebook", response.getEmailID());
 
 
                             } else if (response.getReturnStatus().toLowerCase().contains("tw_exists")) {
                                 pDialog.dismiss();
-                                showAlertDialog("Twitter",response.getEmailID());
+                                showAlertDialog("Twitter", response.getEmailID());
                             } else if (response.getReturnStatus().toLowerCase().contains("gm_exists")) {
                                 pDialog.dismiss();
-                                showAlertDialog("Google",response.getEmailID());
+                                showAlertDialog("Google", response.getEmailID());
                             }
                         } else {
                             pDialog.dismiss();
@@ -550,9 +547,9 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
         yearWheel.setBackgroundColor(Color.parseColor("#797979"));
         mYOB = (EditText) findViewById(R.id.yob);
         //gk mYOB.setInputType(InputType.TYPE_NULL);
-       // scrollView = (VerticalScrollview) findViewById(R.id.scroll_view);
+        // scrollView = (VerticalScrollview) findViewById(R.id.scroll_view);
         view = (View) findViewById(R.id.llToast);
-       // mBackButton = (TextView) findViewById(R.id.tv_back);
+        // mBackButton = (TextView) findViewById(R.id.tv_back);
 
         mFirstName.setOnFocusChangeListener(onFocusChangeListener);
         mLastName.setOnFocusChangeListener(onFocusChangeListener);
@@ -563,7 +560,7 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
         mUserName.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
         mSignUpButton = (Button) findViewById(R.id.tv_signup_button);
-        tvUploadPhoto =(TextView) findViewById(R.id.upload_phototextView);
+        tvUploadPhoto = (TextView) findViewById(R.id.upload_phototextView);
 
         tvAlreadyRegistered = (TextView) findViewById(R.id.tv_already_registered);
         tvSignUpWithoutProfile = (TextView) findViewById(R.id.tv_singup_withput);
@@ -662,6 +659,7 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
     }
 
     private boolean isDeleteKey = true;
+
     public void initListener() {
 
         mRegistertionButton.setOnClickListener(new View.OnClickListener() {
@@ -754,7 +752,6 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
                 return false;
             }
         });
-
 
 
         mFirstName.setOnTouchListener(new View.OnTouchListener() {
@@ -1074,9 +1071,8 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
             } else if (mFirstName.getText().toString().length() < 3) {
                 Utils.getInstance().showToastMessage(RegistrationActivity.this, GlobalConstants.FIRST_NAME_SHOULD_CONTAIN_THREE_CHARACTER, view);
                 return;
-            }else if(!mFirstName.getText().toString().matches("[a-zA-Z ]+"))
-            {
-                Utils.getInstance().showToastMessage(RegistrationActivity.this, GlobalConstants.ENTER_ONLY_ALPHABETS+" in first name", view);
+            } else if (!mFirstName.getText().toString().matches("[a-zA-Z ]+")) {
+                Utils.getInstance().showToastMessage(RegistrationActivity.this, GlobalConstants.ENTER_ONLY_ALPHABETS + " in first name", view);
                 return;
             }
 
@@ -1087,9 +1083,8 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
             } else if (mLastName.getText().toString().length() < 3) {
                 Utils.getInstance().showToastMessage(RegistrationActivity.this, GlobalConstants.LAST_NAME_SHOULD_CONTAIN_THREE_CHARACTER, view);
                 return;
-            }else if(!mLastName.getText().toString().matches("[a-zA-Z ]+"))
-            {
-                Utils.getInstance().showToastMessage(RegistrationActivity.this, GlobalConstants.ENTER_ONLY_ALPHABETS+" in last name", view);
+            } else if (!mLastName.getText().toString().matches("[a-zA-Z ]+")) {
+                Utils.getInstance().showToastMessage(RegistrationActivity.this, GlobalConstants.ENTER_ONLY_ALPHABETS + " in last name", view);
                 return;
             }
 
@@ -1109,11 +1104,9 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
                 return;
             }
             String email = "";
-            if(mEmailId.getVisibility() == View.VISIBLE)
-            {
+            if (mEmailId.getVisibility() == View.VISIBLE) {
                 email = mEmailId.getText().toString();
-            }else if(mEmailIdFB.getVisibility() == View.VISIBLE)
-            {
+            } else if (mEmailIdFB.getVisibility() == View.VISIBLE) {
                 email = mEmailIdFB.getText().toString();
             }
 
@@ -1152,7 +1145,9 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
             }
         }
     }
+
     String email = "";
+
     public void checkEmailAndProceed() {
         if (Utils.isInternetAvailable(this)) {
 
@@ -1165,11 +1160,9 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
             pDialog.setCancelable(false);
 
 
-            if(mEmailId.getVisibility() == View.VISIBLE)
-            {
+            if (mEmailId.getVisibility() == View.VISIBLE) {
                 email = mEmailId.getText().toString();
-            }else if(mEmailIdFB.getVisibility() == View.VISIBLE)
-            {
+            } else if (mEmailIdFB.getVisibility() == View.VISIBLE) {
                 email = mEmailIdFB.getText().toString();
             }
             if (loginEmailModel != null) {
@@ -1355,6 +1348,7 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
     }
 
     private Bitmap selectedBitmap;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
@@ -1435,12 +1429,12 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
     }
 
 
-    public void showAlertDialog(String loginType,String emailId) {
+    public void showAlertDialog(String loginType, String emailId) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 //        alertDialogBuilder
 //                .setMessage("Oops, you previously used this email for " + loginType + " login. Please, login through different email.");
         alertDialogBuilder
-                .setMessage("We see that you have previously used this email address, "+emailId+", with "+ loginType +" login, would you like to update your profile with this new login method?");
+                .setMessage("We see that you have previously used this email address, " + emailId + ", with " + loginType + " login, would you like to update your profile with this new login method?");
         alertDialogBuilder.setPositiveButton("Ok",
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -1477,7 +1471,7 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
 //        alertDialogBuilder
 //                .setMessage("Oops, you previously used this email for " + loginType + " login. Please, login through different email.");
         alertDialogBuilder
-                .setMessage("We see that you have previously used this email address, "+emailId+", with "+ loginType +" login, would you like to update your profile with this new login method?");
+                .setMessage("We see that you have previously used this email address, " + emailId + ", with " + loginType + " login, would you like to update your profile with this new login method?");
         alertDialogBuilder.setPositiveButton("Ok",
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -1617,19 +1611,19 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
                     if (Utils.isInternetAvailable(RegistrationActivity.this)) {
                         if (loginEmailModel.getLoginResult().toLowerCase().contains("vt_exists")) {
 
-                            showAlertBox("Vault",email);
+                            showAlertBox("Vault", email);
 
                         } else if (loginEmailModel.getLoginResult().toLowerCase().contains("fb_exists")) {
 
-                            showAlertBox("Facebook",email);
+                            showAlertBox("Facebook", email);
 
                         } else if (loginEmailModel.getLoginResult().toLowerCase().contains("tw_exists")) {
 
-                            showAlertBox("Twitter",email);
+                            showAlertBox("Twitter", email);
 
                         } else if (loginEmailModel.getLoginResult().toLowerCase().contains("gm_exists")) {
 
-                            showAlertBox("Google",email);
+                            showAlertBox("Google", email);
 
                         } else {
 
@@ -1653,19 +1647,25 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        twitter = false;
-        finish();
-        LoginManager.getInstance().logOut();
-        Twitter.logOut();
-        Auth.GoogleSignInApi.signOut(LoginEmailActivity.mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(@NonNull Status status) {
-                        //updateUI(null);
-                    }
-                });
-        overridePendingTransition(R.anim.leftin, R.anim.rightout);
+//        super.onBackPressed();
+        if (mFirstName.getVisibility() == View.VISIBLE) {
+            twitter = false;
+            super.onBackPressed();
+            finish();
+            LoginManager.getInstance().logOut();
+            Twitter.logOut();
+            Auth.GoogleSignInApi.signOut(LoginEmailActivity.mGoogleApiClient).setResultCallback(
+                    new ResultCallback<Status>() {
+                        @Override
+                        public void onResult(@NonNull Status status) {
+                            //updateUI(null);
+                        }
+                    });
+            overridePendingTransition(R.anim.leftin, R.anim.rightout);
+        } else {
+            naviagteBackToRegistration();
+            overridePendingTransition(R.anim.leftin, R.anim.rightout);
+        }
     }
 
     public void showConfirmLoginDialog(String mailChimpMessage, final String firstName, final String lastName, final String emailId) {
@@ -1772,7 +1772,7 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
                         finish();
                         //gk if (!VideoDataService.isServiceRunning)
 
-                            startService(new Intent(RegistrationActivity.this, TrendingFeaturedVideoService.class));
+                        startService(new Intent(RegistrationActivity.this, TrendingFeaturedVideoService.class));
                     }
                 } else {
                     Utils.getInstance().showToastMessage(RegistrationActivity.this, GlobalConstants.MSG_CONNECTION_TIMEOUT, view);
@@ -1849,6 +1849,43 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
         mSignUpButton.setVisibility(View.VISIBLE);
         tvUploadPhoto.setVisibility(View.VISIBLE);
         tvSignUpWithoutProfile.setVisibility(View.VISIBLE);
+    }
+
+
+    private void naviagteBackToRegistration() {
+
+        leftOutAnimation = AnimationUtils.loadAnimation(RegistrationActivity.this, R.anim.leftin);
+        rightInAnimation = AnimationUtils.loadAnimation(RegistrationActivity.this, R.anim.rightout);
+
+        mFirstName.setAnimation(rightInAnimation);
+        mLastName.setAnimation(rightInAnimation);
+        mYOB.setAnimation(rightInAnimation);
+        mGender.setAnimation(rightInAnimation);
+        mEmailId.setAnimation(rightInAnimation);
+        mUserName.setAnimation(rightInAnimation);
+        mRegistertionButton.setAnimation(rightInAnimation);
+        tvAlreadyRegistered.setAnimation(rightInAnimation);
+
+        mFirstName.setVisibility(View.VISIBLE);
+        mLastName.setVisibility(View.VISIBLE);
+        mYOB.setVisibility(View.VISIBLE);
+        mGender.setVisibility(View.VISIBLE);
+        mEmailId.setVisibility(View.VISIBLE);
+        mUserName.setVisibility(View.VISIBLE);
+        mRegistertionButton.setVisibility(View.VISIBLE);
+        tvAlreadyRegistered.setVisibility(View.VISIBLE);
+        //tvHeader.setText("Register");
+
+        mProfileImage.setAnimation(leftOutAnimation);
+        mSignUpButton.setAnimation(leftOutAnimation);
+        tvUploadPhoto.setAnimation(leftOutAnimation);
+        tvSignUpWithoutProfile.setAnimation(leftOutAnimation);
+
+        mProfileImage.setVisibility(View.GONE);
+        mSignUpButton.setVisibility(View.GONE);
+        tvUploadPhoto.setVisibility(View.GONE);
+        tvSignUpWithoutProfile.setVisibility(View.GONE);
+
     }
 
 }

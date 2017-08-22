@@ -147,6 +147,9 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
     private FirebaseAnalytics mFirebaseAnalytics;
     Bundle params = new Bundle();
 
+    ImageView imageViewPasswordVisibility;
+    ImageView imageViewConfirmPasswordVisibility;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -248,6 +251,12 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
         mGender = (EditText) findViewById(R.id.edit_spinner);
         mPassword = (EditText) findViewById(R.id.password);
         mConfirmPassword = (EditText) findViewById(R.id.confirm_pass);
+        imageViewPasswordVisibility = (ImageView) findViewById(R.id.imageview_password);
+        imageViewPasswordVisibility.setTag(R.drawable.eyeon);
+        imageViewPasswordVisibility.setOnTouchListener(mPasswordVisibleTouchListener);
+        imageViewConfirmPasswordVisibility = (ImageView) findViewById(R.id.imageview_confirm_password);
+        imageViewConfirmPasswordVisibility.setTag(R.drawable.eyeon);
+        imageViewConfirmPasswordVisibility.setOnTouchListener(mPasswordVisibleTouchListener);
         mRegistertionButton = (Button) findViewById(R.id.btn_signup);
         pBar = (ProgressBar) findViewById(R.id.registerprogressbar);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -903,6 +912,69 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
             }
         });
     }
+
+
+    private View.OnTouchListener mPasswordVisibleTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            int cursor = 0;
+
+            switch (v.getId()) {
+
+                case R.id.imageview_password:
+
+                    // change input type will reset cursor position, so we want to save it
+                    cursor = mPassword.getSelectionStart();
+
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+
+                        if (((Integer) imageViewPasswordVisibility.getTag()).intValue() == R.drawable.eyeon) {
+
+                            mPassword.setInputType(InputType.TYPE_CLASS_TEXT |
+                                    InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                            // Do stg
+                            imageViewPasswordVisibility.setImageResource(R.drawable.eyeoff);
+                            imageViewPasswordVisibility.setTag(R.drawable.eyeoff);
+                        } else {
+                            mPassword.setInputType(InputType.TYPE_CLASS_TEXT |
+                                    InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                            imageViewPasswordVisibility.setImageResource(R.drawable.eyeon);
+                            imageViewPasswordVisibility.setTag(R.drawable.eyeon);
+                        }
+
+                        mPassword.setSelection(cursor);
+
+                    }
+                    break;
+                case R.id.imageview_confirm_password:
+
+                    cursor = mConfirmPassword.getSelectionStart();
+
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+
+                        if (((Integer) imageViewConfirmPasswordVisibility.getTag()).intValue() == R.drawable.eyeon) {
+                            mConfirmPassword.setInputType(InputType.TYPE_CLASS_TEXT |
+                                    InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+
+                            imageViewConfirmPasswordVisibility.setImageResource(R.drawable.eyeoff);
+                            imageViewConfirmPasswordVisibility.setTag(R.drawable.eyeoff);
+
+                        } else {
+                            mConfirmPassword.setInputType(InputType.TYPE_CLASS_TEXT |
+                                    InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                            imageViewConfirmPasswordVisibility.setImageResource(R.drawable.eyeon);
+                            imageViewConfirmPasswordVisibility.setTag(R.drawable.eyeon);
+                        }
+
+
+                        mConfirmPassword.setSelection(cursor);
+
+                        break;
+                    }
+            }
+            return true;
+        }
+    };
 
 
     private void openYearWheel() {

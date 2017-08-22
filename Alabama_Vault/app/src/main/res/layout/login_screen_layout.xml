@@ -63,7 +63,7 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.46"
         tools:layout_editor_absoluteY="0dp"
-        tools:layout_editor_absoluteX="177dp" />
+        tools:layout_editor_absoluteX="166dp" />
 
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
@@ -105,7 +105,7 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.04"
         tools:layout_editor_absoluteY="0dp"
-        tools:layout_editor_absoluteX="16dp" />
+        tools:layout_editor_absoluteX="14dp" />
 
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
@@ -114,12 +114,21 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.96"
         tools:layout_editor_absoluteY="0dp"
-        tools:layout_editor_absoluteX="369dp" />
+        tools:layout_editor_absoluteX="346dp" />
+
+    <RelativeLayout
+        android:id="@+id/rr_paasword"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline17"
+        app:layout_constraintTop_toTopOf="@+id/guideline18"
+        >
 
     <EditText
         android:id="@+id/ed_password"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:paddingLeft="20dp"
         android:textColor="@color/white"
         android:textColorHint="@color/Gray"
@@ -132,10 +141,21 @@
         android:textStyle="bold"
         android:inputType="textPassword|textNoSuggestions"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
-        app:layout_constraintRight_toLeftOf="@+id/guideline17"
-        app:layout_constraintTop_toTopOf="@+id/guideline18"
         android:layout_marginEnd="8dp" />
+
+        <ImageView
+            android:id="@+id/imageview_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_alignRight="@+id/ed_password"
+            android:clickable="true"
+            android:src="@drawable/eyeon"
+            />
+
+
+    </RelativeLayout>
 
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
@@ -163,7 +183,7 @@
         android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline19"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/ed_password"
+        app:layout_constraintTop_toBottomOf="@+id/rr_paasword"
         app:layout_constraintVertical_bias="0.985" />
 
     <TextView
@@ -187,7 +207,7 @@
         android:id="@+id/guideline19"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.68"
-        tools:layout_editor_absoluteY="348dp"
+        tools:layout_editor_absoluteY="347dp"
         tools:layout_editor_absoluteX="0dp" />
 
     <android.support.constraint.Guideline
@@ -276,21 +296,25 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5"
         tools:layout_editor_absoluteY="0dp"
-        tools:layout_editor_absoluteX="192dp" />
+        tools:layout_editor_absoluteX="180dp" />
 
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/guideline7"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.22" />
+        app:layout_constraintGuide_percent="0.22"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="79dp" />
 
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/guideline21"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.77" />
+        app:layout_constraintGuide_percent="0.77"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="277dp" />
 
     <TextView
         android:id="@+id/tv_skip_login"
@@ -299,7 +323,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:text="Skip"
+        android:text="SKIP"
         android:textSize="15dp"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
@@ -321,7 +345,8 @@
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="@+id/guideline16"
         app:layout_constraintRight_toLeftOf="@+id/guideline17"
-        android:layout_marginRight="8dp" />
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp" />
 
     <com.twitter.sdk.android.core.identity.TwitterLoginButton
         android:id="@+id/twitter_login_button"
@@ -329,7 +354,9 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:padding="10dp"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="0dp" />
 
 
 </android.support.constraint.ConstraintLayout>

@@ -43,7 +43,7 @@ public class CatagoriesAdapter extends RecyclerView.Adapter<CatagoriesAdapter.Ca
 
     public interface OnClickInterface
     {
-        void onClick(CatagoriesAdapterViewHolder v,long tabPosition, String categoryName);
+        void onClick(CatagoriesAdapterViewHolder v,long tabPosition);
     }
 
 
@@ -110,7 +110,7 @@ public class CatagoriesAdapter extends RecyclerView.Adapter<CatagoriesAdapter.Ca
 
         viewHolder.playlistTabNametextView.setText(catagoriesTabName);
 
-        mOnClickInterface.onClick(viewHolder,categoriesId, catagoriesTabName);
+        mOnClickInterface.onClick(viewHolder,categoriesId);
     }
 
 

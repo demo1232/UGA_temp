@@ -2,6 +2,8 @@ package com.ncsavault.alabamavault.bottomnavigation;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
@@ -116,12 +118,38 @@ public class BottomNavigationBar implements View.OnClickListener {
 
     }
 
+
+
+    public void setListeners(View view){
+
+        setView(view);
+
+        // triggering click listeners
+        if (view.getId() == R.id.linearLayoutBar1) {
+            mListener.onClickedOnBottomNavigationMenu(MENU_BAR_1);
+            return;
+        } else if (view.getId() == R.id.linearLayoutBar2) {
+            mListener.onClickedOnBottomNavigationMenu(MENU_BAR_2);
+            return;
+        } else if (view.getId() == R.id.linearLayoutBar3) {
+            mListener.onClickedOnBottomNavigationMenu(MENU_BAR_3);
+            return;
+        }else if (view.getId() == R.id.linearLayoutBar4) {
+            mListener.onClickedOnBottomNavigationMenu(MENU_BAR_4);
+            return;
+        }
+
+        else {
+            return;
+        }
+    }
+
     /**
      * sets the clicked view as selected, resets other views
      *
      * @param view clicked view
      */
-    private void setView(View view) {
+    public void setView(View view) {
 
         // seting all highlight bar as invisible
         this.mViewBar1.setVisibility(View.INVISIBLE);
@@ -129,15 +157,15 @@ public class BottomNavigationBar implements View.OnClickListener {
         this.mViewBar3.setVisibility(View.INVISIBLE);
         this.mViewBar4.setVisibility(View.INVISIBLE);
         // resetting colors of all icons
-        this.mImageViewBar1.setColorFilter(ContextCompat.getColor(mContext, R.color.gray));
-        this.mImageViewBar2.setColorFilter(ContextCompat.getColor(mContext, R.color.gray));
-        this.mImageViewBar3.setColorFilter(ContextCompat.getColor(mContext, R.color.gray));
-        this.mImageViewBar4.setColorFilter(ContextCompat.getColor(mContext, R.color.gray));
+        this.mImageViewBar1.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+        this.mImageViewBar2.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+        this.mImageViewBar3.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+        this.mImageViewBar4.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
         // resetting colors of all titles
-        this.mTextViewBar1.setTextColor(ContextCompat.getColor(mContext, R.color.gray));
-        this.mTextViewBar2.setTextColor(ContextCompat.getColor(mContext, R.color.gray));
-        this.mTextViewBar3.setTextColor(ContextCompat.getColor(mContext, R.color.gray));
-        this.mTextViewBar4.setTextColor(ContextCompat.getColor(mContext, R.color.gray));
+        this.mTextViewBar1.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+        this.mTextViewBar2.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+        this.mTextViewBar3.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+        this.mTextViewBar4.setTextColor(ContextCompat.getColor(mContext, R.color.black));
         // selectively colorizing the marked view
         if (view.getId() == R.id.linearLayoutBar1) {
             this.mViewBar1.setVisibility(View.VISIBLE);

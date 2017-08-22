@@ -167,20 +167,15 @@ public class VideoSearchActivity extends AppCompatActivity implements VideoSearc
 
                 try {
                     if (fragment.equalsIgnoreCase("HomeFragment") || fragment.equalsIgnoreCase("VideoDetailFragment")) {
-                        if (fragment.equalsIgnoreCase("HomeFragment")) {
-                            editTextSearch.setHint("Videos" + " Name " + "(" + "Users Input Filters" + ")");
-                            editTextSearch.setHintTextColor(mContext.getResources().getColor(R.color.apptheme_color));
-                        }
-                        if (fragment.equalsIgnoreCase("VideoDetailFragment")) {
-                            editTextSearch.setHint(GlobalConstants.CATEGORYNAME + " Name " + "(" + "Users Input Filters" + ")");
-                            editTextSearch.setHintTextColor(mContext.getResources().getColor(R.color.apptheme_color));
-                        }
+                        editTextSearch.setHint("Videos" + " Name " + "(" + "Users Input Filters" + ")");
+                        editTextSearch.setHintTextColor(mContext.getResources().getColor(R.color.apptheme_color));
+
                         objects = new ArrayList<Object>();
                         objects.addAll((VaultDatabaseHelper.getInstance(VideoSearchActivity.this).getAllVideoList()));
 
 
                     } else if (fragment.equalsIgnoreCase("PlayListFragment")) {
-                        editTextSearch.setHint(GlobalConstants.CATEGORYNAME + "(" + "Users Input Filters" + ")");
+                        editTextSearch.setHint("PlayList " + "(" + "Users Input Filters" + ")");
                         editTextSearch.setHintTextColor(mContext.getResources().getColor(R.color.apptheme_color));
                         objects = new ArrayList<Object>();
                         objects.addAll(VaultDatabaseHelper.getInstance(VideoSearchActivity.this).getAllLocalPlaylistTabData());
