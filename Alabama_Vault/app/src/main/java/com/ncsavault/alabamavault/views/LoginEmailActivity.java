@@ -20,10 +20,12 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -117,6 +119,8 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
     private SharedPreferences prefs;
     String videoUrl;
     ImageView gmailLogin;
+
+    ImageView imageViewPassword;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -289,6 +293,11 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
         try {
             edEmailBox = (EditText) findViewById(R.id.ed_email);
             edPassword = (EditText) findViewById(R.id.ed_password);
+
+            imageViewPassword=(ImageView)findViewById(R.id.imageview_password);
+            imageViewPassword.setTag(R.drawable.eyeon);
+            imageViewPassword.setOnTouchListener(mPasswordVisibleTouchListener);
+
             ll_header_image = (LinearLayout) findViewById(R.id.ll_header_image);
             tvFacebookLogin = (ImageView) findViewById(R.id.tv_facebook_login);
             gmailLogin = (ImageView) findViewById(R.id.gmail_login);
@@ -507,6 +516,38 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
         });
 
     }
+
+
+    private View.OnTouchListener mPasswordVisibleTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            int cursor = 0;
+
+                    // change input type will reset cursor position, so we want to save it
+                    cursor = edPassword.getSelectionStart();
+
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+
+                        if (((Integer) imageViewPassword.getTag()).intValue() == R.drawable.eyeon) {
+
+                            edPassword.setInputType(InputType.TYPE_CLASS_TEXT |
+                                    InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                            // Do stg
+                            imageViewPassword.setImageResource(R.drawable.eyeoff);
+                            imageViewPassword.setTag(R.drawable.eyeoff);
+                        } else {
+                            edPassword.setInputType(InputType.TYPE_CLASS_TEXT |
+                                    InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                            imageViewPassword.setImageResource(R.drawable.eyeon);
+                            imageViewPassword.setTag(R.drawable.eyeon);
+                        }
+
+                        edPassword.setSelection(cursor);
+                    }
+
+            return true;
+        }
+    };
 
     private static final String TWEET_AUTH_KEY = "auth_key";
     private static final String TWEET_AUTH_SECRET_KEY = "auth_secret_key";

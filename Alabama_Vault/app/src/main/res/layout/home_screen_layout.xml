@@ -62,6 +62,7 @@
                 android:layout_height="wrap_content">
 
                 <include
+                    android:id="@+id/bottom_navigation"
                     layout="@layout/bottom_nav_bar"
                     />
             </FrameLayout>

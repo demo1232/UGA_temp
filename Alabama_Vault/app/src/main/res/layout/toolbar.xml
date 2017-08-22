@@ -144,6 +144,8 @@
             android:layout_gravity="left"
             android:background="@drawable/edittext_bg"
             android:hint="Search"
+            android:singleLine="true"
+            android:imeOptions="actionDone"
             android:layout_marginRight="10dp"
             android:paddingBottom="5dp"
             android:paddingLeft="10dp"

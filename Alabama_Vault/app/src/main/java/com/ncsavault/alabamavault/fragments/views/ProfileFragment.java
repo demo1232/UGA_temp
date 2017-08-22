@@ -425,7 +425,6 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
             @Override
             public void onClick(View v) {
                 Twitter.logOut();
-                GlobalConstants.CATEGORYNAME = "";
                 mContext.stopService(new Intent(mContext, TrendingFeaturedVideoService.class));
 //                VideoDataFetchingService.isServiceRunning = false;
                 if (LoginManager.getInstance() != null) {

@@ -220,11 +220,10 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
 
 
     @Override
-    public void onClick(CatagoriesAdapter.CatagoriesAdapterViewHolder v, final long tabPosition, final String categoryName) {
+    public void onClick(CatagoriesAdapter.CatagoriesAdapterViewHolder v, final long tabPosition) {
         v.playlistImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GlobalConstants.CATEGORYNAME = categoryName;
                 playlistFragment = (PlaylistFragment) PlaylistFragment.newInstance(mContext, tabPosition);
                 FragmentManager manager = ((HomeScreen) mContext).getSupportFragmentManager();
                 FragmentTransaction transaction = manager.beginTransaction();

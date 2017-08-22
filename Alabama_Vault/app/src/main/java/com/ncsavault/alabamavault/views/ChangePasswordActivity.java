@@ -24,6 +24,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -57,9 +58,11 @@ public class ChangePasswordActivity extends BaseActivity implements TextWatcher,
     private boolean isEditing = false;
     private AlertDialog alertDialog;
     ProgressDialog pDialog;
-    Animation animation= null;
+    Animation animation = null;
 
     private ChangePasswordModel mChangePasswordModel;
+
+    ImageView imageViewOldPassword, imageViewNewPassword, imageViewConfirmPassword;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,7 +79,7 @@ public class ChangePasswordActivity extends BaseActivity implements TextWatcher,
         super.onPause();
         if (pDialog != null)
             pDialog.dismiss();
-       Utils.getInstance().gethideKeyboard(this);
+        Utils.getInstance().gethideKeyboard(this);
     }
 
     @Override
@@ -108,6 +111,17 @@ public class ChangePasswordActivity extends BaseActivity implements TextWatcher,
         chkShowPassword = (CheckBox) findViewById(R.id.chk_show_password);
         ll_header_image = (LinearLayout) findViewById(R.id.ll_header_image);
 
+
+        imageViewOldPassword = (ImageView) findViewById(R.id.imageview_old_password);
+        imageViewOldPassword.setTag(R.drawable.eyeon);
+        imageViewOldPassword.setOnTouchListener(mPasswordVisibleTouchListener);
+        imageViewNewPassword = (ImageView) findViewById(R.id.imageview_new_password);
+        imageViewNewPassword.setTag(R.drawable.eyeon);
+        imageViewNewPassword.setOnTouchListener(mPasswordVisibleTouchListener);
+        imageViewConfirmPassword = (ImageView) findViewById(R.id.imageview_confirm_password);
+        imageViewConfirmPassword.setTag(R.drawable.eyeon);
+        imageViewNewPassword.setOnTouchListener(mPasswordVisibleTouchListener);
+
     }
 
     @Override
@@ -127,7 +141,7 @@ public class ChangePasswordActivity extends BaseActivity implements TextWatcher,
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(dimension, dimension);
         lp.setMargins(0, 20, 0, 0);
         lp.gravity = Gravity.CENTER_HORIZONTAL;
-       // ll_header_image.setLayoutParams(lp);
+        // ll_header_image.setLayoutParams(lp);
     }
 
     @Override
@@ -239,6 +253,95 @@ public class ChangePasswordActivity extends BaseActivity implements TextWatcher,
             }
         });
     }
+
+
+    private View.OnTouchListener mPasswordVisibleTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            int cursor = 0;
+
+            switch (v.getId()) {
+
+                case R.id.imageview_old_password:
+
+                    // change input type will reset cursor position, so we want to save it
+                    cursor = edOldPassword.getSelectionStart();
+
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+
+                        if (((Integer) imageViewOldPassword.getTag()).intValue() == R.drawable.eyeon) {
+
+                            edOldPassword.setInputType(InputType.TYPE_CLASS_TEXT |
+                                    InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                            // Do stg
+                            imageViewOldPassword.setImageResource(R.drawable.eyeoff);
+                            imageViewOldPassword.setTag(R.drawable.eyeoff);
+                        } else {
+                            edOldPassword.setInputType(InputType.TYPE_CLASS_TEXT |
+                                    InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                            imageViewOldPassword.setImageResource(R.drawable.eyeon);
+                            imageViewOldPassword.setTag(R.drawable.eyeon);
+                        }
+
+                        edOldPassword.setSelection(cursor);
+
+                    }
+                    break;
+                case R.id.imageview_new_password:
+
+                    cursor = edNewPassword.getSelectionStart();
+
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+
+                        if (((Integer) imageViewNewPassword.getTag()).intValue() == R.drawable.eyeon) {
+                            edNewPassword.setInputType(InputType.TYPE_CLASS_TEXT |
+                                    InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+
+                            imageViewNewPassword.setImageResource(R.drawable.eyeoff);
+                            imageViewNewPassword.setTag(R.drawable.eyeoff);
+
+                        } else {
+                            edNewPassword.setInputType(InputType.TYPE_CLASS_TEXT |
+                                    InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                            imageViewNewPassword.setImageResource(R.drawable.eyeon);
+                            imageViewNewPassword.setTag(R.drawable.eyeon);
+                        }
+
+
+                        edNewPassword.setSelection(cursor);
+
+                        break;
+                    }
+
+                case R.id.imageview_confirm_password:
+
+                    cursor = edConfirmPassword.getSelectionStart();
+
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+
+                        if (((Integer) imageViewConfirmPassword.getTag()).intValue() == R.drawable.eyeon) {
+                            edConfirmPassword.setInputType(InputType.TYPE_CLASS_TEXT |
+                                    InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+
+                            imageViewConfirmPassword.setImageResource(R.drawable.eyeoff);
+                            imageViewConfirmPassword.setTag(R.drawable.eyeoff);
+
+                        } else {
+                            edConfirmPassword.setInputType(InputType.TYPE_CLASS_TEXT |
+                                    InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                            imageViewConfirmPassword.setImageResource(R.drawable.eyeon);
+                            imageViewConfirmPassword.setTag(R.drawable.eyeon);
+                        }
+
+                        edConfirmPassword.setSelection(cursor);
+
+                        break;
+                    }
+
+            }
+            return true;
+        }
+    };
 
     public void showConfirmation() {
         if (isEditing) {

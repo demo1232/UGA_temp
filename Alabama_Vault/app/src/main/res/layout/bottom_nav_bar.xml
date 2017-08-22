@@ -2,9 +2,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_gravity="center_horizontal"
-    android:alpha="0.7"
     android:background="@color/transparent"
     >
 
@@ -66,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:id="@+id/imageViewBar2"
-                android:tint="@color/gray"/>
+                android:tint="@color/black"/>
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
@@ -74,7 +73,7 @@
                 tools:text="Catagories"
                 android:textSize="12sp"
                 android:id="@+id/textViewBar2"
-                android:textColor="@color/gray"/>
+                android:textColor="@color/black"/>
 
         </LinearLayout>
 
@@ -99,7 +98,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:id="@+id/imageViewBar3"
-                android:tint="@color/gray"/>
+                android:tint="@color/black"/>
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
@@ -107,7 +106,7 @@
                 tools:text="Saved"
                 android:textSize="12sp"
                 android:id="@+id/textViewBar3"
-                android:textColor="@color/gray"/>
+                android:textColor="@color/black"/>
 
         </LinearLayout>
 
@@ -133,7 +132,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:id="@+id/imageViewBar4"
-                android:tint="@color/gray"/>
+                android:tint="@color/black"/>
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
@@ -141,7 +140,7 @@
                 tools:text="PROFILE"
                 android:textSize="12sp"
                 android:id="@+id/textViewBar4"
-                android:textColor="@color/gray"/>
+                android:textColor="@color/black"/>
 
         </LinearLayout>
 

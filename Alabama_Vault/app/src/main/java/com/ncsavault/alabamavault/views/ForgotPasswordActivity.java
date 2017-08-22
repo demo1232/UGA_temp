@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -21,6 +22,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -45,7 +47,7 @@ import java.util.regex.Pattern;
 public class ForgotPasswordActivity extends BaseActivity {
 
     private EditText registeredEmailId, verificationCode, newPasswordEditText, confirmPasswordEditText;
-    private TextView tvHeaderText, tvVerificationCode, tvResendCode, tvCancel, tvBack,tvEnterEmail,tvCancelPassword,tvEnterPasswordText;
+    private TextView tvHeaderText, tvVerificationCode, tvResendCode, tvCancel, tvBack, tvEnterEmail, tvCancelPassword, tvEnterPasswordText;
     private AsyncTask<Void, Void, String> mChangeTask;
     private AsyncTask<Void, Void, String> mChangeConfirmPassTask;
     ProgressDialog pDialog;
@@ -59,6 +61,9 @@ public class ForgotPasswordActivity extends BaseActivity {
     private long userId;
     private Button nextButtonTextView, tvSubmitButton;
     private AlertDialog alertDialog;
+
+    ImageView imageViewNewPassword;
+    ImageView imageViewConfirmPassword;
 
 
     @Override
@@ -82,32 +87,39 @@ public class ForgotPasswordActivity extends BaseActivity {
 
 
 //            if (isValue) {
-                registeredEmailId.setText(emailId);
+            registeredEmailId.setText(emailId);
 //                isValue = false;
 //            }
         }
-       // tvHeaderText = (TextView) findViewById(R.id.tv_header_text);
+        // tvHeaderText = (TextView) findViewById(R.id.tv_header_text);
         nextButtonTextView = (Button) findViewById(R.id.tv_next);
 
         verificationCode = (EditText) findViewById(R.id.ed_verification_code);
-       // tvVerificationCode = (TextView) findViewById(R.id.tv_verification_text);
+        // tvVerificationCode = (TextView) findViewById(R.id.tv_verification_text);
         tvSubmitButton = (Button) findViewById(R.id.tv_submit);
         verificationLinearLayout = (LinearLayout) findViewById(R.id.ll_password_block);
 
         childBlockLinearLayout = (LinearLayout) findViewById(R.id.child_block);
-       // tvResetPassword = (TextView) findViewById(R.id.tv_reset_password);
+        // tvResetPassword = (TextView) findViewById(R.id.tv_reset_password);
         tvSaveTextView = (Button) findViewById(R.id.tv_save);
 
         newPasswordEditText = (EditText) findViewById(R.id.ed_new_password);
         confirmPasswordEditText = (EditText) findViewById(R.id.ed_confirm_password);
 
-       //GK chkChangePassword = (CheckBox) findViewById(R.id.chk_show_password);
+        imageViewNewPassword = (ImageView) findViewById(R.id.imageview_new_password);
+        imageViewNewPassword.setTag(R.drawable.eyeon);
+        imageViewNewPassword.setOnTouchListener(mPasswordVisibleTouchListener);
+        imageViewConfirmPassword = (ImageView) findViewById(R.id.imageview_confirm_password);
+        imageViewConfirmPassword.setTag(R.drawable.eyeon);
+        imageViewConfirmPassword.setOnTouchListener(mPasswordVisibleTouchListener);
+
+        //GK chkChangePassword = (CheckBox) findViewById(R.id.chk_show_password);
         tvResendCode = (TextView) findViewById(R.id.tv_resend);
         tvCancel = (TextView) findViewById(R.id.tv_cancel);
         tvEnterEmail = (TextView) findViewById(R.id.tv_enter_email);
-        tvCancelPassword =(TextView) findViewById(R.id.tv_cancel_password);
+        tvCancelPassword = (TextView) findViewById(R.id.tv_cancel_password);
         tvEnterPasswordText = (TextView) findViewById(R.id.tv_enter_password);
-       // tvBack = (TextView) findViewById(R.id.tv_back);
+        // tvBack = (TextView) findViewById(R.id.tv_back);
 
     }
 
@@ -277,6 +289,68 @@ public class ForgotPasswordActivity extends BaseActivity {
 
     }
 
+
+    private View.OnTouchListener mPasswordVisibleTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            int cursor = 0;
+
+            switch (v.getId()) {
+
+                case R.id.imageview_new_password:
+
+                    // change input type will reset cursor position, so we want to save it
+                    cursor = newPasswordEditText.getSelectionStart();
+
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+
+                        if (((Integer) imageViewNewPassword.getTag()).intValue() == R.drawable.eyeon) {
+
+                            newPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT |
+                                    InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                            // Do stg
+                            imageViewNewPassword.setImageResource(R.drawable.eyeoff);
+                            imageViewNewPassword.setTag(R.drawable.eyeoff);
+                        } else {
+                            newPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT |
+                                    InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                            imageViewNewPassword.setImageResource(R.drawable.eyeon);
+                            imageViewNewPassword.setTag(R.drawable.eyeon);
+                        }
+
+                        newPasswordEditText.setSelection(cursor);
+
+                    }
+                    break;
+                case R.id.imageview_confirm_password:
+
+                    cursor = confirmPasswordEditText.getSelectionStart();
+
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+
+                        if (((Integer) imageViewConfirmPassword.getTag()).intValue() == R.drawable.eyeon) {
+                            confirmPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT |
+                                    InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+
+                            imageViewConfirmPassword.setImageResource(R.drawable.eyeoff);
+                            imageViewConfirmPassword.setTag(R.drawable.eyeoff);
+
+                        } else {
+                            confirmPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT |
+                                    InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                            imageViewConfirmPassword.setImageResource(R.drawable.eyeon);
+                            imageViewConfirmPassword.setTag(R.drawable.eyeon);
+                        }
+
+                        confirmPasswordEditText.setSelection(cursor);
+
+                        break;
+                    }
+            }
+            return true;
+        }
+    };
+
     public void changePasswordCall() {
         if (Utils.isInternetAvailable(this)) {
             if (isValidEmail(registeredEmailId.getText().toString())) {
@@ -306,7 +380,7 @@ public class ForgotPasswordActivity extends BaseActivity {
                         protected String doInBackground(Void... params) {
                             String result = "";
                             try {
-                                result = AppController.getInstance().getServiceManager().getVaultService().forgotPassword(registeredEmail,true);
+                                result = AppController.getInstance().getServiceManager().getVaultService().forgotPassword(registeredEmail, true);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -443,38 +517,38 @@ public class ForgotPasswordActivity extends BaseActivity {
     private void checkEmailIdAndProceed() {
 
 //        if (/*tvVerificationCode.getVisibility() == View.GONE &&*/ tvSubmitButton.getVisibility() == View.GONE) {
-            leftOutAnimation = AnimationUtils.loadAnimation(ForgotPasswordActivity.this, R.anim.leftout);
-            rightInAnimation = AnimationUtils.loadAnimation(ForgotPasswordActivity.this, R.anim.rightin);
+        leftOutAnimation = AnimationUtils.loadAnimation(ForgotPasswordActivity.this, R.anim.leftout);
+        rightInAnimation = AnimationUtils.loadAnimation(ForgotPasswordActivity.this, R.anim.rightin);
 
-           // tvHeaderText.setAnimation(leftOutAnimation);
-            registeredEmailId.setAnimation(leftOutAnimation);
-            nextButtonTextView.setAnimation(leftOutAnimation);
-            tvEnterEmail.setAnimation(leftOutAnimation);
-           // tvHeaderText.setVisibility(View.GONE);
-            registeredEmailId.setVisibility(View.GONE);
-            nextButtonTextView.setVisibility(View.GONE);
-            tvEnterEmail.setVisibility(View.GONE);
-          //  tvBack.setVisibility(View.GONE);
+        // tvHeaderText.setAnimation(leftOutAnimation);
+        registeredEmailId.setAnimation(leftOutAnimation);
+        nextButtonTextView.setAnimation(leftOutAnimation);
+        tvEnterEmail.setAnimation(leftOutAnimation);
+        // tvHeaderText.setVisibility(View.GONE);
+        registeredEmailId.setVisibility(View.GONE);
+        nextButtonTextView.setVisibility(View.GONE);
+        tvEnterEmail.setVisibility(View.GONE);
+        //  tvBack.setVisibility(View.GONE);
 
-            //tvHeader.setText("Register");
+        //tvHeader.setText("Register");
 
-           // tvVerificationCode.setAnimation(rightInAnimation);
-            verificationCode.setAnimation(rightInAnimation);
-            tvSubmitButton.setAnimation(rightInAnimation);
-            tvEnterEmail.setAnimation(rightInAnimation);
-           // tvVerificationCode.setVisibility(View.VISIBLE);
-            verificationCode.setVisibility(View.VISIBLE);
-            tvEnterEmail.setVisibility(View.VISIBLE);
-            tvEnterEmail.setText("ENTER THE VERIFICATION CODE EMAILED TO YOU");
-            // verificationCode.setFocusableInTouchMode(true);
-            verificationCode.requestFocus();
+        // tvVerificationCode.setAnimation(rightInAnimation);
+        verificationCode.setAnimation(rightInAnimation);
+        tvSubmitButton.setAnimation(rightInAnimation);
+        tvEnterEmail.setAnimation(rightInAnimation);
+        // tvVerificationCode.setVisibility(View.VISIBLE);
+        verificationCode.setVisibility(View.VISIBLE);
+        tvEnterEmail.setVisibility(View.VISIBLE);
+        tvEnterEmail.setText("ENTER THE VERIFICATION CODE EMAILED TO YOU");
+        // verificationCode.setFocusableInTouchMode(true);
+        verificationCode.requestFocus();
 
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
-            tvSubmitButton.setVisibility(View.VISIBLE);
-            tvResendCode.setVisibility(View.VISIBLE);
-            tvCancel.setVisibility(View.VISIBLE);
+        tvSubmitButton.setVisibility(View.VISIBLE);
+        tvResendCode.setVisibility(View.VISIBLE);
+        tvCancel.setVisibility(View.VISIBLE);
 //        }
 
     }
@@ -486,27 +560,27 @@ public class ForgotPasswordActivity extends BaseActivity {
         leftOutAnimation = AnimationUtils.loadAnimation(ForgotPasswordActivity.this, R.anim.leftout);
         rightInAnimation = AnimationUtils.loadAnimation(ForgotPasswordActivity.this, R.anim.rightin);
 
-       // tvVerificationCode.setAnimation(leftOutAnimation);
+        // tvVerificationCode.setAnimation(leftOutAnimation);
         verificationCode.setAnimation(leftOutAnimation);
         tvSubmitButton.setAnimation(leftOutAnimation);
 
-       // tvVerificationCode.setVisibility(View.GONE);
+        // tvVerificationCode.setVisibility(View.GONE);
         verificationCode.setVisibility(View.GONE);
         tvSubmitButton.setVisibility(View.GONE);
         verificationLinearLayout.setVisibility(View.GONE);
         tvResendCode.setVisibility(View.GONE);
-      //  tvBack.setVisibility(View.GONE);
+        //  tvBack.setVisibility(View.GONE);
 
         //tvHeader.setText("Register");
         childBlockLinearLayout.setAnimation(rightInAnimation);
-      //  tvResetPassword.setAnimation(rightInAnimation);
+        //  tvResetPassword.setAnimation(rightInAnimation);
         tvSaveTextView.setAnimation(rightInAnimation);
         tvEnterPasswordText.setAnimation(rightInAnimation);
         // verificationCode.setAnimation(rightInAnimation);
         // tvSubmitButton.setAnimation(rightInAnimation);
         childBlockLinearLayout.setVisibility(View.VISIBLE);
         newPasswordEditText.requestFocus();
-      //  tvResetPassword.setVisibility(View.VISIBLE);
+        //  tvResetPassword.setVisibility(View.VISIBLE);
         tvSaveTextView.setVisibility(View.VISIBLE);
         tvCancel.setVisibility(View.VISIBLE);
         tvEnterPasswordText.setVisibility(View.VISIBLE);
@@ -577,11 +651,11 @@ public class ForgotPasswordActivity extends BaseActivity {
                     public void onClick(DialogInterface arg0, int arg1) {
                         alertDialog.dismiss();
 
-                            AppController.getInstance().getModelFacade().getLocalModel().setRegisteredEmailIdForgot(true);
-                            AppController.getInstance().getModelFacade().getLocalModel().setRegisteredEmailIdForgot(registeredEmailId.getText().toString());
-                            AppController.getInstance().handleEvent(AppDefines.EVENT_ID_LOGIN_SCREEN);
-                            overridePendingTransition(R.anim.slideup, R.anim.nochange);
-                            finish();
+                        AppController.getInstance().getModelFacade().getLocalModel().setRegisteredEmailIdForgot(true);
+                        AppController.getInstance().getModelFacade().getLocalModel().setRegisteredEmailIdForgot(registeredEmailId.getText().toString());
+                        AppController.getInstance().handleEvent(AppDefines.EVENT_ID_LOGIN_SCREEN);
+                        overridePendingTransition(R.anim.slideup, R.anim.nochange);
+                        finish();
 
 
                     }
