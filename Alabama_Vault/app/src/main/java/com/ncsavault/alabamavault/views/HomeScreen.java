@@ -329,14 +329,10 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
                                             VaultDatabaseHelper.getInstance(getApplicationContext()).
                                                     insertPlaylistTabData(playlistDtoArrayList, catagoriesTabDao.getCategoriesId());
 
+                                        }
+                                    }
 
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-
-                        }
-                    }
+                      }
                }
 
             } catch (Exception e) {

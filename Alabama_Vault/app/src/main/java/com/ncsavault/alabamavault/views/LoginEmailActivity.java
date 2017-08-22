@@ -935,28 +935,39 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
 
                                       if (fbProfile != null || userId > 0) {
 
-                                          if (fetchingAllDataModel.getResponeUserData().getIsRegisteredUser().equals("N") && !AppController.getInstance().getModelFacade()
-                                                  .getLocalModel().getMailChimpRegisterUser()) {
-                                              AppController.getInstance().getModelFacade().getLocalModel().setMailChimpRegisterUser(true);
-                                             String mFirstName = fetchingAllDataModel.getResponeUserData().getFname()
-                                                      .toString().substring(0, 1).toUpperCase() + fetchingAllDataModel.getResponeUserData().getFname().toString().substring(1);//AppController.getInstance().getFirstName().toString();
-                                              String mLastName = fetchingAllDataModel.getResponeUserData().getLname()
-                                                      .toString().substring(0, 1).toUpperCase() + fetchingAllDataModel.getResponeUserData().getLname().toString().substring(1);
-                                              String mEmailId = fetchingAllDataModel.getResponeUserData().getEmailID();
-                                              long mUserId = fetchingAllDataModel.getResponeUserData().getUserID();
-
-                                              showConfirmLoginDialog(GlobalConstants.DO_YOU_WANT_TO_JOIN_OUR_MAILING_LIST,
-                                                      mFirstName, mLastName, mEmailId,mUserId);
-                                          }else {
+                                          if(fetchingAllDataModel.getResponeUserData().getEmailID() == null)
+                                          {
                                               AppController.getInstance().handleEvent(AppDefines.EVENT_ID_HOME_SCREEN);
 
                                               overridePendingTransition(R.anim.slideup, R.anim.nochange);
                                               finish();
+                                              startService(new Intent(LoginEmailActivity.this, VideoDataService.class));
+                                              Intent intent = new Intent(LoginEmailActivity.this, TrendingFeaturedVideoService.class);
+                                              startService(intent);
+                                          }else {
+                                              if (fetchingAllDataModel.getResponeUserData().getIsRegisteredUser().equals("N") && !AppController.getInstance().getModelFacade()
+                                                      .getLocalModel().getMailChimpRegisterUser()) {
+                                                  AppController.getInstance().getModelFacade().getLocalModel().setMailChimpRegisterUser(true);
+                                                  String mFirstName = fetchingAllDataModel.getResponeUserData().getFname()
+                                                          .toString().substring(0, 1).toUpperCase() + fetchingAllDataModel.getResponeUserData().getFname().toString().substring(1);//AppController.getInstance().getFirstName().toString();
+                                                  String mLastName = fetchingAllDataModel.getResponeUserData().getLname()
+                                                          .toString().substring(0, 1).toUpperCase() + fetchingAllDataModel.getResponeUserData().getLname().toString().substring(1);
+                                                  String mEmailId = fetchingAllDataModel.getResponeUserData().getEmailID();
+                                                  long mUserId = fetchingAllDataModel.getResponeUserData().getUserID();
+
+                                                  showConfirmLoginDialog(GlobalConstants.DO_YOU_WANT_TO_JOIN_OUR_MAILING_LIST,
+                                                          mFirstName, mLastName, mEmailId, mUserId);
+                                              } else {
+                                                  AppController.getInstance().handleEvent(AppDefines.EVENT_ID_HOME_SCREEN);
+
+                                                  overridePendingTransition(R.anim.slideup, R.anim.nochange);
+                                                  finish();
                                           /*if (!VideoDataService.isServiceRunning)
 
                                               startService(new Intent(LoginEmailActivity.this, VideoDataService.class));*/
-                                              Intent intent = new Intent(LoginEmailActivity.this, TrendingFeaturedVideoService.class);
-                                              startService(intent);
+                                                  Intent intent = new Intent(LoginEmailActivity.this, TrendingFeaturedVideoService.class);
+                                                  startService(intent);
+                                              }
                                           }
                                            }
                                               } else {
