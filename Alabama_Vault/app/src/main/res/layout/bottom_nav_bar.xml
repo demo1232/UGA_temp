@@ -19,6 +19,7 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:id="@+id/linearLayoutBar1"
+            android:foreground="?android:attr/selectableItemBackground"
             android:gravity="center_horizontal">
 
             <View
@@ -38,6 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="Home"
+                android:textStyle="bold"
                 android:textSize="12sp"
                 android:id="@+id/textViewBar1"
                 android:textColor="@color/apptheme_color"/>
@@ -50,7 +52,7 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:id="@+id/linearLayoutBar2"
-            android:background="@color/transparent"
+            android:foreground="?android:attr/selectableItemBackground"
             android:gravity="center_horizontal">
 
             <View
@@ -73,6 +75,7 @@
                 tools:text="Catagories"
                 android:textSize="12sp"
                 android:id="@+id/textViewBar2"
+                android:textStyle="bold"
                 android:textColor="@color/black"/>
 
         </LinearLayout>
@@ -106,6 +109,7 @@
                 tools:text="Saved"
                 android:textSize="12sp"
                 android:id="@+id/textViewBar3"
+                android:textStyle="bold"
                 android:textColor="@color/black"/>
 
         </LinearLayout>
@@ -139,6 +143,7 @@
                 android:layout_height="wrap_content"
                 tools:text="PROFILE"
                 android:textSize="12sp"
+                android:textStyle="bold"
                 android:id="@+id/textViewBar4"
                 android:textColor="@color/black"/>
 

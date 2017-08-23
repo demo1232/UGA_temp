@@ -118,6 +118,15 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
         return frag;
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        IntentFilter filter = new IntentFilter(HomeFragment.HomeResponseReceiver.ACTION_RESP);
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        receiver = new HomeFragment.HomeResponseReceiver();
+        mContext.registerReceiver(receiver, filter);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -646,10 +655,7 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    IntentFilter filter = new IntentFilter(HomeFragment.HomeResponseReceiver.ACTION_RESP);
-                    filter.addCategory(Intent.CATEGORY_DEFAULT);
-                    receiver = new HomeFragment.HomeResponseReceiver();
-                    mContext.registerReceiver(receiver, filter);
+
 
 
                     if (VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getVideoCount() > 0) {
@@ -722,6 +728,18 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
 
         mDbTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        try {
+            if (receiver != null) {
+                mContext.unregisterReceiver(receiver);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void playFacbookVideo(String videoId) {

@@ -129,7 +129,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
             pager = pagerContainer.getViewPager();
             //pager = (ViewPager) itemView.findViewById(R.id.pager_introduction);
-            //  topTenText = (TextView) itemView.findViewById(R.id.top_ten_text_view);
+              topTenText = (TextView) itemView.findViewById(R.id.textView_videoName_top);
 
         }
 
@@ -399,11 +399,13 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         // vhHeader.pager.setPageTransformer(false, new CarouselEffectTransformer(mContext,displayWidth));
         try {
             if (trendingVideoList.size() > 0) {
-                vhHeader.topTenText.setText(trendingVideoList.get(0).getVideoShortDescription());
+                vhHeader.topTenText.setText(trendingVideoList.get(0).getPlaylistShortDescription());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
         HorizontalPagerAdapter adapter = new HorizontalPagerAdapter(mContext, trendingVideoList);
         vhHeader.pager.setAdapter(adapter);
         vhHeader.pager.setOffscreenPageLimit(adapter.getCount());
@@ -428,6 +430,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 }
             }
         });
+
     }
 
 
@@ -449,7 +452,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             mVideoName = (TextView) view.findViewById(R.id.video_name);
             videoImage = (ImageView) view.findViewById(R.id.video_image);
             savedImage = (ImageView) view.findViewById(R.id.saved_imageview);
-            videoNameLayout = (RelativeLayout) view.findViewById(R.id.video_name_layout);
+            videoNameLayout = (RelativeLayout) view.findViewById(R.id.rr_video_name_layout);
 
             progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {

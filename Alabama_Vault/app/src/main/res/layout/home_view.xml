@@ -36,7 +36,10 @@
             android:textStyle="bold"
             android:layout_gravity="bottom"
             android:gravity="center"
+            android:singleLine="true"
             android:paddingBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:text="@string/current_video_name_text"
 
             />

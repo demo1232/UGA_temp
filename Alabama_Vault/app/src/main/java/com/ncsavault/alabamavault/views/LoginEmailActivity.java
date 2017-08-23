@@ -11,6 +11,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -534,12 +535,14 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
 
                             edPassword.setInputType(InputType.TYPE_CLASS_TEXT |
                                     InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                            edPassword.setTypeface(edPassword.getTypeface(), Typeface.BOLD);
                             // Do stg
                             imageViewPassword.setImageResource(R.drawable.eyeoff);
                             imageViewPassword.setTag(R.drawable.eyeoff);
                         } else {
                             edPassword.setInputType(InputType.TYPE_CLASS_TEXT |
                                     InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                            edPassword.setTypeface(edPassword.getTypeface(), Typeface.BOLD);
                             imageViewPassword.setImageResource(R.drawable.eyeon);
                             imageViewPassword.setTag(R.drawable.eyeon);
                         }

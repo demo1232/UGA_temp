@@ -238,13 +238,14 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 
         if (userId == GlobalConstants.DEFAULT_USER_ID) {
             loginViewLayout.setVisibility(View.VISIBLE);
+            ((HomeScreen) mContext).textViewEdit.setVisibility(View.INVISIBLE);
             circulerFrameLayout.setVisibility(View.GONE);
             scrollView.setVisibility(View.GONE);
         } else {
             loginViewLayout.setVisibility(View.GONE);
             circulerFrameLayout.setVisibility(View.VISIBLE);
             scrollView.setVisibility(View.VISIBLE);
-
+            ((HomeScreen) mContext).textViewEdit.setVisibility(View.VISIBLE);
             if (Utils.isInternetAvailable(mContext)) {
                 loadUserDataFromServer();
             } else {
@@ -362,7 +363,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                             twitterLoginButton.performClick();
                         } else {
                             Twitter.logOut();
-                            mTwitterEmailId.setText("Link Twitter Accout");
+                            mTwitterEmailId.setText("Link Twitter Account");
                         }
                     }
 

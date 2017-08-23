@@ -102,9 +102,9 @@ public class ChangePasswordActivity extends BaseActivity implements TextWatcher,
         edNewPassword = (EditText) findViewById(R.id.ed_new_password);
         edConfirmPassword = (EditText) findViewById(R.id.ed_confirm_password);
 
-        edOldPassword.setTypeface(Typeface.DEFAULT);
-        edNewPassword.setTypeface(Typeface.DEFAULT);
-        edConfirmPassword.setTypeface(Typeface.DEFAULT);
+//        edOldPassword.setTypeface(Typeface.DEFAULT);
+//        edNewPassword.setTypeface(Typeface.DEFAULT);
+//        edConfirmPassword.setTypeface(Typeface.DEFAULT);
 
         tvSavePassword = (TextView) findViewById(R.id.tv_save);
         tvBack = (TextView) findViewById(R.id.tv_back);

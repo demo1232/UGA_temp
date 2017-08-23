@@ -24,6 +24,7 @@ public class TrendingVideoTable {
     public static final String KEY_VIDEO_IS_FAVORITE = "video_is_favorite";
     public static final String KEY_VIDEO_INDEX = "video_index";
     public static final String KEY_VIDEO_SOCIAL_URL = "video_social_url";
+    public static final String KEY_PLAYLIST_SHORT_DESC = "playlist_short_desc";
 
 
     public static final String CREATE_TRENDING_VIDEOS_TABLE = "CREATE TABLE "
@@ -32,14 +33,13 @@ public class TrendingVideoTable {
             + " TEXT," + KEY_VIDEO_SHORT_URL + " TEXT," + KEY_VIDEO_LONG_URL + " TEXT,"
             + KEY_VIDEO_THUMB_URL + " TEXT," + KEY_VIDEO_STILL_URL + " TEXT," + KEY_VIDEO_COVER_URL + " TEXT," + KEY_VIDEO_WIDE_STILL_URL + " TEXT," + KEY_VIDEO_BADGE_URL + " TEXT," + KEY_VIDEO_DURATION
             + " INTEGER," + KEY_VIDEO_TAGS + " TEXT," + KEY_VIDEO_IS_FAVORITE + " INTEGER," + KEY_VIDEO_INDEX + " INTEGER,"
-            +  " TEXT," + KEY_VIDEO_SOCIAL_URL + " TEXT" + ")";
+            + " TEXT," + KEY_VIDEO_SOCIAL_URL + " TEXT," + KEY_PLAYLIST_SHORT_DESC + " TEXT " + ")";
 
     public static final String selectAllVideos = "SELECT * FROM "
-            + TRENDING_VIDEO_TABLE ;
+            + TRENDING_VIDEO_TABLE;
 
 
-
-    public static void onCreate(SQLiteDatabase db){
+    public static void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TRENDING_VIDEOS_TABLE);
     }
 

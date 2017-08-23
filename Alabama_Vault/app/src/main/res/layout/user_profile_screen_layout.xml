@@ -374,7 +374,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="2"
                     android:textColor="@color/app_dark_grey"
-                    android:text="Push Notification"
+                    android:text="Push Notifications"
                     android:id="@+id/tv_push_view"
                     android:textSize="20dp" />
 
@@ -416,11 +416,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="RESET PASSWORD"
+                android:textStyle="bold"
                 android:textColor="@color/apptheme_color"
                 android:background="@drawable/button_shape"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="10dp"
+                android:textSize="16sp"
                 android:id="@+id/tv_reset_password"
                 />
 
@@ -439,6 +441,8 @@
                     android:layout_height="wrap_content"
                     android:text="LOGOUT"
                     android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
                     android:background="@drawable/button_shape_filled"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
@@ -463,6 +467,7 @@
                     android:textColor="@color/apptheme_color"
                     android:gravity="center"
                     android:textSize="18dp"
+                    android:textStyle="bold"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
                     android:id="@+id/tv_support"

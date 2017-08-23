@@ -47,6 +47,7 @@ import com.ncsavault.alabamavault.fragments.views.HomeFragment;
 import com.ncsavault.alabamavault.fragments.views.PlaylistFragment;
 import com.ncsavault.alabamavault.fragments.views.ProfileFragment;
 import com.ncsavault.alabamavault.fragments.views.SavedVideoFragment;
+import com.ncsavault.alabamavault.fragments.views.VideoDetailFragment;
 import com.ncsavault.alabamavault.globalconstants.GlobalConstants;
 import com.ncsavault.alabamavault.models.BannerDataModel;
 import com.ncsavault.alabamavault.models.BaseModel;
@@ -113,7 +114,6 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
     public static ProgressBar autoRefreshProgressBar;
     private BannerDataModel mBannerDataModel;
     Handler autoRefreshHandler = new Handler();
-
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -303,8 +303,8 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
                                 arrayListVideos.addAll(AppController.getInstance().getServiceManager().
                                         getVaultService().getNewVideoData(videoUrl));
 
-                                            VaultDatabaseHelper.getInstance(getApplicationContext()).
-                                                    insertVideosInDatabase(arrayListVideos);
+                                VaultDatabaseHelper.getInstance(getApplicationContext()).
+                                        insertVideosInDatabase(arrayListVideos);
 
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -316,24 +316,24 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
                     String url = GlobalConstants.CATEGORIES_PLAYLIST_URL + "userid=" + userId + "&nav_tab_id="
                             + catagoriesTabDao.getCategoriesId();
 
-                                playlistDtoArrayList.clear();
-                                playlistDtoArrayList.addAll(AppController.getInstance().getServiceManager().
-                                        getVaultService().getPlaylistData(url));
+                    playlistDtoArrayList.clear();
+                    playlistDtoArrayList.addAll(AppController.getInstance().getServiceManager().
+                            getVaultService().getPlaylistData(url));
 
-                                for (PlaylistDto playlistDto : playlistDtoArrayList) {
-                                    PlaylistDto localPlaylistDto = VaultDatabaseHelper.getInstance(getApplicationContext())
-                                            .getLocalPlaylistDataByPlaylistId(playlistDto.getPlaylistId());
+                    for (PlaylistDto playlistDto : playlistDtoArrayList) {
+                        PlaylistDto localPlaylistDto = VaultDatabaseHelper.getInstance(getApplicationContext())
+                                .getLocalPlaylistDataByPlaylistId(playlistDto.getPlaylistId());
 
-                                    if (localPlaylistDto != null) {
-                                        if (localPlaylistDto.getPlaylist_modified() != playlistDto.getPlaylist_modified()) {
-                                            VaultDatabaseHelper.getInstance(getApplicationContext()).
-                                                    insertPlaylistTabData(playlistDtoArrayList, catagoriesTabDao.getCategoriesId());
+                        if (localPlaylistDto != null) {
+                            if (localPlaylistDto.getPlaylist_modified() != playlistDto.getPlaylist_modified()) {
+                                VaultDatabaseHelper.getInstance(getApplicationContext()).
+                                        insertPlaylistTabData(playlistDtoArrayList, catagoriesTabDao.getCategoriesId());
 
-                                        }
-                                    }
+                            }
+                        }
 
-                      }
-               }
+                    }
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -478,6 +478,7 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
     private void setupFragments() {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.container, mNavigationPageList.get(0).getFragment(), mNavigationPageList.get(0).getFragment().getClass().getName());
+        fragmentTransaction.addToBackStack(mNavigationPageList.get(0).getFragment().getClass().getName());
         fragmentTransaction.commit();
     }
 
@@ -526,15 +527,42 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
 
     @Override
     public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-//            getSupportFragmentManager().beginTransaction().remove(getCurrentFragment()).commit();
+        int backStackEntryCount = getSupportFragmentManager().getBackStackEntryCount();
+        if (backStackEntryCount > 1) {
+            setFragmentIndicatorwithViews(backStackEntryCount);
+
+        } else {
+//            super.onBackPressed();
+            finish();
+        }
+    }
+
+    private void setFragmentIndicatorwithViews(int count) {
+        Fragment fragment = null;
+        String name = "";
+        try {
+//            if (count > 1) {
             getSupportFragmentManager().popBackStack();
-            /*View view = findViewById(R.id.bottom_navigation);
-            Fragment fragment = getCurrentFragment();
+            getSupportFragmentManager().executePendingTransactions();
+            name = getSupportFragmentManager().getBackStackEntryAt(count - 2).getName();
+            fragment = getSupportFragmentManager().findFragmentByTag(name);
+           /* } else {
+                fragment=null;
+//                name = getSupportFragmentManager().getBackStackEntryAt(count - 1).getName();
+//                if (name.length() > 0) {
+//                    fragment = getSupportFragmentManager().findFragmentByTag(name);
+//                }
+            }*/
+            View view = findViewById(R.id.bottom_navigation);
 
             if (fragment instanceof HomeFragment) {
                 LinearLayout ll1 = (LinearLayout) view.findViewById(R.id.linearLayoutBar1);
                 mBottomNav.setView(ll1);
+                for (int i = 1; i < count; i++) {
+                    int backStackId = getSupportFragmentManager().getBackStackEntryAt(i).getId();
+                    getSupportFragmentManager().popBackStack(backStackId, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }
+
             } else if (fragment instanceof CatagoriesFragment) {
                 LinearLayout ll2 = (LinearLayout) view.findViewById(R.id.linearLayoutBar2);
                 mBottomNav.setView(ll2);
@@ -544,21 +572,23 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
                 mBottomNav.setView(ll3);
 
             } else if (fragment instanceof ProfileFragment) {
-                LinearLayout ll4 = (LinearLayout) view.findViewById(R.id.linearLayoutBar2);
+                LinearLayout ll4 = (LinearLayout) view.findViewById(R.id.linearLayoutBar4);
                 mBottomNav.setView(ll4);
-            }*/
+            } else if (fragment instanceof PlaylistFragment) {
+                LinearLayout ll2 = (LinearLayout) view.findViewById(R.id.linearLayoutBar2);
+                mBottomNav.setView(ll2);
+                int backStackId = getSupportFragmentManager().getBackStackEntryAt(count - 1).getId();
+                getSupportFragmentManager().popBackStack(backStackId, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            } else if (fragment instanceof VideoDetailFragment) {
+                LinearLayout ll2 = (LinearLayout) view.findViewById(R.id.linearLayoutBar2);
+                mBottomNav.setView(ll2);
+                int backStackId = getSupportFragmentManager().getBackStackEntryAt(count - 1).getId();
+                getSupportFragmentManager().popBackStack(backStackId, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
-
-        } else {
-            super.onBackPressed();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    }
-
-    private Fragment getCurrentFragment() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        String fragmentTag = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName();
-        Fragment currentFragment = fragmentManager.findFragmentByTag(fragmentTag);
-        return currentFragment;
     }
 
     @Override
