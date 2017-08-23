@@ -649,6 +649,8 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
                 pDialog.setCancelable(false);
 
                 String email = edEmailBox.getText().toString().trim();
+                email = email.replace(" ", "");
+                edEmailBox.setText(email);
                 AppController.getInstance().getModelFacade().getLocalModel().setEmailId(email);
                 AppController.getInstance().getModelFacade().getLocalModel().storeEmailId(email);
 
@@ -674,7 +676,8 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
         } else {
             String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
                     + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-
+            email = email.replace(" ", "");
+            edEmailBox.setText(email);
             Pattern pattern = Pattern.compile(EMAIL_PATTERN);
             Matcher matcher = pattern.matcher(email);
             if (!matcher.matches()) {
@@ -685,7 +688,7 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
         }
     }
 
-    public void showAlertDialog(String loginType, String emailId) {
+    public void showAlertDialog(String loginType,final String emailId,final String existFrom) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder
                 .setMessage("We see that you have previously used this email address, " + emailId + ", with " + loginType + " login, would you like to update your profile with this new login method?");
@@ -698,17 +701,16 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
                         // tvFacebookLogin.setText("Login with Facebook");
                         //LoginManager.getInstance().logOut();
                         pDialog.dismiss();
-                        if (!isSocialUser) {
-
-
-                            fetchInitialRecordsForAll();
-
-                        } else {
+                        if (existFrom.equals("gm_exists") || existFrom.equals("tw_exists") || existFrom.equals("fb_exists"))
+                        {
                             AppController.getInstance().getModelFacade().getLocalModel().setOverride(true);
                             isSocialUser = false;
-                            AppController.getInstance().handleEvent(AppDefines.EVENT_ID_REGISTRATION_SCREEN);
+                            AppController.getInstance().getModelFacade().getLocalModel().setEmailId(emailId);
+                            AppController.getInstance().handleEvent(AppDefines.EVENT_ID_UPLOAD_PHOTO_SCREEN);
                             overridePendingTransition(R.anim.rightin, R.anim.leftout);
+                        } else {
 
+                            fetchInitialRecordsForAll();
                         }
 
 
@@ -866,11 +868,11 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
                                               if (loginEmailModel != null) {
                                                   String emailId = AppController.getInstance().getModelFacade().getLocalModel().getEmailId();
                                                   if (loginEmailModel.getLoginResult().toLowerCase().contains("fb_exists")) {
-                                                      showAlertDialog("Facebook", emailId);
+                                                      showAlertDialog("Facebook", emailId,"fb_exists");
                                                   } else if (loginEmailModel.getLoginResult().toLowerCase().contains("tw_exists")) {
-                                                      showAlertDialog("Twitter", emailId);
+                                                      showAlertDialog("Twitter", emailId,"tw_exists");
                                                   } else if (loginEmailModel.getLoginResult().toLowerCase().contains("gm_exists")) {
-                                                      showAlertDialog("Google", emailId);
+                                                      showAlertDialog("Google", emailId,"gm_exists");
                                                   } else {
 
                                                       // if (!isSocialUser) {
@@ -1047,7 +1049,7 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
                         if (response.getReturnStatus() != null) {
                             if (response.getReturnStatus().toLowerCase().contains("vt_exists") || response.getReturnStatus().toLowerCase().contains("false")) {
                                 pDialog.dismiss();
-                                showAlertDialog("Vault", response.getEmailID());
+                                showAlertDialog("Vault", response.getEmailID(),"vt_exists");
                             } else if (response.getReturnStatus().toLowerCase().contains("fb_exists") /*|| response.getReturnStatus().toLowerCase().contains("" +
                                                     "")*/) {
                                 pDialog.dismiss();
@@ -1063,10 +1065,10 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
 
                             } else if (response.getReturnStatus().toLowerCase().contains("tw_exists")) {
                                 pDialog.dismiss();
-                                showAlertDialog("Twitter", response.getEmailID());
+                                showAlertDialog("Twitter", response.getEmailID(),"tw_exists");
                             } else if (response.getReturnStatus().toLowerCase().contains("gm_exists")) {
                                 pDialog.dismiss();
-                                showAlertDialog("Google", response.getEmailID());
+                                showAlertDialog("Google", response.getEmailID(),"gm_exists");
                             }
                         } else {
                             pDialog.dismiss();
@@ -1372,14 +1374,14 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
                                         isFBLogin = false;
                                         overrideUserData(socialUser);
                                     } else {
-                                        showAlertDialog("Facebook", socialUser.getEmailID());
+                                        showAlertDialog("Facebook", socialUser.getEmailID(),"fb_exists");
                                     }
                                 } else if (response.getReturnStatus().toLowerCase().contains("tw_exists")) {
-                                    showAlertDialog("Twitter", socialUser.getEmailID());
+                                    showAlertDialog("Twitter", socialUser.getEmailID(),"tw_exists");
                                 } else if (response.getReturnStatus().toLowerCase().contains("gm_exists")) {
-                                    showAlertDialog("Google", socialUser.getEmailID());
+                                    showAlertDialog("Google", socialUser.getEmailID(),"gm_exists");
                                 } else if (response.getReturnStatus().toLowerCase().contains("vt_exists")) {
-                                    showAlertDialog("Vault", socialUser.getEmailID());
+                                    showAlertDialog("Vault", socialUser.getEmailID(),"vt_exists");
                                 }
 //                                if (socialUser.getEmailID() != null) {
 //                                    pDialog.dismiss();
@@ -1475,16 +1477,16 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
                             if (response.getReturnStatus() != null) {
                                 if (response.getReturnStatus().toLowerCase().contains("vt_exists") || response.getReturnStatus().toLowerCase().contains("false")) {
                                     pDialog.dismiss();
-                                    showAlertDialog("Vault", vaultUser.getEmailID());
+                                    showAlertDialog("Vault", vaultUser.getEmailID(),"vt_exists");
                                 } else if (response.getReturnStatus().toLowerCase().contains("gm_exists")) {
                                     pDialog.dismiss();
-                                    showAlertDialog("Google", vaultUser.getEmailID());
+                                    showAlertDialog("Google", vaultUser.getEmailID(),"gm_exists");
                                 } else if (response.getReturnStatus().toLowerCase().contains("tw_exists")) {
                                     pDialog.dismiss();
-                                    showAlertDialog("Twitter", vaultUser.getEmailID());
+                                    showAlertDialog("Twitter", vaultUser.getEmailID(),"tw_exists");
                                 } else if (response.getReturnStatus().toLowerCase().contains("fb_exists")) {
                                     pDialog.dismiss();
-                                    showAlertDialog("Facebook", vaultUser.getEmailID());
+                                    showAlertDialog("Facebook", vaultUser.getEmailID(),"fb_exists");
                                 }
                             } else {
                                 pDialog.dismiss();
@@ -1897,13 +1899,13 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
                 if (response != null) {
                     if (mVaultUserDataModel.getmVaultUserResult().toLowerCase().contains("vt_exists")
                             || mVaultUserDataModel.getmVaultUserResult().toLowerCase().contains("false")) {
-                        showAlertDialog("Vault",emailId);
+                        showAlertDialog("Vault",emailId,"vt_exists");
                     } else if (mVaultUserDataModel.getmVaultUserResult().toLowerCase().contains("fb_exists")) {
-                        showAlertDialog("Facebook",emailId);
+                        showAlertDialog("Facebook",emailId,"fb_exists");
                     } else if (mVaultUserDataModel.getmVaultUserResult().toLowerCase().contains("tw_exists")) {
-                        showAlertDialog("Twitter",emailId);
+                        showAlertDialog("Twitter",emailId,"tw_exists");
                     } else if (mVaultUserDataModel.getmVaultUserResult().toLowerCase().contains("gm_exists")) {
-                        showAlertDialog("Google",emailId);
+                        showAlertDialog("Google",emailId,"gm_exists");
                     } else {
                         if (response.getReturnStatus().toLowerCase().equals("true") || response.getReturnStatus().toLowerCase().equals("vt_exists")) {
                             pref.edit().putLong(GlobalConstants.PREF_VAULT_USER_ID_LONG, response.getUserID()).apply();

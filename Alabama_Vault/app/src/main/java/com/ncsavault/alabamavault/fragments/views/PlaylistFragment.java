@@ -39,6 +39,7 @@ import com.ncsavault.alabamavault.adapters.CatagoriesAdapter;
 import com.ncsavault.alabamavault.adapters.FilterSubtypesAdapter;
 import com.ncsavault.alabamavault.adapters.PlaylistDataAdapter;
 import com.ncsavault.alabamavault.controllers.AppController;
+import com.ncsavault.alabamavault.customviews.RecyclerViewDisabler;
 import com.ncsavault.alabamavault.database.VaultDatabaseHelper;
 import com.ncsavault.alabamavault.dto.PlaylistDto;
 import com.ncsavault.alabamavault.dto.TabBannerDTO;
@@ -86,7 +87,7 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
     private ProgressDialog pDialog = null;
     private PullRefreshLayout refreshLayout;
     PullRefreshTask pullTask;
-
+    RecyclerView.OnItemTouchListener disable;
 
     public static Fragment newInstance(Context context, long tabId) {
         Fragment playlistFragment = new PlaylistFragment();
@@ -190,6 +191,7 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
 
     private void initViews(View view) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        disable = new RecyclerViewDisabler();
         bannerImageView = (ImageView) view.findViewById(R.id.img_banner);
         bannerLayout = (LinearLayout) view.findViewById(R.id.syncro_banner_layout);
         progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
@@ -604,6 +606,7 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
             super.onPreExecute();
             if (mRecyclerView != null) {
                 mRecyclerView.setEnabled(false);
+                mRecyclerView.addOnItemTouchListener(disable);
             }
 
             refreshLayout.setRefreshing(true);
@@ -618,24 +621,6 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
                 SharedPreferences pref = AppController.getInstance().getApplicationContext().
                         getSharedPreferences(GlobalConstants.PREF_PACKAGE_NAME, Context.MODE_PRIVATE);
                 long userId = pref.getLong(GlobalConstants.PREF_VAULT_USER_ID_LONG, 0);
-
-                String url = GlobalConstants.CATEGORIES_PLAYLIST_URL + "userid=" + userId + "&nav_tab_id=" + tabId;
-
-                playlistDtoDataList.clear();
-                playlistDtoDataList.addAll(AppController.getInstance().getServiceManager().getVaultService().getPlaylistData(url));
-
-                for (PlaylistDto playlistDto : playlistDtoDataList) {
-                    PlaylistDto localPlaylistDto = VaultDatabaseHelper.getInstance(mContext)
-                            .getLocalPlaylistDataByPlaylistId(playlistDto.getPlaylistId());
-
-                    if (localPlaylistDto != null) {
-                        if (localPlaylistDto.getPlaylist_modified() != playlistDto.getPlaylist_modified()) {
-                            VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).removeAllPlaylistTabData();
-                            VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).insertPlaylistTabData
-                                    (playlistDtoDataList,tabId);
-                        }
-                    }
-                }
 
                 //Update Banner Data
                 if (tabBannerDTO != null) {
@@ -661,6 +646,25 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
                     }
                 }
 
+                String url = GlobalConstants.CATEGORIES_PLAYLIST_URL + "userid=" + userId + "&nav_tab_id=" + tabId;
+                playlistDtoDataList.clear();
+                playlistDtoDataList.addAll(AppController.getInstance().getServiceManager().getVaultService().getPlaylistData(url));
+
+                for (PlaylistDto playlistDto : playlistDtoDataList) {
+                    PlaylistDto localPlaylistDto = VaultDatabaseHelper.getInstance(mContext)
+                            .getLocalPlaylistDataByPlaylistId(playlistDto.getPlaylistId());
+
+                    if (localPlaylistDto != null) {
+                        if (localPlaylistDto.getPlaylist_modified() != playlistDto.getPlaylist_modified()) {
+                            VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).removeAllPlaylistTabData();
+                            VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).insertPlaylistTabData
+                                    (playlistDtoDataList,tabId);
+                        }
+                    }
+                }
+
+
+
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -672,8 +676,8 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
         protected void onPostExecute(final ArrayList<PlaylistDto> result) {
             super.onPostExecute(result);
             try {
-                if (result != null) {
-                    if (result.size() > 0) {
+                if (playlistDtoDataList != null) {
+                    if (playlistDtoDataList.size() > 0) {
                         for (int j = 0; j < playlistDtoDataList.size(); j++) {
                             if ((j + 1) % 5 == 0) {
                                 String adUnitVault = getUnitId(playlistDtoDataList);
@@ -683,7 +687,7 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
                             }
                         }
 
-                        mAlbumsAdapter = new PlaylistDataAdapter(mContext, PlaylistFragment.this, result);
+                        mAlbumsAdapter = new PlaylistDataAdapter(mContext, PlaylistFragment.this, playlistDtoDataList);
                         GridLayoutManager mLayoutManager = new GridLayoutManager(mContext, 2);
                         mRecyclerView.setLayoutManager(mLayoutManager);
                         mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(1), true));
@@ -702,6 +706,7 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
                                 }
                             }
                         });
+                        mRecyclerView.removeOnItemTouchListener(disable);
                         refreshLayout.setRefreshing(false);
                     }
                     // ------- update BannerImage---------------------

@@ -2,9 +2,11 @@ package com.ncsavault.alabamavault.fragments.views;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -25,6 +27,7 @@ import android.widget.TextView;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.ncsavault.alabamavault.R;
+import com.ncsavault.alabamavault.adapters.FilterSubtypesAdapter;
 import com.ncsavault.alabamavault.adapters.VideoDetailAdapter;
 import com.ncsavault.alabamavault.controllers.AppController;
 
@@ -43,6 +46,8 @@ import com.ncsavault.alabamavault.views.VideoInfoActivity;
 import com.ncsavault.alabamavault.views.VideoSearchActivity;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by gauravkumar.singh on 14/08/17.
@@ -63,6 +68,7 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
     long playlistId = 0;
     private TextView tvNoRecoredFound;
     RecyclerView.OnItemTouchListener disable;
+    VideoResponseReceiver receiver;
 
     public static Fragment newInstance(Context context, long playlistId) {
         Fragment videoDetailFragment = new VideoDetailFragment();
@@ -73,6 +79,23 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
         return videoDetailFragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        IntentFilter filter = new IntentFilter(VideoResponseReceiver.ACTION_RESP);
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        receiver = new VideoResponseReceiver();
+        mContext.registerReceiver(receiver, filter);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(receiver != null)
+        {
+            mContext.unregisterReceiver(receiver);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -217,7 +240,7 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
 
                 if (result.size() == 0) {
                     tvNoRecoredFound.setVisibility(View.VISIBLE);
-                    tvNoRecoredFound.setText(GlobalConstants.NO_RECORDS_FOUND);
+                    tvNoRecoredFound.setText(GlobalConstants.NO_VIDEO_FOUND);
                 } else {
                     tvNoRecoredFound.setVisibility(View.GONE);
                 }
@@ -236,27 +259,76 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
         mDbTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    private void getVideoDataFromDataBase(long playlistId) {
+    private void getVideoDataFromDataBase(final long playlistId) {
 
 
-        videoDtoArrayList.clear();
-        videoDtoArrayList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).
-                getVideoDataByPlaylistId(playlistId));
-
-        if (videoDtoArrayList.size() == 0) {
-            tvNoRecoredFound.setVisibility(View.VISIBLE);
-            tvNoRecoredFound.setText(GlobalConstants.NO_RECORDS_FOUND);
-        } else {
-            tvNoRecoredFound.setVisibility(View.GONE);
-        }
 
 
-        videoDetailAdapter = new VideoDetailAdapter(mContext, videoDtoArrayList, VideoDetailFragment.this);
-        mRecyclerView.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(mContext);
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(llm);
-        mRecyclerView.setAdapter(videoDetailAdapter);
+
+
+
+        final AsyncTask<Void, Void, ArrayList<VideoDTO>> mDbTask = new AsyncTask<Void, Void, ArrayList<VideoDTO>>() {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                if (progressBar != null) {
+                    if (videoDtoArrayList.size() == 0) {
+                        progressBar.setVisibility(View.VISIBLE);
+                    } else {
+                        progressBar.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override
+            protected ArrayList<VideoDTO> doInBackground(Void... params) {
+
+                try {
+
+                    videoDtoArrayList.clear();
+                    videoDtoArrayList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).
+                            getVideoDataByPlaylistId(playlistId));
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return videoDtoArrayList;
+            }
+
+            @Override
+            protected void onPostExecute(ArrayList<VideoDTO> result) {
+                super.onPostExecute(result);
+
+                if (progressBar != null) {
+                    if (result.size() == 0) {
+                        progressBar.setVisibility(View.VISIBLE);
+                    } else {
+                        progressBar.setVisibility(View.GONE);
+                    }
+                }
+
+                if (videoDtoArrayList.size() == 0) {
+                    tvNoRecoredFound.setVisibility(View.VISIBLE);
+                    tvNoRecoredFound.setText(GlobalConstants.NO_VIDEO_FOUND);
+                } else {
+                    tvNoRecoredFound.setVisibility(View.GONE);
+                }
+
+
+                videoDetailAdapter = new VideoDetailAdapter(mContext, videoDtoArrayList, VideoDetailFragment.this);
+                mRecyclerView.setHasFixedSize(true);
+                LinearLayoutManager llm = new LinearLayoutManager(mContext);
+                llm.setOrientation(LinearLayoutManager.VERTICAL);
+                mRecyclerView.setLayoutManager(llm);
+                mRecyclerView.setAdapter(videoDetailAdapter);
+                // ------- addBannerImage---------------------
+            }
+        };
+
+        mDbTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
     }
 
     @Override
@@ -463,11 +535,12 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
                 for(VideoDTO videoDTO :videoDtoArrayList)
                 {
                     VideoDTO localVideoDTO = VaultDatabaseHelper.getInstance(mContext)
-                            .getVideoDataByVideoId(String.valueOf(videoDTO.getVideoId()));
+                            .getVideoDtoByPlaylistId(videoDTO.getPlaylistId());
 
                     if(localVideoDTO != null)
                     {
                         if(localVideoDTO.getVedioList_modified() != videoDTO.getVedioList_modified()) {
+
                             VaultDatabaseHelper.getInstance(mContext).
                                     insertVideosInDatabase(videoDtoArrayList);
                         }
@@ -486,12 +559,18 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
             super.onPostExecute(result);
             try {
 
+                videoDtoArrayList.clear();
+                videoDtoArrayList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).
+                        getVideoDataByPlaylistId(playlistId));
+
                 if (videoDtoArrayList.size() == 0) {
                     tvNoRecoredFound.setVisibility(View.VISIBLE);
-                    tvNoRecoredFound.setText(GlobalConstants.NO_RECORDS_FOUND);
+                    tvNoRecoredFound.setText(GlobalConstants.NO_VIDEO_FOUND);
                 } else {
                     tvNoRecoredFound.setVisibility(View.GONE);
                 }
+
+
                 videoDetailAdapter = new VideoDetailAdapter(mContext, videoDtoArrayList, VideoDetailFragment.this);
                 mRecyclerView.setHasFixedSize(true);
                 LinearLayoutManager llm = new LinearLayoutManager(mContext);
@@ -517,4 +596,40 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    public class VideoResponseReceiver extends BroadcastReceiver {
+
+        public static final String ACTION_RESP =
+                "Message Processed";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            try {
+                videoDtoArrayList.clear();
+                videoDtoArrayList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).
+                        getVideoDataByPlaylistId(playlistId));
+
+                if (videoDtoArrayList.size() == 0) {
+                    tvNoRecoredFound.setVisibility(View.VISIBLE);
+                    tvNoRecoredFound.setText(GlobalConstants.NO_VIDEO_FOUND);
+                } else {
+                    tvNoRecoredFound.setVisibility(View.GONE);
+                }
+
+
+                videoDetailAdapter = new VideoDetailAdapter(mContext, videoDtoArrayList, VideoDetailFragment.this);
+                mRecyclerView.setHasFixedSize(true);
+                LinearLayoutManager llm = new LinearLayoutManager(mContext);
+                llm.setOrientation(LinearLayoutManager.VERTICAL);
+                mRecyclerView.setLayoutManager(llm);
+                mRecyclerView.setAdapter(videoDetailAdapter);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 }

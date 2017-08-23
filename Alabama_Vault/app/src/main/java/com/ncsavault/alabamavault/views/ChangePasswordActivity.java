@@ -120,7 +120,7 @@ public class ChangePasswordActivity extends BaseActivity implements TextWatcher,
         imageViewNewPassword.setOnTouchListener(mPasswordVisibleTouchListener);
         imageViewConfirmPassword = (ImageView) findViewById(R.id.imageview_confirm_password);
         imageViewConfirmPassword.setTag(R.drawable.eyeon);
-        imageViewNewPassword.setOnTouchListener(mPasswordVisibleTouchListener);
+        imageViewConfirmPassword.setOnTouchListener(mPasswordVisibleTouchListener);
 
     }
 

@@ -24,8 +24,8 @@
             android:layout_height="50dp"
             android:layout_below="@+id/video_image"
             android:background="@color/white"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="5dp"
+            android:layout_marginRight="7dp"
+            android:layout_marginLeft="7dp"
             android:id="@+id/video_name_layout">
             <TextView
                 android:id="@+id/video_name"

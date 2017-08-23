@@ -274,6 +274,11 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
         view = (View) findViewById(R.id.llToast);
         mBackButton = (TextView) findViewById(R.id.tv_back);
 
+        if(AppController.getInstance().getModelFacade().getLocalModel().getEmailId() != null)
+        {
+            mEmailId.setText(AppController.getInstance().getModelFacade().getLocalModel().getEmailId());
+        }
+
 
         mFirstName.setOnFocusChangeListener(onFocusChangeListener);
         mLastName.setOnFocusChangeListener(onFocusChangeListener);
@@ -565,7 +570,8 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
 
 
                     if (mFirstName.getText().toString().length() > 0) {
-                        String firstName = mFirstName.getText().toString().trim().substring(0, 1).toUpperCase() + mFirstName.getText().toString().trim().substring(1);
+                        String firstName = mFirstName.getText().toString().trim().substring(0, 1).toUpperCase() +
+                                mFirstName.getText().toString().trim().substring(1);
                         firstName = firstName.replace(" ", "");
                         mFirstName.setText(firstName);
                     }
@@ -1671,18 +1677,18 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
 
                             } else if (loginEmailModel.getLoginResult().toLowerCase().contains("fb_exists")) {
 
-                                //showAlertDialog("Facebook", email);
-                                showToastMessage(GlobalConstants.ALREADY_REGISTERED_EMAIL);
+                                showAlertDialog("Facebook", email);
+                               // showToastMessage(GlobalConstants.ALREADY_REGISTERED_EMAIL);
 
                             } else if (loginEmailModel.getLoginResult().toLowerCase().contains("tw_exists")) {
 
-                                //showAlertDialog("Twitter", email);
-                                showToastMessage(GlobalConstants.ALREADY_REGISTERED_EMAIL);
+                                showAlertDialog("Twitter", email);
+                                //showToastMessage(GlobalConstants.ALREADY_REGISTERED_EMAIL);
 
                             } else if (loginEmailModel.getLoginResult().toLowerCase().contains("gm_exists")) {
 
-                                //showAlertDialog("Google", email);
-                                showToastMessage(GlobalConstants.ALREADY_REGISTERED_EMAIL);
+                                showAlertDialog("Google", email);
+                                //showToastMessage(GlobalConstants.ALREADY_REGISTERED_EMAIL);
 
                             } else {
                                 fName = mFirstName.getText().toString().trim().substring(0, 1).toUpperCase()
@@ -2048,6 +2054,8 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
         mConfirmPassword.setAnimation(leftOutAnimation);
         mRegistertionButton.setAnimation(leftOutAnimation);
         tvAlreadyRegistered.setAnimation(leftOutAnimation);
+        imageViewPasswordVisibility.setAnimation(leftOutAnimation);
+        imageViewConfirmPasswordVisibility.setAnimation(leftOutAnimation);
 
         mFirstName.setVisibility(View.GONE);
         mLastName.setVisibility(View.GONE);
@@ -2059,6 +2067,8 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
         mConfirmPassword.setVisibility(View.GONE);
         mRegistertionButton.setVisibility(View.GONE);
         tvAlreadyRegistered.setVisibility(View.GONE);
+        imageViewPasswordVisibility.setVisibility(View.GONE);
+        imageViewConfirmPasswordVisibility.setVisibility(View.GONE);
         //tvHeader.setText("Register");
 
         mProfileImage.setAnimation(rightInAnimation);
@@ -2088,6 +2098,8 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
         mConfirmPassword.setAnimation(rightInAnimation);
         mRegistertionButton.setAnimation(rightInAnimation);
         tvAlreadyRegistered.setAnimation(rightInAnimation);
+        imageViewPasswordVisibility.setAnimation(rightInAnimation);
+        imageViewConfirmPasswordVisibility.setAnimation(rightInAnimation);
 
         mFirstName.setVisibility(View.VISIBLE);
         mLastName.setVisibility(View.VISIBLE);
@@ -2099,6 +2111,8 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
         mConfirmPassword.setVisibility(View.VISIBLE);
         mRegistertionButton.setVisibility(View.VISIBLE);
         tvAlreadyRegistered.setVisibility(View.VISIBLE);
+        imageViewPasswordVisibility.setVisibility(View.VISIBLE);
+        imageViewConfirmPasswordVisibility.setVisibility(View.VISIBLE);
         //tvHeader.setText("Register");
 
         mProfileImage.setAnimation(leftOutAnimation);

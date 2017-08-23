@@ -32,6 +32,7 @@ import com.ncsavault.alabamavault.adapters.SavedVideoAdapter;
 import com.ncsavault.alabamavault.adapters.VideoContentListAdapter;
 import com.ncsavault.alabamavault.adapters.VideoDetailAdapter;
 import com.ncsavault.alabamavault.controllers.AppController;
+import com.ncsavault.alabamavault.customviews.RecyclerViewDisabler;
 import com.ncsavault.alabamavault.database.VaultDatabaseHelper;
 import com.ncsavault.alabamavault.dto.VideoDTO;
 import com.ncsavault.alabamavault.globalconstants.GlobalConstants;
@@ -66,6 +67,7 @@ public class SavedVideoFragment extends Fragment implements SavedVideoAdapter.Sa
     AsyncTask<Void, Void, Void> mPostTask;
     private boolean isFavoriteChecked;
     private String postResult;
+    RecyclerView.OnItemTouchListener disable;
 
     public static Fragment newInstance(Context context) {
         Fragment frag = new SavedVideoFragment();
@@ -150,6 +152,7 @@ public class SavedVideoFragment extends Fragment implements SavedVideoAdapter.Sa
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.saved_video_recycler_view);
+        disable = new RecyclerViewDisabler();
         tvNoRecoredFound = (TextView) view.findViewById(R.id.tv_no_recored_found);
         progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
         savedViewLayout = (RelativeLayout) view.findViewById(R.id.saved_view_layout);
@@ -481,6 +484,7 @@ public class SavedVideoFragment extends Fragment implements SavedVideoAdapter.Sa
             super.onPreExecute();
             if (mRecyclerView != null) {
                 mRecyclerView.setEnabled(false);
+                mRecyclerView.addOnItemTouchListener(disable);
             }
 
             refreshLayout.setRefreshing(true);
@@ -547,6 +551,7 @@ public class SavedVideoFragment extends Fragment implements SavedVideoAdapter.Sa
                 llm.setOrientation(LinearLayoutManager.VERTICAL);
                 mRecyclerView.setLayoutManager(llm);
                 mRecyclerView.setAdapter(savedVideoAdapter);
+                mRecyclerView.removeOnItemTouchListener(disable);
                 refreshLayout.setRefreshing(false);
 
                 if(favoriteVideoList.size() == 0)

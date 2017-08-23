@@ -162,6 +162,27 @@ public class ForgotPasswordActivity extends BaseActivity {
             }
         });
 
+
+        verificationCode.setOnKeyListener(new View.OnKeyListener() {
+
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                    if (verificationCode.getText().toString().equals(verificationCodeValue)) {
+                        checkConfirmPasswordAndProceed();
+                    } else if (verificationCode.getText().toString().equals("")) {
+                        showToastMessage("Please enter verification code");
+                    } else {
+                        showToastMessage("Entered code is either invalid or expired.");
+                    }
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
         tvSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -176,24 +197,19 @@ public class ForgotPasswordActivity extends BaseActivity {
             }
         });
 
-        verificationCode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    if (verificationCode.getText().toString().equals(verificationCodeValue)) {
-                        checkConfirmPasswordAndProceed();
-                    } else if (verificationCode.getText().toString().equals("")) {
-                        showToastMessage("Please enter verification code");
-                    } else {
-                        showToastMessage("Entered code is either invalid or expired.");
-                    }
-                }
 
-                return false;
-
-
-            }
-        });
+//        verificationCode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+//
+//                }
+//
+//                return false;
+//
+//
+//            }
+//        });
 
 //            @Override
 //            public boolean onKey(View v, int keyCode, KeyEvent event) {

@@ -357,7 +357,7 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
 
             if(progressBar != null)
             {
-                progressBar.setVisibility(View.VISIBLE);
+              //  progressBar.setVisibility(View.VISIBLE);
             }
 
             refreshLayout.setRefreshing(true);
@@ -372,7 +372,6 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
             String url = "";
             try {
                 //Update Banner Data
-                if (tabBannerDTO != null) {
                     TabBannerDTO serverObj = AppController.getInstance().getServiceManager().
                             getVaultService().getTabBannerDataById(tabBannerDTO.getTabBannerId(),
                             tabBannerDTO.getTabKeyword(), tabBannerDTO.getTabId());
@@ -412,7 +411,6 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
                             isBannerUpdated = true;
                         }
                     }
-                }
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -440,7 +438,7 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
 
                     if(progressBar != null)
                     {
-                        progressBar.setVisibility(View.GONE);
+                      //  progressBar.setVisibility(View.GONE);
                     }
 
                     // ------- update BannerImage---------------------
@@ -576,55 +574,59 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            mRecyclerViewItems.clear();
-            mRecyclerViewItems.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getVideoList(GlobalConstants.OKF_FEATURED));
+            try {
+                mRecyclerViewItems.clear();
+                mRecyclerViewItems.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getVideoList(GlobalConstants.OKF_FEATURED));
 
-            if (VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getTrendingVideoCount() > 0) {
-                trendingArraylist.clear();
-                trendingArraylist.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getAllTrendingVideoList());
+                if (VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getTrendingVideoCount() > 0) {
+                    trendingArraylist.clear();
+                    trendingArraylist.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getAllTrendingVideoList());
 
-            }
-
-            if(progressBar != null)
-            {
-                progressBar.setVisibility(View.GONE);
-            }
-
-            Collections.sort(mRecyclerViewItems, new Comparator<VideoDTO>() {
-
-                @Override
-                public int compare(VideoDTO lhs, VideoDTO rhs) {
-                    // TODO Auto-generated method stub
-                    return Integer.valueOf(lhs.getVideoIndex())
-                            .compareTo(Integer.valueOf(rhs.getVideoIndex()));
                 }
-            });
-            long tabId = AppController.getInstance().getModelFacade().getLocalModel().getTabId();
-            tabBannerDTO = VaultDatabaseHelper.getInstance(getActivity()).getLocalTabBannerDataByTabId(Long.valueOf(tabId));
 
-            mRecyclerViewItems.add(0, new VideoDTO());
-            VideoDTO videoDTOBanner = new VideoDTO();
-            videoDTOBanner.setVideoStillUrl(tabBannerDTO.getBannerURL());
-            if (tabBannerDTO.isBannerActive()) {
-                mRecyclerViewItems.add(1, videoDTOBanner);
-                AppController.getInstance().getModelFacade().getLocalModel().setBannerActivated(true);
-            } else {
-                mRecyclerViewItems.remove(1);
-                AppController.getInstance().getModelFacade().getLocalModel().setBannerActivated(false);
-            }
-            for (int i = 0; i < mRecyclerViewItems.size(); i++) {
-                if ((i + 1) % 3 == 0) {
-                    VideoDTO videoAdMob = new VideoDTO();
-                    videoAdMob.setVideoName(getRandomId());
-                    mRecyclerViewItems.add(i, videoAdMob);
+                if (progressBar != null) {
+                    progressBar.setVisibility(View.GONE);
                 }
-            }
-            adapter = new FilterSubtypesAdapter(mContext, mRecyclerViewItems, trendingArraylist, HomeFragment.this);
-            mRecyclerView.setAdapter(adapter);
-            mRecyclerView.setHasFixedSize(true);
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-            mRecyclerView.setLayoutManager(layoutManager);
 
+                Collections.sort(mRecyclerViewItems, new Comparator<VideoDTO>() {
+
+                    @Override
+                    public int compare(VideoDTO lhs, VideoDTO rhs) {
+                        // TODO Auto-generated method stub
+                        return Integer.valueOf(lhs.getVideoIndex())
+                                .compareTo(Integer.valueOf(rhs.getVideoIndex()));
+                    }
+                });
+                long tabId = AppController.getInstance().getModelFacade().getLocalModel().getTabId();
+                tabBannerDTO = VaultDatabaseHelper.getInstance(getActivity()).getLocalTabBannerDataByTabId(Long.valueOf(tabId));
+                mRecyclerViewItems.add(0, new VideoDTO());
+                if (tabBannerDTO != null) {
+                    VideoDTO videoDTOBanner = new VideoDTO();
+                    videoDTOBanner.setVideoStillUrl(tabBannerDTO.getBannerURL());
+                    if (tabBannerDTO.isBannerActive()) {
+                        mRecyclerViewItems.add(1, videoDTOBanner);
+                        AppController.getInstance().getModelFacade().getLocalModel().setBannerActivated(true);
+                    } else {
+                        mRecyclerViewItems.remove(1);
+                        AppController.getInstance().getModelFacade().getLocalModel().setBannerActivated(false);
+                    }
+                }
+                for (int i = 0; i < mRecyclerViewItems.size(); i++) {
+                    if ((i + 1) % 3 == 0) {
+                        VideoDTO videoAdMob = new VideoDTO();
+                        videoAdMob.setVideoName(getRandomId());
+                        mRecyclerViewItems.add(i, videoAdMob);
+                    }
+                }
+                adapter = new FilterSubtypesAdapter(mContext, mRecyclerViewItems, trendingArraylist, HomeFragment.this);
+                mRecyclerView.setAdapter(adapter);
+                mRecyclerView.setHasFixedSize(true);
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                mRecyclerView.setLayoutManager(layoutManager);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -197,6 +197,21 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     // if (albumList.size() > 0) {
 
                     final VideoDTO videoDTO = (VideoDTO) albumList.get(position);
+
+                    if (videoDTO.isVideoIsFavorite()) {
+                        vhHeader.savedImage.setImageResource(R.drawable.saved_video_img);
+                    } else {
+                        vhHeader.savedImage.setImageResource(R.drawable.video_save);
+                    }
+
+                    if (VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).
+                            isFavorite(videoDTO.getVideoId())) {
+                        vhHeader.savedImage.setImageResource(R.drawable.saved_video_img);
+                    } else {
+                        vhHeader.savedImage.setImageResource(R.drawable.video_save);
+                    }
+
+
                     com.nostra13.universalimageloader.core.ImageLoader.getInstance().
                             displayImage(videoDTO.getVideoStillUrl(),
                                     vhHeader.videoImage, options, new ImageLoadingListener() {
@@ -222,18 +237,20 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                     });
 
                     int aspectHeight = (displayWidth * 9) / 16;
-                    int bottomAspectHeight = (displayWidth * ((int) 2.25)) / 16;
-
-                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-                            aspectHeight);
-                    lp.setMargins(20,0,20,0);
-                    vhHeader.videoImage.setLayoutParams(lp);
+                    int bottomAspectHeight = (displayWidth* ((int)2.25))/16;
 
 //                    RelativeLayout.LayoutParams bottomLayout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
 //                            bottomAspectHeight);
-//                    bottomLayout.setMargins(15,0,15,0);
+//                    bottomLayout.setMargins(30,0,30,0);
 //
 //                    vhHeader.videoNameLayout.setLayoutParams(bottomLayout);
+
+                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                            aspectHeight);
+                    lp.setMargins(30,0,30,0);
+                    vhHeader.videoImage.setLayoutParams(lp);
+
+
 
                     vhHeader.mVideoName.setText(videoDTO.getVideoName());
 

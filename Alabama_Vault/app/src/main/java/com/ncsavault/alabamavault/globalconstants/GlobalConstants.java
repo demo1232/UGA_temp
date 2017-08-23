@@ -239,7 +239,7 @@ public class GlobalConstants {
     private static final int MINUTE = 60 * SECOND;
     private static final int HOUR = 60 * MINUTE;
     private static final int DAY = 24 * HOUR;
-    public static final int AUTO_REFRESH_INTERVAL = MINUTE*30;//HOUR *2;
+    public static final int AUTO_REFRESH_INTERVAL = SECOND*30;//HOUR *2;
 
     public static final String VAULT_PERMISSION = "Allow ALABAMA Vault to access photos,media,files and location on your device. Please go to app settings and allow permissions.";
     public static final String VAULT_RWAD_PHONE_STATE_PERMISSION = "Allow ALABAMA Vault to access read phone state on your device. Please go to app settings and allow permission.";
@@ -275,6 +275,7 @@ public class GlobalConstants {
     public static final String YOUR_PASSWORD_HAS_BEEN_REGISTERED_SUCCESSFULLY = "Your password has been reset successfully";
     public static final String YOUR_EMAIL_HAS_BEEN_VERIFIED_SUCCESSFULLY = "Your email has been verified successfully";
     public static final String NO_RECORDS_FOUND = "NO FAVORITE VIDEO FOUND";
+    public static final String NO_VIDEO_FOUND = "NO VIDEO AVAILABLE";
 
     public static final String NO_VIDEOS_FOUND = "NO RECORD FOUND";
 
@@ -282,7 +283,7 @@ public class GlobalConstants {
     public static final String NOTIFICATION_RECEIVE = "notificationReceive";
     public static final String NOTIFICATION_FOREGROUND = "notificationForeground";
     public static final String NOTIFICATION_OPEN = "notificationOpen";
-    public static final String NOT_REGISTERED = "Your email is not registered. Please registered your email.";
+    public static final String NOT_REGISTERED = "Your email is not register. Please register your email.";
     public static final String ENTER_EMAIL_AND_PASSWORD = "Please Enter Email and Password!";
 
     public static final String ENTERRED_PASSWORD_WRONG = "entered password is wrong";
@@ -302,7 +303,7 @@ public class GlobalConstants {
             "ca-app-pub-8848124662104437/5281232913"};
 
 
-    public static String ALREADY_REGISTERED_EMAIL = "";
+    public static String ALREADY_REGISTERED_EMAIL = "Entered Email id Already Exists on Vault App!";
 
 
 }

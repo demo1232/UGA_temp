@@ -47,6 +47,7 @@ import com.ncsavault.alabamavault.fragments.views.HomeFragment;
 import com.ncsavault.alabamavault.fragments.views.PlaylistFragment;
 import com.ncsavault.alabamavault.fragments.views.ProfileFragment;
 import com.ncsavault.alabamavault.fragments.views.SavedVideoFragment;
+import com.ncsavault.alabamavault.fragments.views.VideoDetailFragment;
 import com.ncsavault.alabamavault.globalconstants.GlobalConstants;
 import com.ncsavault.alabamavault.models.BannerDataModel;
 import com.ncsavault.alabamavault.models.BaseModel;
@@ -306,11 +307,14 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
                                             VaultDatabaseHelper.getInstance(getApplicationContext()).
                                                     insertVideosInDatabase(arrayListVideos);
 
+
+
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
 
                         }
+
                     }
 
                     String url = GlobalConstants.CATEGORIES_PLAYLIST_URL + "userid=" + userId + "&nav_tab_id="
@@ -334,6 +338,12 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
 
                       }
                }
+
+                Intent videoIntent = new Intent();
+                broadCastIntent.setAction(VideoDetailFragment.VideoResponseReceiver.ACTION_RESP);
+                broadCastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                sendBroadcast(videoIntent);
+
 
             } catch (Exception e) {
                 e.printStackTrace();
