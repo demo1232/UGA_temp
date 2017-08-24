@@ -100,8 +100,7 @@ public class TrendingFeaturedVideoService extends Service {
                         arrayListVideos.addAll(AppController.getInstance().getServiceManager().
                                 getVaultService().getNewVideoData(videoUrl));
 
-                        VaultDatabaseHelper.getInstance(getApplicationContext()).
-                                insertVideosInDatabase(arrayListVideos);
+                        VaultDatabaseHelper.getInstance(getApplicationContext()).insertVideosInDatabase(arrayListVideos);
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -117,7 +116,6 @@ public class TrendingFeaturedVideoService extends Service {
 
                     VaultDatabaseHelper.getInstance(getApplicationContext()).
                             insertPlaylistTabData(playlistDtoArrayList, catagoriesTabDao.getCategoriesId());
-
                 }
 
                 stopSelf();

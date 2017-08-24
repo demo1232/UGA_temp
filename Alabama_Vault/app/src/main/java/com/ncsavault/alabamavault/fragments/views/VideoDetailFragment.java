@@ -261,23 +261,14 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
 
     private void getVideoDataFromDataBase(final long playlistId) {
 
-
-
-
-
-
-
         final AsyncTask<Void, Void, ArrayList<VideoDTO>> mDbTask = new AsyncTask<Void, Void, ArrayList<VideoDTO>>() {
 
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
                 if (progressBar != null) {
-                    if (videoDtoArrayList.size() == 0) {
                         progressBar.setVisibility(View.VISIBLE);
-                    } else {
-                        progressBar.setVisibility(View.GONE);
-                    }
+
                 }
             }
 

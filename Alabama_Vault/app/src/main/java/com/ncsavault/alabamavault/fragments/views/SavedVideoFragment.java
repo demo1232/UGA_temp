@@ -330,19 +330,19 @@ public class SavedVideoFragment extends Fragment implements SavedVideoAdapter.Sa
             @Override
             public void onClick(View v) {
 
-                if (favoriteVideoList.get(pos).isVideoIsFavorite() && ((favoriteVideoList.get(pos)
-                        .getVideoLongUrl().length() == 0 || favoriteVideoList.get(pos).getVideoLongUrl()
-                        .toLowerCase().equals("none")))) {
-                    markFavoriteStatus(viewHolder,pos);
-                } else {
-                    if (favoriteVideoList.get(pos).getVideoLongUrl().length() > 0 && !favoriteVideoList
-                            .get(pos).getVideoLongUrl().toLowerCase().equals("none")) {
-                        markFavoriteStatus(viewHolder,pos);
-                    } else {
-                        //gk ((MainActivity) context).showToastMessage(GlobalConstants.MSG_NO_INFO_AVAILABLE);
-                        viewHolder.savedVideoImageView.setImageResource(R.drawable.video_save);
-                    }
-                }
+//                if (favoriteVideoList.get(pos).isVideoIsFavorite() && ((favoriteVideoList.get(pos)
+//                        .getVideoLongUrl().length() == 0 || favoriteVideoList.get(pos).getVideoLongUrl()
+//                        .toLowerCase().equals("none")))) {
+//                    markFavoriteStatus(viewHolder,pos);
+//                } else {
+//                    if (favoriteVideoList.get(pos).getVideoLongUrl().length() > 0 && !favoriteVideoList
+//                            .get(pos).getVideoLongUrl().toLowerCase().equals("none")) {
+//                        markFavoriteStatus(viewHolder,pos);
+//                    } else {
+//                        //gk ((MainActivity) context).showToastMessage(GlobalConstants.MSG_NO_INFO_AVAILABLE);
+//                        viewHolder.savedVideoImageView.setImageResource(R.drawable.video_save);
+//                    }
+//                }
 
                 savedVideoAdapter.notifyDataSetChanged();
             }

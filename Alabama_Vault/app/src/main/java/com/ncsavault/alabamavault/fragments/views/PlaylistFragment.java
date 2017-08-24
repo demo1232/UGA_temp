@@ -2,8 +2,10 @@ package com.ncsavault.alabamavault.fragments.views;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -38,6 +40,7 @@ import com.ncsavault.alabamavault.R;
 import com.ncsavault.alabamavault.adapters.CatagoriesAdapter;
 import com.ncsavault.alabamavault.adapters.FilterSubtypesAdapter;
 import com.ncsavault.alabamavault.adapters.PlaylistDataAdapter;
+import com.ncsavault.alabamavault.adapters.VideoDetailAdapter;
 import com.ncsavault.alabamavault.controllers.AppController;
 import com.ncsavault.alabamavault.customviews.RecyclerViewDisabler;
 import com.ncsavault.alabamavault.database.VaultDatabaseHelper;
@@ -88,6 +91,7 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
     private PullRefreshLayout refreshLayout;
     PullRefreshTask pullTask;
     RecyclerView.OnItemTouchListener disable;
+    PlaylistResponseReceiver receiver;
 
     public static Fragment newInstance(Context context, long tabId) {
         Fragment playlistFragment = new PlaylistFragment();
@@ -100,8 +104,21 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
 
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        IntentFilter filter = new IntentFilter(PlaylistResponseReceiver.ACTION_RESP);
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        receiver = new PlaylistResponseReceiver();
+        mContext.registerReceiver(receiver, filter);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(receiver != null)
+        {
+            mContext.unregisterReceiver(receiver);
+        }
     }
 
     @Override
@@ -430,11 +447,8 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
             protected void onPreExecute() {
                 super.onPreExecute();
                 if (progressBar != null) {
-                    if (playlistDtoDataList.size() == 0) {
-                        progressBar.setVisibility(View.VISIBLE);
-                    } else {
-                        progressBar.setVisibility(View.GONE);
-                    }
+                     progressBar.setVisibility(View.VISIBLE);
+
                 }
             }
 
@@ -512,50 +526,75 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
     }
 
     private void getPlaylistDateFromDatabase() {
-        //if(playlistDtoDataList.size()>0) {
-        playlistDtoDataList.clear();
-        playlistDtoDataList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext())
-                .getLocalPlaylistDataByCategorieTab(tabId));
 
-//        playlistDtoDataList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext())
-//                .getAllLocalPlaylistTabData());
+        final AsyncTask<Void, Void, ArrayList<PlaylistDto>> mDbTask = new AsyncTask<Void, Void, ArrayList<PlaylistDto>>() {
 
-//        if(mCatagoriesAdapter != null)
-//        {
-//            mCatagoriesAdapter.notifyDataSetChanged();
-//        }else
-//        {
-        for (int j = 0; j < playlistDtoDataList.size(); j++) {
-            if ((j + 1) % 5 == 0) {
-                String adUnitVault = getUnitId(playlistDtoDataList);
-                PlaylistDto playlistDto = new PlaylistDto();
-                playlistDto.setPlaylistName(adUnitVault);
-                playlistDtoDataList.add(j, playlistDto);
-            }
-        }
-
-        mAlbumsAdapter = new PlaylistDataAdapter(mContext, PlaylistFragment.this, playlistDtoDataList);
-        GridLayoutManager mLayoutManager = new GridLayoutManager(mContext, 2);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(1), true));
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setAdapter(mAlbumsAdapter);
-        mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
-            public int getSpanSize(int position) {
-                switch (mAlbumsAdapter.getItemViewType(position)) {
-                    case PlaylistDataAdapter.TYPE_LIST_DATA:
-                        return TOTAL_CELLS_PER_ROW;
-                    case PlaylistDataAdapter.TYPE_AD:
-                        return 2;
-                    default:
-                        return 2;
+            protected void onPreExecute() {
+                super.onPreExecute();
+                if (progressBar != null) {
+                    progressBar.setVisibility(View.VISIBLE);
                 }
             }
-        });
-//        }
+
+            @Override
+            protected ArrayList<PlaylistDto> doInBackground(Void... params) {
+
+                try {
+                    playlistDtoDataList.clear();
+                    playlistDtoDataList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext())
+                            .getLocalPlaylistDataByCategorieTab(tabId));
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return playlistDtoDataList;
+            }
+
+            @Override
+            protected void onPostExecute(ArrayList<PlaylistDto> result) {
+                super.onPostExecute(result);
+
+                if (progressBar != null) {
+                   progressBar.setVisibility(View.GONE);
+                }
+
+
+                for (int j = 0; j < playlistDtoDataList.size(); j++) {
+                    if ((j + 1) % 5 == 0) {
+                        String adUnitVault = getUnitId(playlistDtoDataList);
+                        PlaylistDto playlistDto = new PlaylistDto();
+                        playlistDto.setPlaylistName(adUnitVault);
+                        playlistDtoDataList.add(j, playlistDto);
+                    }
+                }
+
+                mAlbumsAdapter = new PlaylistDataAdapter(mContext, PlaylistFragment.this, playlistDtoDataList);
+                GridLayoutManager mLayoutManager = new GridLayoutManager(mContext, 2);
+                mRecyclerView.setLayoutManager(mLayoutManager);
+                mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(1), true));
+                mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                mRecyclerView.setAdapter(mAlbumsAdapter);
+                mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                    @Override
+                    public int getSpanSize(int position) {
+                        switch (mAlbumsAdapter.getItemViewType(position)) {
+                            case PlaylistDataAdapter.TYPE_LIST_DATA:
+                                return TOTAL_CELLS_PER_ROW;
+                            case PlaylistDataAdapter.TYPE_AD:
+                                return 2;
+                            default:
+                                return 2;
+                        }
+                    }
+                });
+
+            }
+        };
+
+        mDbTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
-    // }
 
     public void showBannerImage(final ImageView bannerCacheableImageView, TabBannerDTO tabBannerDTO) {
         if (tabBannerDTO != null)
@@ -721,6 +760,74 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
                 } else {
                     ((HomeScreen) mContext).showToastMessage(GlobalConstants.MSG_CONNECTION_TIMEOUT);
                     refreshLayout.setRefreshing(false);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public class PlaylistResponseReceiver extends BroadcastReceiver {
+
+        public static final String ACTION_RESP =
+                "Message Processed";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            try {
+                playlistDtoDataList.clear();
+                playlistDtoDataList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext())
+                        .getLocalPlaylistDataByCategorieTab(tabId));
+
+                try {
+                    if (playlistDtoDataList != null) {
+                        if (playlistDtoDataList.size() > 0) {
+                            for (int j = 0; j < playlistDtoDataList.size(); j++) {
+                                if ((j + 1) % 5 == 0) {
+                                    String adUnitVault = getUnitId(playlistDtoDataList);
+                                    PlaylistDto playlistDto = new PlaylistDto();
+                                    playlistDto.setPlaylistName(adUnitVault);
+                                    playlistDtoDataList.add(j, playlistDto);
+                                }
+                            }
+
+                            mAlbumsAdapter = new PlaylistDataAdapter(mContext, PlaylistFragment.this, playlistDtoDataList);
+                            GridLayoutManager mLayoutManager = new GridLayoutManager(mContext, 2);
+                            mRecyclerView.setLayoutManager(mLayoutManager);
+                            mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(1), true));
+                            mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                            mRecyclerView.setAdapter(mAlbumsAdapter);
+                            mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                                @Override
+                                public int getSpanSize(int position) {
+                                    switch (mAlbumsAdapter.getItemViewType(position)) {
+                                        case PlaylistDataAdapter.TYPE_LIST_DATA:
+                                            return TOTAL_CELLS_PER_ROW;
+                                        case PlaylistDataAdapter.TYPE_AD:
+                                            return 2;
+                                        default:
+                                            return 2;
+                                    }
+                                }
+                            });
+                            mRecyclerView.removeOnItemTouchListener(disable);
+                            refreshLayout.setRefreshing(false);
+                        }
+                        // ------- update BannerImage---------------------
+                                tabBannerDTO = VaultDatabaseHelper.getInstance(mContext.getApplicationContext())
+                                        .getLocalTabBannerDataByTabId(tabBannerDTO.getTabId());
+                                if (tabBannerDTO != null)
+                                    showBannerImage(bannerImageView, tabBannerDTO);
+
+                    } else {
+                        ((HomeScreen) mContext).showToastMessage(GlobalConstants.MSG_CONNECTION_TIMEOUT);
+                        refreshLayout.setRefreshing(false);
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
             } catch (Exception e) {

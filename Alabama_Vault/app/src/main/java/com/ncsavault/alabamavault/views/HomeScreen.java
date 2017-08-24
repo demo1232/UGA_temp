@@ -220,10 +220,11 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
         @Override
         protected Void doInBackground(Void... params) {
             ArrayList<TabBannerDTO> arrayListBanner = new ArrayList<TabBannerDTO>();
-            Intent broadCastIntent = new Intent();
+
             try {
                 arrayListBanner.addAll(AppController.getInstance().getServiceManager().getVaultService().getAllTabBannerData());
                 File imageFile;
+                String url = "";
                 for (TabBannerDTO bDTO : arrayListBanner) {
                     TabBannerDTO localBannerData = VaultDatabaseHelper.getInstance(getApplicationContext())
                             .getLocalTabBannerDataByTabId(bDTO.getTabId());
@@ -239,7 +240,7 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
                         if (localBannerData.getTabDataModified() != bDTO.getTabDataModified()) {
                             VaultDatabaseHelper.getInstance(getApplicationContext()).updateTabData(bDTO);
 
-                            String url = GlobalConstants.FEATURED_API_URL + "userId=" + AppController.getInstance().
+                            url  = GlobalConstants.FEATURED_API_URL + "userId=" + AppController.getInstance().
                                     getModelFacade().getLocalModel().getUserId();
                             try {
                                 arrayListFeatured.clear();
@@ -248,7 +249,8 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            VaultDatabaseHelper.getInstance(getApplicationContext()).insertVideosInDatabase(arrayListVideos);
+
+                            VaultDatabaseHelper.getInstance(getApplicationContext()).insertVideosInDatabase(arrayListFeatured);
 
                             url = GlobalConstants.GET_TRENDING_PLAYLIST_URL + "userId=" + AppController.getInstance().
                                     getModelFacade().getLocalModel().getUserId();
@@ -265,7 +267,6 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
                             }
                             MemoryCacheUtils.removeFromCache(localBannerData.getBannerURL(),
                                     ImageLoader.getInstance().getMemoryCache());
-                            broadCastIntent.addCategory(Intent.CATEGORY_DEFAULT);
                             arrayListVideos.clear();
                         }
 
@@ -274,9 +275,7 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
                     }
                 }
 
-                broadCastIntent.setAction(HomeFragment.HomeResponseReceiver.ACTION_RESP);
-                broadCastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-                sendBroadcast(broadCastIntent);
+
 
                 SharedPreferences pref = AppController.getInstance().getApplicationContext().
                         getSharedPreferences(GlobalConstants.PREF_PACKAGE_NAME, Context.MODE_PRIVATE);
@@ -307,7 +306,6 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
                                         insertVideosInDatabase(arrayListVideos);
 
 
-
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -316,12 +314,18 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
 
                     }
 
-                    String url = GlobalConstants.CATEGORIES_PLAYLIST_URL + "userid=" + userId + "&nav_tab_id="
+                }
+
+
+
+                for (CatagoriesTabDao catagoriesTabDao : catagoriesListData) {
+
+                    String playlistUrl = GlobalConstants.CATEGORIES_PLAYLIST_URL + "userid=" + userId + "&nav_tab_id="
                             + catagoriesTabDao.getCategoriesId();
 
                     playlistDtoArrayList.clear();
                     playlistDtoArrayList.addAll(AppController.getInstance().getServiceManager().
-                            getVaultService().getPlaylistData(url));
+                            getVaultService().getPlaylistData(playlistUrl));
 
                     for (PlaylistDto playlistDto : playlistDtoArrayList) {
                         PlaylistDto localPlaylistDto = VaultDatabaseHelper.getInstance(getApplicationContext())
@@ -338,10 +342,7 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
                     }
                 }
 
-                Intent videoIntent = new Intent();
-                broadCastIntent.setAction(VideoDetailFragment.VideoResponseReceiver.ACTION_RESP);
-                broadCastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-                sendBroadcast(videoIntent);
+
 
 
             } catch (Exception e) {
@@ -357,6 +358,21 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
             if (autoRefreshProgressBar != null) {
                 autoRefreshProgressBar.setVisibility(View.GONE);
             }
+            Intent broadCastIntent = new Intent();
+            broadCastIntent.setAction(HomeFragment.HomeResponseReceiver.ACTION_RESP);
+            broadCastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+            sendBroadcast(broadCastIntent);
+
+            Intent videoIntent = new Intent();
+            videoIntent.setAction(VideoDetailFragment.VideoResponseReceiver.ACTION_RESP);
+            videoIntent.addCategory(Intent.CATEGORY_DEFAULT);
+            sendBroadcast(videoIntent);
+
+            Intent playlistIntent = new Intent();
+            playlistIntent.setAction(PlaylistFragment.PlaylistResponseReceiver.ACTION_RESP);
+            playlistIntent.addCategory(Intent.CATEGORY_DEFAULT);
+            sendBroadcast(playlistIntent);
+
             autoRefreshHandler.postDelayed(autoRefreshRunnable, GlobalConstants.AUTO_REFRESH_INTERVAL);
 
         }

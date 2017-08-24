@@ -132,6 +132,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
     private LinearLayout loginViewLayout;
     private Button loginButton;
     private TextView mContactSupportView;
+    private LinearLayout resetButtonLayout;
 
     public static Fragment newInstance(Context context, int centerX, int centerY) {
         mContext = context;
@@ -171,7 +172,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
         mFacebookEmailId = (TextView) view.findViewById(R.id.facebook_email_id);
         mPushNotification = (TextView) view.findViewById(R.id.tv_push_view);
         mContactSupportView  = (TextView) view.findViewById(R.id.tv_support);
-
+        resetButtonLayout = (LinearLayout) view.findViewById(R.id.linear4);
         setToolbarIcons();
         ((HomeScreen) getActivity()).textViewEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -814,14 +815,11 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                     edFirstName.setText(responseUser.getFname());
                     edLastName.setText(responseUser.getLname());
 
-                    if (!responseUser.getFlagStatus().toLowerCase().equals("vt")) {
-                        //tvChangePassword.setVisibility(View.GONE);
-//                        tvEditHeader.setVisibility(View.GONE);
-//                        edBio.setVisibility(View.GONE);
+                    if (responseUser.getFlagStatus().toLowerCase().equals("vt")) {
+                        resetButtonLayout.setVisibility(View.VISIBLE);
+
                     } else {
-                        // tvEditHeader.setVisibility(View.VISIBLE);
-//                        tvEditHeader.setVisibility(View.VISIBLE);
-//                        edBio.setVisibility(View.VISIBLE);
+                        resetButtonLayout.setVisibility(View.GONE);
                     }
 
                     if (responseUser.getImageurl().length() > 0) {
@@ -999,10 +997,11 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                             edFirstName.setText(responseUser.getFname());
                             edLastName.setText(responseUser.getLname());
 
-                            if (!responseUser.getFlagStatus().toLowerCase().equals("vt")) {
+                            if (responseUser.getFlagStatus().toLowerCase().equals("vt")) {
+                                resetButtonLayout.setVisibility(View.VISIBLE);
 
                             } else {
-
+                                resetButtonLayout.setVisibility(View.GONE);
                             }
 
                             if (responseUser.getImageurl().length() > 0) {

@@ -466,7 +466,11 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
             public void onClick(View v) {
                 isSocialUser = false;
                 Utils.getInstance().gethideKeyboard(LoginEmailActivity.this);
-
+                if(edPassword != null) {
+                    String oldPass = edPassword.getText().toString().trim();
+                    oldPass = oldPass.replace(" ", "");
+                    edPassword.setText(oldPass);
+                }
                 checkEmailAndProceed();
 
 
@@ -499,6 +503,9 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
         createNewAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!edEmailBox.getText().toString().isEmpty()) {
+                    edEmailBox.setText("");
+                }
                 AppController.getInstance().handleEvent(AppDefines.EVENT_ID_UPLOAD_PHOTO_SCREEN);
                 overridePendingTransition(R.anim.rightin, R.anim.leftout);
             }

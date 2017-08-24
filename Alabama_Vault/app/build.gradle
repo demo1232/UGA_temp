@@ -81,10 +81,11 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    //    compile 'com.facebook.android:facebook-android-sdk:4.1.0'
+    compile 'com.facebook.android:facebook-android-sdk:4.1.0'
     compile('com.twitter.sdk.android:twitter:2.3.2@aar') {
         transitive = true;
     }
+
     compile files('libs/universal-image-loader-1.9.3.jar')
     compile files('libs/AF-Android-SDK-v2.3.1.19.jar')
     compile files('libs/FlurryAnalytics-6.1.0.jar')

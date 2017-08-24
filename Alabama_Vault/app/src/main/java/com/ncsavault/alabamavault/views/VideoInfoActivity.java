@@ -388,12 +388,12 @@ public class VideoInfoActivity extends PermissionActivity implements VideoPlayer
     protected void onPause() {
         super.onPause();
         try {
-            if (videoView != null) {
-                videoView.onPause();
-//                if (videoView != null) {
-//                    videoCurrentPostion = videoView.getPosition();
-//                }
-            }
+//            if (videoView != null) {
+//                videoView.onPause();
+////                if (videoView != null) {
+////                    videoCurrentPostion = videoView.getPosition();
+////                }
+//            }
             if (linearLayout != null && linearLayout.getVisibility() == View.VISIBLE) {
                 linearLayout.setVisibility(View.GONE);
             }
@@ -409,9 +409,9 @@ public class VideoInfoActivity extends PermissionActivity implements VideoPlayer
     protected void onResume() {
         super.onResume();
         try {
-            if (videoView != null) {
-                videoView.onResume();
-            }
+//            if (videoView != null) {
+//                videoView.onResume();
+//            }
 
             boolean installedFbApp = checkIfAppInstalled("com.facebook.katana");
             boolean installedTwitterApp = checkIfAppInstalled("com.twitter.android");

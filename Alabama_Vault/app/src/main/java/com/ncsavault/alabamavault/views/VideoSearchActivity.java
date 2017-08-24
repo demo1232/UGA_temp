@@ -408,8 +408,8 @@ public class VideoSearchActivity extends AppCompatActivity implements VideoSearc
 //                        prefs.edit().putBoolean(GlobalConstants.PREF_PULL_OPTION_HEADER, false).commit();
 
                         Intent intent = new Intent(mContext, LoginEmailActivity.class);
-                        mContext.startActivity(intent);
-                        ((HomeScreen) mContext).finish();
+                        startActivity(intent);
+                        finish();
 //                        context.finish();
                     }
                 });

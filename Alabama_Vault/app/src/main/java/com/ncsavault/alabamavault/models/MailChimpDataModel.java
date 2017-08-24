@@ -75,7 +75,7 @@ public class MailChimpDataModel extends BaseModel {
             } catch (XMLRPCException e) {
                 e.printStackTrace();
                 mIsSignUpSuccessfull = false;
-
+                informViews();
                 return mIsSignUpSuccessfull;
             }
         } catch (MailChimpApiException e) {
@@ -83,6 +83,7 @@ public class MailChimpDataModel extends BaseModel {
             e.getMessage();
 
             mIsSignUpSuccessfull = false;
+            informViews();
             return mIsSignUpSuccessfull;
         }
         informViews();

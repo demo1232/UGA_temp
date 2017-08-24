@@ -155,7 +155,13 @@ public class ChangePasswordActivity extends BaseActivity implements TextWatcher,
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    if(edOldPassword != null) {
+                        String oldPass = edOldPassword.getText().toString().trim();
+                        oldPass = oldPass.replace(" ", "");
+                        edOldPassword.setText(oldPass);
+                    }
                     if (!isValidPass(edOldPassword.getText().toString(), edOldPassword, "Old Password"))
+
                         return true;
                 }
                 return false;
@@ -166,6 +172,11 @@ public class ChangePasswordActivity extends BaseActivity implements TextWatcher,
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    if(edNewPassword != null) {
+                        String oldPass = edNewPassword.getText().toString().trim();
+                        oldPass = oldPass.replace(" ", "");
+                        edNewPassword.setText(oldPass);
+                    }
                     if (!isValidPass(edNewPassword.getText().toString(), edNewPassword, "New Password"))
                         return true;
                 }
@@ -177,6 +188,11 @@ public class ChangePasswordActivity extends BaseActivity implements TextWatcher,
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_GO) {
+                    if(edConfirmPassword != null) {
+                        String oldPass = edConfirmPassword.getText().toString().trim();
+                        oldPass = oldPass.replace(" ", "");
+                        edConfirmPassword.setText(oldPass);
+                    }
                     if (!isValidPass(edConfirmPassword.getText().toString(), edConfirmPassword, "Confirm Password"))
                         return true;
                     else {
@@ -390,6 +406,7 @@ public class ChangePasswordActivity extends BaseActivity implements TextWatcher,
 
     private boolean isValidPass(String str, EditText edCheck, String fieldName) {
         if (str != null && str.length() >= 6) {
+            str.trim();
             return true;
         } else {
             if (str.length() == 0)
@@ -429,6 +446,8 @@ public class ChangePasswordActivity extends BaseActivity implements TextWatcher,
         pDialog.setCancelable(false);
         oldPassword = edOldPassword.getText().toString();
         newPassword = edNewPassword.getText().toString();
+
+
 
         if (mChangePasswordModel != null) {
             mChangePasswordModel.unRegisterView(this);

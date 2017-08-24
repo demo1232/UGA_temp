@@ -590,7 +590,6 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
                 if (VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getTrendingVideoCount() > 0) {
                     trendingArraylist.clear();
                     trendingArraylist.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getAllTrendingVideoList());
-
                 }
 
                 if (progressBar != null) {
@@ -666,7 +665,7 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
                                 getVideoList(GlobalConstants.OKF_FEATURED));
 
                     }
-                    
+
                     if (VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getTrendingVideoCount() > 0) {
                         trendingArraylist.clear();
                         trendingArraylist.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getAllTrendingVideoList());

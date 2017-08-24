@@ -376,10 +376,13 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
 
     public VideoDTO getVideoDtoByPlaylistId(long playlist) {
         try {
+            System.out.println("getVideoDtoByPlaylistId");
             SQLiteDatabase database = this.getReadableDatabase();
             database.enableWriteAheadLogging();
             String query = "SELECT * FROM " + VideoTable.VIDEO_TABLE
-                    + " WHERE " + VideoTable.KEY_PLAYLIST_ID  + " = " + playlist ;
+                    + " WHERE " + VideoTable.KEY_PLAYLIST_ID  + " = " + playlist +
+                    " GROUP BY " + VideoTable.KEY_PLAYLIST_ID + "," + VideoTable.KEY_VIDEO_ID + " ORDER BY " +
+                    VideoTable.KEY_VIDEO_NAME + " COLLATE NOCASE " + " ASC ";;;
 
             Cursor cursor = database.rawQuery(query, null);
             VideoDTO videoDTO = null;
@@ -426,7 +429,9 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<VideoDTO> getAllVideoList() {
-        String selectOKFQuery = "SELECT * FROM " + VideoTable.VIDEO_TABLE;
+        String selectOKFQuery = "SELECT * FROM " + VideoTable.VIDEO_TABLE +
+                " GROUP BY " + VideoTable.KEY_PLAYLIST_ID + "," + VideoTable.KEY_VIDEO_ID + " ORDER BY " +
+                VideoTable.KEY_VIDEO_NAME + " COLLATE NOCASE " + " ASC ";;
         try {
             ArrayList<VideoDTO> videoDTOsArrayList = new ArrayList<VideoDTO>();
             SQLiteDatabase database = this.getReadableDatabase();
@@ -478,7 +483,9 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
 
     public ArrayList<VideoDTO> getVideoList(String referenceId) {
         String selectOKFQuery = "SELECT * FROM " + VideoTable.VIDEO_TABLE
-                + " WHERE " + VideoTable.KEY_PLAYLIST_REFERENCE_ID + " LIKE '" + referenceId + "%'" + " GROUP BY " + VideoTable.KEY_PLAYLIST_ID + "," + VideoTable.KEY_VIDEO_ID + " ORDER BY " + VideoTable.KEY_VIDEO_NAME + " COLLATE NOCASE " + " ASC ";
+                + " WHERE " + VideoTable.KEY_PLAYLIST_REFERENCE_ID + " LIKE '" + referenceId + "%'" +
+                " GROUP BY " + VideoTable.KEY_PLAYLIST_ID + "," + VideoTable.KEY_VIDEO_ID + " ORDER BY " +
+                VideoTable.KEY_VIDEO_NAME + " COLLATE NOCASE " + " ASC ";
         try {
             ArrayList<VideoDTO> videoDTOsArrayList = new ArrayList<VideoDTO>();
             SQLiteDatabase database = this.getReadableDatabase();
@@ -529,8 +536,15 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<VideoDTO> getVideoDataByPlaylistId(long playlistId) {
+
+        System.out.println("getVideoDataByPlaylistId");
+//        String selectOKFQuery = "SELECT * FROM " + VideoTable.VIDEO_TABLE
+//                + " WHERE " + VideoTable.KEY_PLAYLIST_ID  + " = " + playlistId ;
+
         String selectOKFQuery = "SELECT * FROM " + VideoTable.VIDEO_TABLE
-                + " WHERE " + VideoTable.KEY_PLAYLIST_ID  + " = " + playlistId ;
+                + " WHERE " + VideoTable.KEY_PLAYLIST_ID + " LIKE '" + playlistId + "%'" +
+                " GROUP BY " + VideoTable.KEY_PLAYLIST_ID + "," + VideoTable.KEY_VIDEO_ID + " ORDER BY " +
+                VideoTable.KEY_VIDEO_NAME + " COLLATE NOCASE " + " ASC ";
         try {
 
             ArrayList<VideoDTO> videoDTOsArrayList = new ArrayList<VideoDTO>();
@@ -775,10 +789,9 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
      * not----------
      *
      * @param videoId
-     * @param playlistRefernceId
      * @return
      */
-    public boolean isVideoAvailableInDB(long videoId, String playlistRefernceId) {
+    public boolean isVideoAvailableInDB(long videoId) {
         // TODO Auto-generated method stub
         int count = 0;
         SQLiteDatabase database = this.getReadableDatabase();
@@ -1026,7 +1039,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
             ContentValues initialValues;
             for (VideoDTO videoDTO : listVideos) {
                 //if video is not available in database, execute INSERT
-                if (!isVideoAvailableInDB(videoDTO.getVideoId(), videoDTO.getPlaylistReferenceId())) {
+//                if (!isVideoAvailableInDB(videoDTO.getVideoId())) {
                     if (videoDTO.getVideoShortDescription() != null && videoDTO.getVideoName() != null) {
                         initialValues = new ContentValues();
                         initialValues.put(VideoTable.KEY_VIDEO_ID, videoDTO.getVideoId());
@@ -1061,40 +1074,42 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
 
                         checkVideoAvailabilityInOtherPlaylistAndUpdate(videoDTO);
                     }
-                } else {      // Perform UPDATE query on available record
-                    ContentValues updateExistingVideo = new ContentValues();
-                    updateExistingVideo.put(VideoTable.KEY_VIDEO_ID, videoDTO.getVideoId());
-                    updateExistingVideo.put(VideoTable.KEY_VIDEO_NAME, videoDTO.getVideoName());
-                    updateExistingVideo.put(VideoTable.KEY_VIDEO_SHORT_DESC, videoDTO.getVideoShortDescription());
-                    updateExistingVideo.put(VideoTable.KEY_VIDEO_LONG_DESC, videoDTO.getVideoLongDescription());
-                    updateExistingVideo.put(VideoTable.KEY_VIDEO_SHORT_URL, videoDTO.getVideoShortUrl());
-                    updateExistingVideo.put(VideoTable.KEY_VIDEO_LONG_URL, videoDTO.getVideoLongUrl());
-                    updateExistingVideo.put(VideoTable.KEY_VIDEO_THUMB_URL, videoDTO.getVideoThumbnailUrl());
-                    updateExistingVideo.put(VideoTable.KEY_VIDEO_STILL_URL, videoDTO.getVideoStillUrl());
-                    updateExistingVideo.put(VideoTable.KEY_VIDEO_COVER_URL, videoDTO.getVideoCoverUrl());
-                    updateExistingVideo.put(VideoTable.KEY_VIDEO_WIDE_STILL_URL, videoDTO.getVideoWideStillUrl());
-                    updateExistingVideo.put(VideoTable.KEY_VIDEO_BADGE_URL, videoDTO.getVideoBadgeUrl());
-                    updateExistingVideo.put(VideoTable.KEY_VIDEO_DURATION, videoDTO.getVideoDuration());
-                    updateExistingVideo.put(VideoTable.KEY_VIDEO_TAGS, videoDTO.getVideoTags());
-                    if (videoDTO.isVideoIsFavorite())
-                        updateExistingVideo.put(VideoTable.KEY_VIDEO_IS_FAVORITE, 1);
-                    else
-                        updateExistingVideo.put(VideoTable.KEY_VIDEO_IS_FAVORITE, 0);
-                    updateExistingVideo.put(VideoTable.KEY_VIDEO_INDEX, videoDTO.getVideoIndex());
-
-                    updateExistingVideo.put(VideoTable.KEY_PLAYLIST_NAME, videoDTO.getPlaylistName());
-                    updateExistingVideo.put(VideoTable.KEY_PLAYLIST_ID, videoDTO.getPlaylistId());
-                    updateExistingVideo.put(VideoTable.KEY_PLAYLIST_THUMB_URL, videoDTO.getPlaylistThumbnailUrl());
-                    updateExistingVideo.put(VideoTable.KEY_PLAYLIST_SHORT_DESC, videoDTO.getPlaylistShortDescription());
-                    updateExistingVideo.put(VideoTable.KEY_PLAYLIST_LONG_DESC, videoDTO.getPlaylistLongDescription());
-                    updateExistingVideo.put(VideoTable.KEY_PLAYLIST_TAGS, videoDTO.getPlaylistTags());
-                    updateExistingVideo.put(VideoTable.KEY_PLAYLIST_ID, videoDTO.getPlaylistId());
-                    updateExistingVideo.put(VideoTable.KEY_VIDEO_SOCIAL_URL, videoDTO.getVideoSocialUrl());
-                    updateExistingVideo.put(VideoTable.KEY_VIDEO_MODIFIED,videoDTO.getVedioList_modified());
-
-                    database.update(VideoTable.VIDEO_TABLE, updateExistingVideo, VideoTable.KEY_VIDEO_ID + "=?", new String[]{"" + videoDTO.getVideoId()});
-                    checkVideoAvailabilityInOtherPlaylistAndUpdate(videoDTO);
-                }
+//                }
+//                else {      // Perform UPDATE query on available record
+//                    ContentValues updateExistingVideo = new ContentValues();
+//                    updateExistingVideo.put(VideoTable.KEY_VIDEO_ID, videoDTO.getVideoId());
+//                    updateExistingVideo.put(VideoTable.KEY_VIDEO_NAME, videoDTO.getVideoName());
+//                    updateExistingVideo.put(VideoTable.KEY_VIDEO_SHORT_DESC, videoDTO.getVideoShortDescription());
+//                    updateExistingVideo.put(VideoTable.KEY_VIDEO_LONG_DESC, videoDTO.getVideoLongDescription());
+//                    updateExistingVideo.put(VideoTable.KEY_VIDEO_SHORT_URL, videoDTO.getVideoShortUrl());
+//                    updateExistingVideo.put(VideoTable.KEY_VIDEO_LONG_URL, videoDTO.getVideoLongUrl());
+//                    updateExistingVideo.put(VideoTable.KEY_VIDEO_THUMB_URL, videoDTO.getVideoThumbnailUrl());
+//                    updateExistingVideo.put(VideoTable.KEY_VIDEO_STILL_URL, videoDTO.getVideoStillUrl());
+//                    updateExistingVideo.put(VideoTable.KEY_VIDEO_COVER_URL, videoDTO.getVideoCoverUrl());
+//                    updateExistingVideo.put(VideoTable.KEY_VIDEO_WIDE_STILL_URL, videoDTO.getVideoWideStillUrl());
+//                    updateExistingVideo.put(VideoTable.KEY_VIDEO_BADGE_URL, videoDTO.getVideoBadgeUrl());
+//                    updateExistingVideo.put(VideoTable.KEY_VIDEO_DURATION, videoDTO.getVideoDuration());
+//                    updateExistingVideo.put(VideoTable.KEY_VIDEO_TAGS, videoDTO.getVideoTags());
+//                    if (videoDTO.isVideoIsFavorite())
+//                        updateExistingVideo.put(VideoTable.KEY_VIDEO_IS_FAVORITE, 1);
+//                    else
+//                        updateExistingVideo.put(VideoTable.KEY_VIDEO_IS_FAVORITE, 0);
+//                    updateExistingVideo.put(VideoTable.KEY_VIDEO_INDEX, videoDTO.getVideoIndex());
+//
+//                    updateExistingVideo.put(VideoTable.KEY_PLAYLIST_NAME, videoDTO.getPlaylistName());
+//                    updateExistingVideo.put(VideoTable.KEY_PLAYLIST_ID, videoDTO.getPlaylistId());
+//                    updateExistingVideo.put(VideoTable.KEY_PLAYLIST_THUMB_URL, videoDTO.getPlaylistThumbnailUrl());
+//                    updateExistingVideo.put(VideoTable.KEY_PLAYLIST_SHORT_DESC, videoDTO.getPlaylistShortDescription());
+//                    updateExistingVideo.put(VideoTable.KEY_PLAYLIST_LONG_DESC, videoDTO.getPlaylistLongDescription());
+//                    updateExistingVideo.put(VideoTable.KEY_PLAYLIST_TAGS, videoDTO.getPlaylistTags());
+//                    updateExistingVideo.put(VideoTable.KEY_PLAYLIST_REFERENCE_ID, videoDTO.getPlaylistReferenceId());
+//                    updateExistingVideo.put(VideoTable.KEY_VIDEO_SOCIAL_URL, videoDTO.getVideoSocialUrl());
+//                    updateExistingVideo.put(VideoTable.KEY_VIDEO_MODIFIED,videoDTO.getVedioList_modified());
+//
+//                    database.update(VideoTable.VIDEO_TABLE, updateExistingVideo, VideoTable.KEY_VIDEO_ID + "=?",
+//                            new String[]{"" + String.valueOf(videoDTO.getVideoId())});
+//                    checkVideoAvailabilityInOtherPlaylistAndUpdate(videoDTO);
+//                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1159,7 +1174,8 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
                         updateExistingVideo.put(VideoTable.KEY_VIDEO_IS_FAVORITE, 0);
 //                                updateExistingVideo.put(VideoTable.KEY_VIDEO_INDEX, videoDTO.getVideoIndex());
                     updateExistingVideo.put(VideoTable.KEY_VIDEO_MODIFIED,videoDTO.getVedioList_modified());
-                    database.update(VideoTable.VIDEO_TABLE, updateExistingVideo, VideoTable.KEY_VIDEO_ID + "=?", new String[]{"" + videoDTO.getVideoId()});
+                    database.update(VideoTable.VIDEO_TABLE, updateExistingVideo, VideoTable.KEY_VIDEO_ID + "=?",
+                            new String[]{"" + videoDTO.getVideoId()});
                 }
             }
         } catch (Exception e) {

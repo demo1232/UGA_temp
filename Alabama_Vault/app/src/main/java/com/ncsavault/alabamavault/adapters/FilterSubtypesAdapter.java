@@ -531,7 +531,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         if (Utils.isInternetAvailable(mContext)) {
             if (AppController.getInstance().getModelFacade().getLocalModel().getUserId() ==
                     GlobalConstants.DEFAULT_USER_ID) {
-                viewHolder.savedImage.setBackgroundResource(R.drawable.video_save);
+                viewHolder.savedImage.setImageResource(R.drawable.video_save);
                 showConfirmLoginDialog(GlobalConstants.LOGIN_MESSAGE);
             } else {
                 System.out.println("favorite position : " + pos);

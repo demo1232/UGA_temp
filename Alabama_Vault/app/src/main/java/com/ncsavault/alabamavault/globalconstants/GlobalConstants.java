@@ -239,7 +239,7 @@ public class GlobalConstants {
     private static final int MINUTE = 60 * SECOND;
     private static final int HOUR = 60 * MINUTE;
     private static final int DAY = 24 * HOUR;
-    public static final int AUTO_REFRESH_INTERVAL = SECOND*30;//HOUR *2;
+    public static final int AUTO_REFRESH_INTERVAL = MINUTE*30;//HOUR *2;
 
     public static final String VAULT_PERMISSION = "Allow ALABAMA Vault to access photos,media,files and location on your device. Please go to app settings and allow permissions.";
     public static final String VAULT_RWAD_PHONE_STATE_PERMISSION = "Allow ALABAMA Vault to access read phone state on your device. Please go to app settings and allow permission.";
