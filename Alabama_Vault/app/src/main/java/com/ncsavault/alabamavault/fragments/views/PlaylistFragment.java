@@ -324,7 +324,7 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
                 VideoDetailFragment videoFragment = (VideoDetailFragment) VideoDetailFragment.newInstance(mContext, playlistId);
                 FragmentManager manager = ((HomeScreen) mContext).getSupportFragmentManager();
                 FragmentTransaction transaction = manager.beginTransaction();
-                transaction.replace(R.id.container, videoFragment);
+                transaction.replace(R.id.container, videoFragment, videoFragment.getClass().getName());
                 transaction.addToBackStack(videoFragment.getClass().getName());
                 transaction.commit();
             }

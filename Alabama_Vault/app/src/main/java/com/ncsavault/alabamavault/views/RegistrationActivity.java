@@ -794,10 +794,10 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
                         Utils.getInstance().showToastMessage(RegistrationActivity.this, GlobalConstants.FIRST_NAME_CAN_NOT_EMPTY, view);
                         //return true ;
 
-                    } else if (mFirstName.getText().toString().length() < 3) {
+                    } /*else if (mFirstName.getText().toString().length() < 3) {
                         Utils.getInstance().showToastMessage(RegistrationActivity.this,
                                 GlobalConstants.FIRST_NAME_SHOULD_CONTAIN_THREE_CHARACTER, view);
-                    }
+                    }*/
 
                     if (mFirstName.getText().toString().length() > 0) {
                         String firstName = mFirstName.getText().toString().trim().substring(0, 1).toUpperCase() + mFirstName.getText().toString().trim().substring(1);
@@ -820,9 +820,9 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
                         Utils.getInstance().showToastMessage(RegistrationActivity.this, GlobalConstants.LAST_NAME_CAN_NOT_EMPTY, view);
                         //return true ;
 
-                    } else if (mLastName.getText().toString().length() < 3) {
+                    } /*else if (mLastName.getText().toString().length() < 3) {
                         Utils.getInstance().showToastMessage(RegistrationActivity.this, GlobalConstants.LAST_NAME_SHOULD_CONTAIN_THREE_CHARACTER, view);
-                    }
+                    }*/
 
                     if (mLastName.getText().toString().length() > 0) {
                         String firstName = mLastName.getText().toString().trim().substring(0, 1).toUpperCase() +

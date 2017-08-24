@@ -227,7 +227,7 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
                 playlistFragment = (PlaylistFragment) PlaylistFragment.newInstance(mContext, tabPosition);
                 FragmentManager manager = ((HomeScreen) mContext).getSupportFragmentManager();
                 FragmentTransaction transaction = manager.beginTransaction();
-                transaction.replace(R.id.container, playlistFragment);
+                transaction.replace(R.id.container, playlistFragment, playlistFragment.getClass().getName());
                 transaction.addToBackStack(playlistFragment.getClass().getName());
                 transaction.commit();
             }

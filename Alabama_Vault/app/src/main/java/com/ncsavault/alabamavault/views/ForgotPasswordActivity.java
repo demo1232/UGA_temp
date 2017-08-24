@@ -324,12 +324,16 @@ public class ForgotPasswordActivity extends BaseActivity {
 
                             newPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT |
                                     InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+
+                            newPasswordEditText.setTypeface(newPasswordEditText.getTypeface(), Typeface.BOLD);
                             // Do stg
                             imageViewNewPassword.setImageResource(R.drawable.eyeoff);
                             imageViewNewPassword.setTag(R.drawable.eyeoff);
                         } else {
                             newPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT |
                                     InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
+                            newPasswordEditText.setTypeface(newPasswordEditText.getTypeface(), Typeface.BOLD);
                             imageViewNewPassword.setImageResource(R.drawable.eyeon);
                             imageViewNewPassword.setTag(R.drawable.eyeon);
                         }
@@ -348,6 +352,8 @@ public class ForgotPasswordActivity extends BaseActivity {
                             confirmPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT |
                                     InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
 
+                            confirmPasswordEditText.setTypeface(confirmPasswordEditText.getTypeface(), Typeface.BOLD);
+
                             imageViewConfirmPassword.setImageResource(R.drawable.eyeoff);
                             imageViewConfirmPassword.setTag(R.drawable.eyeoff);
 
@@ -358,6 +364,7 @@ public class ForgotPasswordActivity extends BaseActivity {
                             imageViewConfirmPassword.setTag(R.drawable.eyeon);
                         }
 
+                        confirmPasswordEditText.setTypeface(confirmPasswordEditText.getTypeface(), Typeface.BOLD);
                         confirmPasswordEditText.setSelection(cursor);
 
                         break;

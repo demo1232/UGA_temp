@@ -164,7 +164,7 @@
         android:layout_height="45dp"
         android:background="@drawable/rounded_border_edittext"
         android:ems="10"
-        android:hint="Birthdate"
+        android:hint="Birth Year"
         android:inputType="textPersonName"
         android:paddingLeft="20dp"
         android:textColor="@color/white"
