@@ -33,7 +33,7 @@
         android:id="@+id/recycler_view_search"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/container_toolbar"
+        android:layout_below="@+id/ll_toast"
         android:background="@color/LightGrey"
         android:scrollbars="vertical" />
 
@@ -48,11 +48,22 @@
         android:textColor="@color/black"
         android:textSize="20dp"/>
 
-    <include
-        android:id="@+id/llToast"
+    <LinearLayout
+        android:id="@+id/ll_toast"
+        android:layout_below="@+id/container_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/toast_layout"/>
+        android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/llToast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/toast_layout"/>
+
+
+    </LinearLayout>
+
+
 
 
 </RelativeLayout>

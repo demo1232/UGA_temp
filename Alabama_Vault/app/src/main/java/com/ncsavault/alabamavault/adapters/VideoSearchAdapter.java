@@ -97,6 +97,7 @@ public class VideoSearchAdapter extends RecyclerView.Adapter<VideoSearchAdapter.
                         @Override
                         public void onLoadingFailed(String s, View view, FailReason failReason) {
                             viewHolder.progressBar.setVisibility(View.GONE);
+                            viewHolder.videoImageView.setImageResource(R.drawable.vault_4);
                         }
 
                         @Override
@@ -107,6 +108,7 @@ public class VideoSearchAdapter extends RecyclerView.Adapter<VideoSearchAdapter.
                         @Override
                         public void onLoadingCancelled(String s, View view) {
                             viewHolder.progressBar.setVisibility(View.GONE);
+                            viewHolder.videoImageView.setImageResource(R.drawable.vault_4);
                         }
                     });
 
@@ -148,6 +150,7 @@ public class VideoSearchAdapter extends RecyclerView.Adapter<VideoSearchAdapter.
                         @Override
                         public void onLoadingFailed(String s, View view, FailReason failReason) {
                             viewHolder.progressBar.setVisibility(View.GONE);
+                            viewHolder.videoImageView.setImageResource(R.drawable.alabama_vault_logo);
                         }
 
                         @Override
@@ -158,6 +161,7 @@ public class VideoSearchAdapter extends RecyclerView.Adapter<VideoSearchAdapter.
                         @Override
                         public void onLoadingCancelled(String s, View view) {
                             viewHolder.progressBar.setVisibility(View.GONE);
+                            viewHolder.videoImageView.setImageResource(R.drawable.alabama_vault_logo);
                         }
                     });
 

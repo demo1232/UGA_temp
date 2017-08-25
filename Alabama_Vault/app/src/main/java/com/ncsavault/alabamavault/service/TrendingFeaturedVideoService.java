@@ -31,6 +31,7 @@ public class TrendingFeaturedVideoService extends Service {
     ArrayList<String> apiUrls = new ArrayList<>();
     ArrayList<PlaylistDto> playlistDtoArrayList = new ArrayList<>();
     ArrayList<VideoDTO> arrayListVideoData = new ArrayList<>();
+
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
         //apiUrls = intent.getStringArrayListExtra("apiUrls");
@@ -43,54 +44,55 @@ public class TrendingFeaturedVideoService extends Service {
             @Override
             public void run() {
 
-                String url = "";
-                for (String apiUrl : apiUrls) {
+                try {
 
-                    if (Utils.isInternetAvailable(AppController.getInstance().getApplicationContext())) {
+                    String url = "";
+                    for (String apiUrl : apiUrls) {
 
-                        url = apiUrl + "userid=" + AppController.getInstance().getModelFacade().getLocalModel().getUserId();
+                        if (Utils.isInternetAvailable(AppController.getInstance().getApplicationContext())) {
 
-                        try {
-                            System.out.println("Size of list after calling " + apiUrl + " : " + arrayListVideos.size());
-                            if(url.contains("Featured")) {
-                                arrayListVideos.addAll(AppController.getInstance().getServiceManager().getVaultService().getVideosListFromServer(url));
-                                VaultDatabaseHelper.getInstance(getApplicationContext()).insertVideosInDatabase(arrayListVideos);
-                            }else if(url.contains("TrendingPlayList")){
-                                arrayListVideos.addAll(AppController.getInstance().getServiceManager().getVaultService().getVideosListFromServer(url));
-                                VaultDatabaseHelper.getInstance(getApplicationContext()).insertTrendingVideosInDatabase(arrayListVideos);
+                            url = apiUrl + "userid=" + AppController.getInstance().getModelFacade().getLocalModel().getUserId();
+
+                            try {
+                                System.out.println("Size of list after calling " + apiUrl + " : " + arrayListVideos.size());
+                                if (url.contains("Featured")) {
+                                    arrayListVideos.addAll(AppController.getInstance().getServiceManager().getVaultService().getVideosListFromServer(url));
+                                    VaultDatabaseHelper.getInstance(getApplicationContext()).insertVideosInDatabase(arrayListVideos);
+                                } else if (url.contains("TrendingPlayList")) {
+                                    arrayListVideos.addAll(AppController.getInstance().getServiceManager().getVaultService().getVideosListFromServer(url));
+                                    VaultDatabaseHelper.getInstance(getApplicationContext()).insertTrendingVideosInDatabase(arrayListVideos);
+                                }
+
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
 
 
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                            arrayListVideos.clear();
+                            System.out.println("tabBannerDTO thread end ");
+
                         }
-
-
-                        arrayListVideos.clear();
-                        System.out.println("tabBannerDTO thread end ");
-
                     }
-                }
 
-                Intent broadCastIntent = new Intent();
-                broadCastIntent.setAction(HomeFragment.HomeResponseReceiver.ACTION_RESP);
-                broadCastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-                sendBroadcast(broadCastIntent);
+                    Intent broadCastIntent = new Intent();
+                    broadCastIntent.setAction(HomeFragment.HomeResponseReceiver.ACTION_RESP);
+                    broadCastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                    sendBroadcast(broadCastIntent);
 
 //                SharedPreferences pref = AppController.getInstance().getApplicationContext().
 //                        getSharedPreferences(GlobalConstants.PREF_PACKAGE_NAME, Context.MODE_PRIVATE);
 //                long userId = pref.getLong(GlobalConstants.PREF_VAULT_USER_ID_LONG, 0);
 
-                ArrayList<CatagoriesTabDao> catagoriesListData = new ArrayList<>();
-                String categoriesUrl = GlobalConstants.CATEGORIES_TAB_URL + "userid=" +
-                        AppController.getInstance().getModelFacade().getLocalModel().getUserId();
+                    ArrayList<CatagoriesTabDao> catagoriesListData = new ArrayList<>();
+                    String categoriesUrl = GlobalConstants.CATEGORIES_TAB_URL + "userid=" +
+                            AppController.getInstance().getModelFacade().getLocalModel().getUserId();
 
-                catagoriesListData.addAll(AppController.getInstance().getServiceManager()
-                        .getVaultService().getCategoriesData(categoriesUrl));
+                    catagoriesListData.addAll(AppController.getInstance().getServiceManager()
+                            .getVaultService().getCategoriesData(categoriesUrl));
 
-                for (CatagoriesTabDao catagoriesTabDao : catagoriesListData) {
-                  VaultDatabaseHelper.getInstance(getApplicationContext()).insertCategoriesTabData(catagoriesListData);
-                    try {
+                    for (CatagoriesTabDao catagoriesTabDao : catagoriesListData) {
+                        VaultDatabaseHelper.getInstance(getApplicationContext()).insertCategoriesTabData(catagoriesListData);
 
                         String videoUrl = GlobalConstants.VIDEO_LIST_BY_CATEGORIES_ID_URL + "userid=" +
                                 AppController.getInstance().getModelFacade().getLocalModel().getUserId() +
@@ -102,20 +104,22 @@ public class TrendingFeaturedVideoService extends Service {
 
                         VaultDatabaseHelper.getInstance(getApplicationContext()).insertVideosInDatabase(arrayListVideos);
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
+
+                        String playlistUrl = GlobalConstants.CATEGORIES_PLAYLIST_URL + "userid=" +
+                                AppController.getInstance().getModelFacade().getLocalModel().getUserId() + "&nav_tab_id="
+                                + catagoriesTabDao.getCategoriesId();
+
+                        playlistDtoArrayList.clear();
+                        playlistDtoArrayList.addAll(AppController.getInstance().getServiceManager().
+                                getVaultService().getPlaylistData(playlistUrl));
+
+                        VaultDatabaseHelper.getInstance(getApplicationContext()).
+                                insertPlaylistTabData(playlistDtoArrayList, catagoriesTabDao.getCategoriesId());
+
+
                     }
-
-                    String playlistUrl = GlobalConstants.CATEGORIES_PLAYLIST_URL + "userid=" +
-                            AppController.getInstance().getModelFacade().getLocalModel().getUserId() + "&nav_tab_id="
-                            + catagoriesTabDao.getCategoriesId();
-
-                    playlistDtoArrayList.clear();
-                    playlistDtoArrayList.addAll(AppController.getInstance().getServiceManager().
-                            getVaultService().getPlaylistData(playlistUrl));
-
-                    VaultDatabaseHelper.getInstance(getApplicationContext()).
-                            insertPlaylistTabData(playlistDtoArrayList, catagoriesTabDao.getCategoriesId());
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
                 stopSelf();
