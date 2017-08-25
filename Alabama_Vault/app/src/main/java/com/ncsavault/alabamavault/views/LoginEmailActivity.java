@@ -503,9 +503,13 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
         createNewAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!edEmailBox.getText().toString().isEmpty()) {
+                if(edEmailBox != null)
+                {
                     edEmailBox.setText("");
+                    edPassword.setText("");
                 }
+
+                AppController.getInstance().getModelFacade().getLocalModel().setEmailId("");
                 AppController.getInstance().handleEvent(AppDefines.EVENT_ID_UPLOAD_PHOTO_SCREEN);
                 overridePendingTransition(R.anim.rightin, R.anim.leftout);
             }
@@ -711,18 +715,39 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
                         // tvFacebookLogin.setText("Login with Facebook");
                         //LoginManager.getInstance().logOut();
                         pDialog.dismiss();
-                        if (existFrom.equals("gm_exists") || existFrom.equals("tw_exists") || existFrom.equals("fb_exists"))
+                        if ((existFrom.equals("gm_exists") || existFrom.equals("tw_exists") ||
+                                existFrom.equals("fb_exists") || existFrom.equals("vt_exists")) && !isSocialUser)
                         {
                             AppController.getInstance().getModelFacade().getLocalModel().setOverride(true);
-                            isSocialUser = false;
-                            AppController.getInstance().getModelFacade().getLocalModel().setEmailId(emailId);
-                            AppController.getInstance().handleEvent(AppDefines.EVENT_ID_UPLOAD_PHOTO_SCREEN);
+                            HashMap<String, String> hashMap = new HashMap<>();
+                            hashMap.put("email_id", edEmailBox.getText().toString());
+                            SharedPreferences pref = AppController.getInstance().getApplication().
+                                    getSharedPreferences(GlobalConstants.PREF_PACKAGE_NAME, Context.MODE_PRIVATE);
+                            pref.edit().putBoolean(GlobalConstants.PREF_VAULT_FLAG_STATUS, false).commit();
+                            String email = pref.getString(GlobalConstants.PREF_VAULT_EMAIL, "");
+                            String emailBox = edEmailBox.getText().toString();
+                            if (emailBox.equals(email)) {
+                                pref.edit().putBoolean(GlobalConstants.PREF_VAULT_FLAG_STATUS, true).commit();
+                            } else {
+                                AppController.getInstance().getModelFacade().getLocalModel().setSelectImageBitmap(null);
+                            }
+                            AppController.getInstance().getModelFacade()
+                                    .getLocalModel().setMailChimpRegisterUser(false);
+                            AppController.getInstance().handleEvent(AppDefines.EVENT_ID_UPLOAD_PHOTO_SCREEN, hashMap);
                             overridePendingTransition(R.anim.rightin, R.anim.leftout);
-                        } else {
 
-                            fetchInitialRecordsForAll();
+//                            AppController.getInstance().getModelFacade().getLocalModel().setOverride(true);
+//                            isSocialUser = false;
+//                            AppController.getInstance().getModelFacade().getLocalModel().setEmailId(emailId);
+//                            AppController.getInstance().handleEvent(AppDefines.EVENT_ID_UPLOAD_PHOTO_SCREEN);
+//                            overridePendingTransition(R.anim.rightin, R.anim.leftout);
+                        }  else if ((existFrom.equals("gm_exists") || existFrom.equals("tw_exists") ||
+                                existFrom.equals("fb_exists") || existFrom.equals("vt_exists")) && isSocialUser)
+                        {
+                            AppController.getInstance().getModelFacade().getLocalModel().setEmailId(emailId);
+                            AppController.getInstance().handleEvent(AppDefines.EVENT_ID_REGISTRATION_SCREEN);
+                            overridePendingTransition(R.anim.rightin, R.anim.leftout);
                         }
-
 
                     }
                 });

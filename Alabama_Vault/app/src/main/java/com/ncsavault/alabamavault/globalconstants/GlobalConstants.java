@@ -303,7 +303,11 @@ public class GlobalConstants {
             "ca-app-pub-8848124662104437/5281232913"};
 
 
-    public static String ALREADY_REGISTERED_EMAIL = "Entered Email id Already Exists on Vault App!";
+    public static final String ALREADY_REGISTERED_EMAIL = "Entered Email id Already Exists on Vault App!";
 
+    public static final String SUPPORT_MAIL_ID = "appsupport@alabamavault.com";
+    public static final String SUPPORT_SUBJECT = "Alabama support | Android";
+    public static final String SUPPORT_MAIL_THROUGH_BROWSER =  "https://mail.google.com/mail/?view=cm&fs=1&to="
+                                                              +SUPPORT_MAIL_ID+"&su="+SUPPORT_SUBJECT+"&body="+""+"&bcc="+"";
 
 }

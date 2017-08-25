@@ -504,9 +504,9 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
             public void onClick(View v) {
                 Intent intent = null;
                 intent = new Intent(Intent.ACTION_SENDTO);
-                intent.setData(Uri.parse("mailto:gsingh@delaplex.in"));
+                intent.setData(Uri.parse("mailto:"+GlobalConstants.SUPPORT_MAIL_ID));
                 intent.setPackage("com.google.android.gm");
-                intent.putExtra(Intent.EXTRA_SUBJECT, "Support");
+                intent.putExtra(Intent.EXTRA_SUBJECT, GlobalConstants.SUPPORT_SUBJECT);
                 //intent.putExtra(Intent.EXTRA_TEXT, "Gaurav");
                 if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                     try {
@@ -515,7 +515,10 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                         anfe.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(getActivity(), "No such app found", Toast.LENGTH_SHORT).show();
+//                    Intent intentForBrowser = new Intent(Intent.ACTION_VIEW);
+//                    intentForBrowser.setData(Uri.parse(GlobalConstants.SUPPORT_MAIL_THROUGH_BROWSER));
+//                    startActivity(intentForBrowser);
+                   Toast.makeText(getActivity(), "Gmail app is not installed. Please install Gmaill app for support.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
