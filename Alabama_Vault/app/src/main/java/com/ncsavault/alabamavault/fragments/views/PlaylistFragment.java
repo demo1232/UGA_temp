@@ -617,6 +617,7 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
                             @Override
                             public void onLoadingFailed(String s, View view, FailReason failReason) {
                                 bannerCacheableImageView.setVisibility(View.GONE);
+                                bannerCacheableImageView.setImageResource(R.drawable.vault_4);
                             }
 
                             @Override

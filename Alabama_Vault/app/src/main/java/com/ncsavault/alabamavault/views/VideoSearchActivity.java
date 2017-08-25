@@ -92,6 +92,9 @@ public class VideoSearchActivity extends AppCompatActivity implements VideoSearc
         fragment = getIntent().getStringExtra("Fragment");
 
 
+        setHint(fragment);
+
+
         getVideoDataFromDataBase(fragment);
         editTextSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -167,21 +170,13 @@ public class VideoSearchActivity extends AppCompatActivity implements VideoSearc
 
                 try {
                     if (fragment.equalsIgnoreCase("HomeFragment") || fragment.equalsIgnoreCase("VideoDetailFragment")) {
-                        editTextSearch.setHint("Videos" + " Name " + "(" + "Users Input Filters" + ")");
-                        editTextSearch.setHintTextColor(mContext.getResources().getColor(R.color.apptheme_color));
-
                         objects = new ArrayList<Object>();
                         objects.addAll((VaultDatabaseHelper.getInstance(VideoSearchActivity.this).getAllVideoList()));
 
-
                     } else if (fragment.equalsIgnoreCase("PlayListFragment")) {
-                        editTextSearch.setHint("PlayList " + "(" + "Users Input Filters" + ")");
-                        editTextSearch.setHintTextColor(mContext.getResources().getColor(R.color.apptheme_color));
                         objects = new ArrayList<Object>();
                         objects.addAll(VaultDatabaseHelper.getInstance(VideoSearchActivity.this).getAllLocalPlaylistTabData());
                     } else if (fragment.equalsIgnoreCase("SavedVideoFragment")) {
-                        editTextSearch.setHint("Saved " + "(" + "Users Input Filters" + ")");
-                        editTextSearch.setHintTextColor(mContext.getResources().getColor(R.color.apptheme_color));
                         objects = new ArrayList<Object>();
                         objects.addAll(VaultDatabaseHelper.getInstance(VideoSearchActivity.this).getFavouriteVideosArrayList());
                     }
@@ -278,6 +273,8 @@ public class VideoSearchActivity extends AppCompatActivity implements VideoSearc
                             videoSearchAdapter.notifyDataSetChanged();
 
                         }
+                    }else{
+                        showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
                     }
                 } else {
 
@@ -381,7 +378,7 @@ public class VideoSearchActivity extends AppCompatActivity implements VideoSearc
                 mPostTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
         } else {
-            ((HomeScreen) mContext).showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
+            showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
             viewHolder.savedVideoImageView.setImageResource(R.drawable.video_save);
         }
     }
@@ -443,6 +440,21 @@ public class VideoSearchActivity extends AppCompatActivity implements VideoSearc
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void setHint(String fragment) {
+        if (fragment.equalsIgnoreCase("HomeFragment") || fragment.equalsIgnoreCase("VideoDetailFragment")) {
+            editTextSearch.setHint("Videos" + " Name " + "(" + "Users Input Filters" + ")");
+            editTextSearch.setHintTextColor(mContext.getResources().getColor(R.color.apptheme_color));
+
+        }else if (fragment.equalsIgnoreCase("PlayListFragment")) {
+            editTextSearch.setHint("PlayList " + "(" + "Users Input Filters" + ")");
+            editTextSearch.setHintTextColor(mContext.getResources().getColor(R.color.apptheme_color));
+
+        }else if (fragment.equalsIgnoreCase("SavedVideoFragment")) {
+            editTextSearch.setHint("Saved " + "(" + "Users Input Filters" + ")");
+            editTextSearch.setHintTextColor(mContext.getResources().getColor(R.color.apptheme_color));
         }
     }
 
