@@ -142,7 +142,7 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
         String videoUrl = AppController.getInstance().getModelFacade().getLocalModel().getVideoUrl();
         String videoId = AppController.getInstance().getModelFacade().getLocalModel().getVideoId();
 
-        long tabId = AppController.getInstance().getModelFacade().getLocalModel().getTabId();
+        long tabId = 3;
         tabBannerDTO = VaultDatabaseHelper.getInstance(getActivity()).getLocalTabBannerDataByTabId(Long.valueOf(tabId));
 
 

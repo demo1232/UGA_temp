@@ -598,7 +598,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             }
         } else {
             ((HomeScreen) mContext).showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
-            viewHolder.savedImage.setBackgroundResource(R.drawable.video_save);
+            viewHolder.savedImage.setImageResource(R.drawable.video_save);
         }
     }
 
