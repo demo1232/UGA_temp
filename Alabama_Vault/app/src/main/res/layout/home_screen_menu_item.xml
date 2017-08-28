@@ -2,12 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp"
     >
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/main_featured_layout">
 
         <ImageView
             android:id="@+id/video_image"
@@ -24,8 +24,6 @@
             android:layout_height="50dp"
             android:layout_below="@+id/video_image"
             android:background="@color/white"
-            android:layout_marginRight="7dp"
-            android:layout_marginLeft="7dp"
             android:id="@+id/rr_video_name_layout">
             <TextView
                 android:id="@+id/video_name"
@@ -39,7 +37,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="10dp"/>
-            
+
             <ImageView
                 android:id="@+id/saved_imageview"
                 android:layout_alignParentRight="true"
@@ -50,7 +48,7 @@
                 android:src="@drawable/video_save"
                 android:layout_centerVertical="true"
                 android:layout_height="20dp" />
-            
+
         </RelativeLayout>
 
         <ProgressBar

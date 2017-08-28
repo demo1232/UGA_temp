@@ -238,21 +238,22 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                         }
                                     });
 
-                    int aspectHeight = (displayWidth * 9) / 16;
-                    int bottomAspectHeight = (displayWidth* ((int)2.25))/16;
+                    int aspectHeight = (displayWidth * ((int)12.25)) / 16;
 
+//                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+//                            aspectHeight);
+//                   // lp.setMargins(30,0,30,0);
+//                    vhHeader.videoImage.setLayoutParams(lp);
+
+                    RelativeLayout.LayoutParams mainLayout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                            aspectHeight);
+                    mainLayout.setMargins(30,0,30,0);
+                    vhHeader.mainFeaturedLayout.setLayoutParams(mainLayout);
+
+//
 //                    RelativeLayout.LayoutParams bottomLayout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
 //                            bottomAspectHeight);
-//                    bottomLayout.setMargins(30,0,30,0);
-//
 //                    vhHeader.videoNameLayout.setLayoutParams(bottomLayout);
-
-                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-                            aspectHeight);
-                    lp.setMargins(30,0,30,0);
-                    vhHeader.videoImage.setLayoutParams(lp);
-
-
 
                     vhHeader.mVideoName.setText(videoDTO.getVideoName());
 
@@ -464,7 +465,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public TextView mVideoName;
         public ImageView videoImage, savedImage;
         public ProgressBar progressBar;
-        public RelativeLayout videoNameLayout;
+        public RelativeLayout videoNameLayout,mainFeaturedLayout;
 
         public MyViewHolder(View view) {
             super(view);
@@ -472,6 +473,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             videoImage = (ImageView) view.findViewById(R.id.video_image);
             savedImage = (ImageView) view.findViewById(R.id.saved_imageview);
             videoNameLayout = (RelativeLayout) view.findViewById(R.id.rr_video_name_layout);
+            mainFeaturedLayout = (RelativeLayout) view.findViewById(R.id.main_featured_layout);
 
             progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -487,13 +489,17 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
        // public AdView adView;
         public NativeExpressAdView adView;
-        public LinearLayout adViewLayout;
+        public RelativeLayout adViewLayout;
 
         public SubtypeViewHolder(View itemView) {
             super(itemView);
            // adView = (AdView) itemView.findViewById(R.id.adView);
            // adView = (NativeExpressAdView) itemView.findViewById(R.id.adView);
-            adViewLayout = (LinearLayout) itemView.findViewById(R.id.adView_layout);
+             adViewLayout = (RelativeLayout) itemView.findViewById(R.id.adView_layout);
+              RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+              RelativeLayout.LayoutParams.MATCH_PARENT);
+              lp.setMargins(30,0,30,30);
+              adViewLayout.setLayoutParams(lp);
         }
 
     }
@@ -518,7 +524,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         NativeExpressAdView mAdView = new NativeExpressAdView(mContext);
         System.out.println("unit id get : "+videoAdMob.getVideoName());
 
-        mAdView.setAdSize(new AdSize(300,50));
+        mAdView.setAdSize(new AdSize(RelativeLayout.LayoutParams.MATCH_PARENT,80));
         mAdView.setAdUnitId(videoAdMob.getVideoName());
         vhHeader.adViewLayout.addView(mAdView);
          AdRequest request = new AdRequest.Builder()

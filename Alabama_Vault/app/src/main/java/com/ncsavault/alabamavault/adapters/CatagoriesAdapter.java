@@ -2,17 +2,21 @@ package com.ncsavault.alabamavault.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
@@ -60,6 +64,7 @@ public class CatagoriesAdapter extends RecyclerView.Adapter<CatagoriesAdapter.Ca
                 .imageScaleType(ImageScaleType.EXACTLY)
                 .build();
         imageLoader = AppController.getInstance().getImageLoader();
+        getScreenDimensions();
     }
 
     @Override
@@ -83,6 +88,7 @@ public class CatagoriesAdapter extends RecyclerView.Adapter<CatagoriesAdapter.Ca
         String catagoriesTabImageUrl = mCatagoriesTabList.get(position).getCategoriesUrl();
         String catagoriesTabName = mCatagoriesTabList.get(position).getCategoriesName();
         long categoriesId = mCatagoriesTabList.get(position).getCategoriesId();
+
 
 
         com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(catagoriesTabImageUrl,
@@ -110,9 +116,34 @@ public class CatagoriesAdapter extends RecyclerView.Adapter<CatagoriesAdapter.Ca
                     }
                 });
 
+                int aspectHeight = (displayWidth * 9) / 16;
+
+                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                        aspectHeight);
+                //lp.setMargins(30,0,30,0);
+                viewHolder.playlistLayout.setLayoutParams(lp);
+
         viewHolder.playlistTabNametextView.setText(catagoriesTabName);
 
         mOnClickInterface.onClick(viewHolder,categoriesId);
+    }
+
+    private int displayHeight = 0, displayWidth = 0;
+
+    public void getScreenDimensions() {
+
+        Point size = new Point();
+        WindowManager w = HomeScreen.activity.getWindowManager();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            w.getDefaultDisplay().getSize(size);
+            displayHeight = size.y;
+            displayWidth = size.x;
+        } else {
+            Display d = w.getDefaultDisplay();
+            displayHeight = d.getHeight();
+            displayWidth = d.getWidth();
+        }
     }
 
 
@@ -122,12 +153,14 @@ public class CatagoriesAdapter extends RecyclerView.Adapter<CatagoriesAdapter.Ca
         public ImageView playlistImageView;
         TextView playlistTabNametextView;
         private ProgressBar progressBar;
+        private RelativeLayout playlistLayout;
 
         public CatagoriesAdapterViewHolder(View view) {
             super(view);
             playlistImageView = (ImageView) view.findViewById(R.id.tv_playlist_image);
             playlistTabNametextView = (TextView) view.findViewById(R.id.tv_playlist_name);
             progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
+            playlistLayout = (RelativeLayout)  view.findViewById(R.id.playlist_layout);
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 progressBar.setIndeterminateDrawable(mContext.getResources().getDrawable(R.drawable.circle_progress_bar_lower));
             } else {

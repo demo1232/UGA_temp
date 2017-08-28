@@ -218,6 +218,7 @@ public class VideoInfoActivity extends PermissionActivity implements VideoPlayer
 //        mAdView.setPadding(0,0,0,navBarHeight);
         }
         AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("20B52AAB529851184340334B73A36E8B")
                 .build();
         mAdView.loadAd(adRequest);
     }

@@ -144,6 +144,16 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
                 catagoriesTabList.clear();
                 catagoriesTabList.addAll(AppController.getInstance().getServiceManager().getVaultService().getCategoriesData(url));
 
+                Collections.sort(catagoriesTabList, new Comparator<CatagoriesTabDao>() {
+
+                    @Override
+                    public int compare(CatagoriesTabDao lhs, CatagoriesTabDao rhs) {
+                        // TODO Auto-generated method stub
+                        return Long.valueOf(lhs.getIndex_position())
+                                .compareTo(Long.valueOf(rhs.getIndex_position()));
+                    }
+                });
+
                 for (CatagoriesTabDao catagoriesTabDao : catagoriesTabList) {
                     CatagoriesTabDao localCatoriesData = VaultDatabaseHelper.getInstance(mContext)
                             .getLocalCategoriesDataByCategoriesId(catagoriesTabDao.getCategoriesId());
@@ -263,6 +273,16 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
                             catagoriesTabList.clear();
                             catagoriesTabList.addAll(AppController.getInstance().getServiceManager().getVaultService().getCategoriesData(url));
 
+                            Collections.sort(catagoriesTabList, new Comparator<CatagoriesTabDao>() {
+
+                                @Override
+                                public int compare(CatagoriesTabDao lhs, CatagoriesTabDao rhs) {
+                                    // TODO Auto-generated method stub
+                                    return Long.valueOf(lhs.getIndex_position())
+                                            .compareTo(Long.valueOf(rhs.getIndex_position()));
+                                }
+                            });
+
                             VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).removeAllCategoriesTabData();
                             VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).insertCategoriesTabData(catagoriesTabList);
                         } catch (Exception e) {
@@ -305,6 +325,16 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
         catagoriesTabList.clear();
         catagoriesTabList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).
                 getAllLocalCategoriesTabData());
+
+        Collections.sort(catagoriesTabList, new Comparator<CatagoriesTabDao>() {
+
+            @Override
+            public int compare(CatagoriesTabDao lhs, CatagoriesTabDao rhs) {
+                // TODO Auto-generated method stub
+                return Long.valueOf(lhs.getIndex_position())
+                        .compareTo(Long.valueOf(rhs.getIndex_position()));
+            }
+        });
 
 //        if(mCatagoriesAdapter != null)
 //        {

@@ -2,15 +2,19 @@ package com.ncsavault.alabamavault.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.os.Build;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
@@ -23,6 +27,7 @@ import com.ncsavault.alabamavault.controllers.AppController;
 import com.ncsavault.alabamavault.dto.PlaylistDto;
 import com.ncsavault.alabamavault.dto.TopTenVideoDto;
 import com.ncsavault.alabamavault.dto.VideoDTO;
+import com.ncsavault.alabamavault.views.HomeScreen;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -62,6 +67,7 @@ public class PlaylistDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 .imageScaleType(ImageScaleType.EXACTLY)
                 .build();
         imageLoader = AppController.getInstance().getImageLoader();
+        getScreenDimensions();
     }
 
     public  class MyViewHolder extends RecyclerView.ViewHolder {
@@ -86,12 +92,12 @@ public class PlaylistDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public class NativeAdsViewHolder extends RecyclerView.ViewHolder{
 
         public AdView adView;
-        public LinearLayout adViewLayout;
+        public RelativeLayout adViewLayout;
 
         public NativeAdsViewHolder (View itemView) {
             super(itemView);
            // adView = (AdView) itemView.findViewById(R.id.adView);
-            adViewLayout = (LinearLayout) itemView.findViewById(R.id.adView_layout);
+            adViewLayout = (RelativeLayout) itemView.findViewById(R.id.adView_layout);
         }
 
     }
@@ -175,7 +181,12 @@ public class PlaylistDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     }
                 });
 
-
+//        int aspectHeight = (displayWidth * 16) / 9;
+//
+//        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+//                aspectHeight);
+//        //lp.setMargins(30,0,30,0);
+//        viewHolder.thumbnail.setLayoutParams(lp);
 
         viewHolder.playlistName.setText(playlistName);
         mPlaylistDataClickListener.onClick(viewHolder,playlistId);
@@ -192,7 +203,7 @@ public class PlaylistDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         PlaylistDto playlistDto = mPlaylistDtoArrayList.get(position);
         NativeExpressAdView mAdView = new NativeExpressAdView(mContext);
 
-        mAdView.setAdSize(new AdSize(300,50));
+        mAdView.setAdSize(new AdSize(342,80));
         mAdView.setAdUnitId(playlistDto.getPlaylistName());
         vhHeader.adViewLayout.addView(mAdView);
         AdRequest request = new AdRequest.Builder()
@@ -200,6 +211,25 @@ public class PlaylistDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 .build();
         mAdView.loadAd(request);
         // Load the Native Express ad.
+    }
+
+
+    private int displayHeight = 0, displayWidth = 0;
+
+    public void getScreenDimensions() {
+
+        Point size = new Point();
+        WindowManager w = HomeScreen.activity.getWindowManager();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            w.getDefaultDisplay().getSize(size);
+            displayHeight = size.y;
+            displayWidth = size.x;
+        } else {
+            Display d = w.getDefaultDisplay();
+            displayHeight = d.getHeight();
+            displayWidth = d.getWidth();
+        }
     }
 
 }

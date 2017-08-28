@@ -133,6 +133,7 @@
             android:name=".views.VideoInfoActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensor"
+            android:windowSoftInputMode="adjustPan"
             android:theme="@style/PlayerTheme" />
 
         <!-- Include the AdActivity configChanges and theme. -->

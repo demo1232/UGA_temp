@@ -430,7 +430,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
 
     public ArrayList<VideoDTO> getAllVideoList() {
         String selectOKFQuery = "SELECT * FROM " + VideoTable.VIDEO_TABLE +
-                " GROUP BY " + VideoTable.KEY_PLAYLIST_ID + "," + VideoTable.KEY_VIDEO_ID + " ORDER BY " +
+                " GROUP BY " + VideoTable.KEY_VIDEO_ID + " ORDER BY " +
                 VideoTable.KEY_VIDEO_NAME + " COLLATE NOCASE " + " ASC ";;
         try {
             ArrayList<VideoDTO> videoDTOsArrayList = new ArrayList<VideoDTO>();

@@ -33,18 +33,21 @@ import com.ncsavault.alabamavault.database.VaultDatabaseHelper;
 import com.ncsavault.alabamavault.defines.AppDefines;
 import com.ncsavault.alabamavault.dto.APIResponse;
 import com.ncsavault.alabamavault.globalconstants.GlobalConstants;
+import com.ncsavault.alabamavault.models.BaseModel;
+import com.ncsavault.alabamavault.models.LoginEmailModel;
 import com.ncsavault.alabamavault.utils.Utils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * Created by gauravkumar.singh on 8/16/2016.
  */
-public class ForgotPasswordActivity extends BaseActivity {
+public class ForgotPasswordActivity extends BaseActivity implements AbstractView {
 
     private EditText registeredEmailId, verificationCode, newPasswordEditText, confirmPasswordEditText;
     private TextView tvHeaderText, tvVerificationCode, tvResendCode, tvCancel, tvBack, tvEnterEmail, tvCancelPassword, tvEnterPasswordText;
@@ -84,7 +87,6 @@ public class ForgotPasswordActivity extends BaseActivity {
         if (getIntent() != null) {
 //            boolean isValue = getIntent().getBooleanExtra("key", false);
             String emailId = getIntent().getStringExtra("email_id");
-
 
 //            if (isValue) {
             registeredEmailId.setText(emailId);
@@ -143,7 +145,7 @@ public class ForgotPasswordActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-                changePasswordCall();
+                checkEmailAndProceed();
 
             }
         });
@@ -154,7 +156,7 @@ public class ForgotPasswordActivity extends BaseActivity {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
 
                 if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                    changePasswordCall();
+                    checkEmailAndProceed();
                     return true;
                 } else {
                     return false;
@@ -256,7 +258,8 @@ public class ForgotPasswordActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (registeredEmailId.getText().toString() != null) {
-                    changePasswordCall();
+
+                    checkEmailAndProceed();
 
                 }
             }
@@ -715,6 +718,63 @@ public class ForgotPasswordActivity extends BaseActivity {
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.show();
     }
+    private LoginEmailModel loginEmailModel;
+    public void checkEmailAndProceed() {
+        if (Utils.isInternetAvailable(this)) {
+                Utils.getInstance().gethideKeyboard(this);
 
+                pDialog = new ProgressDialog(ForgotPasswordActivity.this, R.style.CustomDialogTheme);
+                pDialog.show();
+                pDialog.setContentView(Utils.getInstance().setViewToProgressDialog(ForgotPasswordActivity.this));
+                pDialog.setCanceledOnTouchOutside(false);
+                pDialog.setCancelable(false);
+
+                if (loginEmailModel != null) {
+                    loginEmailModel.unRegisterView(this);
+                    loginEmailModel = null;
+                }
+
+                loginEmailModel = AppController.getInstance().getModelFacade().getRemoteModel().getLoginEmailModel();
+                loginEmailModel.registerView(this);
+                loginEmailModel.setProgressDialog(pDialog);
+                loginEmailModel.loadLoginData(registeredEmailId.getText().toString());
+        } else {
+            showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
+        }
+    }
+
+    @Override
+    public void update() {
+        System.out.println("login screen");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (loginEmailModel != null && loginEmailModel.getState() == BaseModel.STATE_SUCCESS) {
+                        pDialog.dismiss();
+                        loginEmailModel.unRegisterView(ForgotPasswordActivity.this);
+                        if (Utils.isInternetAvailable(ForgotPasswordActivity.this)) {
+                            if (loginEmailModel != null) {
+                                if (loginEmailModel.getLoginResult().toLowerCase().contains("fb_exists")
+                                        || loginEmailModel.getLoginResult().toLowerCase().contains("tw_exists")
+                                        || loginEmailModel.getLoginResult().toLowerCase().contains("gm_exists")) {
+                                    showToastMessage(GlobalConstants.ERROR_MESG);
+                                }else
+                                {
+                                    changePasswordCall();
+                                }
+
+                            }
+
+                        } else {
+                            showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
 }

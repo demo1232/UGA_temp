@@ -304,6 +304,8 @@ public class GlobalConstants {
 
 
     public static final String ALREADY_REGISTERED_EMAIL = "Entered Email id Already Exists on Vault App!";
+    public static final String ERROR_MESG = "Error while login in vault!";
+
 
     public static final String SUPPORT_MAIL_ID = "appsupport@alabamavault.com";
     public static final String SUPPORT_SUBJECT = "Alabama support | Android";
