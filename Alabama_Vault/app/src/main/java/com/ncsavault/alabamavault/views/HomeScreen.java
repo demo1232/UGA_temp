@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -60,6 +62,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 import com.nostra13.universalimageloader.utils.StorageUtils;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -110,6 +114,9 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
     public EditText editTextSearch;
     public ImageView imageViewLogo;
     public TextView textViewEdit;
+    public LinearLayout linearLayoutToolbarText;
+    TextView textViewToolbatText1;
+    TextView textViewToolbatText2;
 
     public static ProgressBar autoRefreshProgressBar;
     private BannerDataModel mBannerDataModel;
@@ -157,9 +164,15 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
         mToolbar.setTitle("");
         mToolbar.setSubtitle("");
 
+        linearLayoutToolbarText=(LinearLayout)mToolbar.findViewById(R.id.ll_toolbarText);
+        textViewToolbatText1=(TextView)mToolbar.findViewById(R.id.textview_toolbar1);
+        textViewToolbatText2=(TextView)mToolbar.findViewById(R.id.textview_toolbar2);
+        Typeface face = Typeface.createFromAsset(getAssets(), "fonts/OpenSans-Bold.ttf");
+        Typeface faceNormal = Typeface.createFromAsset(getAssets(), "fonts/OpenSans-Light.ttf");
+        textViewToolbatText2.setTypeface(face);
+        textViewToolbatText1.setTypeface(faceNormal);
         imageViewSearch = (ImageView) mToolbar.findViewById(R.id.imageview_search);
         editTextSearch = (EditText) mToolbar.findViewById(R.id.editText_search);
-        imageViewLogo = (ImageView) mToolbar.findViewById(R.id.imageview_logo);
         textViewEdit = (TextView) findViewById(R.id.textview_edit);
         imageViewBackNavigation = (ImageView) findViewById(R.id.imageview_back);
     }
@@ -240,7 +253,7 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
                         if (localBannerData.getTabDataModified() != bDTO.getTabDataModified()) {
                             VaultDatabaseHelper.getInstance(getApplicationContext()).updateTabData(bDTO);
 
-                            url  = GlobalConstants.FEATURED_API_URL + "userId=" + AppController.getInstance().
+                            url = GlobalConstants.FEATURED_API_URL + "userId=" + AppController.getInstance().
                                     getModelFacade().getLocalModel().getUserId();
                             try {
                                 arrayListFeatured.clear();
@@ -274,7 +287,6 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
                         VaultDatabaseHelper.getInstance(getApplicationContext()).insertTabBannerData(bDTO);
                     }
                 }
-
 
 
                 SharedPreferences pref = AppController.getInstance().getApplicationContext().
@@ -317,7 +329,6 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
                 }
 
 
-
                 for (CatagoriesTabDao catagoriesTabDao : catagoriesListData) {
 
                     String playlistUrl = GlobalConstants.CATEGORIES_PLAYLIST_URL + "userid=" + userId + "&nav_tab_id="
@@ -341,8 +352,6 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
 
                     }
                 }
-
-
 
 
             } catch (Exception e) {

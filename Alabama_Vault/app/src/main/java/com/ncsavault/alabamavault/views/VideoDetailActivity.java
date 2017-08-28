@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -64,6 +65,9 @@ public class VideoDetailActivity extends AppCompatActivity implements VideoDetai
     public ImageView imageViewBackNavigation;
     public TextView textViewEdit;
     LinearLayout linearLayoutToolBar;
+    LinearLayout linearLayoutToolbarText;
+    TextView textViewToolbatText1;
+    TextView textViewToolbatText2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,8 +142,16 @@ public class VideoDetailActivity extends AppCompatActivity implements VideoDetai
         textViewEdit.setVisibility(View.INVISIBLE);
         editTextSearch.setVisibility(View.INVISIBLE);
         imageviewLogo = (ImageView) mToolbar.findViewById(R.id.imageview_logo);
+        linearLayoutToolbarText=(LinearLayout)mToolbar.findViewById(R.id.ll_toolbarText);
+        textViewToolbatText1=(TextView)mToolbar.findViewById(R.id.textview_toolbar1);
+        textViewToolbatText2=(TextView)mToolbar.findViewById(R.id.textview_toolbar2);
+        Typeface face = Typeface.createFromAsset(getAssets(), "fonts/OpenSans-Bold.ttf");
+        Typeface faceNormal = Typeface.createFromAsset(getAssets(), "fonts/OpenSans-Light.ttf");
+        textViewToolbatText2.setTypeface(face);
+        textViewToolbatText1.setTypeface(faceNormal);
         imageviewSearch.setVisibility(View.VISIBLE);
         imageViewBackNavigation.setVisibility(View.VISIBLE);
+        linearLayoutToolbarText.setVisibility(View.VISIBLE);
 
     }
 

@@ -47,10 +47,10 @@ public class AndroidApplication extends Application {
 
         FlurryAgent.init(this, GlobalConstants.FLURRY_KEY);
 
-        FontsOverride.setDefaultFont(this, "DEFAULT", "fonts/Roboto-Regular.ttf");
-        FontsOverride.setDefaultFont(this, "MONOSPACE", "fonts/Roboto-Regular.ttf");
-        FontsOverride.setDefaultFont(this, "SERIF", "fonts/Roboto-Regular.ttf");
-        FontsOverride.setDefaultFont(this, "SANS_SERIF", "fonts/Roboto-Regular.ttf");
+//        FontsOverride.setDefaultFont(this, "DEFAULT", "fonts/Roboto-Regular.ttf");
+//        FontsOverride.setDefaultFont(this, "MONOSPACE", "fonts/Roboto-Regular.ttf");
+////        FontsOverride.setDefaultFont(this, "SERIF", "fonts/Roboto-Regular.ttf");
+//        FontsOverride.setDefaultFont(this, "SANS_SERIF", "fonts/Roboto-Regular.ttf");
         FontsOverride.overrideFont(this, "SERIF", "fonts/OpenSans-Regular.ttf");
     }
 

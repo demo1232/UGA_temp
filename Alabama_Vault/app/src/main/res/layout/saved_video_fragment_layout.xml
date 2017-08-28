@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/tv_login"
             android:gravity="center"
-            android:text="PLEASE LOGIN TO ACCESS SAVED SCREEN"
+            android:text="PLEASE LOGIN TO ACCESS SAVED VIDEOS"
             android:textColor="@color/apptheme_color"
             android:textSize="15dp" />
 

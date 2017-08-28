@@ -75,6 +75,7 @@
         <item>Female</item>
     </string-array>
 
+    <string name="toolbar_text">ALABAMA<b>VAULT</b></string>
 
     <string name="current_video_name_text">Current Top 10 Video Name</string>
 

@@ -152,10 +152,10 @@ public class BottomNavigationBar implements View.OnClickListener {
     public void setView(View view) {
 
         // seting all highlight bar as invisible
-        this.mViewBar1.setVisibility(View.INVISIBLE);
-        this.mViewBar2.setVisibility(View.INVISIBLE);
-        this.mViewBar3.setVisibility(View.INVISIBLE);
-        this.mViewBar4.setVisibility(View.INVISIBLE);
+//        this.mViewBar1.setVisibility(View.INVISIBLE);
+//        this.mViewBar2.setVisibility(View.INVISIBLE);
+//        this.mViewBar3.setVisibility(View.INVISIBLE);
+//        this.mViewBar4.setVisibility(View.INVISIBLE);
         // resetting colors of all icons
         this.mImageViewBar1.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
         this.mImageViewBar2.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
@@ -168,22 +168,22 @@ public class BottomNavigationBar implements View.OnClickListener {
         this.mTextViewBar4.setTextColor(ContextCompat.getColor(mContext, R.color.black));
         // selectively colorizing the marked view
         if (view.getId() == R.id.linearLayoutBar1) {
-            this.mViewBar1.setVisibility(View.VISIBLE);
+//            this.mViewBar1.setVisibility(View.VISIBLE);
             this.mImageViewBar1.setColorFilter(ContextCompat.getColor(mContext, R.color.apptheme_color));
             this.mTextViewBar1.setTextColor(ContextCompat.getColor(mContext, R.color.apptheme_color));
             return;
         } else if (view.getId() == R.id.linearLayoutBar2) {
-            this.mViewBar2.setVisibility(View.VISIBLE);
+//            this.mViewBar2.setVisibility(View.VISIBLE);
             this.mImageViewBar2.setColorFilter(ContextCompat.getColor(mContext, R.color.apptheme_color));
             this.mTextViewBar2.setTextColor(ContextCompat.getColor(mContext, R.color.apptheme_color));
             return;
         } else if (view.getId() == R.id.linearLayoutBar3) {
-            this.mViewBar3.setVisibility(View.VISIBLE);
+//            this.mViewBar3.setVisibility(View.VISIBLE);
             this.mImageViewBar3.setColorFilter(ContextCompat.getColor(mContext, R.color.apptheme_color));
             this.mTextViewBar3.setTextColor(ContextCompat.getColor(mContext, R.color.apptheme_color));
             return;
         } else if (view.getId() == R.id.linearLayoutBar4) {
-            this.mViewBar4.setVisibility(View.VISIBLE);
+//            this.mViewBar4.setVisibility(View.VISIBLE);
             this.mImageViewBar4.setColorFilter(ContextCompat.getColor(mContext, R.color.apptheme_color));
             this.mTextViewBar4.setTextColor(ContextCompat.getColor(mContext, R.color.apptheme_color));
             return;
