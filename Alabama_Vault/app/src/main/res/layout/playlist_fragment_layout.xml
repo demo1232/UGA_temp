@@ -23,7 +23,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="80dp"
             android:background="@color/color_scheme_1_1"
             android:layout_alignParentTop="true"
             android:id="@+id/syncro_banner_layout"

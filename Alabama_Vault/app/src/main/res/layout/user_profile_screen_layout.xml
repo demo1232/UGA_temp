@@ -7,18 +7,35 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/background_profile_image"
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:scaleType="fitXY"
         app:layout_constraintBottom_toTopOf="@+id/guideline24"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/vault_4" />
+        android:orientation="vertical"
+        android:weightSum="2">
+
+        <ImageView
+            android:id="@+id/background_profile_image"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:background="@drawable/layout_shadow"
+            app:srcCompat="@drawable/vault_4"
+            android:layout_weight="1.9"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"
+            android:background="@drawable/layout_shadow"/>
+    </LinearLayout>
+
+
 
 
     <android.support.constraint.Guideline
@@ -28,7 +45,7 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.4"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="205dp" />
+        tools:layout_editor_absoluteY="204dp" />
 
     <FrameLayout
         android:id="@+id/circuler_image_layout"
@@ -67,7 +84,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.25"
-        tools:layout_editor_absoluteX="96dp"
+        tools:layout_editor_absoluteX="90dp"
         tools:layout_editor_absoluteY="0dp" />
 
     <android.support.constraint.Guideline
@@ -76,7 +93,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.74"
-        tools:layout_editor_absoluteX="284dp"
+        tools:layout_editor_absoluteX="266dp"
         tools:layout_editor_absoluteY="0dp" />
 
     <android.support.constraint.Guideline
@@ -514,6 +531,7 @@
         app:layout_constraintGuide_percent="0.55"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="281dp" />
+
 
 
 </android.support.constraint.ConstraintLayout>
