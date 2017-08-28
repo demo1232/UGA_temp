@@ -467,12 +467,13 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
                             AppController.getInstance().getModelFacade().getLocalModel().setBannerActivated(false);
                         }
                     }
-
                     for (int i = 0; i < mRecyclerViewItems.size(); i++) {
                         if ((i + 1) % 3 == 0) {
+                        {
                             VideoDTO videoAdMob = new VideoDTO();
                             videoAdMob.setVideoName(getRandomId());
                             mRecyclerViewItems.add(i, videoAdMob);
+                        }
                         }
                     }
                     if (adapter != null) {
@@ -619,12 +620,16 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
                         AppController.getInstance().getModelFacade().getLocalModel().setBannerActivated(false);
                     }
                 }
+
                 for (int i = 0; i < mRecyclerViewItems.size(); i++) {
                     if ((i + 1) % 3 == 0) {
-                        VideoDTO videoAdMob = new VideoDTO();
-                        videoAdMob.setVideoName(getRandomId());
-                        mRecyclerViewItems.add(i, videoAdMob);
+                        {
+                            VideoDTO videoAdMob = new VideoDTO();
+                            videoAdMob.setVideoName(getRandomId());
+                            mRecyclerViewItems.add(i, videoAdMob);
+                            }
                     }
+
                 }
                 adapter = new FilterSubtypesAdapter(mContext, mRecyclerViewItems, trendingArraylist, HomeFragment.this);
                 mRecyclerView.setAdapter(adapter);
@@ -697,10 +702,13 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
                     }
                     for (int i = 0; i < mRecyclerViewItems.size(); i++) {
                         if ((i + 1) % 3 == 0) {
+                        {
                             VideoDTO videoAdMob = new VideoDTO();
                             videoAdMob.setVideoName(getRandomId());
                             mRecyclerViewItems.add(i, videoAdMob);
                         }
+                        }
+
                     }
                     adapter = new FilterSubtypesAdapter(mContext, mRecyclerViewItems, trendingArraylist, HomeFragment.this);
 

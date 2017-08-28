@@ -521,21 +521,26 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
 
         SubtypeViewHolder vhHeader = (SubtypeViewHolder) holder;
-        VideoDTO videoAdMob = albumList.get(postion);
-        NativeExpressAdView mAdView = new NativeExpressAdView(mContext);
-        System.out.println("unit id get : "+videoAdMob.getVideoName());
+        if(postion == 2)
+        {
+            vhHeader.adViewLayout.setVisibility(View.GONE);
+        }else {
+            vhHeader.adViewLayout.setVisibility(View.VISIBLE);
+            VideoDTO videoAdMob = albumList.get(postion);
+            NativeExpressAdView mAdView = new NativeExpressAdView(mContext);
+            System.out.println("unit id get : " + videoAdMob.getVideoName());
 
-        mAdView.setAdSize(new AdSize(RelativeLayout.LayoutParams.MATCH_PARENT,80));
-        mAdView.setAdUnitId(videoAdMob.getVideoName());
-        vhHeader.adViewLayout.addView(mAdView);
-         AdRequest request = new AdRequest.Builder()
-        .addTestDevice("20B52AAB529851184340334B73A36E8B")
+            mAdView.setAdSize(new AdSize(330, 80));
+            mAdView.setAdUnitId(videoAdMob.getVideoName());
+            vhHeader.adViewLayout.addView(mAdView);
+            AdRequest request = new AdRequest.Builder()
+                    .addTestDevice("20B52AAB529851184340334B73A36E8B")
 //        .addTestDevice("DABB24958D806248B7B399973C92A324")
-        .build();
+                    .build();
 
 
-
-        mAdView.loadAd(request);
+            mAdView.loadAd(request);
+        }
         // Load the Native Express ad.
     }
 

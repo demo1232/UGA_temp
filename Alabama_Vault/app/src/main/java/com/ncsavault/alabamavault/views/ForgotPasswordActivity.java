@@ -759,6 +759,7 @@ public class ForgotPasswordActivity extends BaseActivity implements AbstractView
                                         || loginEmailModel.getLoginResult().toLowerCase().contains("tw_exists")
                                         || loginEmailModel.getLoginResult().toLowerCase().contains("gm_exists")) {
                                     showToastMessage(GlobalConstants.ERROR_MESG);
+                                    pDialog.dismiss();
                                 }else
                                 {
                                     changePasswordCall();

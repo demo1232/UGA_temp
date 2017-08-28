@@ -203,7 +203,7 @@ public class PlaylistDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         PlaylistDto playlistDto = mPlaylistDtoArrayList.get(position);
         NativeExpressAdView mAdView = new NativeExpressAdView(mContext);
 
-        mAdView.setAdSize(new AdSize(342,80));
+        mAdView.setAdSize(new AdSize(338,80));
         mAdView.setAdUnitId(playlistDto.getPlaylistName());
         vhHeader.adViewLayout.addView(mAdView);
         AdRequest request = new AdRequest.Builder()

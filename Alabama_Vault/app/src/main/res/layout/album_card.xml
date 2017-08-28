@@ -3,9 +3,9 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@color/LightGrey"
-    android:layout_marginLeft="10dp"
-    android:layout_marginBottom="10dp"
-    android:layout_marginRight="10dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginBottom="8dp"
+    android:layout_marginRight="8dp"
     >
 
 
@@ -13,14 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/LightGrey">
-        <!-- android:layout_marginLeft="5dp"
-      android:layout_marginTop="5dp"
-      android:layout_marginRight="5dp"-->
 
         <ImageView
             android:id="@+id/thumbnail"
             android:layout_width="wrap_content"
-            android:layout_height="120dp"
+            android:layout_height="100dp"
             android:clickable="true"
             android:scaleType="fitXY"
             android:background="@drawable/playlist_item_shape"
@@ -29,13 +26,13 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="40dp"
             android:layout_below="@id/thumbnail"
             android:background="@color/apptheme_color">
             <TextView
                 android:id="@+id/video_name"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="Player Name"
                 android:gravity="center"
                 android:paddingLeft="@dimen/album_title_padding"

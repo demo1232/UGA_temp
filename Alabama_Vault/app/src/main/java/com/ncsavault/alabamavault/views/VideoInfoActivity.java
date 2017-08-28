@@ -209,7 +209,7 @@ public class VideoInfoActivity extends PermissionActivity implements VideoPlayer
 
         mAdView = (AdView) findViewById(R.id.adView);
 
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(360, 50);
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         if (Utils.hasNavBar(this)) {
