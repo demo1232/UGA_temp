@@ -207,7 +207,7 @@ public class VideoSearchActivity extends AppCompatActivity implements VideoSearc
 
     @Override
     public void onClick(final VideoSearchAdapter.SearchVideoViewHolder videoViewHolder, final int position) {
-        videoViewHolder.videoImageView.setOnClickListener(new View.OnClickListener() {
+        videoViewHolder.videoRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Utils.isInternetAvailable(VideoSearchActivity.this)) {

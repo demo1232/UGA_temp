@@ -2088,18 +2088,18 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
         leftOutAnimation = AnimationUtils.loadAnimation(UploadPhotoActivity.this, R.anim.leftin);
         rightInAnimation = AnimationUtils.loadAnimation(UploadPhotoActivity.this, R.anim.rightout);
 
-        mFirstName.setAnimation(rightInAnimation);
-        mLastName.setAnimation(rightInAnimation);
-        mYOB.setAnimation(rightInAnimation);
-        mGender.setAnimation(rightInAnimation);
-        mEmailId.setAnimation(rightInAnimation);
-        mUserName.setAnimation(rightInAnimation);
-        mPassword.setAnimation(rightInAnimation);
-        mConfirmPassword.setAnimation(rightInAnimation);
-        mRegistertionButton.setAnimation(rightInAnimation);
-        tvAlreadyRegistered.setAnimation(rightInAnimation);
-        imageViewPasswordVisibility.setAnimation(rightInAnimation);
-        imageViewConfirmPasswordVisibility.setAnimation(rightInAnimation);
+        mFirstName.setAnimation(leftOutAnimation);
+        mLastName.setAnimation(leftOutAnimation);
+        mYOB.setAnimation(leftOutAnimation);
+        mGender.setAnimation(leftOutAnimation);
+        mEmailId.setAnimation(leftOutAnimation);
+        mUserName.setAnimation(leftOutAnimation);
+        mPassword.setAnimation(leftOutAnimation);
+        mConfirmPassword.setAnimation(leftOutAnimation);
+        mRegistertionButton.setAnimation(leftOutAnimation);
+        tvAlreadyRegistered.setAnimation(leftOutAnimation);
+        imageViewPasswordVisibility.setAnimation(leftOutAnimation);
+        imageViewConfirmPasswordVisibility.setAnimation(leftOutAnimation);
 
         mFirstName.setVisibility(View.VISIBLE);
         mLastName.setVisibility(View.VISIBLE);
@@ -2115,10 +2115,10 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
         imageViewConfirmPasswordVisibility.setVisibility(View.VISIBLE);
         //tvHeader.setText("Register");
 
-        mProfileImage.setAnimation(leftOutAnimation);
-        mSignUpButton.setAnimation(leftOutAnimation);
-        tvUploadPhoto.setAnimation(leftOutAnimation);
-        tvSignUpWithoutProfile.setAnimation(leftOutAnimation);
+        mProfileImage.setAnimation(rightInAnimation);
+        mSignUpButton.setAnimation(rightInAnimation);
+        tvUploadPhoto.setAnimation(rightInAnimation);
+        tvSignUpWithoutProfile.setAnimation(rightInAnimation);
 
         mProfileImage.setVisibility(View.GONE);
         mSignUpButton.setVisibility(View.GONE);
