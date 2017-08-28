@@ -4,12 +4,15 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.os.Build;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.PagerAdapter;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -55,6 +58,7 @@ public class HorizontalPagerAdapter extends PagerAdapter {
                 .imageScaleType(ImageScaleType.EXACTLY)
                 .build();
         imageLoader = AppController.getInstance().getImageLoader();
+        getScreenDimensions();
     }
 
     @Override
@@ -98,6 +102,13 @@ public class HorizontalPagerAdapter extends PagerAdapter {
                                 }
                             });
 
+            int aspectHeight = (displayWidth * 9) / 16;
+
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                    aspectHeight);
+            //lp.setMargins(30,0,30,0);
+            imageCover.setLayoutParams(lp);
+
 
             imageCover.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -134,6 +145,24 @@ public class HorizontalPagerAdapter extends PagerAdapter {
         }
 
         return view;
+    }
+
+    private int displayHeight = 0, displayWidth = 0;
+
+    public void getScreenDimensions() {
+
+        Point size = new Point();
+        WindowManager w = HomeScreen.activity.getWindowManager();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            w.getDefaultDisplay().getSize(size);
+            displayHeight = size.y;
+            displayWidth = size.x;
+        } else {
+            Display d = w.getDefaultDisplay();
+            displayHeight = d.getHeight();
+            displayWidth = d.getWidth();
+        }
     }
 
     @Override

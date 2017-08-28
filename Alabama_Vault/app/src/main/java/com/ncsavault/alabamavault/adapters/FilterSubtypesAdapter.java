@@ -238,7 +238,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                         }
                                     });
 
-                    int aspectHeight = (displayWidth * ((int)12.25)) / 16;
+                    int aspectHeight = (displayWidth * ((int)11.25)) / 16;
 
 //                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
 //                            aspectHeight);
@@ -247,7 +247,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
                     RelativeLayout.LayoutParams mainLayout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
                             aspectHeight);
-                    mainLayout.setMargins(30,0,30,0);
+                    mainLayout.setMargins(30,30,30,0);
                     vhHeader.mainFeaturedLayout.setLayoutParams(mainLayout);
 
 //
@@ -496,10 +496,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
            // adView = (AdView) itemView.findViewById(R.id.adView);
            // adView = (NativeExpressAdView) itemView.findViewById(R.id.adView);
              adViewLayout = (RelativeLayout) itemView.findViewById(R.id.adView_layout);
-              RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-              RelativeLayout.LayoutParams.MATCH_PARENT);
-              lp.setMargins(30,0,30,30);
-              adViewLayout.setLayoutParams(lp);
+
         }
 
     }
@@ -526,6 +523,10 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             vhHeader.adViewLayout.setVisibility(View.GONE);
         }else {
             vhHeader.adViewLayout.setVisibility(View.VISIBLE);
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT);
+            lp.setMargins(30,30,30,10);
+            vhHeader.adViewLayout.setLayoutParams(lp);
             VideoDTO videoAdMob = albumList.get(postion);
             NativeExpressAdView mAdView = new NativeExpressAdView(mContext);
             System.out.println("unit id get : " + videoAdMob.getVideoName());

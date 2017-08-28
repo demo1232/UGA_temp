@@ -91,6 +91,8 @@ public class GlobalConstants {
     //new Staging url
     public static String BASE_URL = "http://syncroapi-staging.ncsavault.com/api";
 
+    //TEST Pro url
+    //public static String BASE_URL = "http://13.93.160.190/api";
     public static final String PUSH_REGISTER_URL = BASE_URL + "/MobileUsers/PostPushData";
 
     //local url
@@ -271,6 +273,8 @@ public class GlobalConstants {
 
     // public static final String JW_PLAYER_CSS_FILE_URL =  "file:///android_asset/UgaPlayer.css";
     public static final String JW_PLAYER_CSS_FILE_URL =  "http://syncroapi-staging.ncsavault.com/JWPlayerCss/Alabama/AlabamaPlayer.css";
+   // public static final String JW_PLAYER_CSS_FILE_URL =  "http://13.93.160.190/JWPlayerCss/Alabama/AlabamaPlayer.css";
+
 
     public static final String YOUR_PASSWORD_HAS_BEEN_REGISTERED_SUCCESSFULLY = "Your password has been reset successfully";
     public static final String YOUR_EMAIL_HAS_BEEN_VERIFIED_SUCCESSFULLY = "Your email has been verified successfully";

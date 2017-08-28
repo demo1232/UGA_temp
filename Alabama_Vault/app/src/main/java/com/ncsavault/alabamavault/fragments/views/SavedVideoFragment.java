@@ -174,17 +174,21 @@ public class SavedVideoFragment extends Fragment implements SavedVideoAdapter.Sa
         prefs = mContext.getSharedPreferences(GlobalConstants.PREF_PACKAGE_NAME, Context.MODE_PRIVATE);
         long userId = prefs.getLong(GlobalConstants.PREF_VAULT_USER_ID_LONG, 0);
 
+        setToolbarIcons();
+
         if(userId == GlobalConstants.DEFAULT_USER_ID)
         {
             savedLoginLayout.setVisibility(View.VISIBLE);
             savedViewLayout.setVisibility(View.GONE);
+            ((HomeScreen) mContext).imageViewSearch.setVisibility(View.INVISIBLE);
         }else
         {
+            ((HomeScreen) mContext).imageViewSearch.setVisibility(View.VISIBLE);
             savedLoginLayout.setVisibility(View.GONE);
             savedViewLayout.setVisibility(View.VISIBLE);
         }
 
-        setToolbarIcons();
+
 
         ((HomeScreen)getActivity()).imageViewSearch.setOnClickListener(new View.OnClickListener() {
             @Override

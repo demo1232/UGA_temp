@@ -19,13 +19,12 @@
             android:layout_height="match_parent"
             android:scaleType="fitXY"
             app:srcCompat="@drawable/vault_4" />
-    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/apptheme_color"
-        android:layout_below="@+id/playlist_layout"
+        android:layout_alignParentBottom="true"
         >
 
         <TextView
@@ -39,6 +38,8 @@
             android:layout_centerInParent="true"/>
 
     </RelativeLayout>
+    </RelativeLayout>
+
 
 
     <ProgressBar
