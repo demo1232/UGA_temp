@@ -21,7 +21,7 @@
             android:clickable="true"
             android:scaleType="fitXY"
             android:background="@drawable/playlist_item_shape"
-            android:src="@drawable/vault_4"
+            android:src="@drawable/vault"
             android:transitionName="contact_details"/>
 
         <LinearLayout

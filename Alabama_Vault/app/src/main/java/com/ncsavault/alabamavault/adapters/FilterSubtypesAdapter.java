@@ -223,7 +223,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                         @Override
                                         public void onLoadingFailed(String s, View view, FailReason failReason) {
                                             vhHeader.progressBar.setVisibility(View.GONE);
-                                            vhHeader.videoImage.setImageResource(R.drawable.vault_4);
+                                            vhHeader.videoImage.setImageResource(R.drawable.vault);
                                         }
 
                                         @Override
@@ -234,7 +234,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                         @Override
                                         public void onLoadingCancelled(String s, View view) {
                                             vhHeader.progressBar.setVisibility(View.GONE);
-                                            vhHeader.videoImage.setImageResource(R.drawable.vault_4);
+                                            vhHeader.videoImage.setImageResource(R.drawable.vault);
                                         }
                                     });
 

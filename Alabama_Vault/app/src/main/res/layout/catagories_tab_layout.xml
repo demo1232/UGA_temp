@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            app:srcCompat="@drawable/vault_4" />
+            app:srcCompat="@drawable/vault" />
 
     <RelativeLayout
         android:layout_width="match_parent"

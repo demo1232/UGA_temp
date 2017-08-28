@@ -166,7 +166,7 @@ public class PlaylistDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     @Override
                     public void onLoadingFailed(String s, View view, FailReason failReason) {
                         viewHolder.progressBar.setVisibility(View.GONE);
-                        viewHolder.thumbnail.setImageResource(R.drawable.vault_4);
+                        viewHolder.thumbnail.setImageResource(R.drawable.vault);
                     }
 
                     @Override
@@ -177,7 +177,7 @@ public class PlaylistDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     @Override
                     public void onLoadingCancelled(String s, View view) {
                         viewHolder.progressBar.setVisibility(View.GONE);
-                        viewHolder.thumbnail.setImageResource(R.drawable.vault_4);
+                        viewHolder.thumbnail.setImageResource(R.drawable.vault);
                     }
                 });
 
