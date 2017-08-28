@@ -261,8 +261,8 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
     }
 
     private void setToolbarIcons() {
+        ((HomeScreen)mContext).linearLayoutToolbarText.setVisibility(View.VISIBLE);
         ((HomeScreen) mContext).imageViewSearch.setVisibility(View.INVISIBLE);
-        ((HomeScreen) mContext).imageViewLogo.setVisibility(View.VISIBLE);
         ((HomeScreen) mContext).textViewEdit.setVisibility(View.VISIBLE);
         ((HomeScreen) mContext).textViewEdit.setText("EDIT");
         ((HomeScreen) mContext).imageViewBackNavigation.setVisibility(View.INVISIBLE);

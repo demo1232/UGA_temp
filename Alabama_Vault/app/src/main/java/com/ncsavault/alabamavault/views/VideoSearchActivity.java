@@ -25,6 +25,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -42,6 +43,8 @@ import com.ncsavault.alabamavault.globalconstants.GlobalConstants;
 import com.ncsavault.alabamavault.service.TrendingFeaturedVideoService;
 import com.ncsavault.alabamavault.utils.Utils;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -56,6 +59,8 @@ public class VideoSearchActivity extends AppCompatActivity implements VideoSearc
     public EditText editTextSearch;
     public ImageView imageviewLogo;
     public ImageView imageViewBackNavigation;
+
+    public LinearLayout linearLayoutToolbarText;
 
     TextView textviewNoVideoFound;
     ArrayList<Object> objects;
@@ -92,7 +97,7 @@ public class VideoSearchActivity extends AppCompatActivity implements VideoSearc
         fragment = getIntent().getStringExtra("Fragment");
 
 
-        setHint(fragment);
+//        setHint(fragment);
 
 
         getVideoDataFromDataBase(fragment);
@@ -147,10 +152,10 @@ public class VideoSearchActivity extends AppCompatActivity implements VideoSearc
         textviewNoVideoFound = (TextView) findViewById(R.id.textView_recordsNotFound);
         editTextSearch = (EditText) mToolbar.findViewById(R.id.editText_search);
         imageviewSearch = (ImageView) mToolbar.findViewById(R.id.imageview_search);
+        linearLayoutToolbarText=(LinearLayout) mToolbar.findViewById(R.id.ll_toolbarText);
         editTextSearch.setVisibility(View.VISIBLE);
         imageviewSearch.setVisibility(View.INVISIBLE);
-        imageviewLogo = (ImageView) mToolbar.findViewById(R.id.imageview_logo);
-        imageviewLogo.setVisibility(View.INVISIBLE);
+        linearLayoutToolbarText.setVisibility(View.INVISIBLE);
         imageViewBackNavigation = (ImageView) mToolbar.findViewById(R.id.imageview_back);
         imageViewBackNavigation.setVisibility(View.VISIBLE);
     }

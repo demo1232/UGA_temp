@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:custom="http://schemas.android.com/tools"
     android:background="?attr/colorPrimary"
     app:contentInsetLeft="0dp"
     app:contentInsetStart="0dp"
@@ -56,20 +57,50 @@
             android:visibility="visible" />
 
         <LinearLayout
+            android:id="@+id/ll_toolbarText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_toLeftOf="@+id/textview_edit"
             android:layout_toRightOf="@+id/imageview_back"
+            android:visibility="visible"
             android:gravity="center">
+
+
+            <TextView
+                android:id="@+id/textview_toolbar1"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:text="ALABAMA"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+            <TextView
+                android:id="@+id/textview_toolbar2"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:text="VAULT"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
 
             <ImageView
                 android:id="@+id/imageview_logo"
                 android:layout_width="200dp"
-                android:layout_height="25dp"
+                android:layout_height="20dp"
                 android:layout_gravity="center"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/alabama_vault_logo" />
+                android:visibility="gone"
+                android:src="@drawable/alabama_vault_logo" />
 
         </LinearLayout>
 
@@ -89,15 +120,6 @@
                 android:text="ALABAMA"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/toolbar_title_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="VAULT"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -143,7 +165,7 @@
             android:layout_centerInParent="true"
             android:layout_gravity="left"
             android:background="@drawable/edittext_bg"
-            android:hint="Search"
+            android:hint="search ALABAMAVAULT"
             android:singleLine="true"
             android:imeOptions="actionDone"
             android:layout_marginRight="10dp"

@@ -513,17 +513,22 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     public void adMobBannerAdvertising(RecyclerView.ViewHolder holder,int postion) {
 
+
         SubtypeViewHolder vhHeader = (SubtypeViewHolder) holder;
         VideoDTO videoAdMob = albumList.get(postion);
         NativeExpressAdView mAdView = new NativeExpressAdView(mContext);
         System.out.println("unit id get : "+videoAdMob.getVideoName());
 
-        mAdView.setAdSize(new AdSize(300,50));
+        mAdView.setAdSize(new AdSize(360,50));
         mAdView.setAdUnitId(videoAdMob.getVideoName());
         vhHeader.adViewLayout.addView(mAdView);
          AdRequest request = new AdRequest.Builder()
         .addTestDevice("20B52AAB529851184340334B73A36E8B")
+//        .addTestDevice("DABB24958D806248B7B399973C92A324")
         .build();
+
+
+
         mAdView.loadAd(request);
         // Load the Native Express ad.
     }

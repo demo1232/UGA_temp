@@ -212,8 +212,8 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
     }
 
     private void setToolbarIcons() {
+        ((HomeScreen)mContext).linearLayoutToolbarText.setVisibility(View.VISIBLE);
         ((HomeScreen) mContext).imageViewSearch.setVisibility(View.INVISIBLE);
-        ((HomeScreen) mContext).imageViewLogo.setVisibility(View.VISIBLE);
         ((HomeScreen) mContext).textViewEdit.setVisibility(View.INVISIBLE);
         ((HomeScreen) mContext).imageViewBackNavigation.setVisibility(View.INVISIBLE);
     }
