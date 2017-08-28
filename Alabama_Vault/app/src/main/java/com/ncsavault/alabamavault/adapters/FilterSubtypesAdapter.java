@@ -223,7 +223,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                         @Override
                                         public void onLoadingFailed(String s, View view, FailReason failReason) {
                                             vhHeader.progressBar.setVisibility(View.GONE);
-                                            vhHeader.videoImage.setImageResource(R.drawable.vault_4);
+                                            vhHeader.videoImage.setImageResource(R.drawable.vault);
                                         }
 
                                         @Override
@@ -234,7 +234,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                         @Override
                                         public void onLoadingCancelled(String s, View view) {
                                             vhHeader.progressBar.setVisibility(View.GONE);
-                                            vhHeader.videoImage.setImageResource(R.drawable.vault_4);
+                                            vhHeader.videoImage.setImageResource(R.drawable.vault);
                                         }
                                     });
 
@@ -498,7 +498,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
              adViewLayout = (RelativeLayout) itemView.findViewById(R.id.adView_layout);
               RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
               RelativeLayout.LayoutParams.MATCH_PARENT);
-              lp.setMargins(30,0,30,30);
+              lp.setMargins(30,0,30,20);
               adViewLayout.setLayoutParams(lp);
         }
 

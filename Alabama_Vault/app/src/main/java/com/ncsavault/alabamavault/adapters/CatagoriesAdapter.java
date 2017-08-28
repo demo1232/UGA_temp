@@ -101,7 +101,7 @@ public class CatagoriesAdapter extends RecyclerView.Adapter<CatagoriesAdapter.Ca
                     @Override
                     public void onLoadingFailed(String s, View view, FailReason failReason) {
                         viewHolder.progressBar.setVisibility(View.GONE);
-                        viewHolder.playlistImageView.setImageResource(R.drawable.vault_4);
+                        viewHolder.playlistImageView.setImageResource(R.drawable.vault);
                     }
 
                     @Override
@@ -112,7 +112,7 @@ public class CatagoriesAdapter extends RecyclerView.Adapter<CatagoriesAdapter.Ca
                     @Override
                     public void onLoadingCancelled(String s, View view) {
                         viewHolder.progressBar.setVisibility(View.GONE);
-                        viewHolder.playlistImageView.setImageResource(R.drawable.vault_4);
+                        viewHolder.playlistImageView.setImageResource(R.drawable.vault);
                     }
                 });
 

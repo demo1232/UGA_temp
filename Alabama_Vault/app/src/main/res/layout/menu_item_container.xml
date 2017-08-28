@@ -16,12 +16,12 @@
             <ImageView
                 android:id="@+id/menu_item_image"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:src="@drawable/vault_4"
-                android:scaleType="centerCrop"
+                android:src="@drawable/vault"
+                android:scaleType="fitXY"
                 android:layout_centerHorizontal="true"
                 />
 

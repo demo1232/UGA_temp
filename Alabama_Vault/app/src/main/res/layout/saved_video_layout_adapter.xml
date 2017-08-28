@@ -35,7 +35,7 @@
                 android:layout_width="150dp"
                 android:layout_height="100dp"
                 android:layout_margin="5dp"
-                android:src="@drawable/vault_4"
+                android:src="@drawable/vault"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY" />
 

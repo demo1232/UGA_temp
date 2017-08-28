@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="210dp"
             android:scaleType="fitXY"
-            android:src="@drawable/vault_4"
+            android:src="@drawable/vault"
             android:transitionName="contact_details"
             android:background="@color/LightGrey"
             />
