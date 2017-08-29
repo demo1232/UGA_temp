@@ -106,7 +106,7 @@ public class HorizontalPagerAdapter extends PagerAdapter {
 
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
                     aspectHeight);
-            //lp.setMargins(30,0,30,0);
+            //lp.setMargins(50,0,50,0);
             imageCover.setLayoutParams(lp);
 
 

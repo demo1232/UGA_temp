@@ -525,7 +525,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             vhHeader.adViewLayout.setVisibility(View.VISIBLE);
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(30,30,30,10);
+            lp.setMargins(30,30,30,5);
             vhHeader.adViewLayout.setLayoutParams(lp);
             VideoDTO videoAdMob = albumList.get(postion);
             NativeExpressAdView mAdView = new NativeExpressAdView(mContext);

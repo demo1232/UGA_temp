@@ -89,11 +89,14 @@ public class SavedVideoAdapter extends RecyclerView.Adapter<SavedVideoAdapter.Sa
                     @Override
                     public void onLoadingStarted(String s, View view) {
                         viewHolder.progressBar.setVisibility(View.VISIBLE);
+                        viewHolder.videoImageView.setImageResource(R.drawable.vault);
+
                     }
 
                     @Override
                     public void onLoadingFailed(String s, View view, FailReason failReason) {
                         viewHolder.progressBar.setVisibility(View.GONE);
+                        viewHolder.videoImageView.setImageResource(R.drawable.vault);
                     }
 
                     @Override
@@ -104,6 +107,7 @@ public class SavedVideoAdapter extends RecyclerView.Adapter<SavedVideoAdapter.Sa
                     @Override
                     public void onLoadingCancelled(String s, View view) {
                         viewHolder.progressBar.setVisibility(View.GONE);
+                        viewHolder.videoImageView.setImageResource(R.drawable.vault);
                     }
                 });
 
