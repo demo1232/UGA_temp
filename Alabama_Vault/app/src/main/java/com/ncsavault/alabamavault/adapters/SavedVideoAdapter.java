@@ -78,7 +78,7 @@ public class SavedVideoAdapter extends RecyclerView.Adapter<SavedVideoAdapter.Sa
 
         VideoDTO newVideoDto = mFavoriteVideoList.get(position);
 
-        String videoImageUrl = newVideoDto.getVideoStillUrl();
+        final String videoImageUrl = newVideoDto.getVideoStillUrl();
         String videoName = newVideoDto.getVideoName();
         String videDescription = newVideoDto.getVideoShortDescription();
         long videoDuration = newVideoDto.getVideoDuration();
@@ -102,6 +102,9 @@ public class SavedVideoAdapter extends RecyclerView.Adapter<SavedVideoAdapter.Sa
                     @Override
                     public void onLoadingComplete(String s, View view, Bitmap bitmap) {
                         viewHolder.progressBar.setVisibility(View.GONE);
+                        if (videoImageUrl == null) {
+                            viewHolder.videoImageView.setImageResource(R.drawable.vault);
+                        }
                     }
 
                     @Override

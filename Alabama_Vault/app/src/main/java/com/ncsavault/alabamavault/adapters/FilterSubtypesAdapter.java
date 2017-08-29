@@ -229,6 +229,9 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                         @Override
                                         public void onLoadingComplete(String s, View view, Bitmap bitmap) {
                                             vhHeader.progressBar.setVisibility(View.GONE);
+                                            if (videoDTO.getVideoStillUrl() == null) {
+                                                vhHeader.videoImage.setImageResource(R.drawable.vault);
+                                            }
                                         }
 
                                         @Override
@@ -495,6 +498,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
            // adView = (AdView) itemView.findViewById(R.id.adView);
            // adView = (NativeExpressAdView) itemView.findViewById(R.id.adView);
              adViewLayout = (RelativeLayout) itemView.findViewById(R.id.adView_layout);
+
 
         }
 

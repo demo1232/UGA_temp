@@ -210,7 +210,7 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
 
         mAdView = (AdView) findViewById(R.id.adView);
 
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(340, 50);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(320, 50);
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         if (Utils.hasNavBar(this)) {
