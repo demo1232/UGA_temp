@@ -85,7 +85,7 @@ public class CatagoriesAdapter extends RecyclerView.Adapter<CatagoriesAdapter.Ca
     public void onBindViewHolder(final CatagoriesAdapterViewHolder viewHolder, int position) {
 
         //CatagoriesTabDao catagoriesTabDao = mCatagoriesTabList.get(position);
-        String catagoriesTabImageUrl = mCatagoriesTabList.get(position).getCategoriesUrl();
+        final String catagoriesTabImageUrl = mCatagoriesTabList.get(position).getCategoriesUrl();
         String catagoriesTabName = mCatagoriesTabList.get(position).getCategoriesName();
         long categoriesId = mCatagoriesTabList.get(position).getCategoriesId();
 
@@ -107,6 +107,9 @@ public class CatagoriesAdapter extends RecyclerView.Adapter<CatagoriesAdapter.Ca
                     @Override
                     public void onLoadingComplete(String s, View view, Bitmap bitmap) {
                         viewHolder.progressBar.setVisibility(View.GONE);
+                        if(catagoriesTabImageUrl==null){
+                            viewHolder.playlistImageView.setImageResource(R.drawable.vault);
+                        }
                     }
 
                     @Override
@@ -121,7 +124,7 @@ public class CatagoriesAdapter extends RecyclerView.Adapter<CatagoriesAdapter.Ca
                 RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
                         aspectHeight);
                 //lp.setMargins(30,0,30,0);
-                viewHolder.playlistLayout.setLayoutParams(lp);
+                viewHolder.playlistImageView.setLayoutParams(lp);
 
         viewHolder.playlistTabNametextView.setText(catagoriesTabName);
 

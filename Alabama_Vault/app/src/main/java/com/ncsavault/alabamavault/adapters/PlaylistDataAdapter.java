@@ -151,7 +151,7 @@ public class PlaylistDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private void displayPlaylistData(RecyclerView.ViewHolder holder,int position)
     {
         final MyViewHolder viewHolder = (MyViewHolder)holder;
-        String playlistImageUrl = mPlaylistDtoArrayList.get(position).getPlaylistThumbnailUrl();
+        final String playlistImageUrl = mPlaylistDtoArrayList.get(position).getPlaylistThumbnailUrl();
         String playlistName = mPlaylistDtoArrayList.get(position).getPlaylistName();
         long playlistId = mPlaylistDtoArrayList.get(position).getPlaylistId();
 
@@ -172,6 +172,9 @@ public class PlaylistDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     @Override
                     public void onLoadingComplete(String s, View view, Bitmap bitmap) {
                         viewHolder.progressBar.setVisibility(View.GONE);
+                        if (playlistImageUrl == null) {
+                            viewHolder.thumbnail.setImageResource(R.drawable.vault);
+                        }
                     }
 
                     @Override

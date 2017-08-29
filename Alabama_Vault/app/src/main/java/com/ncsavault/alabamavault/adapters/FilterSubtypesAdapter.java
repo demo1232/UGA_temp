@@ -229,6 +229,9 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                         @Override
                                         public void onLoadingComplete(String s, View view, Bitmap bitmap) {
                                             vhHeader.progressBar.setVisibility(View.GONE);
+                                            if (videoDTO.getVideoStillUrl() == null) {
+                                                vhHeader.videoImage.setImageResource(R.drawable.vault);
+                                            }
                                         }
 
                                         @Override
@@ -497,6 +500,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
            // adView = (NativeExpressAdView) itemView.findViewById(R.id.adView);
              adViewLayout = (RelativeLayout) itemView.findViewById(R.id.adView_layout);
 
+
         }
 
     }
@@ -523,15 +527,15 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             vhHeader.adViewLayout.setVisibility(View.GONE);
         }else {
             vhHeader.adViewLayout.setVisibility(View.VISIBLE);
-            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(30,30,30,5);
-            vhHeader.adViewLayout.setLayoutParams(lp);
+//            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+//            ViewGroup.LayoutParams.WRAP_CONTENT);
+//            lp.setMargins(30,30,30,5);
+//            vhHeader.adViewLayout.setLayoutParams(lp);
             VideoDTO videoAdMob = albumList.get(postion);
             NativeExpressAdView mAdView = new NativeExpressAdView(mContext);
             System.out.println("unit id get : " + videoAdMob.getVideoName());
 
-            mAdView.setAdSize(new AdSize(330, 80));
+            mAdView.setAdSize(new AdSize(320, 80));
             mAdView.setAdUnitId(videoAdMob.getVideoName());
             vhHeader.adViewLayout.addView(mAdView);
             AdRequest request = new AdRequest.Builder()

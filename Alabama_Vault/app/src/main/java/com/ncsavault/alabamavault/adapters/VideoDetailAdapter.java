@@ -45,12 +45,11 @@ public class VideoDetailAdapter extends RecyclerView.Adapter<VideoDetailAdapter.
     public DisplayImageOptions options;
     private VideoClickListener mVideoClickListener;
 
-    public interface VideoClickListener
-    {
-        void onClick(VideoDetailAdapter.VideoViewHolder videoViewHolder,int position);
+    public interface VideoClickListener {
+        void onClick(VideoDetailAdapter.VideoViewHolder videoViewHolder, int position);
     }
 
-    public VideoDetailAdapter(Context context,ArrayList<VideoDTO> videoDtoArrayList,
+    public VideoDetailAdapter(Context context, ArrayList<VideoDTO> videoDtoArrayList,
                               VideoClickListener videoClickListener) {
         super();
         mContext = context;
@@ -88,7 +87,7 @@ public class VideoDetailAdapter extends RecyclerView.Adapter<VideoDetailAdapter.
         //   holder.videoNametextView.setText("Video Name");
         VideoDTO newVideoDto = mVideoDtoArrayList.get(position);
 
-        String videoImageUrl = newVideoDto.getVideoStillUrl();
+        final String videoImageUrl = newVideoDto.getVideoStillUrl();
         String videoName = newVideoDto.getVideoName();
         String videDescription = newVideoDto.getVideoShortDescription();
         long videoDuration = newVideoDto.getVideoDuration();
@@ -110,6 +109,9 @@ public class VideoDetailAdapter extends RecyclerView.Adapter<VideoDetailAdapter.
                     @Override
                     public void onLoadingComplete(String s, View view, Bitmap bitmap) {
                         viewHolder.progressBar.setVisibility(View.GONE);
+                        if (videoImageUrl == null) {
+                            viewHolder.videoImageView.setImageResource(R.drawable.vault);
+                        }
                     }
 
                     @Override
@@ -130,7 +132,7 @@ public class VideoDetailAdapter extends RecyclerView.Adapter<VideoDetailAdapter.
         viewHolder.videoNameTextView.setText(videoName);
         viewHolder.videoDescriptionTextView.setText(videDescription);
 
-        if(videoDuration != 0) {
+        if (videoDuration != 0) {
             viewHolder.videoDurationTextView.setText(Utils.convertSecondsToHMmSs(videoDuration));
         }
 
@@ -147,15 +149,15 @@ public class VideoDetailAdapter extends RecyclerView.Adapter<VideoDetailAdapter.
             viewHolder.savedVideoImageView.setImageResource(R.drawable.video_save);
         }
 
-        mVideoClickListener.onClick(viewHolder,position);
+        mVideoClickListener.onClick(viewHolder, position);
 
     }
 
 
     public class VideoViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView videoImageView,savedVideoImageView;
-        TextView videoNameTextView,videoDescriptionTextView,videoDurationTextView;
+        public ImageView videoImageView, savedVideoImageView;
+        TextView videoNameTextView, videoDescriptionTextView, videoDurationTextView;
         private ProgressBar progressBar;
         public RelativeLayout videoRelativeLayout;
         public LinearLayout mLayoutSavedImage;
@@ -178,7 +180,7 @@ public class VideoDetailAdapter extends RecyclerView.Adapter<VideoDetailAdapter.
                         R.drawable.progress_large_material, null));
             }
 
-            videoRelativeLayout = (RelativeLayout)view.findViewById(R.id.save_video_main_layout);
+            videoRelativeLayout = (RelativeLayout) view.findViewById(R.id.save_video_main_layout);
 
         }
     }
