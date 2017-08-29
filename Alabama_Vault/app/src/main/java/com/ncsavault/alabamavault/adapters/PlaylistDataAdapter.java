@@ -195,10 +195,6 @@ public class PlaylistDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public void adMobBannerAdvertising(RecyclerView.ViewHolder holder,int position) {
 
-//        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-//        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-//        layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-
         NativeAdsViewHolder vhHeader = (NativeAdsViewHolder)holder;
         PlaylistDto playlistDto = mPlaylistDtoArrayList.get(position);
         NativeExpressAdView mAdView = new NativeExpressAdView(mContext);

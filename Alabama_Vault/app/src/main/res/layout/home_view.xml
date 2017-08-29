@@ -90,6 +90,8 @@
                 android:id="@+id/pager_introduction"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginRight="18dp"
+                android:layout_marginLeft="18dp"
                 android:layout_gravity="center" />
         </me.crosswall.lib.coverflow.core.PagerContainer>
 

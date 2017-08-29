@@ -34,6 +34,7 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.transition.Transition;
 import android.util.Log;
 import android.view.Display;
@@ -111,7 +112,7 @@ import java.util.Vector;
 /**
  * Created by Gauravkumar.singh on 09-09-2015.
  */
-public class VideoInfoActivity extends PermissionActivity implements VideoPlayerEvents.OnFullscreenListener {
+public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerEvents.OnFullscreenListener {
 
     //Declare fields required
     private VideoDTO videoObject;
@@ -261,65 +262,65 @@ public class VideoInfoActivity extends PermissionActivity implements VideoPlayer
     }
 
 
-    @Override
-    public void onPermissionResult(int requestCode, boolean isGranted, Object extras) {
+//    @Override
+//    public void onPermissionResult(int requestCode, boolean isGranted, Object extras) {
+//
+//        try {
+//            switch (requestCode) {
+//                case PERMISSION_REQUEST_MUST:
+//                    if (isGranted) {
+//                        //perform action here
+//                        //gk initlizeAllVideoInfoActivityData();
+//                        if (linearLayout != null && linearLayout.getVisibility() == View.VISIBLE) {
+//                            linearLayout.setVisibility(View.GONE);
+//                        }
+//                        if (videoObject != null && imageUri == null) {
+//                            new ShareTwitter().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//                        }
+//                       //gk twitterSharingData();
+//                    } else {
+//                        if (!askAgainForMustPermissions) {
+//                            askAgainForMustPermissions = true;
+//                            haveAllMustPermissions(writeExternalStorage, PERMISSION_REQUEST_MUST);
+//                        } else if (!goToSettingsScreen) {
+//                            goToSettingsScreen = true;
+//
+//                            showPermissionsConfirmationDialog(GlobalConstants.VAULT_WRITE_PERMISSION);
+//
+//                        } else {
+//                            showPermissionsConfirmationDialog(GlobalConstants.VAULT_WRITE_PERMISSION);
+//                        }
+//                        if (linearLayout != null && linearLayout.getVisibility() == View.VISIBLE) {
+//                            linearLayout.setVisibility(View.GONE);
+//                        }
+//                    }
+//                    break;
+//            }
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-        try {
-            switch (requestCode) {
-                case PERMISSION_REQUEST_MUST:
-                    if (isGranted) {
-                        //perform action here
-                        //gk initlizeAllVideoInfoActivityData();
-                        if (linearLayout != null && linearLayout.getVisibility() == View.VISIBLE) {
-                            linearLayout.setVisibility(View.GONE);
-                        }
-                        if (videoObject != null && imageUri == null) {
-                            new ShareTwitter().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                        }
-                       //gk twitterSharingData();
-                    } else {
-                        if (!askAgainForMustPermissions) {
-                            askAgainForMustPermissions = true;
-                            haveAllMustPermissions(writeExternalStorage, PERMISSION_REQUEST_MUST);
-                        } else if (!goToSettingsScreen) {
-                            goToSettingsScreen = true;
-
-                            showPermissionsConfirmationDialog(GlobalConstants.VAULT_WRITE_PERMISSION);
-
-                        } else {
-                            showPermissionsConfirmationDialog(GlobalConstants.VAULT_WRITE_PERMISSION);
-                        }
-                        if (linearLayout != null && linearLayout.getVisibility() == View.VISIBLE) {
-                            linearLayout.setVisibility(View.GONE);
-                        }
-                    }
-                    break;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            if (isBackToSplashScreen) {
-                isBackToSplashScreen = false;
-                if (haveAllMustPermissions()) {
-                    if (linearLayout != null && linearLayout.getVisibility() == View.VISIBLE) {
-                        linearLayout.setVisibility(View.GONE);
-                    }
-//GK                    if (videoObject != null && imageUri == null) {
-//                        new ShareTwitter().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-//GK                    }
-                 //gk   twitterSharingData();
-                    //gk initlizeAllVideoInfoActivityData();
-                }
-            }
-        }
-    }
+//    @Override
+//    public void onWindowFocusChanged(boolean hasFocus) {
+//        super.onWindowFocusChanged(hasFocus);
+//        if (hasFocus) {
+//            if (isBackToSplashScreen) {
+//                isBackToSplashScreen = false;
+//                if (haveAllMustPermissions()) {
+//                    if (linearLayout != null && linearLayout.getVisibility() == View.VISIBLE) {
+//                        linearLayout.setVisibility(View.GONE);
+//                    }
+////GK                    if (videoObject != null && imageUri == null) {
+////                        new ShareTwitter().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+////GK                    }
+//                 //gk   twitterSharingData();
+//                    //gk initlizeAllVideoInfoActivityData();
+//                }
+//            }
+//        }
+//    }
 
     public void showPermissionsConfirmationDialog(String message) {
         if (linearLayout != null && linearLayout.getVisibility() == View.VISIBLE) {
@@ -1212,9 +1213,9 @@ public class VideoInfoActivity extends PermissionActivity implements VideoPlayer
                     mFirebaseAnalytics.setAnalyticsCollectionEnabled(true);
                 }
                 if (videoObject != null && videoUri == null) {
-                    if (haveAllMustPermissions(writeExternalStorage, PERMISSION_REQUEST_MUST)) {
+                   // if (haveAllMustPermissions(writeExternalStorage, PERMISSION_REQUEST_MUST)) {
                         new ShareTwitter().execute();
-                    }
+                   // }
                 }
             }
         } catch (Exception e) {

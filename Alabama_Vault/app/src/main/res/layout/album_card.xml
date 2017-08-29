@@ -35,6 +35,7 @@
                 android:layout_height="match_parent"
                 android:text="Player Name"
                 android:gravity="center"
+                android:singleLine="true"
                 android:paddingLeft="@dimen/album_title_padding"
                 android:paddingRight="@dimen/album_title_padding"
                 android:paddingTop="@dimen/album_title_padding"

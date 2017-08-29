@@ -238,8 +238,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                         }
                                     });
 
-                    int aspectHeight = (displayWidth * ((int)11.25)) / 16;
-
+                    int aspectHeight = (displayWidth * 9) / 16;
 //                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
 //                            aspectHeight);
 //                   // lp.setMargins(30,0,30,0);
@@ -247,7 +246,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
                     RelativeLayout.LayoutParams mainLayout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
                             aspectHeight);
-                    mainLayout.setMargins(30,30,30,0);
+                    mainLayout.setMargins(40,0,40,0);
                     vhHeader.mainFeaturedLayout.setLayoutParams(mainLayout);
 
 //
@@ -394,7 +393,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         int screenSize = mContext.getResources().getConfiguration().screenLayout &
                 Configuration.SCREENLAYOUT_SIZE_MASK;
         if (screenSize == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
-            margin = (float) (-displayWidth / 3.5);
+            margin = (float) (-displayWidth / 3.8);
         } else {
             margin = (float) (-displayWidth / 3.9);
         }
@@ -523,15 +522,15 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             vhHeader.adViewLayout.setVisibility(View.GONE);
         }else {
             vhHeader.adViewLayout.setVisibility(View.VISIBLE);
-            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(30,30,30,5);
-            vhHeader.adViewLayout.setLayoutParams(lp);
+//            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+//            ViewGroup.LayoutParams.WRAP_CONTENT);
+//            lp.setMargins(30,30,30,5);
+//            vhHeader.adViewLayout.setLayoutParams(lp);
             VideoDTO videoAdMob = albumList.get(postion);
             NativeExpressAdView mAdView = new NativeExpressAdView(mContext);
             System.out.println("unit id get : " + videoAdMob.getVideoName());
 
-            mAdView.setAdSize(new AdSize(330, 80));
+            mAdView.setAdSize(new AdSize(340, 80));
             mAdView.setAdUnitId(videoAdMob.getVideoName());
             vhHeader.adViewLayout.addView(mAdView);
             AdRequest request = new AdRequest.Builder()
