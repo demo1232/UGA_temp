@@ -97,7 +97,7 @@ public class VideoSearchAdapter extends RecyclerView.Adapter<VideoSearchAdapter.
                         @Override
                         public void onLoadingFailed(String s, View view, FailReason failReason) {
                             viewHolder.progressBar.setVisibility(View.GONE);
-                            viewHolder.videoImageView.setImageResource(R.drawable.vault_4);
+                            viewHolder.videoImageView.setImageResource(R.drawable.vault);
                         }
 
                         @Override
@@ -108,7 +108,7 @@ public class VideoSearchAdapter extends RecyclerView.Adapter<VideoSearchAdapter.
                         @Override
                         public void onLoadingCancelled(String s, View view) {
                             viewHolder.progressBar.setVisibility(View.GONE);
-                            viewHolder.videoImageView.setImageResource(R.drawable.vault_4);
+                            viewHolder.videoImageView.setImageResource(R.drawable.vault);
                         }
                     });
 
@@ -188,7 +188,7 @@ public class VideoSearchAdapter extends RecyclerView.Adapter<VideoSearchAdapter.
         public ImageView videoImageView, savedVideoImageView;
         TextView videoNameTextView, videoDescriptionTextView, videoDurationTextView;
         private ProgressBar progressBar;
-        public RelativeLayout videoRelativeLayout;
+        public LinearLayout videoRelativeLayout;
         public LinearLayout mLayoutSavedImage;
 
         public SearchVideoViewHolder(View view) {
@@ -209,7 +209,7 @@ public class VideoSearchAdapter extends RecyclerView.Adapter<VideoSearchAdapter.
                         R.drawable.progress_large_material, null));
             }
 
-            videoRelativeLayout = (RelativeLayout) view.findViewById(R.id.save_video_main_layout);
+            videoRelativeLayout = (LinearLayout) view.findViewById(R.id.save_video_main_layout);
 
         }
     }

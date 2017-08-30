@@ -176,6 +176,9 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
         protected void onPostExecute(final ArrayList<CatagoriesTabDao> result) {
             super.onPostExecute(result);
             try {
+                catagoriesTabList.clear();
+                catagoriesTabList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).
+                        getAllLocalCategoriesTabData());
 
             if (mRecyclerView != null) {
                 mCatagoriesAdapter = new CatagoriesAdapter(mContext, CatagoriesFragment.this, catagoriesTabList);

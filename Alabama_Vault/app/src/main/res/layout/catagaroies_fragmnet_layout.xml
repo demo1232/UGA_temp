@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/LightGrey"
+    android:layout_marginBottom="10dp"
     >
 
 
@@ -19,6 +20,7 @@
             android:layout_height="match_parent"
             android:background="@color/LightGrey"
             android:scrollbars="vertical"
+
             />
     </com.baoyz.widget.PullRefreshLayout>
 
@@ -27,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"
-            android:background="@color/VDarkGray">
+            android:background="@color/LightGrey">
 
         </FrameLayout>
 

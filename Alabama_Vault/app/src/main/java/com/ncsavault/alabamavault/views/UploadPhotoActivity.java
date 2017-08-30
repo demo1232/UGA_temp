@@ -1042,10 +1042,10 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
                 showToastMessage(GlobalConstants.FIRST_NAME_CAN_NOT_EMPTY);
                 return;
 
-            } else if (mFirstName.getText().toString().length() < 3) {
+            } /*else if (mFirstName.getText().toString().length() < 3) {
                 showToastMessage(GlobalConstants.FIRST_NAME_SHOULD_CONTAIN_THREE_CHARACTER);
                 return;
-            } else {
+            } */else {
                 fName = mFirstName.getText().toString().toString().trim();
             }
 
@@ -1053,10 +1053,10 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
                 showToastMessage(GlobalConstants.LAST_NAME_CAN_NOT_EMPTY);
                 return;
 
-            } else if (mLastName.getText().toString().length() < 3) {
+            } /*else if (mLastName.getText().toString().length() < 3) {
                 showToastMessage(GlobalConstants.LAST_NAME_SHOULD_CONTAIN_THREE_CHARACTER);
                 return;
-            } else {
+            } */else {
                 lName = mLastName.getText().toString().toString().trim();
             }
 

@@ -38,6 +38,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.transition.Transition;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -151,7 +152,7 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
     private Vector<Fragment> fragments;
     private PagerAdapter mPagerAdapter;
     private RelativeLayout viewPagerRelativeView;
-    private LinearLayout shareVideoLayout;
+    private LinearLayout shareVideoLayout,jwPlayerLayout;
     private boolean askAgainForMustPermissions = false;
     private boolean goToSettingsScreen = false;
     private MusicIntentReceiver myReceiver;
@@ -718,6 +719,7 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
         llVideoLoader = (LinearLayout) findViewById(R.id.ll_video_loader);
         bufferLinearLayout = (LinearLayout) findViewById(R.id.buffer_layout);
         bufferLinearLayout.setVisibility(View.GONE);
+        jwPlayerLayout = (LinearLayout) findViewById(R.id.jwplayer_layout);
 //gk        bufferProgressBar = (ProgressBar) findViewById(R.id.progressbar);
 //        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
 //            bufferProgressBar.setIndeterminateDrawable(getResources().getDrawable(R.drawable.circle_progress_bar_lower));
@@ -784,7 +786,7 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
             PlayerConfig playerConfig = new PlayerConfig.Builder()
                     .autostart(false)
                     .captionsEdgeStyle("ec_seek")
-                    .stretching(PlayerConfig.STRETCHING_FILL) //"exactfit"
+                    .stretching(PlayerConfig.STRETCHING_EXACT_FIT) //"exactfit"
                     .build();
 
             videoView.setup(playerConfig);
@@ -796,6 +798,8 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
                     .build();
 
             videoView.load(pi);
+
+            //jwPlayerLayout.setGravity(Gravity.CENTER);
 
 
 

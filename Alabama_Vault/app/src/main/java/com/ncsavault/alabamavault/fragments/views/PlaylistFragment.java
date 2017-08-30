@@ -481,8 +481,12 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
             protected void onPostExecute(ArrayList<PlaylistDto> result) {
                 super.onPostExecute(result);
 
+                playlistDtoDataList.clear();
+                playlistDtoDataList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext())
+                        .getLocalPlaylistDataByCategorieTab(tabId));
+
                 if (progressBar != null) {
-                    if (result.size() == 0) {
+                    if (playlistDtoDataList.size() == 0) {
                         progressBar.setVisibility(View.VISIBLE);
                     } else {
                         progressBar.setVisibility(View.GONE);
@@ -499,7 +503,7 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
                     }
                 }
 
-                mAlbumsAdapter = new PlaylistDataAdapter(mContext, PlaylistFragment.this, result);
+                mAlbumsAdapter = new PlaylistDataAdapter(mContext, PlaylistFragment.this, playlistDtoDataList);
                 GridLayoutManager mLayoutManager = new GridLayoutManager(mContext, 2);
                 mRecyclerView.setLayoutManager(mLayoutManager);
                 mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(1), true));
@@ -544,6 +548,16 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
                     playlistDtoDataList.clear();
                     playlistDtoDataList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext())
                             .getLocalPlaylistDataByCategorieTab(tabId));
+
+                    Collections.sort(playlistDtoDataList, new Comparator<PlaylistDto>() {
+
+                        @Override
+                        public int compare(PlaylistDto lhs, PlaylistDto rhs) {
+                            // TODO Auto-generated method stub
+                            return lhs.getPlaylistName().toLowerCase()
+                                    .compareTo(rhs.getPlaylistName().toLowerCase());
+                        }
+                    });
 
 
                 } catch (Exception e) {
@@ -690,6 +704,16 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
                 playlistDtoDataList.clear();
                 playlistDtoDataList.addAll(AppController.getInstance().getServiceManager().getVaultService().getPlaylistData(url));
 
+                Collections.sort(playlistDtoDataList, new Comparator<PlaylistDto>() {
+
+                    @Override
+                    public int compare(PlaylistDto lhs, PlaylistDto rhs) {
+                        // TODO Auto-generated method stub
+                        return lhs.getPlaylistName().toLowerCase()
+                                .compareTo(rhs.getPlaylistName().toLowerCase());
+                    }
+                });
+
                 for (PlaylistDto playlistDto : playlistDtoDataList) {
                     PlaylistDto localPlaylistDto = VaultDatabaseHelper.getInstance(mContext)
                             .getLocalPlaylistDataByPlaylistId(playlistDto.getPlaylistId());
@@ -783,6 +807,16 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
                         .getLocalPlaylistDataByCategorieTab(tabId));
 
                 try {
+                    Collections.sort(playlistDtoDataList, new Comparator<PlaylistDto>() {
+
+                        @Override
+                        public int compare(PlaylistDto lhs, PlaylistDto rhs) {
+                            // TODO Auto-generated method stub
+                            return lhs.getPlaylistName().toLowerCase()
+                                    .compareTo(rhs.getPlaylistName().toLowerCase());
+                        }
+                    });
+
                     if (playlistDtoDataList != null) {
                         if (playlistDtoDataList.size() > 0) {
                             for (int j = 0; j < playlistDtoDataList.size(); j++) {

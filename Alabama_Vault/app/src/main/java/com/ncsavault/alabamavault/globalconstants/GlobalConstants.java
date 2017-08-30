@@ -14,7 +14,7 @@ public class GlobalConstants {
 
     public static final int APP_ID = 4;
     public static final String APP_NAME = "alabamavault";
-    public static final String APP_VERSION = "2.0.1";
+    public static final String APP_VERSION = "1.0";
     public static final String DEVICE_TYPE = "Android";
     public static final String APP_FULL_NAME = "Alabama Vault";
     public static final String APP_SCHOOL_NAME = "Alabama";
@@ -89,17 +89,21 @@ public class GlobalConstants {
     // public static final String BASE_URL = "http://0b78b111a9d0410784caa8a634aa3b90.cloudapp.net/api";
 
     //new Staging url
-    public static String BASE_URL = "http://syncroapi-staging.ncsavault.com/api";
+   // public static String BASE_URL = "http://syncroapi-staging.ncsavault.com/api";
 
     //TEST Pro url
-    //public static String BASE_URL = "http://13.93.160.190/api";
+   // public static String BASE_URL = "http://13.93.160.190/api";
+
+    //new Production Url
+     public static final String BASE_URL = "http://syncroapi.ncsavault.com/api";
+
     public static final String PUSH_REGISTER_URL = BASE_URL + "/MobileUsers/PostPushData";
 
     //local url
     //public static final String PUSH_REGISTER_URL = "http://10.10.10.65:8088/api/MobileUsers/PostPushData";
 
     //Staging API Urls
-    public static final String FEATURED_API_URL = BASE_URL + "/playlist/GetFeatured?";
+    public static final String FEATURED_API_URL = BASE_URL + "/playlist/GetFeaturedPlaylist?";
     public static final String GAMES_API_URL = BASE_URL + "/playlist/GetGames?";
     public static final String PLAYER_API_URL = BASE_URL + "/playlist/GetPlayer?";
     public static final String OPPONENT_API_URL = BASE_URL + "/playlist/GetOpponent?";
@@ -235,7 +239,7 @@ public class GlobalConstants {
     public static final String DISPLAY_MESSAGE_ACTION =
             "Display Message";
 
-    public static final String DO_YOU_WANT_TO_JOIN_OUR_MAILING_LIST = "We won't spam you, or sell your email. We simply want to keep informed about whats going on at ALABAMA VAULT.\n";
+    public static final String DO_YOU_WANT_TO_JOIN_OUR_MAILING_LIST = "We won't spam you, or sell your email. We simply want to keep informed about what's going on at ALABAMA VAULT.\n";
 
     private static final int SECOND = 1000;
     private static final int MINUTE = 60 * SECOND;
@@ -272,7 +276,7 @@ public class GlobalConstants {
     public static final String USER_SUCCESSFULLY_REGISTERED = "User successfully registered to the app!";
 
     // public static final String JW_PLAYER_CSS_FILE_URL =  "file:///android_asset/UgaPlayer.css";
-    public static final String JW_PLAYER_CSS_FILE_URL =  "http://syncroapi-staging.ncsavault.com/JWPlayerCss/Alabama/AlabamaPlayer.css";
+    public static final String JW_PLAYER_CSS_FILE_URL =  "http://syncroapi.ncsavault.com/JWPlayerCss/Alabama/AlabamaPlayer.css";
    // public static final String JW_PLAYER_CSS_FILE_URL =  "http://13.93.160.190/JWPlayerCss/Alabama/AlabamaPlayer.css";
 
 

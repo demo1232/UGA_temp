@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
@@ -121,6 +122,8 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         private ViewPager pager;
         private TextView topTenText;
+        private ConstraintLayout horizontal_layout;
+
 
         public VHHeader(View itemView) {
             super(itemView);
@@ -130,6 +133,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             pager = pagerContainer.getViewPager();
             //pager = (ViewPager) itemView.findViewById(R.id.pager_introduction);
               topTenText = (TextView) itemView.findViewById(R.id.textView_videoName_top);
+            horizontal_layout = (ConstraintLayout) itemView.findViewById(R.id.horizontal_layout);
 
         }
 
@@ -249,7 +253,6 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
                     RelativeLayout.LayoutParams mainLayout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
                             aspectHeight);
-                    mainLayout.setMargins(40,0,40,0);
                     vhHeader.mainFeaturedLayout.setLayoutParams(mainLayout);
 
 //
@@ -422,6 +425,9 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         try {
             if (trendingVideoList.size() > 0) {
                 vhHeader.topTenText.setText(trendingVideoList.get(0).getPlaylistShortDescription());
+            }else
+            {
+                vhHeader.horizontal_layout.setVisibility(View.GONE);
             }
         } catch (Exception e) {
             e.printStackTrace();

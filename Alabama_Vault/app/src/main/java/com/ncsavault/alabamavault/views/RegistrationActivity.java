@@ -1068,10 +1068,10 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
                 Utils.getInstance().showToastMessage(RegistrationActivity.this, GlobalConstants.FIRST_NAME_CAN_NOT_EMPTY, view);
                 return;
 
-            } else if (mFirstName.getText().toString().length() < 3) {
+            }/* else if (mFirstName.getText().toString().length() < 3) {
                 Utils.getInstance().showToastMessage(RegistrationActivity.this, GlobalConstants.FIRST_NAME_SHOULD_CONTAIN_THREE_CHARACTER, view);
                 return;
-            } else if (!mFirstName.getText().toString().matches("[a-zA-Z ]+")) {
+            }*/ else if (!mFirstName.getText().toString().matches("[a-zA-Z ]+")) {
                 Utils.getInstance().showToastMessage(RegistrationActivity.this, GlobalConstants.ENTER_ONLY_ALPHABETS + " in first name", view);
                 return;
             }
@@ -1080,10 +1080,10 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
                 Utils.getInstance().showToastMessage(RegistrationActivity.this, GlobalConstants.LAST_NAME_CAN_NOT_EMPTY, view);
                 return;
 
-            } else if (mLastName.getText().toString().length() < 3) {
+            } /*else if (mLastName.getText().toString().length() < 3) {
                 Utils.getInstance().showToastMessage(RegistrationActivity.this, GlobalConstants.LAST_NAME_SHOULD_CONTAIN_THREE_CHARACTER, view);
                 return;
-            } else if (!mLastName.getText().toString().matches("[a-zA-Z ]+")) {
+            } */else if (!mLastName.getText().toString().matches("[a-zA-Z ]+")) {
                 Utils.getInstance().showToastMessage(RegistrationActivity.this, GlobalConstants.ENTER_ONLY_ALPHABETS + " in last name", view);
                 return;
             }

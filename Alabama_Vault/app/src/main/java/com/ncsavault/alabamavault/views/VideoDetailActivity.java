@@ -469,13 +469,17 @@ public class VideoDetailActivity extends AppCompatActivity implements VideoDetai
             super.onPostExecute(result);
             try {
 
-                if (result.size() == 0) {
+                videoDtoArrayList.clear();
+                videoDtoArrayList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).
+                        getVideoDataByPlaylistId(playlistId));
+
+                if (videoDtoArrayList.size() == 0) {
                     tvNoRecoredFound.setVisibility(View.VISIBLE);
                     tvNoRecoredFound.setText(GlobalConstants.NO_RECORDS_FOUND);
                 } else {
                     tvNoRecoredFound.setVisibility(View.GONE);
                 }
-                videoDetailAdapter = new VideoDetailAdapter(mContext, result, VideoDetailActivity.this);
+                videoDetailAdapter = new VideoDetailAdapter(mContext, videoDtoArrayList, VideoDetailActivity.this);
                 mRecyclerView.setHasFixedSize(true);
                 LinearLayoutManager llm = new LinearLayoutManager(mContext);
                 llm.setOrientation(LinearLayoutManager.VERTICAL);

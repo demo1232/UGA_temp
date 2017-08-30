@@ -8,39 +8,39 @@
     android:layout_marginRight="10dp"
     android:layout_marginTop="10dp">
 
-
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="210dp"
+        android:layout_height="wrap_content"
         android:id="@+id/playlist_layout">
 
         <ImageView
             android:id="@+id/tv_playlist_image"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
             app:srcCompat="@drawable/vault" />
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="@color/apptheme_color"
+            android:layout_below="@+id/tv_playlist_image"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PLAYER"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:id="@+id/tv_playlist_name"
+                android:layout_centerInParent="true"/>
+
+        </RelativeLayout>
+
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/apptheme_color"
-        android:layout_below="@+id/playlist_layout"
-        >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="PLAYER"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:gravity="center"
-            android:id="@+id/tv_playlist_name"
-            android:layout_centerInParent="true"/>
-
-    </RelativeLayout>
 
 
 

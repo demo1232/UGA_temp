@@ -121,7 +121,7 @@ public class VideoDetailAdapter extends RecyclerView.Adapter<VideoDetailAdapter.
                     }
                 });
 
-//        int aspectHeight = (displayWidth * 9) / 16;
+//        int aspectHeight = (displayHeight * 9) / 16;
 //
 //        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
 //                aspectHeight);
@@ -159,7 +159,7 @@ public class VideoDetailAdapter extends RecyclerView.Adapter<VideoDetailAdapter.
         public ImageView videoImageView, savedVideoImageView;
         TextView videoNameTextView, videoDescriptionTextView, videoDurationTextView;
         private ProgressBar progressBar;
-        public RelativeLayout videoRelativeLayout;
+        public LinearLayout videoRelativeLayout;
         public LinearLayout mLayoutSavedImage;
 
         public VideoViewHolder(View view) {
@@ -180,7 +180,7 @@ public class VideoDetailAdapter extends RecyclerView.Adapter<VideoDetailAdapter.
                         R.drawable.progress_large_material, null));
             }
 
-            videoRelativeLayout = (RelativeLayout) view.findViewById(R.id.save_video_main_layout);
+            videoRelativeLayout = (LinearLayout) view.findViewById(R.id.save_video_main_layout);
 
         }
     }

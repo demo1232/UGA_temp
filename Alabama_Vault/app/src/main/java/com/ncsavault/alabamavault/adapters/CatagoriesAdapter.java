@@ -119,11 +119,10 @@ public class CatagoriesAdapter extends RecyclerView.Adapter<CatagoriesAdapter.Ca
                     }
                 });
 
-                int aspectHeight = (displayWidth * 9) / 16;
+                int aspectHeight = (displayWidth * 8) / 16;
 
                 RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
                         aspectHeight);
-                //lp.setMargins(30,0,30,0);
                 viewHolder.playlistImageView.setLayoutParams(lp);
 
         viewHolder.playlistTabNametextView.setText(catagoriesTabName);

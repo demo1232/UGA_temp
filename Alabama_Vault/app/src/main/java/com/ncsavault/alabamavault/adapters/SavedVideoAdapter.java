@@ -142,7 +142,7 @@ public class SavedVideoAdapter extends RecyclerView.Adapter<SavedVideoAdapter.Sa
         public ImageView videoImageView,savedVideoImageView;
         TextView videoNameTextView,videoDescriptionTextView,videoDurationTextView;
         private ProgressBar progressBar;
-        public RelativeLayout videoRelativeLayout;
+        public LinearLayout videoRelativeLayout;
         public LinearLayout mLayoutSavedImage;
 
         public SavedVideoViewHolder(View view) {
@@ -164,7 +164,7 @@ public class SavedVideoAdapter extends RecyclerView.Adapter<SavedVideoAdapter.Sa
                         R.drawable.progress_large_material, null));
             }
 
-            videoRelativeLayout = (RelativeLayout)view.findViewById(R.id.save_video_main_layout);
+            videoRelativeLayout = (LinearLayout)view.findViewById(R.id.save_video_main_layout);
 
         }
     }

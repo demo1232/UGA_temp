@@ -13,6 +13,7 @@ import com.ncsavault.alabamavault.controllers.AppController;
 import com.ncsavault.alabamavault.database.VaultDatabaseHelper;
 import com.ncsavault.alabamavault.dto.CatagoriesTabDao;
 import com.ncsavault.alabamavault.dto.PlaylistDto;
+import com.ncsavault.alabamavault.dto.TabBannerDTO;
 import com.ncsavault.alabamavault.dto.VideoDTO;
 import com.ncsavault.alabamavault.fragments.views.FeaturedFragment;
 import com.ncsavault.alabamavault.fragments.views.HomeFragment;
@@ -39,13 +40,11 @@ public class TrendingFeaturedVideoService extends Service {
         apiUrls.clear();
         apiUrls.add(GlobalConstants.GET_TRENDING_PLAYLIST_URL);
         apiUrls.add(GlobalConstants.FEATURED_API_URL);
-
         new Thread(new Runnable() {
             @Override
             public void run() {
 
                 try {
-
                     String url = "";
                     for (String apiUrl : apiUrls) {
 

@@ -25,7 +25,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
     private static VaultDatabaseHelper sInstance;
 
     // ------ Database Version----------
-    public static final int DATABASE_VERSION = 13;
+    public static final int DATABASE_VERSION = 1;
     private static String DATABASE_PATH = "";
 
     // ----- Database Name------------
@@ -484,7 +484,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<VideoDTO> getVideoList(String referenceId) {
         String selectOKFQuery = "SELECT * FROM " + VideoTable.VIDEO_TABLE
                 + " WHERE " + VideoTable.KEY_PLAYLIST_REFERENCE_ID + " LIKE '" + referenceId + "%'" +
-                " GROUP BY " + VideoTable.KEY_PLAYLIST_ID + "," + VideoTable.KEY_VIDEO_ID + " ORDER BY " +
+                " GROUP BY " + VideoTable.KEY_VIDEO_ID + " ORDER BY " +
                 VideoTable.KEY_VIDEO_NAME + " COLLATE NOCASE " + " ASC ";
         try {
             ArrayList<VideoDTO> videoDTOsArrayList = new ArrayList<VideoDTO>();
@@ -1189,6 +1189,8 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
             db.enableWriteAheadLogging();
             db.execSQL("DELETE FROM " + VideoTable.VIDEO_TABLE);
             removeAllTabBannerData();
+            removeAllPlaylistTabData();
+            removeAllCategoriesTabData();
         } catch (Exception e) {
             e.printStackTrace();
         }
