@@ -693,7 +693,7 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
                 twitter = false;
                 finish();
                 LoginManager.getInstance().logOut();
-                Twitter.logOut();
+//                Twitter.logOut();
                 Auth.GoogleSignInApi.signOut(LoginEmailActivity.mGoogleApiClient).setResultCallback(
                         new ResultCallback<Status>() {
                             @Override
