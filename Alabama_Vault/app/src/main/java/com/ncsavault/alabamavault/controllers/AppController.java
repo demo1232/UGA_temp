@@ -86,8 +86,6 @@ public class AppController {
     private boolean isAllScreenRefreshed = true;
     private boolean isDataRefreshed = false;
     private long cacheClearTime = 999999999999999L;
-
-
     private ArrayList<String> API_URLS = new ArrayList<>();
 
     private Activity currentActivity;

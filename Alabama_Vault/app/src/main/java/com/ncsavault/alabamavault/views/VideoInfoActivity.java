@@ -627,7 +627,6 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
                 rlVideoLayout.setLayoutParams(lp);
             }
 
-
             if (imgVideoStillUrl.isShown()) {
                 Animation anim = AnimationUtils.loadAnimation(VideoInfoActivity.this, R.anim.fadein);
                 imgVideoStillUrl.setAnimation(anim);
@@ -1190,12 +1189,11 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
             measuredWidth = d.getWidth();
         }
 
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (int) (measuredHeight * 0.35));
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (int) (measuredHeight * 0.30));
         lp.addRule(RelativeLayout.BELOW, R.id.view_line);
         if (rlVideoLayout != null) {
             rlVideoLayout.setLayoutParams(lp);
         }
-
         //gk videoView.setDimensions(measuredWidth, (int) (measuredHeight * 0.35));
     }
 

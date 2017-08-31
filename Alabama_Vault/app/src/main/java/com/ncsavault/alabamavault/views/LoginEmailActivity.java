@@ -83,9 +83,12 @@ import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+import com.twitter.sdk.android.tweetcomposer.TweetComposer;
+import com.twitter.sdk.android.tweetui.TweetUi;
 
 import org.json.JSONObject;
 
@@ -225,6 +228,9 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
     private void initAllDataRequiredInEmailActivity() {
         initViews();
         initData();
+
+
+
         String videoId = AppController.getInstance().getModelFacade().getLocalModel().getVideoId();
 
         prefs = getSharedPreferences(GlobalConstants.PREF_PACKAGE_NAME, Context.MODE_PRIVATE);
@@ -423,7 +429,7 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
 
 
                     } else {
-
+                        Twitter.logOut();
                         twitterLoginButton.performClick();
 
                     }

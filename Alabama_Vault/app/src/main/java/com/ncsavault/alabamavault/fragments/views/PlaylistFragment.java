@@ -727,9 +727,6 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
                     }
                 }
 
-
-
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
