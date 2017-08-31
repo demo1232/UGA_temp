@@ -416,7 +416,7 @@ public class ForgotPasswordActivity extends BaseActivity implements AbstractView
                         @Override
                         protected void onPostExecute(String result) {
                             super.onPostExecute(result);
-
+                            pDialog.dismiss();
                             try {
                                 if (Utils.isInternetAvailable(ForgotPasswordActivity.this)) {
                                     if (result != null) {
@@ -437,7 +437,6 @@ public class ForgotPasswordActivity extends BaseActivity implements AbstractView
                                     showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
                                 }
                                 mChangeTask = null;
-                                pDialog.dismiss();
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 mChangeTask = null;
@@ -762,6 +761,7 @@ public class ForgotPasswordActivity extends BaseActivity implements AbstractView
                                     pDialog.dismiss();
                                 }else
                                 {
+                                    pDialog.dismiss();
                                     changePasswordCall();
                                 }
 

@@ -58,7 +58,6 @@
                 android:layout_marginRight="5dp"
                 android:src="@drawable/video_save"
                 android:layout_centerVertical="true"
-
                 android:layout_height="20dp" />
 
         </RelativeLayout>

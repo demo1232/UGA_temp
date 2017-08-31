@@ -90,9 +90,9 @@ import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.utils.StorageUtils;
-import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
@@ -1451,8 +1451,7 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
                 } else {
 
                     // videoView.pause();
-                    TwitterSession session = Twitter.getSessionManager().getActiveSession();
-
+                    TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
                     if (session == null) {
                         twitterLoginButton.performClick();
                     } else {
@@ -2045,7 +2044,7 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
                     showToastMessage(GlobalConstants.MSG_NO_INFO_AVAILABLE + " to share");
                 } else {
                     //gk videoView.pause();
-                    TwitterSession session = Twitter.getSessionManager().getActiveSession();
+                    TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
                     if (session == null) {
                         twitterLoginButton.performClick();
                     } else {

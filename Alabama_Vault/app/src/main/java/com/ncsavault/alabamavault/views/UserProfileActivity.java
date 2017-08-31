@@ -72,9 +72,9 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.utils.StorageUtils;
-import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
@@ -379,8 +379,9 @@ public class UserProfileActivity extends PermissionActivity implements TextWatch
                 tvFacebookStatus.setText(fbProfile.getName());
             }
 
-            TwitterSession session =
-                    Twitter.getSessionManager().getActiveSession();
+//            TwitterSession session =
+//                    Twitter.getSessionManager().getActiveSession();
+            TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
 
             if (session != null) {
 //                TwitterAuthToken authToken = session.getAuthToken();
@@ -413,13 +414,12 @@ public class UserProfileActivity extends PermissionActivity implements TextWatch
 
                     } else {
                         // prefs.edit().putBoolean(TWITTER_LINKING, true).apply();
-                        TwitterSession session =
-                                Twitter.getSessionManager().getActiveSession();
+                        TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
                         if (session == null) {
                             twitterLoginButton.performClick();
                         }else
                         {
-                           Twitter.logOut();
+                           //Twitter.logOut();
                             tvTwitterStatus.setText("Link Twitter Accout");
                         }
                     }
@@ -489,7 +489,7 @@ public class UserProfileActivity extends PermissionActivity implements TextWatch
         tvLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Twitter.logOut();
+                //Twitter.logOut();
 
                 stopService(new Intent(UserProfileActivity.this, TrendingFeaturedVideoService.class));
 //                VideoDataFetchingService.isServiceRunning = false;
