@@ -5,20 +5,20 @@
     android:background="@color/LightGrey"
     >
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/white"
-        android:layout_alignParentTop="true"
-        android:id="@+id/view"
-        />
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1.5dp"-->
+        <!--android:background="@color/white"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:id="@+id/view"-->
+        <!--/>-->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/main_layout"
         android:orientation="vertical"
-        android:layout_below="@+id/view"
+
        >
 
         <LinearLayout

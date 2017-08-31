@@ -133,7 +133,6 @@ public class AppController {
 
         modelFacade.initialize();
     }
-
     /**
      * Destory all the required object
      */

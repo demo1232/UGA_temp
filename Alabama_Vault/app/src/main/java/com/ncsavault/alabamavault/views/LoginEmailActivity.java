@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -108,7 +109,7 @@ import retrofit2.Call;
 /**
  * Created by gauravkumar.singh on 07-08-2017.
  */
-public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener, AbstractView {
+public class LoginEmailActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, AbstractView {
 
     private EditText edEmailBox, edPassword;
     private TextView tvSkipLogin, createNewAccount, tvForgotPassword;
@@ -273,7 +274,6 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
 
     }
 
-    @Override
     public void initData() {
         try {
             Point size = new Point();
@@ -297,7 +297,6 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
         }
     }
 
-    @Override
     public void initViews() {
         try {
             edEmailBox = (EditText) findViewById(R.id.ed_email);
@@ -336,7 +335,6 @@ public class LoginEmailActivity extends BaseActivity implements GoogleApiClient.
         }
     }
 
-    @Override
     public void initListener() {
 
         tvSkipLogin.setOnClickListener(new View.OnClickListener() {

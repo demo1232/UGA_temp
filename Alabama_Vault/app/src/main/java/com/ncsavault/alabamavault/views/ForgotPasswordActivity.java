@@ -157,6 +157,7 @@ public class ForgotPasswordActivity extends BaseActivity implements AbstractView
 
                 if (keyCode == KeyEvent.KEYCODE_ENTER) {
                     checkEmailAndProceed();
+                    pDialog.dismiss();
                     return true;
                 } else {
                     return false;

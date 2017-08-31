@@ -54,16 +54,16 @@
         android:orientation="vertical"
         android:visibility="visible">
 
-        <View
-            android:id="@+id/view_line"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/white" />
+        <!--<View-->
+            <!--android:id="@+id/view_line"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="2dp"-->
+            <!--android:background="@color/white" />-->
 
         <FrameLayout
             android:id="@+id/rl_video_layout"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="200dp"
             android:background="@color/white">
 
             <LinearLayout
@@ -78,13 +78,6 @@
                 android:layout_height="match_parent"
                 />
             </LinearLayout>
-
-            <ImageView
-                android:id="@+id/image_video_still"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                android:background="@color/app_light_grey"/>
 
 
             <LinearLayout
@@ -113,6 +106,13 @@
                 android:visibility="gone">
 
             </LinearLayout>
+
+            <ImageView
+                android:id="@+id/image_video_still"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/app_light_grey"
+                android:scaleType="fitXY" />
         </FrameLayout>
 
         <RelativeLayout
@@ -127,7 +127,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:padding="10dp">
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="10dp"
+                >
 
                 <TextView
                     android:id="@+id/tv_video_name"
@@ -138,6 +141,7 @@
                     android:layout_toLeftOf="@+id/imgToggleButton"
                     android:text="Video Name"
                     android:textStyle="bold"
+                    android:paddingLeft="5dp"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 
@@ -168,7 +172,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="140dp"
-                    android:padding="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingRight="10dp"
                     >
 
                     <TextView

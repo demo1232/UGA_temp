@@ -621,7 +621,7 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN, WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(displayWidth, (int) (displayHeight * 0.35));
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(displayWidth, (int) (displayHeight * 0.30));
             lp.addRule(RelativeLayout.BELOW, R.id.view_line);
             if (rlVideoLayout != null) {
                 rlVideoLayout.setLayoutParams(lp);
@@ -785,6 +785,7 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
             PlayerConfig playerConfig = new PlayerConfig.Builder()
                     .autostart(false)
                     .captionsEdgeStyle("ec_seek")
+                    .skinName("glow")
                     .stretching(PlayerConfig.STRETCHING_EXACT_FIT) //"exactfit"
                     .build();
 
@@ -871,6 +872,7 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
                     videoView.setSkin(GlobalConstants.JW_PLAYER_CSS_FILE_URL);
                     PlayerConfig playerConfig = new PlayerConfig.Builder()
                             .autostart(false)
+                            .stretching(PlayerConfig.STRETCHING_EXACT_FIT)
                             .skinName("glow")
                             .build();
 
