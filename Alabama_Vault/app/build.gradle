@@ -34,6 +34,7 @@ repositories {
     }
     maven { url "https://jitpack.io" }
     mavenCentral()
+    jcenter()
 }
 
 android {
@@ -114,6 +115,12 @@ dependencies {
     compile 'com.github.crosswall:Android-Coverflow:release-v1.0.4'
     testCompile 'junit:junit:4.12'
     compile 'com.google.firebase:firebase-ads:10.2.6'
+
+//    compile 'com.twitter.sdk.android:twitter-core:3.1.1'
+//    compile 'com.twitter.sdk.android:tweet-ui:3.1.1'
+//    compile 'com.twitter.sdk.android:tweet-composer:3.1.1'
+//    compile 'com.twitter.sdk.android:twitter-mopub:3.1.1'
+//    compile 'com.twitter.sdk.android:twitter:3.1.1'
 
 }
 

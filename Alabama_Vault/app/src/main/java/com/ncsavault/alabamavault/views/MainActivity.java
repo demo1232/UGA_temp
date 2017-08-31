@@ -155,9 +155,9 @@ public class MainActivity extends FragmentActivity implements Serializable, Abst
         FlurryAgent.onStartSession(context, GlobalConstants.FLURRY_KEY);
 
 
-        TwitterAuthConfig authConfig = new TwitterAuthConfig(GlobalConstants.TWITTER_CONSUMER_KEY, GlobalConstants.TWITTER_CONSUMER_SECRET);
-        Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
-        Fabric.with(this, new TweetComposer());
+//        TwitterAuthConfig authConfig = new TwitterAuthConfig(GlobalConstants.TWITTER_CONSUMER_KEY, GlobalConstants.TWITTER_CONSUMER_SECRET);
+//        Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
+//        Fabric.with(this, new TweetComposer());
 
         initViews();
 

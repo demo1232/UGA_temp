@@ -229,8 +229,10 @@
 
         <activity
             android:name=".views.HomeScreen"
+
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"
             android:theme="@style/AppTheme_1">
 
             <!-- <intent-filter> -->

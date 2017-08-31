@@ -80,13 +80,15 @@ import com.google.android.gms.common.api.Status;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.DefaultLogger;
 import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 import com.twitter.sdk.android.tweetui.TweetUi;
@@ -105,6 +107,7 @@ import java.util.regex.Pattern;
 
 import io.fabric.sdk.android.Fabric;
 import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * Created by gauravkumar.singh on 07-08-2017.
@@ -220,13 +223,21 @@ public class LoginEmailActivity extends AppCompatActivity implements GoogleApiCl
         AppsFlyerLib.setAppsFlyerKey("i6ZusgQ8L8qW9ADfXbqgre");
         AppsFlyerLib.sendTracking(getApplicationContext());
 
-        TwitterAuthConfig authConfig =
-                new TwitterAuthConfig(GlobalConstants.TWITTER_CONSUMER_KEY,
-                        GlobalConstants.TWITTER_CONSUMER_SECRET);
-        Fabric.with(this, new Twitter(authConfig));
+//        TwitterAuthConfig authConfig =
+//                new TwitterAuthConfig(GlobalConstants.TWITTER_CONSUMER_KEY,
+//                        GlobalConstants.TWITTER_CONSUMER_SECRET);
+//        Fabric.with(this, new Twitter(authConfig));
+
     }
 
     private void initAllDataRequiredInEmailActivity() {
+        TwitterConfig config = new TwitterConfig.Builder(this)
+                .logger(new DefaultLogger(Log.DEBUG))
+                .twitterAuthConfig(new TwitterAuthConfig(GlobalConstants.TWITTER_CONSUMER_KEY, GlobalConstants.TWITTER_CONSUMER_SECRET))
+                .debug(true)
+                .build();
+        Twitter.initialize(config);
+
         initViews();
         initData();
 
@@ -1257,73 +1268,143 @@ public class LoginEmailActivity extends AppCompatActivity implements GoogleApiCl
         //Getting the username from session
         final String username = session.getUserName();
 
-        Call<com.twitter.sdk.android.core.models.User> call = Twitter.getApiClient(session).getAccountService()
-                .verifyCredentials(true, false);
-        call.enqueue(new Callback<com.twitter.sdk.android.core.models.User>() {
-            @Override
-            public void failure(TwitterException e) {
-                //If any error occurs handle it here
-            }
 
+        TwitterAuthClient authClient = new TwitterAuthClient();
+        authClient.requestEmail(session, new Callback<String>() {
             @Override
-            public void success(Result<com.twitter.sdk.android.core.models.User> userResult) {
-                //If it succeeds creating a User object from userResult.data
+            public void success(Result<String> result) {
+                // Do something with the result, which provides the email address
+
                 try {
                     //If it succeeds creating a User object from userResult.data
                     String image_path = "";
-                    com.twitter.sdk.android.core.models.User user = userResult.data;
-                    String fName = "";
-                    String lName = "";
-                    String twitterImage = user.profileImageUrl;
-                    String userName = user.screenName;
-                    String name = user.name;
-                    long id = user.id;
-                    if (name.toLowerCase().contains(" ")) {
-                        String[] firstandLastName = name.split(" ");
-                        fName = firstandLastName[0];
-                        lName = firstandLastName[1];
-                    } else {
-                        fName = name;
-                    }
-
-                    image_path = twitterImage.toString();
-                    if (image_path != null) {
-                        socialUser.setImageurl(image_path);
-                    } else {
-                        Drawable image = getResources().getDrawable(R.drawable.defaultimage);
-                        String defaultImage = image.toString();
-                        socialUser.setImageurl(String.valueOf(defaultImage));
-
-                    }
-
-                    if (user.email == null) {
-                        socialUser.setEmailID("");
-                    }
-
-                    socialUser.setUsername(userName);
-                    socialUser.setFname(fName);
-                    socialUser.setLname(lName);
-                    socialUser.setPasswd(String.valueOf(id));
-                    socialUser.setImageurl(twitterImage);
-                    socialUser.setAppID(GlobalConstants.APP_ID);
-                    socialUser.setAppVersion(GlobalConstants.APP_VERSION);
-                    socialUser.setDeviceType(GlobalConstants.DEVICE_TYPE);
-                    socialUser.setFlagStatus("tw");
-                    socialUser.setSocialLoginToken(String.valueOf(id));
-                    AppController.getInstance().getModelFacade().getLocalModel().setUser(socialUser);
-                    AppController.getInstance().getModelFacade().getLocalModel().setFacebookLogin(false);
-                    AppController.getInstance().getModelFacade().getLocalModel().setGoogleLogin(false);
-                    AppController.getInstance().getModelFacade().getLocalModel().setTwitterLogin(true);
-
-
-                    checkExistingUserOrNot(socialUser);
+                    Response user = result.response;
+//                    String fName = "";
+//                    String lName = "";
+//                    String twitterImage = user.profileImageUrl;
+//                    String userName = user.screenName;
+//                    String name = user.name;
+//                    long id = user.id;
+//                    if (name.toLowerCase().contains(" ")) {
+//                        String[] firstandLastName = name.split(" ");
+//                        fName = firstandLastName[0];
+//                        lName = firstandLastName[1];
+//                    } else {
+//                        fName = name;
+//                    }
+//
+//                    image_path = twitterImage.toString();
+//                    if (image_path != null) {
+//                        socialUser.setImageurl(image_path);
+//                    } else {
+//                        Drawable image = getResources().getDrawable(R.drawable.defaultimage);
+//                        String defaultImage = image.toString();
+//                        socialUser.setImageurl(String.valueOf(defaultImage));
+//
+//                    }
+//
+//                    if (user.email == null) {
+//                        socialUser.setEmailID("");
+//                    }
+//
+//                    socialUser.setUsername(userName);
+//                    socialUser.setFname(fName);
+//                    socialUser.setLname(lName);
+//                    socialUser.setPasswd(String.valueOf(id));
+//                    socialUser.setImageurl(twitterImage);
+//                    socialUser.setAppID(GlobalConstants.APP_ID);
+//                    socialUser.setAppVersion(GlobalConstants.APP_VERSION);
+//                    socialUser.setDeviceType(GlobalConstants.DEVICE_TYPE);
+//                    socialUser.setFlagStatus("tw");
+//                    socialUser.setSocialLoginToken(String.valueOf(id));
+//                    AppController.getInstance().getModelFacade().getLocalModel().setUser(socialUser);
+//                    AppController.getInstance().getModelFacade().getLocalModel().setFacebookLogin(false);
+//                    AppController.getInstance().getModelFacade().getLocalModel().setGoogleLogin(false);
+//                    AppController.getInstance().getModelFacade().getLocalModel().setTwitterLogin(true);
+//
+//
+//                    checkExistingUserOrNot(socialUser);
 
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+
+            @Override
+            public void failure(TwitterException exception) {
+                // Do something on failure
+            }
         });
+
+
+//        Call<com.twitter.sdk.android.core.models.User> call = Twitter.getApiClient(session).getAccountService()
+//                .verifyCredentials(true, false);
+//        call.enqueue(new Callback<com.twitter.sdk.android.core.models.User>() {
+//            @Override
+//            public void failure(TwitterException e) {
+//                //If any error occurs handle it here
+//            }
+//
+//            @Override
+//            public void success(Result<com.twitter.sdk.android.core.models.User> userResult) {
+//                //If it succeeds creating a User object from userResult.data
+//                try {
+//                    //If it succeeds creating a User object from userResult.data
+//                    String image_path = "";
+//                    com.twitter.sdk.android.core.models.User user = userResult.data;
+//                    String fName = "";
+//                    String lName = "";
+//                    String twitterImage = user.profileImageUrl;
+//                    String userName = user.screenName;
+//                    String name = user.name;
+//                    long id = user.id;
+//                    if (name.toLowerCase().contains(" ")) {
+//                        String[] firstandLastName = name.split(" ");
+//                        fName = firstandLastName[0];
+//                        lName = firstandLastName[1];
+//                    } else {
+//                        fName = name;
+//                    }
+//
+//                    image_path = twitterImage.toString();
+//                    if (image_path != null) {
+//                        socialUser.setImageurl(image_path);
+//                    } else {
+//                        Drawable image = getResources().getDrawable(R.drawable.defaultimage);
+//                        String defaultImage = image.toString();
+//                        socialUser.setImageurl(String.valueOf(defaultImage));
+//
+//                    }
+//
+//                    if (user.email == null) {
+//                        socialUser.setEmailID("");
+//                    }
+//
+//                    socialUser.setUsername(userName);
+//                    socialUser.setFname(fName);
+//                    socialUser.setLname(lName);
+//                    socialUser.setPasswd(String.valueOf(id));
+//                    socialUser.setImageurl(twitterImage);
+//                    socialUser.setAppID(GlobalConstants.APP_ID);
+//                    socialUser.setAppVersion(GlobalConstants.APP_VERSION);
+//                    socialUser.setDeviceType(GlobalConstants.DEVICE_TYPE);
+//                    socialUser.setFlagStatus("tw");
+//                    socialUser.setSocialLoginToken(String.valueOf(id));
+//                    AppController.getInstance().getModelFacade().getLocalModel().setUser(socialUser);
+//                    AppController.getInstance().getModelFacade().getLocalModel().setFacebookLogin(false);
+//                    AppController.getInstance().getModelFacade().getLocalModel().setGoogleLogin(false);
+//                    AppController.getInstance().getModelFacade().getLocalModel().setTwitterLogin(true);
+//
+//
+//                    checkExistingUserOrNot(socialUser);
+//
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
 
         //This code will fetch the profile image URL
         //Getting the account service of the user logged in

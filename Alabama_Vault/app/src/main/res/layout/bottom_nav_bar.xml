@@ -7,11 +7,19 @@
     android:background="@color/transparent"
     >
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/LightGrey"
+        android:visibility="visible"/>
+
     <LinearLayout
         android:id="@+id/panelAddress"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
 
 
         <LinearLayout
@@ -33,7 +41,6 @@
             <android.support.v7.widget.AppCompatImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
                 android:id="@+id/imageViewBar1"
                 android:tint="@color/apptheme_color"/>
 
@@ -67,7 +74,6 @@
             <android.support.v7.widget.AppCompatImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
                 android:id="@+id/imageViewBar2"
                 android:tint="@color/black"/>
 
@@ -101,7 +107,6 @@
             <android.support.v7.widget.AppCompatImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
                 android:id="@+id/imageViewBar3"
                 android:tint="@color/black"/>
 
@@ -136,7 +141,6 @@
             <android.support.v7.widget.AppCompatImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
                 android:id="@+id/imageViewBar4"
                 android:tint="@color/black"/>
 

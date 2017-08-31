@@ -42,7 +42,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.ncsavault.alabamavault.service.TrendingFeaturedVideoService;
-import com.twitter.sdk.android.Twitter;
 import com.ncsavault.alabamavault.R;
 import com.ncsavault.alabamavault.controllers.AppController;
 import com.ncsavault.alabamavault.customviews.VerticalScrollview;
@@ -693,7 +692,11 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
                 twitter = false;
                 finish();
                 LoginManager.getInstance().logOut();
+<<<<<<< .mine
 //                Twitter.logOut();
+=======
+               //gk Twitter.logOut();
+>>>>>>> .theirs
                 Auth.GoogleSignInApi.signOut(LoginEmailActivity.mGoogleApiClient).setResultCallback(
                         new ResultCallback<Status>() {
                             @Override
@@ -1490,7 +1493,7 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
                         alertDialog.dismiss();
                         // tvFacebookLogin.setText("Login with Facebook");
                         LoginManager.getInstance().logOut();
-                        Twitter.logOut();
+                      //  Twitter.logOut();
                         Utils.getInstance().gethideKeyboard(RegistrationActivity.this);
                         AppController.getInstance().handleEvent(AppDefines.EVENT_ID_LOGIN_SCREEN);
                         overridePendingTransition(R.anim.leftin, R.anim.rightout);
@@ -1653,7 +1656,7 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
             super.onBackPressed();
             finish();
             LoginManager.getInstance().logOut();
-            Twitter.logOut();
+            //Twitter.logOut();
             Auth.GoogleSignInApi.signOut(LoginEmailActivity.mGoogleApiClient).setResultCallback(
                     new ResultCallback<Status>() {
                         @Override

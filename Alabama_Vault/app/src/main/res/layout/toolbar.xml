@@ -138,9 +138,9 @@
             android:layout_width="48dp"
             android:layout_height="50dp"
             android:layout_alignParentRight="true"
-            android:padding="10dp"
+            android:padding="15dp"
             android:src="@drawable/search"
-            android:visibility="invisible" />
+            android:visibility="visible" />
 
 
         <TextView

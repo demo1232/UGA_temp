@@ -8,6 +8,14 @@
         "source": "D:\\2.0_release\\21_aug\\UGA_temp\\Alabama_Vault\\indicatorlibrary\\src\\main\\res\\drawable-mdpi\\vpi__tab_unselected_pressed_holo.9.png"
     },
     {
+        "merged": "E:\\Company Projects\\ALABAMA\\UGA_temp\\UGA_temp\\Alabama_Vault\\indicatorlibrary\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\vpi__tab_unselected_holo.9.png",
+        "source": "E:\\Company Projects\\ALABAMA\\UGA_temp\\UGA_temp\\Alabama_Vault\\indicatorlibrary\\src\\main\\res\\drawable-mdpi\\vpi__tab_unselected_holo.9.png"
+    },
+    {
+        "merged": "E:\\Company Projects\\ALABAMA\\UGA_temp\\UGA_temp\\Alabama_Vault\\indicatorlibrary\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\vpi__tab_unselected_focused_holo.9.png",
+        "source": "E:\\Company Projects\\ALABAMA\\UGA_temp\\UGA_temp\\Alabama_Vault\\indicatorlibrary\\src\\main\\res\\drawable-mdpi\\vpi__tab_unselected_focused_holo.9.png"
+    },
+    {
         "merged": "D:\\2.0_release\\21_aug\\UGA_temp\\Alabama_Vault\\indicatorlibrary\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\vpi__tab_unselected_focused_holo.9.png",
         "source": "D:\\2.0_release\\21_aug\\UGA_temp\\Alabama_Vault\\indicatorlibrary\\src\\main\\res\\drawable-mdpi\\vpi__tab_unselected_focused_holo.9.png"
     },
@@ -16,8 +24,24 @@
         "source": "D:\\2.0_release\\21_aug\\UGA_temp\\Alabama_Vault\\indicatorlibrary\\src\\main\\res\\drawable-mdpi\\vpi__tab_selected_focused_holo.9.png"
     },
     {
+        "merged": "E:\\Company Projects\\ALABAMA\\UGA_temp\\UGA_temp\\Alabama_Vault\\indicatorlibrary\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\vpi__tab_unselected_pressed_holo.9.png",
+        "source": "E:\\Company Projects\\ALABAMA\\UGA_temp\\UGA_temp\\Alabama_Vault\\indicatorlibrary\\src\\main\\res\\drawable-mdpi\\vpi__tab_unselected_pressed_holo.9.png"
+    },
+    {
+        "merged": "E:\\Company Projects\\ALABAMA\\UGA_temp\\UGA_temp\\Alabama_Vault\\indicatorlibrary\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\vpi__tab_selected_pressed_holo.9.png",
+        "source": "E:\\Company Projects\\ALABAMA\\UGA_temp\\UGA_temp\\Alabama_Vault\\indicatorlibrary\\src\\main\\res\\drawable-mdpi\\vpi__tab_selected_pressed_holo.9.png"
+    },
+    {
         "merged": "D:\\2.0_release\\21_aug\\UGA_temp\\Alabama_Vault\\indicatorlibrary\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\vpi__tab_selected_pressed_holo.9.png",
         "source": "D:\\2.0_release\\21_aug\\UGA_temp\\Alabama_Vault\\indicatorlibrary\\src\\main\\res\\drawable-mdpi\\vpi__tab_selected_pressed_holo.9.png"
+    },
+    {
+        "merged": "E:\\Company Projects\\ALABAMA\\UGA_temp\\UGA_temp\\Alabama_Vault\\indicatorlibrary\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\vpi__tab_selected_focused_holo.9.png",
+        "source": "E:\\Company Projects\\ALABAMA\\UGA_temp\\UGA_temp\\Alabama_Vault\\indicatorlibrary\\src\\main\\res\\drawable-mdpi\\vpi__tab_selected_focused_holo.9.png"
+    },
+    {
+        "merged": "E:\\Company Projects\\ALABAMA\\UGA_temp\\UGA_temp\\Alabama_Vault\\indicatorlibrary\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\vpi__tab_selected_holo.9.png",
+        "source": "E:\\Company Projects\\ALABAMA\\UGA_temp\\UGA_temp\\Alabama_Vault\\indicatorlibrary\\src\\main\\res\\drawable-mdpi\\vpi__tab_selected_holo.9.png"
     },
     {
         "merged": "D:\\2.0_release\\21_aug\\UGA_temp\\Alabama_Vault\\indicatorlibrary\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\vpi__tab_selected_holo.9.png",

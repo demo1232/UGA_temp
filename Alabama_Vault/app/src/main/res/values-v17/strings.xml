@@ -79,4 +79,6 @@
 
     <string name="current_video_name_text">Current Top 10 Video Name</string>
 
+    <string name="profile_alert_text">Do you want to save changes?</string>
+
 </resources>
