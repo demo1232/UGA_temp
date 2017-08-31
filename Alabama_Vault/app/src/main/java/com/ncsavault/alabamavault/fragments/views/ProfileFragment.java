@@ -77,9 +77,9 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
-import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
@@ -192,14 +192,14 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                     mFirstName.setText(edFirstName.getText().toString());
                     mLastName.setText(edLastName.getText().toString());
 
-               /*     if (!isValidText(edFirstName.getText().toString())) {
+                    if (edFirstName.getText().toString().length()==0) {
                         ((HomeScreen) mContext).showToastMessage(GlobalConstants.FIRST_NAME_CAN_NOT_EMPTY);
 
-                    } else if (!isValidText(edLastName.getText().toString())) {
+                    } else if (edLastName.getText().toString().length()==0) {
                         ((HomeScreen) mContext).showToastMessage(GlobalConstants.LAST_NAME_CAN_NOT_EMPTY);
-                    } else {*/
+                    } else {
                         updateUserData();
-//                    }
+                    }
 
 
                 }
@@ -282,9 +282,9 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
             mFacebookEmailId.setText(fbProfile.getName());
         }
 
-//        TwitterSession session =
-//                Twitter.getSessionManager().getActiveSession();
-        TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
+        TwitterSession session =
+                Twitter.getSessionManager().getActiveSession();
+
 
         if (session != null) {
 //                TwitterAuthToken authToken = session.getAuthToken();
@@ -367,13 +367,12 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 
                     } else {
                         // prefs.edit().putBoolean(TWITTER_LINKING, true).apply();
-//                        TwitterSession session =
-//                                Twitter.getSessionManager().getActiveSession();
-                        TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
+                        TwitterSession session =
+                                Twitter.getSessionManager().getActiveSession();
                         if (session == null) {
                             twitterLoginButton.performClick();
                         } else {
-                            session = null;
+                           Twitter.logOut();
                             mTwitterEmailId.setText("Link Twitter Account");
                         }
                     }
@@ -1160,14 +1159,14 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
         super.onDestroyView();
 
         if ((((HomeScreen) mContext).textViewEdit.getText().toString().equalsIgnoreCase("SAVE"))) {
-           /* if (!isValidText(edFirstName.getText().toString().trim())) {
+            if (edFirstName.getText().toString().length()==0) {
                 ((HomeScreen) mContext).showToastMessage(GlobalConstants.FIRST_NAME_CAN_NOT_EMPTY);
 
-            } else if (!isValidText(edLastName.getText().toString().trim())) {
+            } else if (edLastName.getText().toString().length()==0) {
                 ((HomeScreen) mContext).showToastMessage(GlobalConstants.LAST_NAME_CAN_NOT_EMPTY);
-            } else {*/
+            } else {
                 showConfirmationDialog();
-//            }
+            }
         }
     }
 }

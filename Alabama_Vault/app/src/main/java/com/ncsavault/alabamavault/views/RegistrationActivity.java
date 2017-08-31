@@ -78,6 +78,7 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.reginald.editspinner.EditSpinner;
+import com.twitter.sdk.android.Twitter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -692,11 +693,9 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
                 twitter = false;
                 finish();
                 LoginManager.getInstance().logOut();
-<<<<<<< .mine
-//                Twitter.logOut();
-=======
-               //gk Twitter.logOut();
->>>>>>> .theirs
+
+                Twitter.logOut();
+
                 Auth.GoogleSignInApi.signOut(LoginEmailActivity.mGoogleApiClient).setResultCallback(
                         new ResultCallback<Status>() {
                             @Override
@@ -1493,7 +1492,7 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
                         alertDialog.dismiss();
                         // tvFacebookLogin.setText("Login with Facebook");
                         LoginManager.getInstance().logOut();
-                      //  Twitter.logOut();
+                        Twitter.logOut();
                         Utils.getInstance().gethideKeyboard(RegistrationActivity.this);
                         AppController.getInstance().handleEvent(AppDefines.EVENT_ID_LOGIN_SCREEN);
                         overridePendingTransition(R.anim.leftin, R.anim.rightout);
@@ -1656,7 +1655,7 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
             super.onBackPressed();
             finish();
             LoginManager.getInstance().logOut();
-            //Twitter.logOut();
+            Twitter.logOut();
             Auth.GoogleSignInApi.signOut(LoginEmailActivity.mGoogleApiClient).setResultCallback(
                     new ResultCallback<Status>() {
                         @Override

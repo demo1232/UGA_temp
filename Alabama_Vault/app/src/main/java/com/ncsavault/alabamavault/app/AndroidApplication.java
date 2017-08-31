@@ -8,13 +8,15 @@ import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
-import com.twitter.sdk.android.core.DefaultLogger;
-import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.ncsavault.alabamavault.controllers.AppController;
 import com.ncsavault.alabamavault.globalconstants.GlobalConstants;
 import com.ncsavault.alabamavault.utils.FontsOverride;
-import com.twitter.sdk.android.core.TwitterConfig;
+
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.tweetcomposer.TweetComposer;
+import com.twitter.sdk.android.tweetui.TweetUi;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -33,35 +35,26 @@ public class AndroidApplication extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
     }
-    
+
     @Override
     public void onCreate() {
         super.onCreate();
-       // MultiDex.install(this);
+        // MultiDex.install(this);
         AppController.getInstance().setApplication(this);
         AppController.getInstance().setHandler(handler);
 
         AppController.getInstance().initialize();
-        Twitter.initialize(this);
 
 
         //gk CrashManager.initialize(this, GlobalConstants.HOCKEY_APP_ID, null);
 
-<<<<<<< .mine
+
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(GlobalConstants.TWITTER_CONSUMER_KEY, GlobalConstants.TWITTER_CONSUMER_SECRET);
+        Fabric.with(this, new Twitter(authConfig), new Crashlytics());
+
         Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
         Fabric.with(this, new TweetComposer());
 
-
-
-
-=======
-//        TwitterAuthConfig authConfig = new TwitterAuthConfig(GlobalConstants.TWITTER_CONSUMER_KEY, GlobalConstants.TWITTER_CONSUMER_SECRET);
-        Fabric.with(this, new Crashlytics());
-
-
-
-
->>>>>>> .theirs
         FlurryAgent.init(this, GlobalConstants.FLURRY_KEY);
 
 //        FontsOverride.setDefaultFont(this, "DEFAULT", "fonts/Roboto-Regular.ttf");
