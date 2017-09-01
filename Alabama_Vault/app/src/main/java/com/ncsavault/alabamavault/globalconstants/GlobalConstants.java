@@ -89,7 +89,7 @@ public class GlobalConstants {
     // public static final String BASE_URL = "http://0b78b111a9d0410784caa8a634aa3b90.cloudapp.net/api";
 
     //new Staging url
-    //public static String BASE_URL = "http://syncroapi-staging.ncsavault.com/api";
+    // public static String BASE_URL = "http://syncroapi-staging.ncsavault.com/api";
 
     //TEST Pro url
    // public static String BASE_URL = "http://13.93.160.190/api";

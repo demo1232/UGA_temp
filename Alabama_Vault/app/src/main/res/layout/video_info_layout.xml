@@ -155,6 +155,7 @@
                     android:background="@drawable/video_save"
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
+                    android:layout_marginTop="6dp"
                     android:visibility="visible" />
             </RelativeLayout>
 
