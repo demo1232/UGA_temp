@@ -312,7 +312,6 @@ public class LoginEmailActivity extends AppCompatActivity implements GoogleApiCl
             imgTwitterLogin = (ImageView) findViewById(R.id.twitter_login);
             tvSkipLogin = (TextView) findViewById(R.id.tv_skip_login);
             tvNextLogin = (Button) findViewById(R.id.tv_next_email);
-            ll_facebook_login = (LinearLayout) findViewById(R.id.ll_facebook_login);
 
             isValue = AppController.getInstance().getModelFacade().getLocalModel().isRegisteredEmailIdForgot();
             String emailId = AppController.getInstance().getModelFacade().getLocalModel().getRegisteredEmailIdForgot();

@@ -1160,9 +1160,9 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
             pDialog.setCancelable(false);
 
 
-            if (mEmailId.getVisibility() == View.VISIBLE) {
+            if (twitter) {
                 email = mEmailId.getText().toString();
-            } else if (mEmailIdFB.getVisibility() == View.VISIBLE) {
+            } else  {
                 email = mEmailIdFB.getText().toString();
             }
             if (loginEmailModel != null) {

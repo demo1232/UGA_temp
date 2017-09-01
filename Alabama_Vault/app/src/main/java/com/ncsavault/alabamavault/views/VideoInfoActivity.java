@@ -1,15 +1,10 @@
 package com.ncsavault.alabamavault.views;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,27 +16,21 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.transition.Transition;
 import android.util.Log;
 import android.view.Display;
-import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -54,15 +43,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ncsavault.alabamavault.R;
-import com.ncsavault.alabamavault.adapters.PagerAdapter;
 import com.ncsavault.alabamavault.controllers.AppController;
 import com.ncsavault.alabamavault.database.VaultDatabaseHelper;
 import com.ncsavault.alabamavault.dto.VideoDTO;
-import com.ncsavault.alabamavault.fragments.views.VideoInfoPagerFragment;
 import com.ncsavault.alabamavault.globalconstants.GlobalConstants;
 import com.ncsavault.alabamavault.jwplayer.KeepScreenOnHandler;
 import com.ncsavault.alabamavault.service.TrendingFeaturedVideoService;
-import com.ncsavault.alabamavault.service.VideoDataService;
 import com.ncsavault.alabamavault.utils.Utils;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -150,7 +136,6 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
     ProfileTracker profileTracker;
     private Animation animation;
     private Vector<Fragment> fragments;
-    private PagerAdapter mPagerAdapter;
     private RelativeLayout viewPagerRelativeView;
     private LinearLayout shareVideoLayout,jwPlayerLayout;
     private boolean askAgainForMustPermissions = false;
@@ -493,10 +478,6 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if (MainActivity.mIndicator != null && MainActivity.mPager != null) {
-            MainActivity.mIndicator.setCurrentItem(GlobalConstants.CURRENT_TAB);
-            MainActivity.mPager.setCurrentItem(GlobalConstants.CURRENT_TAB);
-        }
         if (imageUri != null && path != null) {
             deleteFileFromSDcard();
         }
@@ -959,11 +940,6 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
 
                 try {
                     if (!VideoInfoActivity.llVideoLoader.isShown()) {
-                        if (MainActivity.mIndicator != null && MainActivity.mPager != null) {
-                            MainActivity.mIndicator.setCurrentItem(GlobalConstants.CURRENT_TAB);
-                            MainActivity.mPager.setCurrentItem(GlobalConstants.CURRENT_TAB);
-                        }
-
                         if (imageUri != null) {
                             deleteFileFromSDcard();
                         }
@@ -1597,14 +1573,14 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
         articleParams.put(GlobalConstants.KEY_VIDEONAME, videoObject.getVideoName());
         FlurryAgent.logEvent(videoCategory, articleParams, true);
 
-        if (mPagerAdapter.getCount() > 0) {
-            VideoInfoPagerFragment descriptionFragment = (VideoInfoPagerFragment) mPagerAdapter.getItem(0);
-            View fragmentView = descriptionFragment.getView();
-            TextView tvLongDescription = (TextView) fragmentView.findViewById(R.id.tv_video_long_description);
-            tvLongDescription.setText(videoObject.getVideoLongDescription());
-
-            mPagerAdapter.notifyDataSetChanged();
-        }
+//        if (mPagerAdapter.getCount() > 0) {
+//            VideoInfoPagerFragment descriptionFragment = (VideoInfoPagerFragment) mPagerAdapter.getItem(0);
+//            View fragmentView = descriptionFragment.getView();
+//            TextView tvLongDescription = (TextView) fragmentView.findViewById(R.id.tv_video_long_description);
+//            tvLongDescription.setText(videoObject.getVideoLongDescription());
+//
+//            mPagerAdapter.notifyDataSetChanged();
+//        }
     }
 
     public void showConfirmLoginDialog(String message) {
@@ -1629,7 +1605,6 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
                             context.startActivity(intent);
                             context.finish();
 
-                            MainActivity.context.finish();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

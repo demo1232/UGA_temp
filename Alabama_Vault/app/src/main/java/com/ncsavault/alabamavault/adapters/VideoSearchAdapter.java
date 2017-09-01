@@ -81,7 +81,7 @@ public class VideoSearchAdapter extends RecyclerView.Adapter<VideoSearchAdapter.
         PlaylistDto playlistDto = null;
         if (objects.get(position) instanceof VideoDTO) {
             newVideoDto = (VideoDTO) objects.get(position);
-            String videoImageUrl = newVideoDto.getVideoStillUrl();
+            final String videoImageUrl = newVideoDto.getVideoStillUrl();
             String videoName = newVideoDto.getVideoName();
             String videDescription = newVideoDto.getVideoShortDescription();
             long videoDuration = newVideoDto.getVideoDuration();
@@ -103,6 +103,9 @@ public class VideoSearchAdapter extends RecyclerView.Adapter<VideoSearchAdapter.
                         @Override
                         public void onLoadingComplete(String s, View view, Bitmap bitmap) {
                             viewHolder.progressBar.setVisibility(View.GONE);
+                            if(videoImageUrl== null){
+                                viewHolder.videoImageView.setImageResource(R.drawable.vault);
+                            }
                         }
 
                         @Override

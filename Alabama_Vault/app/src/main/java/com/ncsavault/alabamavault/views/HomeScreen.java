@@ -20,7 +20,6 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -44,7 +43,6 @@ import com.ncsavault.alabamavault.dto.TabBannerDTO;
 import com.ncsavault.alabamavault.dto.VideoDTO;
 import com.ncsavault.alabamavault.fragments.views.BaseFragment;
 import com.ncsavault.alabamavault.fragments.views.CatagoriesFragment;
-import com.ncsavault.alabamavault.fragments.views.FeaturedFragment;
 import com.ncsavault.alabamavault.fragments.views.HomeFragment;
 import com.ncsavault.alabamavault.fragments.views.PlaylistFragment;
 import com.ncsavault.alabamavault.fragments.views.ProfileFragment;
@@ -54,7 +52,6 @@ import com.ncsavault.alabamavault.globalconstants.GlobalConstants;
 import com.ncsavault.alabamavault.models.BannerDataModel;
 import com.ncsavault.alabamavault.models.BaseModel;
 import com.ncsavault.alabamavault.service.TrendingFeaturedVideoService;
-import com.ncsavault.alabamavault.service.VideoDataService;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
@@ -62,8 +59,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 import com.nostra13.universalimageloader.utils.StorageUtils;
-
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -75,7 +70,7 @@ import java.util.List;
  */
 
 public class HomeScreen extends AppCompatActivity implements BottomNavigationBar.BottomNavigationMenuClickListener, AbstractView
-        , OnFragmentToucheded {
+         {
     private static final String SELECTED_ITEM = "arg_selected_item";
 
     private int mSelectedItem;
@@ -415,43 +410,6 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         return false;
-    }
-
-    @Override
-    public void onFragmentTouched(Fragment fragment, float x, float y) {
-
-
-        if (fragment instanceof BaseFragment) {
-
-            final BaseFragment theFragment = (BaseFragment) fragment;
-
-            Animator unreveal = theFragment.prepareUnrevealAnimator(x, y);
-
-            unreveal.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    // remove the fragment only when the animation finishes
-                    //  getFragmentManager().beginTransaction().remove(theFragment).commit();
-                    //to prevent flashing the fragment before removing it, execute pending transactions inmediately
-                    getFragmentManager().executePendingTransactions();
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-                }
-            });
-            unreveal.start();
-        }
-
-
     }
 
 

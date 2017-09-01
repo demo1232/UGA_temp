@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -22,8 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -39,21 +36,15 @@ import com.ncsavault.alabamavault.database.VaultDatabaseHelper;
 import com.ncsavault.alabamavault.dto.TabBannerDTO;
 import com.ncsavault.alabamavault.dto.VideoDTO;
 import com.ncsavault.alabamavault.globalconstants.GlobalConstants;
-import com.ncsavault.alabamavault.models.BannerDataModel;
 import com.ncsavault.alabamavault.models.BaseModel;
 import com.ncsavault.alabamavault.models.VideoDataTaskModel;
 import com.ncsavault.alabamavault.service.TrendingFeaturedVideoService;
 import com.ncsavault.alabamavault.utils.Utils;
 import com.ncsavault.alabamavault.views.AbstractView;
 import com.ncsavault.alabamavault.views.HomeScreen;
-import com.ncsavault.alabamavault.views.MainActivity;
 import com.ncsavault.alabamavault.views.VideoInfoActivity;
 import com.ncsavault.alabamavault.views.VideoSearchActivity;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 
 import java.io.File;
@@ -63,8 +54,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-
-import static com.ncsavault.alabamavault.views.HomeScreen.mToolbar;
 
 /**
  * Created by gauravkumar.singh on 6/12/2017.

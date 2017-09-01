@@ -5,15 +5,8 @@ import android.content.Intent;
 import android.os.IBinder;
 
 import com.ncsavault.alabamavault.controllers.AppController;
-import com.ncsavault.alabamavault.database.VaultDatabaseHelper;
 import com.ncsavault.alabamavault.dto.VideoDTO;
 
-import com.ncsavault.alabamavault.fragments.views.CoachesEraFragment;
-import com.ncsavault.alabamavault.fragments.views.FeaturedFragment;
-import com.ncsavault.alabamavault.fragments.views.GamesFragment;
-import com.ncsavault.alabamavault.fragments.views.OpponentsFragment;
-import com.ncsavault.alabamavault.fragments.views.PlayerFragment;
-import com.ncsavault.alabamavault.globalconstants.GlobalConstants;
 import com.ncsavault.alabamavault.utils.Utils;
 
 import java.util.ArrayList;

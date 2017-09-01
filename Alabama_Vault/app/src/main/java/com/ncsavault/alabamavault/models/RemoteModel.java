@@ -55,11 +55,6 @@ public class RemoteModel implements IModel {
     VideoDataTaskModel videoDataTaskModel;
 
     /**
-     * Instance of fragment task model
-     */
-    FragmentDataTaskModel fragmentDataTaskModel;
-
-    /**
      * Instance of login password model
      */
     LoginPasswordModel loginPasswordModel;
@@ -78,9 +73,7 @@ public class RemoteModel implements IModel {
         changePasswordModel = new ChangePasswordModel();
         createTaskOnAsanaModel = new CreateTaskOnAsanaModel();
         videoDataTaskModel = new VideoDataTaskModel();
-        fragmentDataTaskModel = new FragmentDataTaskModel();
         loginPasswordModel = new LoginPasswordModel();
-
     }
 
     @Override
@@ -126,10 +119,6 @@ public class RemoteModel implements IModel {
 
     public VideoDataTaskModel getVideoDataTaskModel() {
         return videoDataTaskModel;
-    }
-
-    public FragmentDataTaskModel getFragmentDataTaskModel() {
-        return fragmentDataTaskModel;
     }
 
     public LoginPasswordModel getLoginPasswordModel() {

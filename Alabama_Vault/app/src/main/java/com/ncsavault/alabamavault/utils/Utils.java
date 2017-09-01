@@ -76,7 +76,6 @@ import com.ncsavault.alabamavault.mailchimp.org.xmlrpc.android.XMLRPCException;
 import com.ncsavault.alabamavault.mailchimp.rsg.mailchimp.api.MailChimpApiException;
 import com.ncsavault.alabamavault.mailchimp.rsg.mailchimp.api.lists.ListMethods;
 import com.ncsavault.alabamavault.mailchimp.rsg.mailchimp.api.lists.MergeFieldListUtil;
-import com.ncsavault.alabamavault.views.MainActivity;
 
 import org.json.JSONArray;
 
@@ -549,80 +548,80 @@ public class Utils {
         // }
     }
 
-    public void showNotificationToggleSetting(final MainActivity mActivity) {
-        View view = mActivity.getLayoutInflater().inflate(R.layout.notification_toggle, null);
-        TextView tv_notification_text = (TextView) view.findViewById(R.id.tv_notification_text);
-        Switch switch_notification = (Switch) view.findViewById(R.id.toggle_notification);
-
-        tv_notification_text.setText(mActivity.getResources().getString(R.string.notification_question));
-
-        prefs = mActivity.getSharedPreferences(GlobalConstants.PREF_PACKAGE_NAME, Context.MODE_PRIVATE);
-
-        boolean isAllowed = prefs.getBoolean(GlobalConstants.PREF_IS_NOTIFICATION_ALLOW, false);
-
-        switch_notification.setChecked(isAllowed);
-//        GCMRegistrar.checkDevice(mActivity.getApplicationContext());
-//        // Make sure the manifest permissions was properly set
-//        GCMRegistrar.checkManifest(mActivity.getApplicationContext());
+//    public void showNotificationToggleSetting(final MainActivity mActivity) {
+//        View view = mActivity.getLayoutInflater().inflate(R.layout.notification_toggle, null);
+//        TextView tv_notification_text = (TextView) view.findViewById(R.id.tv_notification_text);
+//        Switch switch_notification = (Switch) view.findViewById(R.id.toggle_notification);
 //
-//        // Get GCM registration id
-//        final String regId = GCMRegistrar.getRegistrationId(mActivity.getApplicationContext());
-        refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        final String deviceId = Settings.Secure.getString(mActivity.getApplicationContext().getContentResolver(),
-                Settings.Secure.ANDROID_ID);
-
-        switch_notification.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
-                // TODO Auto-generated method stub
-                mPermissionChangeTask = new AsyncTask<Void, Void, Void>() {
-
-                    @Override
-                    protected Void doInBackground(Void... params) {
-                        Log.i("Sync Dialog", "Device Id : " + deviceId);
-                        System.out.println("Registration Id in Toggle Setting Dialog : " + refreshedToken);
-                        if (isChecked) {
-                            if (refreshedToken != "") {
-                                result = AppController.getInstance().getServiceManager().getVaultService().sendPushNotificationRegistration(GlobalConstants.PUSH_REGISTER_URL, refreshedToken, deviceId, isChecked);
-                                if (result != null) {
-                                    if (result.toLowerCase().contains("success")) {
-//                                        GCMRegistrar.setRegisteredOnServer(mActivity.getApplicationContext(),
-//                                                true);
-                                        prefs.edit().putBoolean(GlobalConstants.PREF_IS_NOTIFICATION_ALLOW, true).commit();
-                                    }
-                                }
-                            } else
-                                registerWithGCM(mActivity);
-                        } else {
-                            result = AppController.getInstance().getServiceManager().getVaultService().sendPushNotificationRegistration(GlobalConstants.PUSH_REGISTER_URL, refreshedToken, deviceId, isChecked);
-                            if (result != null) {
-                                if (result.toLowerCase().contains("success")) {
-                                    prefs.edit().putBoolean(GlobalConstants.PREF_IS_NOTIFICATION_ALLOW, false).commit();
-                                }
-                            }
-                        }
-                        System.out.println("Result of Push Registration Url : " + result);
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Void result) {
-                        mRegisterTask = null;
-                    }
-                };
-
-                mPermissionChangeTask.execute();
-            }
-        });
-
-        progressDialog = new ProgressDialog(mActivity);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setCancelable(true);
-        progressDialog.setCanceledOnTouchOutside(true);
-        progressDialog.show();
-        progressDialog.setContentView(view);
-    }
+//        tv_notification_text.setText(mActivity.getResources().getString(R.string.notification_question));
+//
+//        prefs = mActivity.getSharedPreferences(GlobalConstants.PREF_PACKAGE_NAME, Context.MODE_PRIVATE);
+//
+//        boolean isAllowed = prefs.getBoolean(GlobalConstants.PREF_IS_NOTIFICATION_ALLOW, false);
+//
+//        switch_notification.setChecked(isAllowed);
+////        GCMRegistrar.checkDevice(mActivity.getApplicationContext());
+////        // Make sure the manifest permissions was properly set
+////        GCMRegistrar.checkManifest(mActivity.getApplicationContext());
+////
+////        // Get GCM registration id
+////        final String regId = GCMRegistrar.getRegistrationId(mActivity.getApplicationContext());
+//        refreshedToken = FirebaseInstanceId.getInstance().getToken();
+//        final String deviceId = Settings.Secure.getString(mActivity.getApplicationContext().getContentResolver(),
+//                Settings.Secure.ANDROID_ID);
+//
+//        switch_notification.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
+//                // TODO Auto-generated method stub
+//                mPermissionChangeTask = new AsyncTask<Void, Void, Void>() {
+//
+//                    @Override
+//                    protected Void doInBackground(Void... params) {
+//                        Log.i("Sync Dialog", "Device Id : " + deviceId);
+//                        System.out.println("Registration Id in Toggle Setting Dialog : " + refreshedToken);
+//                        if (isChecked) {
+//                            if (refreshedToken != "") {
+//                                result = AppController.getInstance().getServiceManager().getVaultService().sendPushNotificationRegistration(GlobalConstants.PUSH_REGISTER_URL, refreshedToken, deviceId, isChecked);
+//                                if (result != null) {
+//                                    if (result.toLowerCase().contains("success")) {
+////                                        GCMRegistrar.setRegisteredOnServer(mActivity.getApplicationContext(),
+////                                                true);
+//                                        prefs.edit().putBoolean(GlobalConstants.PREF_IS_NOTIFICATION_ALLOW, true).commit();
+//                                    }
+//                                }
+//                            } else
+//                                registerWithGCM(mActivity);
+//                        } else {
+//                            result = AppController.getInstance().getServiceManager().getVaultService().sendPushNotificationRegistration(GlobalConstants.PUSH_REGISTER_URL, refreshedToken, deviceId, isChecked);
+//                            if (result != null) {
+//                                if (result.toLowerCase().contains("success")) {
+//                                    prefs.edit().putBoolean(GlobalConstants.PREF_IS_NOTIFICATION_ALLOW, false).commit();
+//                                }
+//                            }
+//                        }
+//                        System.out.println("Result of Push Registration Url : " + result);
+//                        return null;
+//                    }
+//
+//                    @Override
+//                    protected void onPostExecute(Void result) {
+//                        mRegisterTask = null;
+//                    }
+//                };
+//
+//                mPermissionChangeTask.execute();
+//            }
+//        });
+//
+//        progressDialog = new ProgressDialog(mActivity);
+//        progressDialog.setCanceledOnTouchOutside(false);
+//        progressDialog.setCancelable(true);
+//        progressDialog.setCanceledOnTouchOutside(true);
+//        progressDialog.show();
+//        progressDialog.setContentView(view);
+//    }
 
     public Bitmap decodeUri(Uri selectedImage, Activity context) throws FileNotFoundException {
 
@@ -1004,86 +1003,86 @@ public class Utils {
 //        }
     }
 
-    public void showConfirmLoginDialog(final Activity context, String message, final String firstName, final String lastName, final String emailId) {
-        AlertDialog alertDialog = null;
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-        alertDialogBuilder
-                .setMessage(message);
-        alertDialogBuilder.setTitle("Join our Mailing list?");
-        alertDialogBuilder.setPositiveButton("YES, Keep me Updated",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        SharedPreferences pref = AppController.getInstance().getApplicationContext().getSharedPreferences(GlobalConstants.PREF_PACKAGE_NAME, Context.MODE_PRIVATE);
-                        pref.edit().putBoolean(GlobalConstants.PREF_JOIN_MAIL_CHIMP, true).commit();
-                        if (Utils.isInternetAvailable(context)) {
-                            if (mMailChimpTask == null) {
-
-                                mMailChimpTask = new AsyncTask<Void, Void, Boolean>() {
-
-                                    @Override
-                                    protected void onPreExecute() {
-                                        super.onPreExecute();
-                                        progressDialog = new ProgressDialog(context, R.style.CustomDialogTheme);
-                                        progressDialog.show();
-                                        progressDialog.setContentView(setViewToProgressDialog(context));
-                                        progressDialog.setCanceledOnTouchOutside(false);
-                                    }
-
-                                    @Override
-                                    protected Boolean doInBackground(Void... params) {
-
-                                        return addToList(context, emailId, firstName, lastName);
-                                    }
-
-                                    @Override
-                                    protected void onPostExecute(Boolean aBoolean) {
-                                        super.onPostExecute(aBoolean);
-                                        Intent intent = new Intent(context, MainActivity.class);
-                                        if (!aBoolean) {
-                                            intent.putExtra("is_success", false);
-                                        } else {
-                                            intent.putExtra("is_success", true);
-                                        }
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        context.startActivity(intent);
-                                        context.overridePendingTransition(R.anim.slideup, R.anim.nochange);
-                                        context.finish();
-                                        // if (!VideoDataService.isServiceRunning)
-                                        context.startService(new Intent(context, TrendingFeaturedVideoService.class));
-                                        progressDialog.dismiss();
-                                        mMailChimpTask = null;
-                                    }
-                                };
-
-                                // execute AsyncTask
-                                mMailChimpTask.execute();
-                            }
-                        } else {
-                            showToastMessage(context, GlobalConstants.MSG_NO_CONNECTION);
-                        }
-                    }
-                });
-
-        alertDialogBuilder.setNegativeButton("No Thanks",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        Intent intent = new Intent(context, MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(intent);
-                        context.overridePendingTransition(R.anim.slideup, R.anim.nochange);
-                        context.finish();
-                        //if (!VideoDataService.isServiceRunning)
-                        context.startService(new Intent(context, TrendingFeaturedVideoService.class));
-                    }
-                });
-
-        alertDialog = alertDialogBuilder.create();
-        alertDialog.setCancelable(false);
-        alertDialog.setCanceledOnTouchOutside(false);
-        alertDialog.show();
-    }
+//    public void showConfirmLoginDialog(final Activity context, String message, final String firstName, final String lastName, final String emailId) {
+//        AlertDialog alertDialog = null;
+//        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+//        alertDialogBuilder
+//                .setMessage(message);
+//        alertDialogBuilder.setTitle("Join our Mailing list?");
+//        alertDialogBuilder.setPositiveButton("YES, Keep me Updated",
+//                new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface arg0, int arg1) {
+//                        SharedPreferences pref = AppController.getInstance().getApplicationContext().getSharedPreferences(GlobalConstants.PREF_PACKAGE_NAME, Context.MODE_PRIVATE);
+//                        pref.edit().putBoolean(GlobalConstants.PREF_JOIN_MAIL_CHIMP, true).commit();
+//                        if (Utils.isInternetAvailable(context)) {
+//                            if (mMailChimpTask == null) {
+//
+//                                mMailChimpTask = new AsyncTask<Void, Void, Boolean>() {
+//
+//                                    @Override
+//                                    protected void onPreExecute() {
+//                                        super.onPreExecute();
+//                                        progressDialog = new ProgressDialog(context, R.style.CustomDialogTheme);
+//                                        progressDialog.show();
+//                                        progressDialog.setContentView(setViewToProgressDialog(context));
+//                                        progressDialog.setCanceledOnTouchOutside(false);
+//                                    }
+//
+//                                    @Override
+//                                    protected Boolean doInBackground(Void... params) {
+//
+//                                        return addToList(context, emailId, firstName, lastName);
+//                                    }
+//
+//                                    @Override
+//                                    protected void onPostExecute(Boolean aBoolean) {
+//                                        super.onPostExecute(aBoolean);
+//                                        Intent intent = new Intent(context, MainActivity.class);
+//                                        if (!aBoolean) {
+//                                            intent.putExtra("is_success", false);
+//                                        } else {
+//                                            intent.putExtra("is_success", true);
+//                                        }
+//                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                                        context.startActivity(intent);
+//                                        context.overridePendingTransition(R.anim.slideup, R.anim.nochange);
+//                                        context.finish();
+//                                        // if (!VideoDataService.isServiceRunning)
+//                                        context.startService(new Intent(context, TrendingFeaturedVideoService.class));
+//                                        progressDialog.dismiss();
+//                                        mMailChimpTask = null;
+//                                    }
+//                                };
+//
+//                                // execute AsyncTask
+//                                mMailChimpTask.execute();
+//                            }
+//                        } else {
+//                            showToastMessage(context, GlobalConstants.MSG_NO_CONNECTION);
+//                        }
+//                    }
+//                });
+//
+//        alertDialogBuilder.setNegativeButton("No Thanks",
+//                new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface arg0, int arg1) {
+//                        Intent intent = new Intent(context, MainActivity.class);
+//                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                        context.startActivity(intent);
+//                        context.overridePendingTransition(R.anim.slideup, R.anim.nochange);
+//                        context.finish();
+//                        //if (!VideoDataService.isServiceRunning)
+//                        context.startService(new Intent(context, TrendingFeaturedVideoService.class));
+//                    }
+//                });
+//
+//        alertDialog = alertDialogBuilder.create();
+//        alertDialog.setCancelable(false);
+//        alertDialog.setCanceledOnTouchOutside(false);
+//        alertDialog.show();
+//    }
 
 
     private boolean addToList(final Activity context, String emailId, String firstName, String lastName) {

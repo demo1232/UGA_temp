@@ -6,12 +6,8 @@ import com.ncsavault.alabamavault.views.ContactActivity;
 import com.ncsavault.alabamavault.views.ForgotPasswordActivity;
 import com.ncsavault.alabamavault.views.HomeScreen;
 import com.ncsavault.alabamavault.views.LoginEmailActivity;
-import com.ncsavault.alabamavault.views.LoginPasswordActivity;
-import com.ncsavault.alabamavault.views.MainActivity;
 import com.ncsavault.alabamavault.views.RegistrationActivity;
-import com.ncsavault.alabamavault.views.SplashActivity;
 import com.ncsavault.alabamavault.views.UploadPhotoActivity;
-import com.ncsavault.alabamavault.views.UserProfileActivity;
 import com.ncsavault.alabamavault.views.VideoInfoActivity;
 
 /**
@@ -67,17 +63,8 @@ public class ViewFactory {
             case LOGIN_SCREEN: {
                 return LoginEmailActivity.class;
             }
-            case LOGIN_PASSWORD_SCREEN: {
-                return LoginPasswordActivity.class;
-            }
-            case MAIN_SCREEN: {
-                return MainActivity.class;
-            }
-            case UPLOAD_PHOTO_SCREEN: {
+             case UPLOAD_PHOTO_SCREEN: {
                 return UploadPhotoActivity.class;
-            }
-            case USER_PROFILE_SCREEN: {
-                return UserProfileActivity.class;
             }
             case CHANGE_PASSWORD_SCREEN: {
                 return ChangePasswordActivity.class;

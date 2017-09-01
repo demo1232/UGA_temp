@@ -1,21 +1,15 @@
 package com.ncsavault.alabamavault.service;
 
-import android.app.IntentService;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.ncsavault.alabamavault.controllers.AppController;
 import com.ncsavault.alabamavault.database.VaultDatabaseHelper;
 import com.ncsavault.alabamavault.dto.CatagoriesTabDao;
 import com.ncsavault.alabamavault.dto.PlaylistDto;
-import com.ncsavault.alabamavault.dto.TabBannerDTO;
 import com.ncsavault.alabamavault.dto.VideoDTO;
-import com.ncsavault.alabamavault.fragments.views.FeaturedFragment;
 import com.ncsavault.alabamavault.fragments.views.HomeFragment;
 import com.ncsavault.alabamavault.globalconstants.GlobalConstants;
 import com.ncsavault.alabamavault.utils.Utils;

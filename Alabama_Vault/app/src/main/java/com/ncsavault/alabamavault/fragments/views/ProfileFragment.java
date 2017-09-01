@@ -1,7 +1,6 @@
 package com.ncsavault.alabamavault.fragments.views;
 
 import android.Manifest;
-import android.animation.Animator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -18,7 +17,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
@@ -30,10 +28,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -44,7 +39,6 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -67,12 +61,10 @@ import com.ncsavault.alabamavault.globalconstants.GlobalConstants;
 import com.ncsavault.alabamavault.models.BaseModel;
 import com.ncsavault.alabamavault.models.UserProfileModel;
 import com.ncsavault.alabamavault.service.TrendingFeaturedVideoService;
-import com.ncsavault.alabamavault.service.VideoDataService;
 import com.ncsavault.alabamavault.utils.Utils;
 import com.ncsavault.alabamavault.views.AbstractView;
 import com.ncsavault.alabamavault.views.HomeScreen;
 import com.ncsavault.alabamavault.views.LoginEmailActivity;
-import com.ncsavault.alabamavault.views.UserProfileActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -80,7 +72,6 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
-import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
@@ -186,11 +177,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                     tvLinearLayout.setVisibility(View.GONE);
 
                 } else if (((HomeScreen) mContext).textViewEdit.getText().toString().equalsIgnoreCase("SAVE")) {
-                    ((HomeScreen) mContext).textViewEdit.setText("EDIT");
-                    edLinearLayout.setVisibility(View.GONE);
-                    tvLinearLayout.setVisibility(View.VISIBLE);
-                    mFirstName.setText(edFirstName.getText().toString());
-                    mLastName.setText(edLastName.getText().toString());
+
 
                     if (edFirstName.getText().toString().length()==0) {
                         ((HomeScreen) mContext).showToastMessage(GlobalConstants.FIRST_NAME_CAN_NOT_EMPTY);
@@ -198,6 +185,11 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                     } else if (edLastName.getText().toString().length()==0) {
                         ((HomeScreen) mContext).showToastMessage(GlobalConstants.LAST_NAME_CAN_NOT_EMPTY);
                     } else {
+                        ((HomeScreen) mContext).textViewEdit.setText("EDIT");
+                        edLinearLayout.setVisibility(View.GONE);
+                        tvLinearLayout.setVisibility(View.VISIBLE);
+                        mFirstName.setText(edFirstName.getText().toString());
+                        mLastName.setText(edLastName.getText().toString());
                         updateUserData();
                     }
 

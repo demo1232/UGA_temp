@@ -535,6 +535,10 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
                             VaultDatabaseHelper.getInstance(mContext).
                                     insertVideosInDatabase(videoDtoArrayList);
                         }
+                    }else
+                    {
+                        VaultDatabaseHelper.getInstance(mContext).
+                                insertVideosInDatabase(videoDtoArrayList);
                     }
 
                 }

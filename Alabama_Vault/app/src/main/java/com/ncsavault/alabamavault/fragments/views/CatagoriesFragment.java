@@ -1,6 +1,5 @@
 package com.ncsavault.alabamavault.fragments.views;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -13,24 +12,18 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.baoyz.widget.PullRefreshLayout;
-import com.ncsavault.alabamavault.AsyncTask.PullRefreshTask;
 import com.ncsavault.alabamavault.R;
 import com.ncsavault.alabamavault.adapters.CatagoriesAdapter;
-import com.ncsavault.alabamavault.adapters.SavedVideoAdapter;
 import com.ncsavault.alabamavault.controllers.AppController;
 import com.ncsavault.alabamavault.customviews.RecyclerViewDisabler;
 import com.ncsavault.alabamavault.database.VaultDatabaseHelper;
 import com.ncsavault.alabamavault.dto.CatagoriesTabDao;
-import com.ncsavault.alabamavault.dto.TabBannerDTO;
-import com.ncsavault.alabamavault.dto.VideoDTO;
 import com.ncsavault.alabamavault.globalconstants.GlobalConstants;
 import com.ncsavault.alabamavault.utils.Utils;
 import com.ncsavault.alabamavault.views.HomeScreen;

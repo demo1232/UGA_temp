@@ -1,6 +1,5 @@
 package com.ncsavault.alabamavault.fragments.views;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -9,7 +8,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -22,25 +20,18 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.baoyz.widget.PullRefreshLayout;
-import com.ncsavault.alabamavault.AsyncTask.PullRefreshTask;
 import com.ncsavault.alabamavault.R;
-import com.ncsavault.alabamavault.adapters.CatagoriesAdapter;
-import com.ncsavault.alabamavault.adapters.FilterSubtypesAdapter;
 import com.ncsavault.alabamavault.adapters.PlaylistDataAdapter;
-import com.ncsavault.alabamavault.adapters.VideoDetailAdapter;
 import com.ncsavault.alabamavault.controllers.AppController;
 import com.ncsavault.alabamavault.customviews.RecyclerViewDisabler;
 import com.ncsavault.alabamavault.database.VaultDatabaseHelper;
@@ -53,7 +44,6 @@ import com.ncsavault.alabamavault.models.VideoDataTaskModel;
 import com.ncsavault.alabamavault.utils.Utils;
 import com.ncsavault.alabamavault.views.AbstractView;
 import com.ncsavault.alabamavault.views.HomeScreen;
-import com.ncsavault.alabamavault.views.MainActivity;
 import com.ncsavault.alabamavault.views.VideoInfoActivity;
 import com.ncsavault.alabamavault.views.VideoSearchActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -724,6 +714,10 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
                             VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).insertPlaylistTabData
                                     (playlistDtoDataList,tabId);
                         }
+                    }else
+                    {
+                        VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).insertPlaylistTabData
+                                (playlistDtoDataList,tabId);
                     }
                 }
 

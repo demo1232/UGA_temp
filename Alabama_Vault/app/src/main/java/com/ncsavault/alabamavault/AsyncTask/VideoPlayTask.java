@@ -12,13 +12,12 @@ import com.ncsavault.alabamavault.database.VaultDatabaseHelper;
 import com.ncsavault.alabamavault.dto.VideoDTO;
 import com.ncsavault.alabamavault.globalconstants.GlobalConstants;
 import com.ncsavault.alabamavault.utils.Utils;
-import com.ncsavault.alabamavault.views.MainActivity;
+import com.ncsavault.alabamavault.views.HomeScreen;
 import com.ncsavault.alabamavault.views.VideoInfoActivity;
-
 import java.util.ArrayList;
 
 /**
- * Created by yogita.panpaliya on 9/23/2016.
+ * Created by Gauravkumar on 9/23/2016.
  */
 
 public class VideoPlayTask  extends AsyncTask<String, Void, VideoDTO> {
@@ -79,17 +78,17 @@ public class VideoPlayTask  extends AsyncTask<String, Void, VideoDTO> {
                         mActivity.startActivity(intent);
                         mActivity.overridePendingTransition(R.anim.slide_up_video_info, R.anim.nochange);
                     } else {
-                        ((MainActivity) mActivity).showToastMessage(GlobalConstants.MSG_NO_INFO_AVAILABLE);
+                        ((HomeScreen) mActivity).showToastMessage(GlobalConstants.MSG_NO_INFO_AVAILABLE);
                     }
                 } else {
-                    ((MainActivity) mActivity).showToastMessage(GlobalConstants.MSG_NO_INFO_AVAILABLE);
+                    ((HomeScreen) mActivity).showToastMessage(GlobalConstants.MSG_NO_INFO_AVAILABLE);
                 }
             } else {
-                ((MainActivity) mActivity).showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
+                ((HomeScreen) mActivity).showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
             }
 
         } else {
-            ((MainActivity) mActivity).showToastMessage(GlobalConstants.MSG_NO_INFO_AVAILABLE);
+            ((HomeScreen) mActivity).showToastMessage(GlobalConstants.MSG_NO_INFO_AVAILABLE);
         }
         pDialog.dismiss();
     }

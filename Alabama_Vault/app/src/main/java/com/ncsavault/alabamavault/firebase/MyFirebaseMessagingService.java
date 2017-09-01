@@ -25,7 +25,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.ncsavault.alabamavault.R;
 import com.ncsavault.alabamavault.globalconstants.GlobalConstants;
-import com.ncsavault.alabamavault.views.MainActivity;
+import com.ncsavault.alabamavault.views.HomeScreen;
 import com.ncsavault.alabamavault.views.SplashActivity;
 
 import java.util.Calendar;
@@ -181,7 +181,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Intent resultIntent = new Intent(this, SplashActivity.class);
             resultIntent.putExtra("key", video);
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-            stackBuilder.addParentStack(MainActivity.class);
+            stackBuilder.addParentStack(HomeScreen.class);
             stackBuilder.addNextIntent(resultIntent);
             int iUniqueId = (int) (System.currentTimeMillis() & 0xfffffff);
             PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(iUniqueId,

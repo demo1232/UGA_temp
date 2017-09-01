@@ -25,7 +25,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
     private static VaultDatabaseHelper sInstance;
 
     // ------ Database Version----------
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     private static String DATABASE_PATH = "";
 
     // ----- Database Name------------
