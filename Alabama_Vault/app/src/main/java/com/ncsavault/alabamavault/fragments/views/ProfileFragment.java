@@ -80,6 +80,7 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
@@ -171,7 +172,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
         mTwitterEmailId = (TextView) view.findViewById(R.id.twitter_email_id);
         mFacebookEmailId = (TextView) view.findViewById(R.id.facebook_email_id);
         mPushNotification = (TextView) view.findViewById(R.id.tv_push_view);
-        mContactSupportView  = (TextView) view.findViewById(R.id.tv_support);
+        mContactSupportView = (TextView) view.findViewById(R.id.tv_support);
         resetButtonLayout = (LinearLayout) view.findViewById(R.id.linear4);
         setToolbarIcons();
         ((HomeScreen) getActivity()).textViewEdit.setOnClickListener(new View.OnClickListener() {
@@ -191,7 +192,14 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                     mFirstName.setText(edFirstName.getText().toString());
                     mLastName.setText(edLastName.getText().toString());
 
-                    updateUserData();
+                    if (edFirstName.getText().toString().length()==0) {
+                        ((HomeScreen) mContext).showToastMessage(GlobalConstants.FIRST_NAME_CAN_NOT_EMPTY);
+
+                    } else if (edLastName.getText().toString().length()==0) {
+                        ((HomeScreen) mContext).showToastMessage(GlobalConstants.LAST_NAME_CAN_NOT_EMPTY);
+                    } else {
+                        updateUserData();
+                    }
 
 
                 }
@@ -261,7 +269,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
     }
 
     private void setToolbarIcons() {
-        ((HomeScreen)mContext).linearLayoutToolbarText.setVisibility(View.VISIBLE);
+        ((HomeScreen) mContext).linearLayoutToolbarText.setVisibility(View.VISIBLE);
         ((HomeScreen) mContext).imageViewSearch.setVisibility(View.INVISIBLE);
         ((HomeScreen) mContext).textViewEdit.setVisibility(View.VISIBLE);
         ((HomeScreen) mContext).textViewEdit.setText("EDIT");
@@ -276,6 +284,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 
         TwitterSession session =
                 Twitter.getSessionManager().getActiveSession();
+
 
         if (session != null) {
 //                TwitterAuthToken authToken = session.getAuthToken();
@@ -363,7 +372,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                         if (session == null) {
                             twitterLoginButton.performClick();
                         } else {
-                            Twitter.logOut();
+                           Twitter.logOut();
                             mTwitterEmailId.setText("Link Twitter Account");
                         }
                     }
@@ -392,7 +401,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
         mLogoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Twitter.logOut();
+                //gk Twitter.logOut();
                 mContext.stopService(new Intent(mContext, TrendingFeaturedVideoService.class));
 //                VideoDataFetchingService.isServiceRunning = false;
                 if (LoginManager.getInstance() != null) {
@@ -504,7 +513,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
             public void onClick(View v) {
                 Intent intent = null;
                 intent = new Intent(Intent.ACTION_SENDTO);
-                intent.setData(Uri.parse("mailto:"+GlobalConstants.SUPPORT_MAIL_ID));
+                intent.setData(Uri.parse("mailto:" + GlobalConstants.SUPPORT_MAIL_ID));
                 intent.setPackage("com.google.android.gm");
                 intent.putExtra(Intent.EXTRA_SUBJECT, GlobalConstants.SUPPORT_SUBJECT);
                 //intent.putExtra(Intent.EXTRA_TEXT, "Gaurav");
@@ -518,7 +527,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 //                    Intent intentForBrowser = new Intent(Intent.ACTION_VIEW);
 //                    intentForBrowser.setData(Uri.parse(GlobalConstants.SUPPORT_MAIL_THROUGH_BROWSER));
 //                    startActivity(intentForBrowser);
-                   Toast.makeText(getActivity(), "Gmail app is not installed. Please install Gmaill app for support.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Gmail app is not installed. Please install Gmaill app for support.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -1063,13 +1072,13 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
     }
 
     private boolean isValidText(String str) {
-        return str != null && str.length() >= 3;
+        return str != null && str.length() >= 0;
     }
 
     public void showConfirmationDialog() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
         alertDialogBuilder
-                .setMessage("Do you want to save changes you made?");
+                .setMessage(mContext.getResources().getString(R.string.profile_alert_text));
         alertDialogBuilder.setTitle("Alert");
         alertDialogBuilder.setPositiveButton("Save",
                 new DialogInterface.OnClickListener() {
@@ -1078,11 +1087,11 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                         if (!isValidText(edFirstName.getText().toString())) {
                             isValidFields = false;
 //                            edFirstName.setError("Invalid! Minimum 3 characters");
-                            ((HomeScreen) mContext).showToastMessage("First Name should have minimum 3 characters");
+                            ((HomeScreen) mContext).showToastMessage(GlobalConstants.FIRST_NAME_CAN_NOT_EMPTY);
                         } else if (!isValidText(edLastName.getText().toString())) {
                             isValidFields = false;
 //                            edLastName.setError("Invalid! Minimum 3 characters");
-                            ((HomeScreen) mContext).showToastMessage("Last Name should have minimum 3 characters");
+                            ((HomeScreen) mContext).showToastMessage(GlobalConstants.LAST_NAME_CAN_NOT_EMPTY);
                         }
 
                         //gk if (isValidFields) {
@@ -1091,25 +1100,22 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 
                         mFirstName.setText(edFirstName.getText().toString());
                         mLastName.setText(edLastName.getText().toString());
-                        //tvBio.setText(edBio.getText().toString());
+
 
                         edFirstName.setVisibility(View.GONE);
                         edLastName.setVisibility(View.GONE);
 
-                        //edBio.setVisibility(View.GONE);
+
                         isEditing = false;
                         edFirstName.setBackground(null);
                         edLastName.setBackground(null);
-                        //edBio.setBackground(null);
+
 
                         mFirstName.setVisibility(View.VISIBLE);
                         mLastName.setVisibility(View.VISIBLE);
-                        //tvBio.setVisibility(View.VISIBLE);
-//                            isEdited = false;
-                        //make a server call for updating the data along with video
+
                         updateUserData();
-                        // }
-                        isValidFields = true;
+
                         alertDialog.dismiss();
                     }
                 });
@@ -1148,4 +1154,19 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
     }
 
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        if ((((HomeScreen) mContext).textViewEdit.getText().toString().equalsIgnoreCase("SAVE"))) {
+            if (edFirstName.getText().toString().length()==0) {
+                ((HomeScreen) mContext).showToastMessage(GlobalConstants.FIRST_NAME_CAN_NOT_EMPTY);
+
+            } else if (edLastName.getText().toString().length()==0) {
+                ((HomeScreen) mContext).showToastMessage(GlobalConstants.LAST_NAME_CAN_NOT_EMPTY);
+            } else {
+                showConfirmationDialog();
+            }
+        }
+    }
 }

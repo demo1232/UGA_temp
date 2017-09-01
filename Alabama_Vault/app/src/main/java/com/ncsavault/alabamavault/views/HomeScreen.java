@@ -103,8 +103,8 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
             SavedVideoFragment.newInstance(this), ProfileFragment.newInstance(this, 20, 20)};
     public SearchView searchView;
 
-    private int[] bottomTabIcons = {R.drawable.home_icon, R.drawable.categories, R.drawable.video_save_bottom,
-            R.drawable.user_profile};
+    private int[] bottomTabIcons = {R.drawable.tab_home, R.drawable.tab_category, R.drawable.tab_saved,
+            R.drawable.tab_profile};
 
     public static Toolbar mToolbar;
     Animation animation;

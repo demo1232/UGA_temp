@@ -159,7 +159,8 @@
                         android:layout_marginBottom="8dp"
                         android:layout_marginTop="8dp"
                         android:text="First"
-                        android:textColor="@color/app_dark_grey"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
                         android:textSize="20sp" />
 
                     <TextView
@@ -170,7 +171,8 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="8dp"
                         android:text="LastName"
-                        android:textColor="@color/app_dark_grey"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
                         android:textSize="20sp" />
 
                 </LinearLayout>
@@ -235,7 +237,7 @@
             <LinearLayout
                 android:id="@+id/linear"
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
+                android:layout_height="50dp"
                 android:layout_below="@+id/view_line"
                 android:layout_marginLeft="15dp"
                 android:orientation="horizontal"
@@ -246,18 +248,18 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="2"
+                    android:layout_weight="2.3"
                     android:singleLine="true"
                     android:text="Email Id"
-                    android:textColor="@color/app_dark_grey"
-                    android:textSize="20dp" />
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
 
 
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_weight="1">
+                    android:layout_weight="0.7">
 
                     <ImageView
                         android:layout_width="40dp"
@@ -279,7 +281,7 @@
             <LinearLayout
                 android:id="@+id/linear1"
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
+                android:layout_height="50dp"
                 android:layout_below="@+id/view_1"
                 android:layout_marginLeft="15dp"
                 android:orientation="horizontal"
@@ -290,16 +292,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="2"
+                    android:layout_weight="2.3"
                     android:text="Link Twitter Account"
-                    android:textColor="@color/app_dark_grey"
-                    android:textSize="20dp" />
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
 
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_weight="1">
+                    android:layout_weight="0.7">
 
                     <ImageView
                         android:layout_width="40dp"
@@ -329,7 +331,7 @@
             <LinearLayout
                 android:id="@+id/linear2"
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
+                android:layout_height="50dp"
                 android:layout_below="@+id/view_2"
                 android:layout_marginLeft="15dp"
                 android:orientation="horizontal"
@@ -340,17 +342,17 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="2"
+                    android:layout_weight="2.3"
                     android:singleLine="true"
                     android:text="Link Facebook Account"
-                    android:textColor="@color/app_dark_grey"
-                    android:textSize="20dp" />
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
 
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_weight="1">
+                    android:layout_weight="0.7">
 
                     <ImageView
                         android:layout_width="40dp"
@@ -372,7 +374,7 @@
             <LinearLayout
                 android:id="@+id/linear3"
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
+                android:layout_height="50dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/view_3"
@@ -385,16 +387,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="2"
+                    android:layout_weight="2.3"
                     android:text="Push Notifications"
-                    android:textColor="@color/app_dark_grey"
-                    android:textSize="20dp" />
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
 
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_weight="1">
+                    android:layout_weight="0.7">
 
                     <android.support.v7.widget.SwitchCompat
                         android:id="@+id/toggle_button"

@@ -71,7 +71,8 @@
               "client_id": "1050882923963-6vreiukecrh3dsrboq6co6u0chgugt3p.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.ncsavault.alabamavault"
+                "bundle_id": "com.ncsavault.alabamavault",
+                "app_store_id": "1267292377"
               }
             }
           ]
