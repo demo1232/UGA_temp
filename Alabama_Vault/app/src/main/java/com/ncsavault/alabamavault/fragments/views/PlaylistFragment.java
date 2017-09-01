@@ -737,6 +737,10 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
         protected void onPostExecute(final ArrayList<PlaylistDto> result) {
             super.onPostExecute(result);
             try {
+                playlistDtoDataList.clear();
+                playlistDtoDataList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext())
+                        .getLocalPlaylistDataByCategorieTab(tabId));
+
                 if (playlistDtoDataList != null) {
                     if (playlistDtoDataList.size() > 0) {
                         for (int j = 0; j < playlistDtoDataList.size(); j++) {

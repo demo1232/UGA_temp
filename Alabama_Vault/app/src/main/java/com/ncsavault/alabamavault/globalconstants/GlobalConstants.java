@@ -91,9 +91,6 @@ public class GlobalConstants {
     //new Staging url
     //public static String BASE_URL = "http://syncroapi-staging.ncsavault.com/api";
 
-    //TEST Pro url
-   // public static String BASE_URL = "http://13.93.160.190/api";
-
     //new Production Url
      public static final String BASE_URL = "http://syncroapi.ncsavault.com/api";
 

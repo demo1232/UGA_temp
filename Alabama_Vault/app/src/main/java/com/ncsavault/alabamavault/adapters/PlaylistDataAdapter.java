@@ -116,7 +116,7 @@ public class PlaylistDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }else
         {
             view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.native_inline_ads_small_scrren_layout, parent, false);
+                    .inflate(R.layout.inline_playlist_ads, parent, false);
 
             return new NativeAdsViewHolder(view);
         }
@@ -202,7 +202,7 @@ public class PlaylistDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         PlaylistDto playlistDto = mPlaylistDtoArrayList.get(position);
         NativeExpressAdView mAdView = new NativeExpressAdView(mContext);
 
-        mAdView.setAdSize(new AdSize(338,80));
+        mAdView.setAdSize(new AdSize(340,80));
         mAdView.setAdUnitId(playlistDto.getPlaylistName());
         vhHeader.adViewLayout.addView(mAdView);
         AdRequest request = new AdRequest.Builder()

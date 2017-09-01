@@ -745,9 +745,9 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
 
         if (videoObject != null) {
             if (VaultDatabaseHelper.getInstance(VideoInfoActivity.this).isFavorite(videoObject.getVideoId()))
-                imgToggleButton.setBackgroundResource(R.drawable.saved_video_img);
+                imgToggleButton.setImageResource(R.drawable.saved_video_img);
             else
-                imgToggleButton.setBackgroundResource(R.drawable.video_save);
+                imgToggleButton.setImageResource(R.drawable.video_save);
             if (imgVideoStillUrl != null)
                 Utils.addImageByCaching(imgVideoStillUrl, videoObject.getVideoStillUrl());
             tvVideoName.setText(videoObject.getVideoName().toString());
@@ -1032,19 +1032,19 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
                 }
                 if (Utils.isInternetAvailable(context)) {
                     if (AppController.getInstance().getModelFacade().getLocalModel().getUserId() == GlobalConstants.DEFAULT_USER_ID) {
-                        imgToggleButton.setBackgroundResource(R.drawable.video_save);
+                        imgToggleButton.setImageResource(R.drawable.video_save);
                         showConfirmLoginDialog(GlobalConstants.LOGIN_MESSAGE);
                     } else {
                         if (VaultDatabaseHelper.getInstance(VideoInfoActivity.this).isFavorite(videoObject.getVideoId())) {
                             isFavoriteChecked = false;
                             VaultDatabaseHelper.getInstance(context.getApplicationContext()).setFavoriteFlag(0, videoObject.getVideoId());
                             videoObject.setVideoIsFavorite(false);
-                            imgToggleButton.setBackgroundResource(R.drawable.video_save);
+                            imgToggleButton.setImageResource(R.drawable.video_save);
                         } else {
                             isFavoriteChecked = true;
                             VaultDatabaseHelper.getInstance(context.getApplicationContext()).setFavoriteFlag(1, videoObject.getVideoId());
                             videoObject.setVideoIsFavorite(true);
-                            imgToggleButton.setBackgroundResource(R.drawable.saved_video_img);
+                            imgToggleButton.setImageResource(R.drawable.saved_video_img);
                         }
 
                         mPostTask = new AsyncTask<Void, Void, Void>() {
@@ -1081,7 +1081,7 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
                     }
                 } else {
                     showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
-                    imgToggleButton.setBackgroundResource(R.drawable.video_save);
+                    imgToggleButton.setImageResource(R.drawable.video_save);
                 }
             }
         });
@@ -1585,9 +1585,9 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
         }
         if (videoObject != null) {
             if (VaultDatabaseHelper.getInstance(VideoInfoActivity.this).isFavorite(videoObject.getVideoId()))
-                imgToggleButton.setBackgroundResource(R.drawable.saved_video_img);
+                imgToggleButton.setImageResource(R.drawable.saved_video_img);
             else
-                imgToggleButton.setBackgroundResource(R.drawable.video_save);
+                imgToggleButton.setImageResource(R.drawable.video_save);
             Utils.addImageByCaching(imgVideoStillUrl, videoObject.getVideoStillUrl());
             //gk imgVideoStillUrl.setVisibility(View.VISIBLE);
             tvVideoName.setText(videoObject.getVideoName().toString());

@@ -1823,18 +1823,24 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
         mLastName.setAnimation(leftOutAnimation);
         mYOB.setAnimation(leftOutAnimation);
         mGender.setAnimation(leftOutAnimation);
-        mEmailId.setAnimation(leftOutAnimation);
         mUserName.setAnimation(leftOutAnimation);
         mRegistertionButton.setAnimation(leftOutAnimation);
         tvAlreadyRegistered.setAnimation(leftOutAnimation);
-        mEmailIdFB.setAnimation(leftOutAnimation);
+        if(twitter)
+        {
+            mEmailId.setAnimation(leftOutAnimation);
+            mEmailId.setVisibility(View.GONE);
+        }else
+        {
+            mEmailIdFB.setAnimation(leftOutAnimation);
+            mEmailIdFB.setVisibility(View.GONE);
+        }
+
 
         mFirstName.setVisibility(View.GONE);
         mLastName.setVisibility(View.GONE);
         mYOB.setVisibility(View.GONE);
         mGender.setVisibility(View.GONE);
-        mEmailId.setVisibility(View.GONE);
-        mEmailIdFB.setVisibility(View.GONE);
         mUserName.setVisibility(View.GONE);
         mRegistertionButton.setVisibility(View.GONE);
         tvAlreadyRegistered.setVisibility(View.GONE);
@@ -1862,15 +1868,25 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
         mYOB.setAnimation(leftOutAnimation);
         mGender.setAnimation(leftOutAnimation);
         mEmailId.setAnimation(leftOutAnimation);
+        mEmailIdFB.setAnimation(leftOutAnimation);
         mUserName.setAnimation(leftOutAnimation);
         mRegistertionButton.setAnimation(leftOutAnimation);
         tvAlreadyRegistered.setAnimation(leftOutAnimation);
+
+        if(twitter)
+        {
+            mEmailId.setAnimation(leftOutAnimation);
+            mEmailId.setVisibility(View.VISIBLE);
+        }else
+        {
+            mEmailIdFB.setAnimation(leftOutAnimation);
+            mEmailIdFB.setVisibility(View.VISIBLE);
+        }
 
         mFirstName.setVisibility(View.VISIBLE);
         mLastName.setVisibility(View.VISIBLE);
         mYOB.setVisibility(View.VISIBLE);
         mGender.setVisibility(View.VISIBLE);
-        mEmailId.setVisibility(View.VISIBLE);
         mUserName.setVisibility(View.VISIBLE);
         mRegistertionButton.setVisibility(View.VISIBLE);
         tvAlreadyRegistered.setVisibility(View.VISIBLE);

@@ -357,7 +357,7 @@ public class SavedVideoFragment extends Fragment implements SavedVideoAdapter.Sa
         if (Utils.isInternetAvailable(mContext)) {
             if (AppController.getInstance().getModelFacade().getLocalModel().getUserId() ==
                     GlobalConstants.DEFAULT_USER_ID) {
-                viewHolder.savedVideoImageView.setBackgroundResource(R.drawable.video_save);
+                viewHolder.savedVideoImageView.setImageResource(R.drawable.video_save);
                 showConfirmLoginDialog(GlobalConstants.LOGIN_MESSAGE);
             } else {
                 System.out.println("favorite position : " + pos);
@@ -429,7 +429,7 @@ public class SavedVideoFragment extends Fragment implements SavedVideoAdapter.Sa
             }
         } else {
             ((HomeScreen) mContext).showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
-            viewHolder.savedVideoImageView.setBackgroundResource(R.drawable.video_save);
+            viewHolder.savedVideoImageView.setImageResource(R.drawable.video_save);
         }
     }
 
