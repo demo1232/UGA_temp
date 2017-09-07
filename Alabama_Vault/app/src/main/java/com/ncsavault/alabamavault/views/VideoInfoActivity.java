@@ -42,9 +42,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.ads.interactivemedia.v3.api.ImaSdkSettings;
 import com.longtailvideo.jwplayer.media.ads.Ad;
 import com.longtailvideo.jwplayer.media.ads.AdBreak;
 import com.longtailvideo.jwplayer.media.ads.AdSource;
+import com.longtailvideo.jwplayer.media.ads.Advertising;
 import com.longtailvideo.jwplayer.media.ads.ImaAdvertising;
 import com.ncsavault.alabamavault.R;
 import com.ncsavault.alabamavault.controllers.AppController;
@@ -143,7 +145,7 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
     private Animation animation;
     private Vector<Fragment> fragments;
     private RelativeLayout viewPagerRelativeView;
-    private LinearLayout shareVideoLayout,jwPlayerLayout;
+    private LinearLayout shareVideoLayout, jwPlayerLayout;
     private boolean askAgainForMustPermissions = false;
     private boolean goToSettingsScreen = false;
     private MusicIntentReceiver myReceiver;
@@ -489,7 +491,7 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
             deleteFileFromSDcard();
         }
 
-        params.putString(FirebaseAnalytics.Param.ITEM_ID,  videoObject.getVideoName());
+        params.putString(FirebaseAnalytics.Param.ITEM_ID, videoObject.getVideoName());
         params.putString(FirebaseAnalytics.Param.ITEM_NAME, videoObject.getVideoName());
         params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "video_info");
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params);
@@ -561,10 +563,10 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
 
             // rlActionStrip.setVisibility(View.GONE);
 
-            if (ll_header != null && rlVideoNameStrip != null ) {
+            if (ll_header != null && rlVideoNameStrip != null) {
                 ll_header.setVisibility(View.GONE);
                 rlVideoNameStrip.setVisibility(View.GONE);
-           }
+            }
             if (mAdView != null) {
                 mAdView.setVisibility(View.GONE);
             }
@@ -724,7 +726,7 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
 
     void initData() {
 
-        if(videoObject != null) {
+        if (videoObject != null) {
             mVideoDescription.setText(videoObject.getVideoLongDescription());
         }
         myReceiver = new MusicIntentReceiver();
@@ -773,16 +775,34 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
             // Create your ad schedule
             List<AdBreak> adSchedule = new ArrayList<>();
 
-            Ad ad = new Ad(AdSource.IMA, "http://playertest.longtailvideo.com/adtags/preroll_newer.xml");
+            Ad ad = new Ad(AdSource.VAST, "http://playertest.longtailvideo.com/adtags/preroll_newer.xml");
             AdBreak adBreak = new AdBreak("pre", ad);
+            AdBreak adBreak1=new AdBreak("50%", ad);
+            AdBreak adBreak2=new AdBreak("post", ad);
             adSchedule.add(adBreak);
+            adSchedule.add(adBreak1);
+            adSchedule.add(adBreak2);
             // Set your ad schedule to your advertising object
-            ImaAdvertising imaAdvertising = new ImaAdvertising(adSchedule);
+//            ImaAdvertising imaAdvertising = new ImaAdvertising(adSchedule);
+//            ImaSdkSettings imaSdkSettings = new ImaSdkSettings();
+//            imaSdkSettings.setAutoPlayAdBreaks(true);
+
+//            List<AdBreak> emptyList = new ArrayList<>();
+            Advertising advertising = new Advertising(AdSource.VAST,adSchedule);
+            advertising.setSkipOffset(5);
+
+//            imaAdvertising.setSkipOffset(3);
+//            imaAdvertising.setAdMessage("Text that appears in the control bar");
+//            imaAdvertising.setCueText("Text that appears when you hover over the ad marker");
+//            imaAdvertising.setSkipMessage("Text that appears before skip is available");
+//            imaAdvertising.setSkipText("Text that appears when skip is available");
+
+//            imaAdvertising.setImaSdkSettings(imaSdkSettings);
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             PlayerConfig playerConfig = new PlayerConfig.Builder()
                     .autostart(false)
-                    .advertising(imaAdvertising)
+                    .advertising(advertising)
                     .captionsEdgeStyle("ec_seek")
                     .skinName("glow")
                     .stretching(PlayerConfig.STRETCHING_EXACT_FIT) //"exactfit"
@@ -792,14 +812,15 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
 
             // Load a media source
             PlaylistItem pi = new PlaylistItem.Builder()
+                    .adSchedule(adSchedule)
                     .file(videoObject.getVideoLongUrl())
                     .image(videoObject.getVideoStillUrl())
                     .build();
 
+
             videoView.load(pi);
 
             //jwPlayerLayout.setGravity(Gravity.CENTER);
-
 
 
             //gkimgVideoStillUrl.setVisibility(View.GONE);
@@ -1053,7 +1074,7 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
                                     postResult = AppController.getInstance().getServiceManager()
                                             .getVaultService().postFavoriteStatus(AppController.getInstance()
                                                     .getModelFacade().getLocalModel().
-                                            getUserId(), videoObject.getVideoId(), videoObject.getPlaylistId(), isFavoriteChecked);
+                                                            getUserId(), videoObject.getVideoId(), videoObject.getPlaylistId(), isFavoriteChecked);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -1080,15 +1101,14 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
             }
         });
 
-        viewPagerRelativeView.setOnClickListener(new View.OnClickListener()
-             {
-                 @Override
-                 public void onClick(View v) {
-                     if (linearLayout != null && linearLayout.getVisibility() == View.VISIBLE) {
-                         linearLayout.setVisibility(View.GONE);
-                     }
-                 }
-             }
+        viewPagerRelativeView.setOnClickListener(new View.OnClickListener() {
+                                                     @Override
+                                                     public void onClick(View v) {
+                                                         if (linearLayout != null && linearLayout.getVisibility() == View.VISIBLE) {
+                                                             linearLayout.setVisibility(View.GONE);
+                                                         }
+                                                     }
+                                                 }
 
         );
     }
@@ -1204,16 +1224,15 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
 
                 Uri videoUri = AppController.getInstance().getModelFacade().getLocalModel().getUriUrl();
                 String pushNotification = AppController.getInstance().getModelFacade().getLocalModel().getNotificationVideoId();
-                if(pushNotification != null)
-                {
+                if (pushNotification != null) {
                     params.putString(GlobalConstants.NOTIFICATION_OPEN, GlobalConstants.NOTIFICATION_OPEN);
                     mFirebaseAnalytics.logEvent(GlobalConstants.NOTIFICATION_OPEN, params);
                     mFirebaseAnalytics.setAnalyticsCollectionEnabled(true);
                 }
                 if (videoObject != null && videoUri == null) {
-                   // if (haveAllMustPermissions(writeExternalStorage, PERMISSION_REQUEST_MUST)) {
-                        new ShareTwitter().execute();
-                   // }
+                    // if (haveAllMustPermissions(writeExternalStorage, PERMISSION_REQUEST_MUST)) {
+                    new ShareTwitter().execute();
+                    // }
                 }
             }
         } catch (Exception e) {
@@ -1415,7 +1434,7 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
 //                        }
 
 
-                        twitterSharingData();
+                    twitterSharingData();
                 }
             });
         }
@@ -1732,7 +1751,7 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
             final FacebookCallback<Sharer.Result> shareCallback = new FacebookCallback<Sharer.Result>() {
                 @Override
                 public void onCancel() {
-                   //gk showToastMessage(GlobalConstants.FACEBOOK_SHARING_CANCEL);
+                    //gk showToastMessage(GlobalConstants.FACEBOOK_SHARING_CANCEL);
                     GlobalConstants.IS_SHARING_ON_FACEBOOK = false;
                 }
 
