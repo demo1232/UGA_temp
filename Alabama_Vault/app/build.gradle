@@ -46,7 +46,7 @@ android {
         }
     }*/
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "25.0.3"
     defaultConfig {
         applicationId "com.ncsavault.alabamavault"
         minSdkVersion 16
@@ -56,15 +56,32 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
+
     }
     dexOptions {
         javaMaxHeapSize "4g"
     }
+
     packagingOptions {
         exclude 'jsr305_annotations/Jsr305_annotations.gwt.xml'
         exclude 'error_prone/Annotations.gwt.xml'
         exclude 'third_party/java_src/error_prone/project/annotations/Annotations.gwt.xml'
         exclude 'third_party/java_src/error_prone/project/annotations/Google_internal.gwt.xml'
+        exclude 'build-data.properties'
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/nanohttpd/default-mimetypes.properties'
+        exclude 'META-INF/nanohttpd/mimetypes.properties'
+
     }
 
     buildTypes {
@@ -73,6 +90,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
 }
 
 dependencies {
@@ -95,9 +113,9 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
         transitive = true;
     }
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:cardview-v7:25.3.1'
+    compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'com.android.support:design:25.0.1'
+    compile 'com.android.support:cardview-v7:25.0.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.facebook.android:facebook-android-sdk:4.+'
@@ -114,6 +132,8 @@ dependencies {
     compile 'com.github.crosswall:Android-Coverflow:release-v1.0.4'
     testCompile 'junit:junit:4.12'
     compile 'com.google.firebase:firebase-ads:10.2.6'
+    compile 'com.longtailvideo.jwplayer:jwplayer-ima:+'
+   // compile 'com.google.ads.interactivemedia.v3:interactivemedia:3.5.2'
 
 }
 

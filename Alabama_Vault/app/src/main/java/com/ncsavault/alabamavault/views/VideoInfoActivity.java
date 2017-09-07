@@ -42,6 +42,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.longtailvideo.jwplayer.media.ads.Ad;
+import com.longtailvideo.jwplayer.media.ads.AdBreak;
+import com.longtailvideo.jwplayer.media.ads.AdSource;
+import com.longtailvideo.jwplayer.media.ads.ImaAdvertising;
 import com.ncsavault.alabamavault.R;
 import com.ncsavault.alabamavault.controllers.AppController;
 import com.ncsavault.alabamavault.database.VaultDatabaseHelper;
@@ -89,8 +93,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Vector;
@@ -209,6 +215,7 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
                 .build();
         mAdView.loadAd(adRequest);
     }
+
 
     private void initlizeAllVideoInfoActivityData() {
         try {
@@ -762,9 +769,20 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
 
             //videoView.setSkin("http://0b78b111a9d0410784caa8a634aa3b90.cloudapp.net/JWPlayerCss/UGA/UgaPlayer.css");
             videoView.setSkin(GlobalConstants.JW_PLAYER_CSS_FILE_URL);
+            ///////////////////////////////////////////////Pre load ads/////////////////////////////////////////////////////////
+            // Create your ad schedule
+            List<AdBreak> adSchedule = new ArrayList<>();
 
+            Ad ad = new Ad(AdSource.IMA, "http://playertest.longtailvideo.com/adtags/preroll_newer.xml");
+            AdBreak adBreak = new AdBreak("pre", ad);
+            adSchedule.add(adBreak);
+            // Set your ad schedule to your advertising object
+            ImaAdvertising imaAdvertising = new ImaAdvertising(adSchedule);
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             PlayerConfig playerConfig = new PlayerConfig.Builder()
                     .autostart(false)
+                    .advertising(imaAdvertising)
                     .captionsEdgeStyle("ec_seek")
                     .skinName("glow")
                     .stretching(PlayerConfig.STRETCHING_EXACT_FIT) //"exactfit"

@@ -37,7 +37,7 @@ public class AndroidApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-       // MultiDex.install(this);
+        //MultiDex.install(this);
         AppController.getInstance().setApplication(this);
         AppController.getInstance().setHandler(handler);
 
