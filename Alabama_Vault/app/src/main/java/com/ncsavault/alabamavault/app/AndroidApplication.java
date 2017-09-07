@@ -7,6 +7,7 @@ import android.os.Handler;
 
 import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
+import com.longtailvideo.jwplayer.cast.CastManager;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.ncsavault.alabamavault.controllers.AppController;
@@ -57,6 +58,8 @@ public class AndroidApplication extends Application {
 ////        FontsOverride.setDefaultFont(this, "SERIF", "fonts/Roboto-Regular.ttf");
 //        FontsOverride.setDefaultFont(this, "SANS_SERIF", "fonts/Roboto-Regular.ttf");
         FontsOverride.overrideFont(this, "SERIF", "fonts/OpenSans-Regular.ttf");
+
+        CastManager.getInstance().initialize(this);
     }
 
     @Override

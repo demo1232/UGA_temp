@@ -39,10 +39,17 @@
                     android:id="@+id/img_video_share"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:src="@drawable/share"
                     android:visibility="visible" />
             </LinearLayout>
+
+            <android.support.v7.app.MediaRouteButton
+                android:layout_toLeftOf="@+id/share_video_layout"
+                android:id="@+id/chromecast_btn"
+                android:layout_marginRight="10dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
         </RelativeLayout>
     </LinearLayout>
 

@@ -108,6 +108,7 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
     ArrayList<TabBannerDTO> bannerList = new ArrayList<>();
     private VideoDataTaskModel mVideoDataTaskModel;
 
+
     public static Fragment newInstance(Activity context) {
         Fragment frag = new HomeFragment();
         mContext = context;

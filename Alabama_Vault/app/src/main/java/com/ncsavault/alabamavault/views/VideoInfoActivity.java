@@ -35,6 +35,7 @@ import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.MediaRouteButton;
 import android.transition.Transition;
 import android.util.Log;
 import android.view.Display;
@@ -53,6 +54,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.longtailvideo.jwplayer.cast.CastManager;
+import com.longtailvideo.jwplayer.media.ads.Ad;
+import com.longtailvideo.jwplayer.media.ads.AdBreak;
+import com.longtailvideo.jwplayer.media.ads.AdSource;
 import com.ncsavault.alabamavault.R;
 import com.ncsavault.alabamavault.adapters.PagerAdapter;
 import com.ncsavault.alabamavault.controllers.AppController;
@@ -103,8 +108,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Vector;
@@ -187,6 +194,9 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
         setContentView(R.layout.video_info_layout);
         context = VideoInfoActivity.this;
+
+        MediaRouteButton chromecastBtn = (MediaRouteButton) findViewById(R.id.chromecast_btn);
+        CastManager.getInstance().addMediaRouterButton(chromecastBtn);
 
         File cacheDir = StorageUtils.getCacheDirectory(this);
         ImageLoaderConfiguration config;
@@ -782,10 +792,25 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
             //videoView.setSkin("http://0b78b111a9d0410784caa8a634aa3b90.cloudapp.net/JWPlayerCss/UGA/UgaPlayer.css");
             videoView.setSkin(GlobalConstants.JW_PLAYER_CSS_FILE_URL);
 
+
+
+//            List<AdBreak> adSchedule = new ArrayList<>();
+
+//            Ad ad = new Ad(AdSource.IMA, "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dlinear&correlator=");
+//            AdBreak adBreak = new AdBreak("pre", ad);
+//
+//            adSchedule.add(adBreak);
+
+//            ImaAdvertising imaAdvertising = new ImaAdvertising(adSchedule);
+
+
+
+
             PlayerConfig playerConfig = new PlayerConfig.Builder()
                     .autostart(false)
                     .captionsEdgeStyle("ec_seek")
                     .skinName("glow")
+//                    .advertising(imaAdvertising)
                     .stretching(PlayerConfig.STRETCHING_EXACT_FIT) //"exactfit"
                     .build();
 
