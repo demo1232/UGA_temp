@@ -138,8 +138,6 @@ dependencies {
     compile 'com.google.ads.interactivemedia.v3:interactivemedia:3.5.2'
     compile 'com.google.android.libraries.cast.companionlibrary:ccl:2.9.1'
     compile 'com.longtailvideo.jwplayer:jwplayer-chromecast:+'
-    compile 'com.longtailvideo.jwplayer:jwplayer-core:+'
-    compile 'com.longtailvideo.jwplayer:jwplayer-common:+'
     compile 'com.google.android.gms:play-services:10.2.6'
 
 

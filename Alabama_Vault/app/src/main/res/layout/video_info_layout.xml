@@ -44,11 +44,11 @@
 
             </LinearLayout>
 
-            <android.support.v7.app.MediaRouteButton
-                android:id="@+id/chromecast_btn"
-                android:layout_width="50dp"
-                android:layout_toLeftOf="@+id/share_video_layout"
-                android:layout_height="50dp" />
+            <!--<android.support.v7.app.MediaRouteButton-->
+                <!--android:id="@+id/chromecast_btn"-->
+                <!--android:layout_width="50dp"-->
+                <!--android:layout_toLeftOf="@+id/share_video_layout"-->
+                <!--android:layout_height="50dp" />-->
 
 
         </RelativeLayout>

@@ -49,7 +49,6 @@ import com.longtailvideo.jwplayer.media.ads.Ad;
 import com.longtailvideo.jwplayer.media.ads.AdBreak;
 import com.longtailvideo.jwplayer.media.ads.AdSource;
 import com.longtailvideo.jwplayer.media.ads.Advertising;
-import com.longtailvideo.jwplayer.media.ads.ImaAdvertising;
 import com.ncsavault.alabamavault.R;
 import com.ncsavault.alabamavault.controllers.AppController;
 import com.ncsavault.alabamavault.database.VaultDatabaseHelper;
@@ -182,8 +181,7 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
         setContentView(R.layout.video_info_layout);
 
-        MediaRouteButton chromecastBtn = (MediaRouteButton) findViewById(R.id.chromecast_btn);
-        CastManager.getInstance().addMediaRouterButton(chromecastBtn);
+
         context = VideoInfoActivity.this;
 
         File cacheDir = StorageUtils.getCacheDirectory(this);
@@ -725,6 +723,9 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
         imgVideoClose = (ImageView) findViewById(R.id.img_video_close);
         imgVideoShare = (ImageView) findViewById(R.id.img_video_share);
         imgVideoStillUrl = (ImageView) findViewById(R.id.image_video_still);
+
+//        MediaRouteButton chromecastBtn = (MediaRouteButton) findViewById(R.id.chromecast_btn);
+//        CastManager.getInstance().addMediaRouterButton(chromecastBtn);
 
     }
 
