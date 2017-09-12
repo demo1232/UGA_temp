@@ -30,7 +30,6 @@
             <LinearLayout
                 android:id="@+id/share_video_layout"
                 android:layout_width="wrap_content"
-
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:orientation="horizontal">
@@ -42,7 +41,16 @@
                     android:padding="10dp"
                     android:src="@drawable/share"
                     android:visibility="visible" />
+
             </LinearLayout>
+
+            <android.support.v7.app.MediaRouteButton
+                android:id="@+id/chromecast_btn"
+                android:layout_width="50dp"
+                android:layout_toLeftOf="@+id/share_video_layout"
+                android:layout_height="50dp" />
+
+
         </RelativeLayout>
     </LinearLayout>
 

@@ -7,6 +7,7 @@ import android.os.Handler;
 
 import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
+import com.longtailvideo.jwplayer.cast.CastManager;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.ncsavault.alabamavault.controllers.AppController;
@@ -37,20 +38,22 @@ public class AndroidApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        //MultiDex.install(this);
+//        MultiDex.install(this);
         AppController.getInstance().setApplication(this);
         AppController.getInstance().setHandler(handler);
 
         AppController.getInstance().initialize();
 
+        CastManager.initialize(this);
+
        //gk CrashManager.initialize(this, GlobalConstants.HOCKEY_APP_ID, null);
 
-        TwitterAuthConfig authConfig = new TwitterAuthConfig(GlobalConstants.TWITTER_CONSUMER_KEY, GlobalConstants.TWITTER_CONSUMER_SECRET);
-        Fabric.with(this, new Twitter(authConfig),new Crashlytics());
-
-        Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
-        Fabric.with(this, new TweetComposer());
-        FlurryAgent.init(this, GlobalConstants.FLURRY_KEY);
+//        TwitterAuthConfig authConfig = new TwitterAuthConfig(GlobalConstants.TWITTER_CONSUMER_KEY, GlobalConstants.TWITTER_CONSUMER_SECRET);
+//        Fabric.with(this, new Twitter(authConfig),new Crashlytics());
+//
+//        Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
+//        Fabric.with(this, new TweetComposer());
+//        FlurryAgent.init(this, GlobalConstants.FLURRY_KEY);
 
 //        FontsOverride.setDefaultFont(this, "DEFAULT", "fonts/Roboto-Regular.ttf");
 //        FontsOverride.setDefaultFont(this, "MONOSPACE", "fonts/Roboto-Regular.ttf");

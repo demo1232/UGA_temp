@@ -28,6 +28,7 @@ import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.MediaRouteButton;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -43,6 +44,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.ads.interactivemedia.v3.api.ImaSdkSettings;
+import com.longtailvideo.jwplayer.cast.CastManager;
 import com.longtailvideo.jwplayer.media.ads.Ad;
 import com.longtailvideo.jwplayer.media.ads.AdBreak;
 import com.longtailvideo.jwplayer.media.ads.AdSource;
@@ -179,6 +181,9 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
         setContentView(R.layout.video_info_layout);
+
+        MediaRouteButton chromecastBtn = (MediaRouteButton) findViewById(R.id.chromecast_btn);
+        CastManager.getInstance().addMediaRouterButton(chromecastBtn);
         context = VideoInfoActivity.this;
 
         File cacheDir = StorageUtils.getCacheDirectory(this);
@@ -777,8 +782,8 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
 
             Ad ad = new Ad(AdSource.VAST, "http://playertest.longtailvideo.com/adtags/preroll_newer.xml");
             AdBreak adBreak = new AdBreak("pre", ad);
-            AdBreak adBreak1=new AdBreak("50%", ad);
-            AdBreak adBreak2=new AdBreak("post", ad);
+            AdBreak adBreak1 = new AdBreak("50%", ad);
+            AdBreak adBreak2 = new AdBreak("post", ad);
             adSchedule.add(adBreak);
             adSchedule.add(adBreak1);
             adSchedule.add(adBreak2);
@@ -788,7 +793,7 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
 //            imaSdkSettings.setAutoPlayAdBreaks(true);
 
 //            List<AdBreak> emptyList = new ArrayList<>();
-            Advertising advertising = new Advertising(AdSource.VAST,adSchedule);
+            Advertising advertising = new Advertising(AdSource.VAST, adSchedule);
             advertising.setSkipOffset(5);
 
 //            imaAdvertising.setSkipOffset(3);
