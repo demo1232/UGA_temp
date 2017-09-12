@@ -692,6 +692,12 @@ public class ForgotPasswordActivity extends BaseActivity implements AbstractView
         alertDialog.setCancelable(false);
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.show();
+        Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        nbutton.setAllCaps(false);
+        nbutton.setTextColor(getResources().getColor(R.color.apptheme_color));
+        Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        pbutton.setTextColor(getResources().getColor(R.color.apptheme_color));
+        pbutton.setAllCaps(false);
     }
 
 
@@ -718,6 +724,10 @@ public class ForgotPasswordActivity extends BaseActivity implements AbstractView
         alertDialog.setCancelable(false);
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.show();
+        Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        nbutton.setAllCaps(false);
+        nbutton.setTextColor(getResources().getColor(R.color.apptheme_color));
+
     }
     private LoginEmailModel loginEmailModel;
     public void checkEmailAndProceed() {

@@ -11,6 +11,8 @@ import com.ncsavault.alabamavault.dto.CatagoriesTabDao;
 import com.ncsavault.alabamavault.dto.PlaylistDto;
 import com.ncsavault.alabamavault.dto.VideoDTO;
 import com.ncsavault.alabamavault.fragments.views.HomeFragment;
+import com.ncsavault.alabamavault.fragments.views.PlaylistFragment;
+import com.ncsavault.alabamavault.fragments.views.VideoDetailFragment;
 import com.ncsavault.alabamavault.globalconstants.GlobalConstants;
 import com.ncsavault.alabamavault.utils.Utils;
 
@@ -111,6 +113,15 @@ public class TrendingFeaturedVideoService extends Service {
 
 
                     }
+                    Intent videoIntent = new Intent();
+                    videoIntent.setAction(VideoDetailFragment.VideoResponseReceiver.ACTION_RESP);
+                    videoIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                    sendBroadcast(videoIntent);
+
+                    Intent playlistIntent = new Intent();
+                    playlistIntent.setAction(PlaylistFragment.PlaylistResponseReceiver.ACTION_RESP);
+                    playlistIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                    sendBroadcast(playlistIntent);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

@@ -31,6 +31,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -41,13 +42,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.google.ads.interactivemedia.v3.api.ImaSdkSettings;
 import com.longtailvideo.jwplayer.media.ads.Ad;
 import com.longtailvideo.jwplayer.media.ads.AdBreak;
 import com.longtailvideo.jwplayer.media.ads.AdSource;
 import com.longtailvideo.jwplayer.media.ads.Advertising;
-import com.longtailvideo.jwplayer.media.ads.ImaAdvertising;
 import com.ncsavault.alabamavault.R;
 import com.ncsavault.alabamavault.controllers.AppController;
 import com.ncsavault.alabamavault.database.VaultDatabaseHelper;
@@ -350,9 +348,9 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.show();
         Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-        nbutton.setTextColor(getResources().getColor(R.color.green));
+        nbutton.setTextColor(getResources().getColor(R.color.apptheme_color));
         Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        pbutton.setTextColor(getResources().getColor(R.color.green));
+        pbutton.setTextColor(getResources().getColor(R.color.apptheme_color));
     }
 
 
@@ -720,6 +718,8 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
         imgVideoClose = (ImageView) findViewById(R.id.img_video_close);
         imgVideoShare = (ImageView) findViewById(R.id.img_video_share);
         imgVideoStillUrl = (ImageView) findViewById(R.id.image_video_still);
+
+
 
     }
 

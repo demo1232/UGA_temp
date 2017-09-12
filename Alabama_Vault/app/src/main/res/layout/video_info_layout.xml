@@ -43,6 +43,7 @@
                     android:src="@drawable/share"
                     android:visibility="visible" />
             </LinearLayout>
+
         </RelativeLayout>
     </LinearLayout>
 

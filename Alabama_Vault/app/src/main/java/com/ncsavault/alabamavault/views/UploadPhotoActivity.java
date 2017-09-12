@@ -1138,6 +1138,9 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
         alertDialog.setCancelable(false);
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.show();
+        Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        nbutton.setAllCaps(false);
+        nbutton.setTextColor(getResources().getColor(R.color.apptheme_color));
     }
 
     @Override
@@ -1587,7 +1590,7 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
         alertDialog.show();
         Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         nbutton.setAllCaps(false);
-        nbutton.setTextColor(Color.GRAY);
+        nbutton.setTextColor(getResources().getColor(R.color.apptheme_color));
         Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
         pbutton.setTextColor(getResources().getColor(R.color.apptheme_color));
         pbutton.setAllCaps(false);
@@ -2013,7 +2016,14 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
         alertDialog = alertDialogBuilder.create();
         alertDialog.setCancelable(false);
         alertDialog.setCanceledOnTouchOutside(false);
+
         alertDialog.show();
+        Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        nbutton.setAllCaps(false);
+        nbutton.setTextColor(getResources().getColor(R.color.apptheme_color));
+        Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        pbutton.setTextColor(getResources().getColor(R.color.apptheme_color));
+        pbutton.setAllCaps(false);
     }
 
     public void showAlertDialogForSuccess(String mesg) {
@@ -2034,7 +2044,11 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
         alertDialog.setCancelable(false);
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.show();
+        Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        nbutton.setAllCaps(false);
+        nbutton.setTextColor(getResources().getColor(R.color.apptheme_color));
     }
+
 
     private Animation leftOutAnimation;
     private Animation rightInAnimation;

@@ -1464,6 +1464,12 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
         alertDialog.setCancelable(false);
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.show();
+        Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        nbutton.setAllCaps(false);
+        nbutton.setTextColor(getResources().getColor(R.color.apptheme_color));
+        Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        pbutton.setTextColor(getResources().getColor(R.color.apptheme_color));
+        pbutton.setAllCaps(false);
     }
 
     public void showAlertBox(String loginType, String emailId) {
@@ -1503,6 +1509,12 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
         alertDialog.setCancelable(false);
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.show();
+        Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        nbutton.setAllCaps(false);
+        nbutton.setTextColor(getResources().getColor(R.color.apptheme_color));
+        Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        pbutton.setTextColor(getResources().getColor(R.color.apptheme_color));
+        pbutton.setAllCaps(false);
     }
 
     public void showAlert(final String emailId) {
@@ -1540,6 +1552,9 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
         alertDialog.setCancelable(false);
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.show();
+        Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        nbutton.setAllCaps(false);
+        nbutton.setTextColor(getResources().getColor(R.color.apptheme_color));
     }
 
 
@@ -1809,6 +1824,12 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
         alertDialog.setCancelable(false);
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.show();
+        Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        nbutton.setAllCaps(false);
+        nbutton.setTextColor(getResources().getColor(R.color.apptheme_color));
+        Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        pbutton.setTextColor(getResources().getColor(R.color.apptheme_color));
+        pbutton.setAllCaps(false);
     }
 
     private Animation leftOutAnimation;

@@ -386,8 +386,8 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
                         url = GlobalConstants.FEATURED_API_URL + "userId=" + AppController.getInstance().
                                 getModelFacade().getLocalModel().getUserId();
                         arrList.clear();
-                        arrList.addAll(AppController.getInstance().getServiceManager().getVaultService().
-                                getVideosListFromServer(url));
+                        arrList.addAll(AppController.getInstance().getServiceManager().getVaultService().getVideosListFromServer(url));
+                        VaultDatabaseHelper.getInstance(getActivity().getApplicationContext()).removeRecordsByTab(GlobalConstants.OKF_FEATURED);
                         VaultDatabaseHelper.getInstance(getActivity().getApplicationContext()).insertVideosInDatabase(arrList);
 
                         url = GlobalConstants.GET_TRENDING_PLAYLIST_URL + "userId=" + AppController.getInstance().

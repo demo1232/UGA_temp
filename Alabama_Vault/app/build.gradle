@@ -132,7 +132,6 @@ dependencies {
     compile 'com.github.crosswall:Android-Coverflow:release-v1.0.4'
     testCompile 'junit:junit:4.12'
     compile 'com.google.firebase:firebase-ads:10.2.6'
-    compile 'com.longtailvideo.jwplayer:jwplayer-ima:+'
     compile 'com.google.ads.interactivemedia.v3:interactivemedia:3.5.2'
 
 }

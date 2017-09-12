@@ -526,9 +526,9 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                if (progressBar != null) {
-                    progressBar.setVisibility(View.VISIBLE);
-                }
+//                if (progressBar != null) {
+//                    progressBar.setVisibility(View.VISIBLE);
+//                }
             }
 
             @Override
@@ -560,9 +560,11 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
             protected void onPostExecute(ArrayList<PlaylistDto> result) {
                 super.onPostExecute(result);
 
-                if (progressBar != null) {
-                   progressBar.setVisibility(View.GONE);
-                }
+//                if(playlistDtoDataList.size()>0) {
+//                    if (progressBar != null) {
+//                        progressBar.setVisibility(View.GONE);
+//                    }
+//                }
 
 
                 for (int j = 0; j < playlistDtoDataList.size(); j++) {
