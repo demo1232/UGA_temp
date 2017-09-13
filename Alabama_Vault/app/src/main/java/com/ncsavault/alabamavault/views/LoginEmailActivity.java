@@ -747,6 +747,7 @@ public class LoginEmailActivity extends AppCompatActivity implements GoogleApiCl
                         }  else if ((existFrom.equals("gm_exists") || existFrom.equals("tw_exists") ||
                                 existFrom.equals("fb_exists") || existFrom.equals("vt_exists")) && isSocialUser)
                         {
+                            AppController.getInstance().getModelFacade().getLocalModel().setOverride(true);
                             AppController.getInstance().getModelFacade().getLocalModel().setEmailId(emailId);
                             AppController.getInstance().handleEvent(AppDefines.EVENT_ID_REGISTRATION_SCREEN);
                             overridePendingTransition(R.anim.rightin, R.anim.leftout);

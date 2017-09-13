@@ -532,6 +532,9 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
                     {
                         if(localVideoDTO.getVedioList_modified() != videoDTO.getVedioList_modified()) {
 
+
+                            VaultDatabaseHelper.getInstance(mContext).
+                                    removeVideoByPlaylistId(playlistId);
                             VaultDatabaseHelper.getInstance(mContext).
                                     insertVideosInDatabase(videoDtoArrayList);
                         }

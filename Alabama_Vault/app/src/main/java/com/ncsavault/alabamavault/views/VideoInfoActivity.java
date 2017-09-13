@@ -16,6 +16,7 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.net.Uri;
@@ -28,6 +29,7 @@ import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.MediaRouteButton;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -42,6 +44,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.longtailvideo.jwplayer.cast.CastManager;
 import com.longtailvideo.jwplayer.media.ads.Ad;
 import com.longtailvideo.jwplayer.media.ads.AdBreak;
 import com.longtailvideo.jwplayer.media.ads.AdSource;
@@ -719,7 +723,10 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
         imgVideoShare = (ImageView) findViewById(R.id.img_video_share);
         imgVideoStillUrl = (ImageView) findViewById(R.id.image_video_still);
 
-
+        LinearLayout container = (LinearLayout) findViewById(R.id.chromecast_button_layout);
+        MediaRouteButton chromecastBtn = new MediaRouteButton(this);
+        container.addView(chromecastBtn);
+        CastManager.getInstance().addMediaRouterButton(chromecastBtn);
 
     }
 
@@ -787,21 +794,24 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
 //            ImaSdkSettings imaSdkSettings = new ImaSdkSettings();
 //            imaSdkSettings.setAutoPlayAdBreaks(true);
 
-//            List<AdBreak> emptyList = new ArrayList<>();
-            Advertising advertising = new Advertising(AdSource.VAST,adSchedule);
+            List<AdBreak> emptyList = new ArrayList<>();
+            List<PlaylistItem> playlist = new ArrayList<>();
+            Advertising advertising = new Advertising(AdSource.VAST, adSchedule);
+
             advertising.setSkipOffset(5);
+            // Load a media source
+            PlaylistItem pi = new PlaylistItem.Builder()
+                    .adSchedule(adSchedule)
+                    .file(videoObject.getVideoLongUrl())
+                    .image(videoObject.getVideoStillUrl())
+                    .build();
+            videoView.load(pi);
 
-//            imaAdvertising.setSkipOffset(3);
-//            imaAdvertising.setAdMessage("Text that appears in the control bar");
-//            imaAdvertising.setCueText("Text that appears when you hover over the ad marker");
-//            imaAdvertising.setSkipMessage("Text that appears before skip is available");
-//            imaAdvertising.setSkipText("Text that appears when skip is available");
-
-//            imaAdvertising.setImaSdkSettings(imaSdkSettings);
-
+            playlist.add(pi);
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             PlayerConfig playerConfig = new PlayerConfig.Builder()
                     .autostart(false)
+                    .playlist(playlist)
                     .advertising(advertising)
                     .captionsEdgeStyle("ec_seek")
                     .skinName("glow")
@@ -809,16 +819,6 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
                     .build();
 
             videoView.setup(playerConfig);
-
-            // Load a media source
-            PlaylistItem pi = new PlaylistItem.Builder()
-                    .adSchedule(adSchedule)
-                    .file(videoObject.getVideoLongUrl())
-                    .image(videoObject.getVideoStillUrl())
-                    .build();
-
-
-            videoView.load(pi);
 
             //jwPlayerLayout.setGravity(Gravity.CENTER);
 

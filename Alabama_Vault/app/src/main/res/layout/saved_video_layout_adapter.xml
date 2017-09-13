@@ -26,7 +26,7 @@
             android:id="@+id/rl_image_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/white"
+            android:background="@drawable/selector_listitemview"
             android:layout_weight="2.3">
             <ProgressBar
                 android:id="@+id/progressbar"

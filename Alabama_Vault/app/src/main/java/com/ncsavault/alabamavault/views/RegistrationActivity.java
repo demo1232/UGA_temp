@@ -234,18 +234,18 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
     private void facebookLogin(User socialUserData, String registerUser) {
 
         String email = "";
-        if (mEmailId.getVisibility() == View.VISIBLE) {
-            email = mEmailId.getText().toString();
-        } else if (mEmailIdFB.getVisibility() == View.VISIBLE) {
-            email = mEmailIdFB.getText().toString();
-        } else {
+//        if (mEmailId.getVisibility() == View.VISIBLE) {
+//            email = mEmailId.getText().toString();
+//        } else if (mEmailIdFB.getVisibility() == View.VISIBLE) {
+//            email = mEmailIdFB.getText().toString();
+//        } else {
             if (twitter) {
                 email = mEmailId.getText().toString();
             } else {
                 email = mEmailIdFB.getText().toString();
             }
 
-        }
+ //       }
         if (loginEmailModel != null) {
             loginEmailModel.unRegisterView(this);
         }
@@ -1626,19 +1626,19 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
                     if (Utils.isInternetAvailable(RegistrationActivity.this)) {
                         if (loginEmailModel.getLoginResult().toLowerCase().contains("vt_exists")) {
 
-                            showAlertBox("Vault", email);
+                            showAlertBox("Vault", mEmailId.getText().toString());
 
                         } else if (loginEmailModel.getLoginResult().toLowerCase().contains("fb_exists")) {
 
-                            showAlertBox("Facebook", email);
+                            showAlertBox("Facebook", mEmailId.getText().toString());
 
                         } else if (loginEmailModel.getLoginResult().toLowerCase().contains("tw_exists")) {
 
-                            showAlertBox("Twitter", email);
+                            showAlertBox("Twitter", mEmailId.getText().toString());
 
                         } else if (loginEmailModel.getLoginResult().toLowerCase().contains("gm_exists")) {
 
-                            showAlertBox("Google", email);
+                            showAlertBox("Google", mEmailId.getText().toString());
 
                         } else {
 

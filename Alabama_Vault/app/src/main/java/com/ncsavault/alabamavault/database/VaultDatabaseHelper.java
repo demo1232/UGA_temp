@@ -1197,12 +1197,36 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public void removeTrandingVideoRecords() {
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.enableWriteAheadLogging();
+            db.execSQL("DELETE FROM " + TrendingVideoTable.TRENDING_VIDEO_TABLE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
     public void removeRecordsByTab(String referenceId) {
         try {
             SQLiteDatabase db = this.getWritableDatabase();
             db.enableWriteAheadLogging();
             db.execSQL("DELETE FROM " + VideoTable.VIDEO_TABLE + " WHERE " + VideoTable.KEY_PLAYLIST_REFERENCE_ID + " LIKE '" + referenceId + "%'");
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removeVideoByPlaylistId(long playlist) {
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.enableWriteAheadLogging();
+            db.execSQL("DELETE FROM " + VideoTable.VIDEO_TABLE + " WHERE " + VideoTable.KEY_PLAYLIST_ID + " = " + playlist);
+        } catch (Exception e) {
+//            "SELECT * FROM " + VideoTable.VIDEO_TABLE
+//                    + " WHERE " + VideoTable.KEY_PLAYLIST_ID  + " = " + playlist
             e.printStackTrace();
         }
     }

@@ -395,11 +395,13 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
                         trendingArraylist.clear();
                         trendingArraylist.addAll(AppController.getInstance().getServiceManager().getVaultService().
                                 getVideosListFromServer(url));
+
+                        VaultDatabaseHelper.getInstance(getActivity().getApplicationContext()).
+                                removeTrandingVideoRecords();
                         VaultDatabaseHelper.getInstance(getActivity().getApplicationContext()).
                                 insertTrendingVideosInDatabase(trendingArraylist);
                         isTabDataUpdated = true;
                     }
-
                     if (serverObj != null) {
                         if ((tabBannerDTO.getBannerModified() != serverObj.getBannerModified()) ||
                                 (tabBannerDTO.getBannerCreated() != serverObj.getBannerCreated())) {

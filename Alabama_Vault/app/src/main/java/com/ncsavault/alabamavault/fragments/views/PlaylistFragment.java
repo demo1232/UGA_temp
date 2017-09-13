@@ -157,7 +157,8 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
 //        if(playlistDtoDataList.size()==0) {
 //            getPlaylistData(tabId);
 //        }else {
-        getPlaylistDateFromDatabase();
+     //   getPlaylistDateFromDatabase();
+        getPlaylistData(tabId);
 //        }
     }
 
@@ -461,6 +462,7 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
                                 insertPlaylistTabData(playlistDtoDataList, tabId);
                     }
 
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -471,10 +473,6 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
             protected void onPostExecute(ArrayList<PlaylistDto> result) {
                 super.onPostExecute(result);
 
-                playlistDtoDataList.clear();
-                playlistDtoDataList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext())
-                        .getLocalPlaylistDataByCategorieTab(tabId));
-
                 if (progressBar != null) {
                     if (playlistDtoDataList.size() == 0) {
                         progressBar.setVisibility(View.VISIBLE);
@@ -482,6 +480,19 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
                         progressBar.setVisibility(View.GONE);
                     }
                 }
+
+                playlistDtoDataList.clear();
+                playlistDtoDataList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext())
+                        .getLocalPlaylistDataByCategorieTab(tabId));
+
+                Collections.sort(playlistDtoDataList, new Comparator<PlaylistDto>() {
+                    @Override
+                    public int compare(PlaylistDto lhs, PlaylistDto rhs) {
+                        // TODO Auto-generated method stub
+                        return lhs.getPlaylistName().toLowerCase()
+                                .compareTo(rhs.getPlaylistName().toLowerCase());
+                    }
+                });
 
 
                 for (int j = 0; j < playlistDtoDataList.size(); j++) {
@@ -514,6 +525,7 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
                 });
 
             }
+
         };
 
         mDbTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -539,15 +551,7 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
                     playlistDtoDataList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext())
                             .getLocalPlaylistDataByCategorieTab(tabId));
 
-                    Collections.sort(playlistDtoDataList, new Comparator<PlaylistDto>() {
 
-                        @Override
-                        public int compare(PlaylistDto lhs, PlaylistDto rhs) {
-                            // TODO Auto-generated method stub
-                            return lhs.getPlaylistName().toLowerCase()
-                                    .compareTo(rhs.getPlaylistName().toLowerCase());
-                        }
-                    });
 
 
                 } catch (Exception e) {
@@ -565,7 +569,15 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
 //                        progressBar.setVisibility(View.GONE);
 //                    }
 //                }
+                Collections.sort(playlistDtoDataList, new Comparator<PlaylistDto>() {
 
+                    @Override
+                    public int compare(PlaylistDto lhs, PlaylistDto rhs) {
+                        // TODO Auto-generated method stub
+                        return lhs.getPlaylistName().toLowerCase()
+                                .compareTo(rhs.getPlaylistName().toLowerCase());
+                    }
+                });
 
                 for (int j = 0; j < playlistDtoDataList.size(); j++) {
                     if ((j + 1) % 5 == 0) {

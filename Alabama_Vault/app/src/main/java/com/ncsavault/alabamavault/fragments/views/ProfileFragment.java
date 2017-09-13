@@ -393,7 +393,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
         mLogoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //gk Twitter.logOut();
+                 Twitter.logOut();
                 mContext.stopService(new Intent(mContext, TrendingFeaturedVideoService.class));
 //                VideoDataFetchingService.isServiceRunning = false;
                 if (LoginManager.getInstance() != null) {
