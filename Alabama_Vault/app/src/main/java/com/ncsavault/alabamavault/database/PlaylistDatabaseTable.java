@@ -138,8 +138,9 @@ public class PlaylistDatabaseTable {
         try {
             ArrayList<PlaylistDto> playlistDaoArrayList = new ArrayList<>();
             database.enableWriteAheadLogging();
-            String selectQuery = "SELECT * FROM " + PLAYLIST_DATA_TABLE +" WHERE "+KEY_CATEGEROIES_ID+" = "+categoriesId
-            + " ORDER BY " + KEY_PLAYLIST_NAME + " COLLATE NOCASE " + " ASC ";
+            String selectQuery = "SELECT * FROM " + PLAYLIST_DATA_TABLE +" WHERE "+
+                    KEY_CATEGEROIES_ID+" = "+categoriesId;
+            //+ " ORDER BY " + KEY_PLAYLIST_NAME + " COLLATE NOCASE " + " ASC ";
             Cursor cursor = database.rawQuery(selectQuery, null);
             PlaylistDto playlistDto = null;
             if (cursor != null)

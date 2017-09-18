@@ -154,12 +154,9 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
             showBannerImage(bannerImageView, tabBannerDTO);
         }
 
-//        if(playlistDtoDataList.size()==0) {
-//            getPlaylistData(tabId);
-//        }else {
-     //   getPlaylistDateFromDatabase();
-        getPlaylistData(tabId);
-//        }
+        getPlaylistDateFromDatabase();
+ //       getPlaylistData(tabId);
+
     }
 
     private String getUnitId(ArrayList<PlaylistDto> playlistDtoDataList)
@@ -203,13 +200,11 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
         bannerImageView = (ImageView) view.findViewById(R.id.img_banner);
         bannerLayout = (LinearLayout) view.findViewById(R.id.syncro_banner_layout);
         progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            progressBar.setIndeterminateDrawable(mContext.getResources().getDrawable(R.drawable.circle_progress_bar_lower));
-        } else {
-            System.out.println("progress bar not showing ");
-            progressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(mContext.getResources(),
-                    R.drawable.progress_large_material, null));
-        }
+
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+//            progressBar.setIndeterminateDrawable(getResources().getDrawable(R.drawable.circle_progress_bar_lower));
+//        else
+//            progressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.progress_large_material, null));
 
         refreshLayout = (PullRefreshLayout) view.findViewById(R.id.refresh_layout);
 
@@ -473,56 +468,62 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
             protected void onPostExecute(ArrayList<PlaylistDto> result) {
                 super.onPostExecute(result);
 
-                if (progressBar != null) {
-                    if (playlistDtoDataList.size() == 0) {
-                        progressBar.setVisibility(View.VISIBLE);
-                    } else {
-                        progressBar.setVisibility(View.GONE);
-                    }
-                }
-
-                playlistDtoDataList.clear();
-                playlistDtoDataList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext())
-                        .getLocalPlaylistDataByCategorieTab(tabId));
-
-                Collections.sort(playlistDtoDataList, new Comparator<PlaylistDto>() {
-                    @Override
-                    public int compare(PlaylistDto lhs, PlaylistDto rhs) {
-                        // TODO Auto-generated method stub
-                        return lhs.getPlaylistName().toLowerCase()
-                                .compareTo(rhs.getPlaylistName().toLowerCase());
-                    }
-                });
-
-
-                for (int j = 0; j < playlistDtoDataList.size(); j++) {
-                    if ((j + 1) % 5 == 0) {
-                        String adUnitVault = getUnitId(playlistDtoDataList);
-                        PlaylistDto playlistDto = new PlaylistDto();
-                        playlistDto.setPlaylistName(adUnitVault);
-                        playlistDtoDataList.add(j, playlistDto);
-                    }
-                }
-
-                mAlbumsAdapter = new PlaylistDataAdapter(mContext, PlaylistFragment.this, playlistDtoDataList);
-                GridLayoutManager mLayoutManager = new GridLayoutManager(mContext, 2);
-                mRecyclerView.setLayoutManager(mLayoutManager);
-                mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(1), true));
-                mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-                mRecyclerView.setAdapter(mAlbumsAdapter);
-                mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                    @Override
-                    public int getSpanSize(int position) {
-                        switch (mAlbumsAdapter.getItemViewType(position)) {
-                            case PlaylistDataAdapter.TYPE_LIST_DATA:
-                                return TOTAL_CELLS_PER_ROW;
-                            case PlaylistDataAdapter.TYPE_AD:
-                                return 2;
-                            default:
-                                return 2;
+                try {
+                    if (progressBar != null) {
+                        if (playlistDtoDataList.size() == 0) {
+                            progressBar.setVisibility(View.VISIBLE);
+                        } else {
+                            progressBar.setVisibility(View.GONE);
                         }
                     }
-                });
+
+                    playlistDtoDataList.clear();
+                    playlistDtoDataList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext())
+                            .getLocalPlaylistDataByCategorieTab(tabId));
+
+                    Collections.sort(playlistDtoDataList, new Comparator<PlaylistDto>() {
+                        @Override
+                        public int compare(PlaylistDto lhs, PlaylistDto rhs) {
+                            // TODO Auto-generated method stub
+                            return lhs.getPlaylistName().toLowerCase()
+                                    .compareTo(rhs.getPlaylistName().toLowerCase());
+                        }
+                    });
+
+
+                    for (int j = 0; j < playlistDtoDataList.size(); j++) {
+                        if ((j + 1) % 5 == 0) {
+                            String adUnitVault = getUnitId(playlistDtoDataList);
+                            PlaylistDto playlistDto = new PlaylistDto();
+                            playlistDto.setPlaylistName(adUnitVault);
+                            playlistDtoDataList.add(j, playlistDto);
+                        }
+                    }
+
+                    mAlbumsAdapter = new PlaylistDataAdapter(mContext, PlaylistFragment.this, playlistDtoDataList);
+                    GridLayoutManager mLayoutManager = new GridLayoutManager(mContext, 2);
+                    mRecyclerView.setLayoutManager(mLayoutManager);
+                    mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(1), true));
+                    mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                    mRecyclerView.setAdapter(mAlbumsAdapter);
+                    mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                        @Override
+                        public int getSpanSize(int position) {
+                            switch (mAlbumsAdapter.getItemViewType(position)) {
+                                case PlaylistDataAdapter.TYPE_LIST_DATA:
+                                    return TOTAL_CELLS_PER_ROW;
+                                case PlaylistDataAdapter.TYPE_AD:
+                                    return 2;
+                                default:
+                                    return 2;
+                            }
+                        }
+                    });
+
+                }catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
 
             }
 
@@ -538,9 +539,9 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-//                if (progressBar != null) {
-//                    progressBar.setVisibility(View.VISIBLE);
-//                }
+                if (progressBar != null) {
+                    progressBar.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -550,8 +551,6 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
                     playlistDtoDataList.clear();
                     playlistDtoDataList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext())
                             .getLocalPlaylistDataByCategorieTab(tabId));
-
-
 
 
                 } catch (Exception e) {
@@ -564,11 +563,11 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
             protected void onPostExecute(ArrayList<PlaylistDto> result) {
                 super.onPostExecute(result);
 
-//                if(playlistDtoDataList.size()>0) {
-//                    if (progressBar != null) {
-//                        progressBar.setVisibility(View.GONE);
-//                    }
-//                }
+                if(playlistDtoDataList.size()>0) {
+                    if (progressBar != null) {
+                        progressBar.setVisibility(View.GONE);
+                    }
+                }
                 Collections.sort(playlistDtoDataList, new Comparator<PlaylistDto>() {
 
                     @Override
@@ -761,24 +760,25 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
                         }
 
                         mAlbumsAdapter = new PlaylistDataAdapter(mContext, PlaylistFragment.this, playlistDtoDataList);
-                        GridLayoutManager mLayoutManager = new GridLayoutManager(mContext, 2);
-                        mRecyclerView.setLayoutManager(mLayoutManager);
-                        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(1), true));
-                        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-                        mRecyclerView.setAdapter(mAlbumsAdapter);
-                        mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                            @Override
-                            public int getSpanSize(int position) {
-                                switch (mAlbumsAdapter.getItemViewType(position)) {
-                                    case PlaylistDataAdapter.TYPE_LIST_DATA:
-                                        return TOTAL_CELLS_PER_ROW;
-                                    case PlaylistDataAdapter.TYPE_AD:
-                                        return 2;
-                                    default:
-                                        return 2;
-                                }
-                            }
-                        });
+                        mAlbumsAdapter.notifyDataSetChanged();
+//                        GridLayoutManager mLayoutManager = new GridLayoutManager(mContext, 2);
+//                        mRecyclerView.setLayoutManager(mLayoutManager);
+//                        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(1), true));
+//                        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+//                        mRecyclerView.setAdapter(mAlbumsAdapter);
+//                        mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+//                            @Override
+//                            public int getSpanSize(int position) {
+//                                switch (mAlbumsAdapter.getItemViewType(position)) {
+//                                    case PlaylistDataAdapter.TYPE_LIST_DATA:
+//                                        return TOTAL_CELLS_PER_ROW;
+//                                    case PlaylistDataAdapter.TYPE_AD:
+//                                        return 2;
+//                                    default:
+//                                        return 2;
+//                                }
+//                            }
+//                        });
                         mRecyclerView.removeOnItemTouchListener(disable);
                         refreshLayout.setRefreshing(false);
                     }
@@ -814,6 +814,12 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
                 playlistDtoDataList.clear();
                 playlistDtoDataList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext())
                         .getLocalPlaylistDataByCategorieTab(tabId));
+
+                if(playlistDtoDataList.size()>0) {
+                    if (progressBar != null) {
+                        progressBar.setVisibility(View.GONE);
+                    }
+                }
 
                 try {
                     Collections.sort(playlistDtoDataList, new Comparator<PlaylistDto>() {

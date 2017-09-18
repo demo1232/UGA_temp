@@ -82,7 +82,7 @@ public class ForgotPasswordActivity extends BaseActivity implements AbstractView
 
     @Override
     public void initViews() {
-
+        Utils.getInstance().setAppName(this);
         registeredEmailId = (EditText) findViewById(R.id.ed_registered_email_id);
         if (getIntent() != null) {
 //            boolean isValue = getIntent().getBooleanExtra("key", false);

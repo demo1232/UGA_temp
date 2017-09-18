@@ -162,12 +162,11 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
         });
 
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            progressBar.setIndeterminateDrawable(mContext.getResources().getDrawable(R.drawable.circle_progress_bar_lower));
-        } else {
-            System.out.println("progress bar not showing ");
-            progressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.progress_large_material, null));
-        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+            progressBar.setIndeterminateDrawable(getResources().getDrawable(R.drawable.circle_progress_bar_lower));
+        else
+            progressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(getResources(),
+                    R.drawable.progress_large_material, null));
 
         refreshLayout = (PullRefreshLayout) view.findViewById(R.id.refresh_layout);
 
@@ -266,10 +265,10 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                if (progressBar != null) {
-                        progressBar.setVisibility(View.VISIBLE);
-
-                }
+//                if (progressBar != null) {
+//                        progressBar.setVisibility(View.VISIBLE);
+//
+//                }
             }
 
             @Override
@@ -292,13 +291,13 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
             protected void onPostExecute(ArrayList<VideoDTO> result) {
                 super.onPostExecute(result);
 
-                if (progressBar != null) {
-                    if (result.size() == 0) {
-                        progressBar.setVisibility(View.VISIBLE);
-                    } else {
-                        progressBar.setVisibility(View.GONE);
-                    }
-                }
+//                if (progressBar != null) {
+//                    if (result.size() == 0) {
+//                        progressBar.setVisibility(View.VISIBLE);
+//                    } else {
+//                        progressBar.setVisibility(View.GONE);
+//                    }
+//                }
 
                 if (videoDtoArrayList.size() == 0) {
                     tvNoRecoredFound.setVisibility(View.VISIBLE);

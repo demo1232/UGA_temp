@@ -14,7 +14,7 @@ public class GlobalConstants {
 
     public static final int APP_ID = 4;
     public static final String APP_NAME = "alabamavault";
-    public static final String APP_VERSION = "1.0";
+    public static final String APP_VERSION = "1.0.1";
     public static final String DEVICE_TYPE = "Android";
     public static final String APP_FULL_NAME = "Alabama Vault";
     public static final String APP_SCHOOL_NAME = "Alabama";
@@ -92,7 +92,7 @@ public class GlobalConstants {
     public static String BASE_URL = "http://syncroapi-staging.ncsavault.com/api";
 
     //new Production Url
-   //  public static final String BASE_URL = "http://syncroapi.ncsavault.com/api";
+    //public static final String BASE_URL = "http://syncroapi.ncsavault.com/api";
 
     public static final String PUSH_REGISTER_URL = BASE_URL + "/MobileUsers/PostPushData";
 

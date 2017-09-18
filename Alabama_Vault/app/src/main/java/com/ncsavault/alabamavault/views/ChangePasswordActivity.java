@@ -53,7 +53,7 @@ public class ChangePasswordActivity extends BaseActivity implements TextWatcher,
     private TextView tvSavePassword;
     private TextView tvBack;
     private CheckBox chkShowPassword;
-    private LinearLayout ll_header_image;
+//    private LinearLayout ll_header_image;
 
     private boolean isAllFieldsChecked = false;
     private boolean isEditing = false;
@@ -99,6 +99,7 @@ public class ChangePasswordActivity extends BaseActivity implements TextWatcher,
 
     @Override
     public void initViews() {
+        Utils.getInstance().setAppName(this);
         edOldPassword = (EditText) findViewById(R.id.ed_old_password);
         edNewPassword = (EditText) findViewById(R.id.ed_new_password);
         edConfirmPassword = (EditText) findViewById(R.id.ed_confirm_password);
@@ -110,7 +111,7 @@ public class ChangePasswordActivity extends BaseActivity implements TextWatcher,
         tvSavePassword = (TextView) findViewById(R.id.tv_save);
         tvBack = (TextView) findViewById(R.id.tv_back);
         chkShowPassword = (CheckBox) findViewById(R.id.chk_show_password);
-        ll_header_image = (LinearLayout) findViewById(R.id.ll_header_image);
+//        ll_header_image = (LinearLayout) findViewById(R.id.ll_header_image);
 
 
         imageViewOldPassword = (ImageView) findViewById(R.id.imageview_old_password);

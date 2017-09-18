@@ -29,7 +29,7 @@ import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.MediaRouteButton;
+
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -723,10 +723,10 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
         imgVideoShare = (ImageView) findViewById(R.id.img_video_share);
         imgVideoStillUrl = (ImageView) findViewById(R.id.image_video_still);
 
-        LinearLayout container = (LinearLayout) findViewById(R.id.chromecast_button_layout);
-        MediaRouteButton chromecastBtn = new MediaRouteButton(this);
-        container.addView(chromecastBtn);
-        CastManager.getInstance().addMediaRouterButton(chromecastBtn);
+//        LinearLayout container = (LinearLayout) findViewById(R.id.chromecast_button_layout);
+//        MediaRouteButton chromecastBtn = new MediaRouteButton(this);
+//        container.addView(chromecastBtn);
+//        CastManager.getInstance().addMediaRouterButton(chromecastBtn);
 
     }
 
@@ -1091,8 +1091,8 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
                             }
                         };
 
-//                        mPostTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                        mPostTask.execute();
+                        mPostTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                       // mPostTask.execute();
                     }
                 } else {
                     showToastMessage(GlobalConstants.MSG_NO_CONNECTION);

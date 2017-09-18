@@ -80,12 +80,12 @@ public class PlaylistDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             playlistName = (TextView) view.findViewById(R.id.video_name);
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
             progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            /*if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 progressBar.setIndeterminateDrawable(mContext.getResources().getDrawable(R.drawable.circle_progress_bar_lower));
             } else {
                 System.out.println("progress bar not showing ");
                 progressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.progress_large_material, null));
-            }
+            }*/
         }
     }
 
@@ -113,19 +113,21 @@ public class PlaylistDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     .inflate(R.layout.album_card, parent, false);
 
             return new MyViewHolder(itemView);
-        }else
+        }else if(viewType== TYPE_AD)
         {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.inline_playlist_ads, parent, false);
 
             return new NativeAdsViewHolder(view);
         }
+        return null;
     }
 
     @Override
     public int getItemViewType(int position) {
-        if ((position+1) % 5 == 0)
+        if ((position+1) % 5 == 0) {
             return TYPE_AD;
+        }
         return TYPE_LIST_DATA;
     }
 

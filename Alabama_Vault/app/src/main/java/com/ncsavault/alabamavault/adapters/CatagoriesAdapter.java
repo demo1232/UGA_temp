@@ -163,12 +163,12 @@ public class CatagoriesAdapter extends RecyclerView.Adapter<CatagoriesAdapter.Ca
             playlistTabNametextView = (TextView) view.findViewById(R.id.tv_playlist_name);
             progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
             playlistLayout = (RelativeLayout)  view.findViewById(R.id.playlist_layout);
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                progressBar.setIndeterminateDrawable(mContext.getResources().getDrawable(R.drawable.circle_progress_bar_lower));
-            } else {
-                System.out.println("progress bar not showing ");
-                progressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.progress_large_material, null));
-            }
+//            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+//                progressBar.setIndeterminateDrawable(mContext.getResources().getDrawable(R.drawable.circle_progress_bar_lower));
+//            } else {
+//                System.out.println("progress bar not showing ");
+//                progressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.progress_large_material, null));
+//            }
 
         }
     }

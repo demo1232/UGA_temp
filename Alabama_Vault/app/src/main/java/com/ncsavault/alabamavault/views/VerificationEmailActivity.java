@@ -75,6 +75,7 @@ public class VerificationEmailActivity extends BaseActivity implements AbstractV
 
     @Override
     public void initViews() {
+        Utils.getInstance().setAppName(this);
         registeredEmailId = (EditText) findViewById(R.id.ed_registered_email_id);
         if (getIntent() != null) {
             String emailId = getIntent().getStringExtra("email_id");

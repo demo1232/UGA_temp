@@ -171,14 +171,14 @@ public class VideoDetailAdapter extends RecyclerView.Adapter<VideoDetailAdapter.
             videoDurationTextView = (TextView) view.findViewById(R.id.tv_video_duration);
             progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
             mLayoutSavedImage = (LinearLayout) view.findViewById(R.id.layout_saved_image);
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                progressBar.setIndeterminateDrawable(mContext.getResources().getDrawable(R.drawable
-                        .circle_progress_bar_lower));
-            } else {
-                System.out.println("progress bar not showing ");
-                progressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(mContext.getResources(),
-                        R.drawable.progress_large_material, null));
-            }
+//            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+//                progressBar.setIndeterminateDrawable(mContext.getResources().getDrawable(R.drawable
+//                        .circle_progress_bar_lower));
+//            } else {
+//                System.out.println("progress bar not showing ");
+//                progressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(mContext.getResources(),
+//                        R.drawable.progress_custom_circle, null));
+//            }
 
             videoRelativeLayout = (LinearLayout) view.findViewById(R.id.save_video_main_layout);
 

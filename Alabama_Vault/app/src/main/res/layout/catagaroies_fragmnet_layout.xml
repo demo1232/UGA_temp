@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/LightGrey"
-    android:layout_marginBottom="10dp"
     >
 
 
     <com.baoyz.widget.PullRefreshLayout
         android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/catagories_recycler_view"
@@ -20,7 +20,6 @@
             android:layout_height="match_parent"
             android:background="@color/LightGrey"
             android:scrollbars="vertical"
-
             />
     </com.baoyz.widget.PullRefreshLayout>
 
@@ -38,7 +37,9 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_centerInParent="true"
+        android:indeterminateTintMode="src_atop"
         android:indeterminateDuration="1100"
+        android:indeterminateTint="@color/apptheme_color"
         android:visibility="gone"
         />
 

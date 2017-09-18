@@ -21,6 +21,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.media.ExifInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -1401,6 +1402,16 @@ public class Utils {
             duration = mnStr + ":" + secStr;
         }
         return duration;
+    }
+
+
+    public void setAppName(Activity context){
+        TextView textViewAlabama=(TextView)context.findViewById(R.id.textview_alabama);
+        TextView textViewVault=(TextView)context.findViewById(R.id.textview_vault);
+        Typeface face = Typeface.createFromAsset(context.getAssets(), "fonts/OpenSans-Bold.ttf");
+        Typeface faceNormal = Typeface.createFromAsset(context.getAssets(), "fonts/OpenSans-Light.ttf");
+        textViewAlabama.setTypeface(faceNormal);
+        textViewVault.setTypeface(face);
     }
 
 

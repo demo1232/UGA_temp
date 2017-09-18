@@ -67,15 +67,15 @@ public class HorizontalPagerAdapter extends PagerAdapter {
         try {
 
             RelativeLayout rrMain = (RelativeLayout) view.findViewById(R.id.linMain);
-            ImageView imageCover = (ImageView) view.findViewById(R.id.imageCover);
+            final ImageView imageCover = (ImageView) view.findViewById(R.id.imageCover);
             final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progess_bar_trendingvideos);
             rrMain.setTag(position);
 
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                progressBar.setIndeterminateDrawable(AppController.getInstance().getApplication().getResources().getDrawable(R.drawable.circle_progress_bar_lower));
-            } else {
-                progressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(AppController.getInstance().getApplication().getResources(), R.drawable.progress_large_material, null));
-            }
+//            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+//                progressBar.setIndeterminateDrawable(AppController.getInstance().getApplication().getResources().getDrawable(R.drawable.circle_progress_bar_lower));
+//            } else {
+//                progressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(AppController.getInstance().getApplication().getResources(), R.drawable.progress_large_material, null));
+//            }
 
 
             com.nostra13.universalimageloader.core.ImageLoader.getInstance().
@@ -89,16 +89,21 @@ public class HorizontalPagerAdapter extends PagerAdapter {
                                 @Override
                                 public void onLoadingFailed(String s, View view, FailReason failReason) {
                                     progressBar.setVisibility(View.GONE);
+                                    imageCover.setImageResource(R.drawable.vault);
                                 }
 
                                 @Override
                                 public void onLoadingComplete(String s, View view, Bitmap bitmap) {
                                     progressBar.setVisibility(View.GONE);
+                                    if (trendingVideosList == null) {
+                                        imageCover.setImageResource(R.drawable.vault);
+                                    }
                                 }
 
                                 @Override
                                 public void onLoadingCancelled(String s, View view) {
                                     progressBar.setVisibility(View.GONE);
+                                    imageCover.setImageResource(R.drawable.vault);
                                 }
                             });
 

@@ -106,7 +106,7 @@
                 android:orientation="vertical"
                 android:padding="10dp">
 
-                <LinearLayout
+              <!--  <LinearLayout
                     android:id="@+id/ll_header_image"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -117,7 +117,15 @@
                         android:layout_height="match_parent"
                         android:layout_margin="30dp"
                         android:background="@drawable/alabama_vault_logo" />
-                </LinearLayout>
+                </LinearLayout>-->
+
+
+                <include
+                    android:id="@+id/splash_text"
+                    layout="@layout/splash_logo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp" />
 
                 <LinearLayout
                     android:id="@+id/ll_password_block"

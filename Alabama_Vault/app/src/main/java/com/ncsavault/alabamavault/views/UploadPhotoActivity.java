@@ -242,6 +242,7 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
 
     public void initViews() {
 
+        Utils.getInstance().setAppName(this);
         mEditSpinner = (EditSpinner) findViewById(R.id.edit_spinner);
 
         mUserName = (EditText) findViewById(R.id.username);

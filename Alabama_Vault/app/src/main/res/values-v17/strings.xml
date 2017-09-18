@@ -43,7 +43,7 @@
     <string name="url">https://mediasvcr0q7zkllkzkq6.blob.core.windows.net/asset-8712445d-1500-80c3-8a30-f1e4ea4afad3/(2010%20Arkansas)%20TD%20King.mp4?sv=2012-02-12\uf000sr=c\uf000si=399953b5-4780-44ab-83e3-bb2bcc3f2a5b\uf000sig=E%2FunWOZ2Q1L4ZejsvAy90bj3bP2yPVA%2BBkrP6NEcRn0%3D\uf000st=2015-04-24T06%3A52%3A21Z\uf000se=2115-03-31T06%3A52%3A21Z</string>
     <string name="title_activity_test">TestActivity</string>
     <string name="title_activity_webview_test">WebviewTestActivity</string>
-    <string name="build_version">V1.0</string>
+    <string name="build_version">V1.0.1</string>
 
     <string-array name="pull_colors">
         <item>@color/apptheme_color</item>

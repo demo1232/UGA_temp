@@ -291,7 +291,7 @@ public class LoginEmailActivity extends AppCompatActivity implements GoogleApiCl
             int dimension = (int) (screenWidth * 0.45);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(dimension, dimension);
             lp.setMargins(0, 30, 0, 0);
-            ll_header_image.setLayoutParams(lp);
+//            ll_header_image.setLayoutParams(lp);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -299,6 +299,7 @@ public class LoginEmailActivity extends AppCompatActivity implements GoogleApiCl
 
     public void initViews() {
         try {
+            Utils.getInstance().setAppName(this);
             edEmailBox = (EditText) findViewById(R.id.ed_email);
             edPassword = (EditText) findViewById(R.id.ed_password);
 
@@ -306,7 +307,7 @@ public class LoginEmailActivity extends AppCompatActivity implements GoogleApiCl
             imageViewPassword.setTag(R.drawable.eyeon);
             imageViewPassword.setOnTouchListener(mPasswordVisibleTouchListener);
 
-            ll_header_image = (LinearLayout) findViewById(R.id.ll_header_image);
+//            ll_header_image = (LinearLayout) findViewById(R.id.ll_header_image);
             tvFacebookLogin = (ImageView) findViewById(R.id.tv_facebook_login);
             gmailLogin = (ImageView) findViewById(R.id.gmail_login);
             imgTwitterLogin = (ImageView) findViewById(R.id.twitter_login);

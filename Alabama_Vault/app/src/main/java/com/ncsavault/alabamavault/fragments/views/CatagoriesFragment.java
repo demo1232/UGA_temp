@@ -69,8 +69,6 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
@@ -86,15 +84,7 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
         super.onViewCreated(view, savedInstanceState);
 
         initViews(view);
-
-
-//        if(catagoriesTabList.size()==0) {
-//            getCatagoriesData();
-//        }else
-//        {
         getCategoriesDateFromDatabase();
-//        }
-
 
     }
 
@@ -122,7 +112,6 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
                 mRecyclerView.setEnabled(false);
                 mRecyclerView.addOnItemTouchListener(disable);
             }
-
             refreshLayout.setRefreshing(true);
 
         }
@@ -156,6 +145,9 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
                             VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).removeAllCategoriesTabData();
                             VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).insertCategoriesTabData(catagoriesTabList);
                         }
+                    }else
+                    {
+                        VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).insertCategoriesTabData(catagoriesTabList);
                     }
                 }
 
@@ -183,8 +175,6 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
                 mRecyclerView.removeOnItemTouchListener(disable);
             }
                refreshLayout.setRefreshing(false);
-
-                refreshLayout.setRefreshing(false);
 
 
             } catch (Exception e) {
@@ -317,13 +307,11 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
 
 
     private void getCategoriesDateFromDatabase() {
-        // if(catagoriesTabList.size()>0) {
         catagoriesTabList.clear();
         catagoriesTabList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).
                 getAllLocalCategoriesTabData());
 
         Collections.sort(catagoriesTabList, new Comparator<CatagoriesTabDao>() {
-
             @Override
             public int compare(CatagoriesTabDao lhs, CatagoriesTabDao rhs) {
                 // TODO Auto-generated method stub
@@ -331,19 +319,12 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
                         .compareTo(Long.valueOf(rhs.getIndex_position()));
             }
         });
-
-//        if(mCatagoriesAdapter != null)
-//        {
-//            mCatagoriesAdapter.notifyDataSetChanged();
-//        }else
-//        {
         mCatagoriesAdapter = new CatagoriesAdapter(mContext, CatagoriesFragment.this, catagoriesTabList);
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(mContext);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(llm);
         mRecyclerView.setAdapter(mCatagoriesAdapter);
-//        }
     }
     // }
 

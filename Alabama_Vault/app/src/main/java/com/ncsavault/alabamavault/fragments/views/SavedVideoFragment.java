@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -152,13 +153,10 @@ public class SavedVideoFragment extends Fragment implements SavedVideoAdapter.Sa
         savedLoginLayout = (RelativeLayout) view.findViewById(R.id.saved_login_layout);
         tvLoginButton = (Button) view.findViewById(R.id.tv_login);
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            progressBar.setIndeterminateDrawable(mContext.getResources().getDrawable(R.drawable.circle_progress_bar_lower));
-        } else {
-            System.out.println("progress bar not showing ");
-            progressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(mContext.getResources(),
-                    R.drawable.progress_large_material, null));
-        }
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+//            progressBar.setIndeterminateDrawable(getResources().getDrawable(R.drawable.circle_progress_bar_lower));
+//        else
+//            progressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.progress_large_material, null));
         refreshLayout = (PullRefreshLayout) view.findViewById(R.id.refresh_layout);
 
         refreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_RING);
@@ -210,78 +208,116 @@ public class SavedVideoFragment extends Fragment implements SavedVideoAdapter.Sa
     private void getFavoriteDataFromDataBase() {
         try {
 
-            AsyncTask<Void, Void, ArrayList<VideoDTO>> mDbTask = new AsyncTask<Void, Void, ArrayList<VideoDTO>>() {
+            try {
+                favoriteVideoList.clear();
+                favoriteVideoList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).
+                        getFavouriteVideosArrayList());
+                System.out.println("favoriteVideoList size getFavoriteDataFromDataBase : " +
+                        favoriteVideoList.size());
+                Collections.sort(favoriteVideoList, new Comparator<VideoDTO>() {
 
-                @Override
-                protected void onPreExecute() {
-                    super.onPreExecute();
-
-                    if(progressBar != null)
-                    {
-                        progressBar.setVisibility(View.VISIBLE);
+                    @Override
+                    public int compare(VideoDTO lhs, VideoDTO rhs) {
+                        // TODO Auto-generated method stub
+                        return lhs.getVideoName().toLowerCase()
+                                .compareTo(rhs.getVideoName().toLowerCase());
                     }
+                });
 
-                    if (savedVideoAdapter != null) {
-                        savedVideoAdapter.notifyDataSetChanged();
-                    }
+                savedVideoAdapter  = new SavedVideoAdapter(mContext,favoriteVideoList, SavedVideoFragment.this);
+                if(favoriteVideoList.size() == 0)
+                {
+                    tvNoRecoredFound.setVisibility(View.VISIBLE);
+                    tvNoRecoredFound.setText(GlobalConstants.NO_RECORDS_FOUND);
+                }else
+                {
+                    tvNoRecoredFound.setVisibility(View.GONE);
                 }
 
-                @Override
-                protected ArrayList<VideoDTO> doInBackground(Void... params) {
-                    try {
-                        favoriteVideoList.clear();
-                        favoriteVideoList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).
-                                getFavouriteVideosArrayList());
-                        System.out.println("favoriteVideoList size getFavoriteDataFromDataBase : " +
-                                favoriteVideoList.size());
-                        Collections.sort(favoriteVideoList, new Comparator<VideoDTO>() {
 
-                            @Override
-                            public int compare(VideoDTO lhs, VideoDTO rhs) {
-                                // TODO Auto-generated method stub
-                                return lhs.getVideoName().toLowerCase()
-                                        .compareTo(rhs.getVideoName().toLowerCase());
-                            }
-                        });
+                mRecyclerView.setHasFixedSize(true);
+                LinearLayoutManager llm = new LinearLayoutManager(mContext);
+                llm.setOrientation(LinearLayoutManager.VERTICAL);
+                mRecyclerView.setLayoutManager(llm);
+                mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                mRecyclerView.setAdapter(savedVideoAdapter);
+                savedVideoAdapter.notifyDataSetChanged();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-                        savedVideoAdapter  = new SavedVideoAdapter(mContext,favoriteVideoList, SavedVideoFragment.this);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    return favoriteVideoList;
-                }
-
-                @Override
-                protected void onPostExecute(ArrayList<VideoDTO> list) {
-                    super.onPostExecute(list);
-
-                    if(progressBar != null)
-                    {
-                        progressBar.setVisibility(View.GONE);
-                    }
-
-                    if(list.size() == 0)
-                    {
-                        tvNoRecoredFound.setVisibility(View.VISIBLE);
-                        tvNoRecoredFound.setText(GlobalConstants.NO_RECORDS_FOUND);
-                    }else
-                    {
-                        tvNoRecoredFound.setVisibility(View.GONE);
-                    }
-
-
-                    mRecyclerView.setHasFixedSize(true);
-                    LinearLayoutManager llm = new LinearLayoutManager(mContext);
-                    llm.setOrientation(LinearLayoutManager.VERTICAL);
-                    mRecyclerView.setLayoutManager(llm);
-                    mRecyclerView.setAdapter(savedVideoAdapter);
-                    savedVideoAdapter.notifyDataSetChanged();
-
-                }
-            };
-
-            mDbTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//            AsyncTask<Void, Void, ArrayList<VideoDTO>> mDbTask = new AsyncTask<Void, Void, ArrayList<VideoDTO>>() {
+//
+//                @Override
+//                protected void onPreExecute() {
+//                    super.onPreExecute();
+//
+//                    if(progressBar != null)
+//                    {
+//                        progressBar.setVisibility(View.VISIBLE);
+//                    }
+//
+//                    if (savedVideoAdapter != null) {
+//                        savedVideoAdapter.notifyDataSetChanged();
+//                    }
+//                }
+//
+//                @Override
+//                protected ArrayList<VideoDTO> doInBackground(Void... params) {
+//                    try {
+//                        favoriteVideoList.clear();
+//                        favoriteVideoList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).
+//                                getFavouriteVideosArrayList());
+//                        System.out.println("favoriteVideoList size getFavoriteDataFromDataBase : " +
+//                                favoriteVideoList.size());
+//                        Collections.sort(favoriteVideoList, new Comparator<VideoDTO>() {
+//
+//                            @Override
+//                            public int compare(VideoDTO lhs, VideoDTO rhs) {
+//                                // TODO Auto-generated method stub
+//                                return lhs.getVideoName().toLowerCase()
+//                                        .compareTo(rhs.getVideoName().toLowerCase());
+//                            }
+//                        });
+//
+//                        savedVideoAdapter  = new SavedVideoAdapter(mContext,favoriteVideoList, SavedVideoFragment.this);
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                    return favoriteVideoList;
+//                }
+//
+//                @Override
+//                protected void onPostExecute(ArrayList<VideoDTO> list) {
+//                    super.onPostExecute(list);
+//
+//                    if(progressBar != null)
+//                    {
+//                        progressBar.setVisibility(View.GONE);
+//                    }
+//
+//                    if(list.size() == 0)
+//                    {
+//                        tvNoRecoredFound.setVisibility(View.VISIBLE);
+//                        tvNoRecoredFound.setText(GlobalConstants.NO_RECORDS_FOUND);
+//                    }else
+//                    {
+//                        tvNoRecoredFound.setVisibility(View.GONE);
+//                    }
+//
+//
+//                    mRecyclerView.setHasFixedSize(true);
+//                    LinearLayoutManager llm = new LinearLayoutManager(mContext);
+//                    llm.setOrientation(LinearLayoutManager.VERTICAL);
+//                    mRecyclerView.setLayoutManager(llm);
+//                    mRecyclerView.setAdapter(savedVideoAdapter);
+//                    savedVideoAdapter.notifyDataSetChanged();
+//
+//                }
+//            };
+//
+//            mDbTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -503,10 +539,6 @@ public class SavedVideoFragment extends Fragment implements SavedVideoAdapter.Sa
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-
-
-
 
             } catch (Exception e) {
                 e.printStackTrace();

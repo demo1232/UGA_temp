@@ -95,8 +95,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 //        screenSize  = mContext.getResources().getConfiguration().screenLayout &
 //                Configuration.SCREENLAYOUT_SIZE_MASK;
         options = new DisplayImageOptions.Builder()
-                .cacheOnDisk(true)
-                .resetViewBeforeLoading(true)
+                .cacheOnDisk(true).resetViewBeforeLoading(true)
                 .cacheInMemory(true)
                 .bitmapConfig(Bitmap.Config.RGB_565)
                 .imageScaleType(ImageScaleType.EXACTLY)
@@ -246,10 +245,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                     });
 
                     int aspectHeight = (displayWidth * 9) / 16;
-//                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-//                            aspectHeight);
-//                   // lp.setMargins(30,0,30,0);
-//                    vhHeader.videoImage.setLayoutParams(lp);
+
 
                     RelativeLayout.LayoutParams mainLayout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
                             aspectHeight);
@@ -338,14 +334,44 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private void setBanner(RecyclerView.ViewHolder holder, int position) {
         final BannerViewHolder viewholer = (BannerViewHolder) holder;
         if (AppController.getInstance().getModelFacade().getLocalModel().isBannerActivated()) {
-            VideoDTO videoDTO = albumList.get(position);
+            final VideoDTO videoDTO = albumList.get(position);
             viewholer.imageviewBanner.setVisibility(View.VISIBLE);
             viewholer.bannerLayout.setVisibility(View.VISIBLE);
 
-            Glide.with(mContext)
-                    .load(videoDTO.getVideoStillUrl())
-                    .placeholder(R.drawable.alabama_vault_logo)
-                    .into(viewholer.imageviewBanner);
+//            Glide.with(mContext)
+//                    .load(videoDTO.getVideoStillUrl())
+//                    .placeholder(R.drawable.alabama_vault_logo)
+//                    .into(viewholer.imageviewBanner);
+
+            com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(videoDTO.getVideoStillUrl(),
+                    viewholer.imageviewBanner, options, new ImageLoadingListener() {
+                        @Override
+                        public void onLoadingStarted(String s, View view) {
+                            viewholer.progressBar.setVisibility(View.VISIBLE);
+                            viewholer.imageviewBanner.setImageResource(R.drawable.alabama_vault_logo);
+
+                        }
+
+                        @Override
+                        public void onLoadingFailed(String s, View view, FailReason failReason) {
+                            viewholer.progressBar.setVisibility(View.GONE);
+                            viewholer.imageviewBanner.setImageResource(R.drawable.alabama_vault_logo);
+                        }
+
+                        @Override
+                        public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                            viewholer.progressBar.setVisibility(View.GONE);
+                            if (videoDTO.getVideoStillUrl() == null) {
+                                viewholer.imageviewBanner.setImageResource(R.drawable.alabama_vault_logo);
+                            }
+                        }
+
+                        @Override
+                        public void onLoadingCancelled(String s, View view) {
+                            viewholer.progressBar.setVisibility(View.GONE);
+                            viewholer.imageviewBanner.setImageResource(R.drawable.vault);
+                        }
+                    });
 
             bannerClickListener.onClick((BannerViewHolder) holder, position);
         } else {
@@ -484,11 +510,11 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             mainFeaturedLayout = (RelativeLayout) view.findViewById(R.id.main_featured_layout);
 
             progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                progressBar.setIndeterminateDrawable(AppController.getInstance().getApplication().getResources().getDrawable(R.drawable.circle_progress_bar_lower));
-            } else {
-                progressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(AppController.getInstance().getApplication().getResources(), R.drawable.progress_large_material, null));
-            }
+//            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+//                progressBar.setIndeterminateDrawable(AppController.getInstance().getApplication().getResources().getDrawable(R.drawable.circle_progress_bar_lower));
+//            } else {
+//                progressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(AppController.getInstance().getApplication().getResources(), R.drawable.progress_large_material, null));
+//            }
         }
     }
 
@@ -514,11 +540,13 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         public ImageView imageviewBanner;
         public LinearLayout bannerLayout;
+        ProgressBar progressBar;
 
         public BannerViewHolder(View itemView) {
             super(itemView);
             imageviewBanner = (ImageView) itemView.findViewById(R.id.imageview_banner);
             bannerLayout = (LinearLayout) itemView.findViewById(R.id.banner_layout);
+            progressBar = (ProgressBar) itemView.findViewById(R.id.progressbar);
         }
 
     }

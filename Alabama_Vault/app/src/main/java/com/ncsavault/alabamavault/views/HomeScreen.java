@@ -25,6 +25,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -144,6 +145,7 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
 
         AppController.getInstance().setCurrentActivity(activity);
         autoRefresh();
+        setUpPullOptionHeader();
     }
 
     private void initializeToolbarIcons() {
@@ -184,6 +186,30 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
         autoRefreshHandler.postDelayed(autoRefreshRunnable, GlobalConstants.AUTO_REFRESH_INTERVAL);
 
     }
+
+     public void setUpPullOptionHeader() {
+         final View pullView = findViewById(R.id.rl_pull_option);
+
+         final SharedPreferences prefs = getSharedPreferences(GlobalConstants.PREF_PACKAGE_NAME, Context.MODE_PRIVATE);
+         boolean isPullHeaderSeen = prefs.getBoolean(GlobalConstants.PREF_PULL_OPTION_HEADER, false);
+
+         Button btnGotIt = (Button) pullView.findViewById(R.id.btn_got_it);
+
+         btnGotIt.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 prefs.edit().putBoolean(GlobalConstants.PREF_PULL_OPTION_HEADER, true).commit();
+
+                 Animation anim = AnimationUtils.loadAnimation(HomeScreen.this, R.anim.abc_fade_out);
+                 pullView.setVisibility(View.GONE);
+                 pullView.setAnimation(anim);
+             }
+         });
+
+         if (isPullHeaderSeen) {
+             pullView.setVisibility(View.GONE);
+         }
+     }
 
     private Runnable autoRefreshRunnable = new Runnable() {
         @Override
@@ -519,6 +545,10 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
 
     @Override
     public void onBackPressed() {
+
+        try {
+
+
         int backStackEntryCount = getSupportFragmentManager().getBackStackEntryCount();
         if (backStackEntryCount > 1) {
             setFragmentIndicatorwithViews(backStackEntryCount);
@@ -526,6 +556,10 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
         } else {
 //            super.onBackPressed();
             finish();
+        }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 

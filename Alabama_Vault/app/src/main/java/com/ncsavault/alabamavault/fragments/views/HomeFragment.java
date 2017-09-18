@@ -187,14 +187,14 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
         refreshLayout.setEnabled(false);
 
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            progressBar.setIndeterminateDrawable(mContext.getResources().getDrawable(R.drawable.
-                    circle_progress_bar_lower));
-        } else {
-            System.out.println("progress bar not showing ");
-            progressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(mContext.getResources(),
-                    R.drawable.progress_large_material, null));
-        }
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+//            progressBar.setIndeterminateDrawable(mContext.getResources().getDrawable(R.drawable.
+//                    circle_progress_bar_lower));
+//        } else {
+//            System.out.println("progress bar not showing ");
+//            progressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(mContext.getResources(),
+//                    R.drawable.progress_large_material, null));
+//        }
 
         setToolbarIcons();
 
@@ -676,107 +676,188 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
     HomeResponseReceiver receiver;
 
     private void getFeatureDataFromDataBase() {
-        final AsyncTask<Void, Void, Void> mDbTask = new AsyncTask<Void, Void, Void>() {
+
+
+      try{
+          if(progressBar != null)
+          {
+              progressBar.setVisibility(View.VISIBLE);
+          }
+
+        if (VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getVideoCount() > 0) {
+            mRecyclerViewItems.clear();
+            mRecyclerViewItems.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).
+                    getVideoList(GlobalConstants.OKF_FEATURED));
+
+        }
+
+        if (VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getTrendingVideoCount() > 0) {
+            trendingArraylist.clear();
+            trendingArraylist.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getAllTrendingVideoList());
+        }
+
+
+        Collections.sort(mRecyclerViewItems, new Comparator<VideoDTO>() {
 
             @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
+            public int compare(VideoDTO lhs, VideoDTO rhs) {
+                // TODO Auto-generated method stub
 
-                if(progressBar != null)
-                {
-                    progressBar.setVisibility(View.VISIBLE);
-                }
+                return Integer.valueOf(lhs.getVideoIndex())
+                        .compareTo(Integer.valueOf(rhs.getVideoIndex()));
             }
+        });
 
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
-
-
-
-                    if (VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getVideoCount() > 0) {
-                        mRecyclerViewItems.clear();
-                        mRecyclerViewItems.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).
-                                getVideoList(GlobalConstants.OKF_FEATURED));
-
-                    }
-
-                    if (VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getTrendingVideoCount() > 0) {
-                        trendingArraylist.clear();
-                        trendingArraylist.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getAllTrendingVideoList());
-                    }
-
-
-                    Collections.sort(mRecyclerViewItems, new Comparator<VideoDTO>() {
-
-                        @Override
-                        public int compare(VideoDTO lhs, VideoDTO rhs) {
-                            // TODO Auto-generated method stub
-
-                            return Integer.valueOf(lhs.getVideoIndex())
-                                    .compareTo(Integer.valueOf(rhs.getVideoIndex()));
-                        }
-                    });
-
-                    System.out.println("featuredVideoList doInBackground : " + mRecyclerViewItems.size());
-                    if(trendingArraylist.size()>0) {
-                        mRecyclerViewItems.add(0, new VideoDTO());
-                    }else
-                    {
-                        mRecyclerViewItems.remove(0);
-                    }
-                    VideoDTO videoDTOBanner = new VideoDTO();
-                   // if(tabBannerDTO.getBannerURL().length() > 0) {
-                        videoDTOBanner.setVideoStillUrl(tabBannerDTO.getBannerURL());
-                        if (tabBannerDTO.isBannerActive()) {
-                            mRecyclerViewItems.add(1, videoDTOBanner);
-                            AppController.getInstance().getModelFacade().getLocalModel().setBannerActivated(true);
-                        } else {
-                           // mRecyclerViewItems.remove(1);
-                            mRecyclerViewItems.add(1, new VideoDTO());
-                            AppController.getInstance().getModelFacade().getLocalModel().setBannerActivated(false);
-                        }
+        System.out.println("featuredVideoList doInBackground : " + mRecyclerViewItems.size());
+        if(trendingArraylist.size()>0) {
+            mRecyclerViewItems.add(0, new VideoDTO());
+        }else
+        {
+            mRecyclerViewItems.remove(0);
+        }
+        VideoDTO videoDTOBanner = new VideoDTO();
+        // if(tabBannerDTO.getBannerURL().length() > 0) {
+        videoDTOBanner.setVideoStillUrl(tabBannerDTO.getBannerURL());
+        if (tabBannerDTO.isBannerActive()) {
+            mRecyclerViewItems.add(1, videoDTOBanner);
+            AppController.getInstance().getModelFacade().getLocalModel().setBannerActivated(true);
+        } else {
+            // mRecyclerViewItems.remove(1);
+            mRecyclerViewItems.add(1, new VideoDTO());
+            AppController.getInstance().getModelFacade().getLocalModel().setBannerActivated(false);
+        }
 //                    }else
 //                    {
 //                        mRecyclerViewItems.add(1, new VideoDTO());
 //                    }
-                    for (int i = 0; i < mRecyclerViewItems.size(); i++) {
-                        if ((i + 1) % 3 == 0) {
-                        {
-                            VideoDTO videoAdMob = new VideoDTO();
-                            videoAdMob.setVideoName(getRandomId());
-                            mRecyclerViewItems.add(i, videoAdMob);
-                        }
-                        }
-
-                    }
-                    adapter = new FilterSubtypesAdapter(mContext, mRecyclerViewItems, trendingArraylist, HomeFragment.this);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-
-                if(progressBar != null)
+        for (int i = 0; i < mRecyclerViewItems.size(); i++) {
+            if ((i + 1) % 3 == 0) {
                 {
-                    progressBar.setVisibility(View.GONE);
+                    VideoDTO videoAdMob = new VideoDTO();
+                    videoAdMob.setVideoName(getRandomId());
+                    mRecyclerViewItems.add(i, videoAdMob);
                 }
-
-                mRecyclerView.setAdapter(adapter);
-                mRecyclerView.setHasFixedSize(true);
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-                mRecyclerView.setLayoutManager(layoutManager);
-                // ------- addBannerImage---------------------
-
             }
-        };
 
-        mDbTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+
+        if(progressBar != null)
+        {
+            progressBar.setVisibility(View.GONE);
+        }
+        adapter = new FilterSubtypesAdapter(mContext, mRecyclerViewItems, trendingArraylist, HomeFragment.this);
+        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(layoutManager);
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+
+
+//        final AsyncTask<Void, Void, Void> mDbTask = new AsyncTask<Void, Void, Void>() {
+//
+//            @Override
+//            protected void onPreExecute() {
+//                super.onPreExecute();
+//
+//                if(progressBar != null)
+//                {
+//                    progressBar.setVisibility(View.VISIBLE);
+//                }
+//            }
+//
+//            @Override
+//            protected Void doInBackground(Void... params) {
+//                try {
+//
+//
+//
+//                    if (VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getVideoCount() > 0) {
+//                        mRecyclerViewItems.clear();
+//                        mRecyclerViewItems.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).
+//                                getVideoList(GlobalConstants.OKF_FEATURED));
+//
+//                    }
+//
+//                    if (VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getTrendingVideoCount() > 0) {
+//                        trendingArraylist.clear();
+//                        trendingArraylist.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getAllTrendingVideoList());
+//                    }
+//
+//
+//                    Collections.sort(mRecyclerViewItems, new Comparator<VideoDTO>() {
+//
+//                        @Override
+//                        public int compare(VideoDTO lhs, VideoDTO rhs) {
+//                            // TODO Auto-generated method stub
+//
+//                            return Integer.valueOf(lhs.getVideoIndex())
+//                                    .compareTo(Integer.valueOf(rhs.getVideoIndex()));
+//                        }
+//                    });
+//
+//                    System.out.println("featuredVideoList doInBackground : " + mRecyclerViewItems.size());
+//                    if(trendingArraylist.size()>0) {
+//                        mRecyclerViewItems.add(0, new VideoDTO());
+//                    }else
+//                    {
+//                        mRecyclerViewItems.remove(0);
+//                    }
+//                    VideoDTO videoDTOBanner = new VideoDTO();
+//                   // if(tabBannerDTO.getBannerURL().length() > 0) {
+//                        videoDTOBanner.setVideoStillUrl(tabBannerDTO.getBannerURL());
+//                        if (tabBannerDTO.isBannerActive()) {
+//                            mRecyclerViewItems.add(1, videoDTOBanner);
+//                            AppController.getInstance().getModelFacade().getLocalModel().setBannerActivated(true);
+//                        } else {
+//                           // mRecyclerViewItems.remove(1);
+//                            mRecyclerViewItems.add(1, new VideoDTO());
+//                            AppController.getInstance().getModelFacade().getLocalModel().setBannerActivated(false);
+//                        }
+////                    }else
+////                    {
+////                        mRecyclerViewItems.add(1, new VideoDTO());
+////                    }
+//                    for (int i = 0; i < mRecyclerViewItems.size(); i++) {
+//                        if ((i + 1) % 3 == 0) {
+//                        {
+//                            VideoDTO videoAdMob = new VideoDTO();
+//                            videoAdMob.setVideoName(getRandomId());
+//                            mRecyclerViewItems.add(i, videoAdMob);
+//                        }
+//                        }
+//
+//                    }
+//                    adapter = new FilterSubtypesAdapter(mContext, mRecyclerViewItems, trendingArraylist, HomeFragment.this);
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//                return null;
+//            }
+//
+//            @Override
+//            protected void onPostExecute(Void aVoid) {
+//                super.onPostExecute(aVoid);
+//
+//                if(progressBar != null)
+//                {
+//                    progressBar.setVisibility(View.GONE);
+//                }
+//
+//                mRecyclerView.setAdapter(adapter);
+//                mRecyclerView.setHasFixedSize(true);
+//                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+//                mRecyclerView.setLayoutManager(layoutManager);
+//                // ------- addBannerImage---------------------
+//
+//            }
+//        };
+//
+//        mDbTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
     }
 

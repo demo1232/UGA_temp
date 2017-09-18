@@ -239,13 +239,13 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
 //        } else if (mEmailIdFB.getVisibility() == View.VISIBLE) {
 //            email = mEmailIdFB.getText().toString();
 //        } else {
-            if (twitter) {
-                email = mEmailId.getText().toString();
-            } else {
-                email = mEmailIdFB.getText().toString();
-            }
+        if (twitter) {
+            email = mEmailId.getText().toString();
+        } else {
+            email = mEmailIdFB.getText().toString();
+        }
 
- //       }
+        //       }
         if (loginEmailModel != null) {
             loginEmailModel.unRegisterView(this);
         }
@@ -520,6 +520,7 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
 
     public void initViews() {
 
+        Utils.getInstance().setAppName(this);
         mEditSpinner = (EditSpinner) findViewById(R.id.edit_spinner);
         mProfileImage = (ImageView) findViewById(R.id.imgUserProfile);
         mUserName = (EditText) findViewById(R.id.username);
@@ -1083,7 +1084,7 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
             } /*else if (mLastName.getText().toString().length() < 3) {
                 Utils.getInstance().showToastMessage(RegistrationActivity.this, GlobalConstants.LAST_NAME_SHOULD_CONTAIN_THREE_CHARACTER, view);
                 return;
-            } */else if (!mLastName.getText().toString().matches("[a-zA-Z ]+")) {
+            } */ else if (!mLastName.getText().toString().matches("[a-zA-Z ]+")) {
                 Utils.getInstance().showToastMessage(RegistrationActivity.this, GlobalConstants.ENTER_ONLY_ALPHABETS + " in last name", view);
                 return;
             }
@@ -1162,7 +1163,7 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
 
             if (twitter) {
                 email = mEmailId.getText().toString();
-            } else  {
+            } else {
                 email = mEmailIdFB.getText().toString();
             }
             if (loginEmailModel != null) {
@@ -1847,12 +1848,10 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
         mUserName.setAnimation(leftOutAnimation);
         mRegistertionButton.setAnimation(leftOutAnimation);
         tvAlreadyRegistered.setAnimation(leftOutAnimation);
-        if(twitter)
-        {
+        if (twitter) {
             mEmailId.setAnimation(leftOutAnimation);
             mEmailId.setVisibility(View.GONE);
-        }else
-        {
+        } else {
             mEmailIdFB.setAnimation(leftOutAnimation);
             mEmailIdFB.setVisibility(View.GONE);
         }
@@ -1894,12 +1893,10 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
         mRegistertionButton.setAnimation(leftOutAnimation);
         tvAlreadyRegistered.setAnimation(leftOutAnimation);
 
-        if(twitter)
-        {
+        if (twitter) {
             mEmailId.setAnimation(leftOutAnimation);
             mEmailId.setVisibility(View.VISIBLE);
-        }else
-        {
+        } else {
             mEmailIdFB.setAnimation(leftOutAnimation);
             mEmailIdFB.setVisibility(View.VISIBLE);
         }

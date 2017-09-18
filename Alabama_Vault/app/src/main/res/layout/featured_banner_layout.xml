@@ -11,9 +11,22 @@
         android:orientation="horizontal"
         android:visibility="visible">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <ProgressBar
+                android:id="@+id/progressbar"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_horizontal"
+                android:indeterminateTintMode="src_atop"
+                android:indeterminateDuration="1100"
+                android:indeterminateTint="@color/apptheme_color"
+                android:visibility="visible" />
+
 
         <ImageView
             android:id="@+id/imageview_banner"
@@ -23,7 +36,7 @@
             android:adjustViewBounds="true"
             />
 
-        </LinearLayout>
+        </FrameLayout>
 
     </LinearLayout>
 
@@ -46,5 +59,6 @@
 
 
     </LinearLayout>
+
 
 </RelativeLayout>
