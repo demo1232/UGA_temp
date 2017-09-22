@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
 
+import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
 
 import com.twitter.sdk.android.Twitter;
@@ -37,7 +38,7 @@ public class AndroidApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        //MultiDex.install(this);
+      //  MultiDex.install(this);
         AppController.getInstance().setApplication(this);
         AppController.getInstance().setHandler(handler);
 
@@ -46,7 +47,7 @@ public class AndroidApplication extends Application {
        //gk CrashManager.initialize(this, GlobalConstants.HOCKEY_APP_ID, null);
 
         TwitterAuthConfig authConfig = new TwitterAuthConfig(GlobalConstants.TWITTER_CONSUMER_KEY, GlobalConstants.TWITTER_CONSUMER_SECRET);
-        Fabric.with(this, new Twitter(authConfig)/*,new Crashlytics()*/);
+        Fabric.with(this, new Twitter(authConfig),new Crashlytics());
 
         Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
         Fabric.with(this, new TweetComposer());

@@ -111,7 +111,6 @@ public class TrendingFeaturedVideoService extends Service {
                         VaultDatabaseHelper.getInstance(getApplicationContext()).
                                 insertPlaylistTabData(playlistDtoArrayList, catagoriesTabDao.getCategoriesId());
 
-
                     }
                     Intent videoIntent = new Intent();
                     videoIntent.setAction(VideoDetailFragment.VideoResponseReceiver.ACTION_RESP);

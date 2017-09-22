@@ -14,17 +14,23 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.VolleyError;
 import com.ncsavault.alabamavault.R;
 import com.ncsavault.alabamavault.controllers.AppController;
 import com.ncsavault.alabamavault.database.VaultDatabaseHelper;
 import com.ncsavault.alabamavault.dto.VideoDTO;
+import com.ncsavault.alabamavault.utils.ImageLoaderController;
 import com.ncsavault.alabamavault.utils.Utils;
+import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.utils.StorageUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -36,7 +42,6 @@ public class SavedVideoAdapter extends RecyclerView.Adapter<SavedVideoAdapter.Sa
 
      private Context mContext;
      private ArrayList<VideoDTO> mFavoriteVideoList = new ArrayList<>();
-    ImageLoader imageLoader;
     public DisplayImageOptions options;
     private SavedClickListener mSavedClickListener;
 
@@ -50,13 +55,22 @@ public class SavedVideoAdapter extends RecyclerView.Adapter<SavedVideoAdapter.Sa
         mFavoriteVideoList = favoriteVideoList;
         mSavedClickListener = savedClickListener;
 
+//        File cacheDir = StorageUtils.getCacheDirectory(mContext);
+//        ImageLoaderConfiguration config;
+//        config = new ImageLoaderConfiguration.Builder(mContext)
+//                .threadPoolSize(3) // default
+//                .denyCacheImageMultipleSizesInMemory()
+//                .diskCache(new UnlimitedDiscCache(cacheDir))
+//                .build();
+//        ImageLoader.getInstance().init(config);
+
         options = new DisplayImageOptions.Builder()
                 .cacheOnDisk(true).resetViewBeforeLoading(true)
                 .cacheInMemory(true)
                 .bitmapConfig(Bitmap.Config.RGB_565)
                 .imageScaleType(ImageScaleType.EXACTLY)
                 .build();
-        imageLoader = AppController.getInstance().getImageLoader();
+
     }
 
     @Override
@@ -83,36 +97,39 @@ public class SavedVideoAdapter extends RecyclerView.Adapter<SavedVideoAdapter.Sa
         String videDescription = newVideoDto.getVideoShortDescription();
         long videoDuration = newVideoDto.getVideoDuration();
 
+        try {
+            ImageLoader.getInstance().displayImage(videoImageUrl,
+                    viewHolder.videoImageView, options, new ImageLoadingListener() {
+                        @Override
+                        public void onLoadingStarted(String s, View view) {
+                            viewHolder.progressBar.setVisibility(View.VISIBLE);
+                            // viewHolder.videoImageView.setImageResource(R.drawable.vault);
 
-        com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(videoImageUrl,
-                viewHolder.videoImageView, options, new ImageLoadingListener() {
-                    @Override
-                    public void onLoadingStarted(String s, View view) {
-                        viewHolder.progressBar.setVisibility(View.VISIBLE);
-                        viewHolder.videoImageView.setImageResource(R.drawable.vault);
-
-                    }
-
-                    @Override
-                    public void onLoadingFailed(String s, View view, FailReason failReason) {
-                        viewHolder.progressBar.setVisibility(View.GONE);
-                        viewHolder.videoImageView.setImageResource(R.drawable.vault);
-                    }
-
-                    @Override
-                    public void onLoadingComplete(String s, View view, Bitmap bitmap) {
-                        viewHolder.progressBar.setVisibility(View.GONE);
-                        if (videoImageUrl == null) {
-                            viewHolder.videoImageView.setImageResource(R.drawable.vault);
                         }
-                    }
 
-                    @Override
-                    public void onLoadingCancelled(String s, View view) {
-                        viewHolder.progressBar.setVisibility(View.GONE);
-                        viewHolder.videoImageView.setImageResource(R.drawable.vault);
-                    }
-                });
+                        @Override
+                        public void onLoadingFailed(String s, View view, FailReason failReason) {
+                            viewHolder.progressBar.setVisibility(View.GONE);
+                            // viewHolder.videoImageView.setImageResource(R.drawable.vault);
+                        }
+
+                        @Override
+                        public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                            viewHolder.progressBar.setVisibility(View.GONE);
+                            if (videoImageUrl == null) {
+                                //  viewHolder.videoImageView.setImageResource(R.drawable.vault);
+                            }
+                        }
+
+                        @Override
+                        public void onLoadingCancelled(String s, View view) {
+                            viewHolder.progressBar.setVisibility(View.GONE);
+                        }
+                    });
+        }catch (OutOfMemoryError error)
+        {
+            error.printStackTrace();
+        }
 
         viewHolder.videoNameTextView.setText(videoName);
         viewHolder.videoDescriptionTextView.setText(videDescription);
@@ -153,16 +170,17 @@ public class SavedVideoAdapter extends RecyclerView.Adapter<SavedVideoAdapter.Sa
             videoDescriptionTextView = (TextView) view.findViewById(R.id.tv_video_description);
             videoDurationTextView = (TextView) view.findViewById(R.id.tv_video_duration);
             progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
+            progressBar.setVisibility(View.VISIBLE);
             mLayoutSavedImage = (LinearLayout) view.findViewById(R.id.layout_saved_image);
 
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                progressBar.setIndeterminateDrawable(mContext.getResources().getDrawable(R.drawable
-                        .circle_progress_bar_lower));
-            } else {
-                System.out.println("progress bar not showing ");
-                progressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(mContext.getResources(),
-                        R.drawable.progress_large_material, null));
-            }
+//            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+//                progressBar.setIndeterminateDrawable(mContext.getResources().getDrawable(R.drawable
+//                        .circle_progress_bar_lower));
+//            } else {
+//                System.out.println("progress bar not showing ");
+//                progressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(mContext.getResources(),
+//                        R.drawable.progress_large_material, null));
+//            }
 
             videoRelativeLayout = (LinearLayout)view.findViewById(R.id.save_video_main_layout);
 

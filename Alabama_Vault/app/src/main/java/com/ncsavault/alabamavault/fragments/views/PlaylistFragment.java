@@ -96,10 +96,7 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        IntentFilter filter = new IntentFilter(PlaylistResponseReceiver.ACTION_RESP);
-        filter.addCategory(Intent.CATEGORY_DEFAULT);
-        receiver = new PlaylistResponseReceiver();
-        mContext.registerReceiver(receiver, filter);
+
     }
 
     @Override
@@ -107,7 +104,8 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
         super.onDestroy();
         if(receiver != null)
         {
-            mContext.unregisterReceiver(receiver);
+            getActivity().unregisterReceiver(receiver);
+            receiver = null;
         }
     }
 
@@ -144,6 +142,11 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        IntentFilter filter = new IntentFilter(PlaylistResponseReceiver.ACTION_RESP);
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        receiver = new PlaylistResponseReceiver();
+        getActivity().registerReceiver(receiver, filter);
 
         initViews(view);
         initListener();
@@ -634,7 +637,7 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
                             @Override
                             public void onLoadingFailed(String s, View view, FailReason failReason) {
                                 bannerCacheableImageView.setVisibility(View.GONE);
-                                bannerCacheableImageView.setImageResource(R.drawable.vault);
+                                //bannerCacheableImageView.setImageResource(R.drawable.vault);
                             }
 
                             @Override
@@ -723,7 +726,7 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
 
                     if (localPlaylistDto != null) {
                         if (localPlaylistDto.getPlaylist_modified() != playlistDto.getPlaylist_modified()) {
-                            VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).removeAllPlaylistTabData();
+                            VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).removePlaylistTabData(tabId);
                             VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).insertPlaylistTabData
                                     (playlistDtoDataList,tabId);
                         }
@@ -744,9 +747,16 @@ public class PlaylistFragment extends Fragment implements PlaylistDataAdapter.Pl
         protected void onPostExecute(final ArrayList<PlaylistDto> result) {
             super.onPostExecute(result);
             try {
+
                 playlistDtoDataList.clear();
                 playlistDtoDataList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext())
                         .getLocalPlaylistDataByCategorieTab(tabId));
+
+                if(playlistDtoDataList.size()>0) {
+                    if (progressBar != null && progressBar.getVisibility() == View.VISIBLE) {
+                        progressBar.setVisibility(View.GONE);
+                    }
+                }
 
                 if (playlistDtoDataList != null) {
                     if (playlistDtoDataList.size() > 0) {

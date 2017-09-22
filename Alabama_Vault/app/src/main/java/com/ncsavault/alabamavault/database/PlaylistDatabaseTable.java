@@ -233,6 +233,15 @@ public class PlaylistDatabaseTable {
         }
     }
 
+    public void removePlaylistTabData(SQLiteDatabase database,long categoriesId) {
+        try {
+            database.enableWriteAheadLogging();
+            database.execSQL("DELETE FROM " + PLAYLIST_DATA_TABLE + " WHERE " + KEY_CATEGEROIES_ID  + " = " + categoriesId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void removeAllPlaylistTabData(SQLiteDatabase database) {
         try {
             database.enableWriteAheadLogging();

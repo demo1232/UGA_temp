@@ -89,10 +89,10 @@ public class GlobalConstants {
     // public static final String BASE_URL = "http://0b78b111a9d0410784caa8a634aa3b90.cloudapp.net/api";
 
     //new Staging url
-    public static String BASE_URL = "http://syncroapi-staging.ncsavault.com/api";
+   // public static String BASE_URL = "http://syncroapi-staging.ncsavault.com/api";
 
     //new Production Url
-    //public static final String BASE_URL = "http://syncroapi.ncsavault.com/api";
+    public static final String BASE_URL = "http://syncroapi.ncsavault.com/api";
 
     public static final String PUSH_REGISTER_URL = BASE_URL + "/MobileUsers/PostPushData";
 
@@ -113,8 +113,6 @@ public class GlobalConstants {
     public static final String SOCIAL_SHARING_INFO = BASE_URL + "/FavoriteTab/PostSocialSharingInfo";
     public static final String GET_VIDEO_DATA = BASE_URL + "/Playlist/GetVideo";
 
-    public static final String GET_TRENDING_PLAYLIST_URL = BASE_URL + "/playlist/GetTrendingPlayListInfo?";
-
     //User specific API calls
     public static final String VALIDATE_EMAIL_URL = BASE_URL + "/MobileUsers/validateEmail?emailID=";
     public static final String VALIDATE_USERNAME_URL = BASE_URL + "/MobileUsers/IsUserAvailable?UserName=";
@@ -134,6 +132,7 @@ public class GlobalConstants {
     public static final String CATEGORIES_PLAYLIST_URL = BASE_URL + "/playlist/GetPlayListInfo?";
     public static final String PLAYLIST_VIDEO_URL = BASE_URL + "/playlist/GetVideoInfo?";
     public static final String VIDEO_LIST_BY_CATEGORIES_ID_URL = BASE_URL + "/playlist/GetVideoListByCategory?";
+    public static final String GET_TRENDING_PLAYLIST_URL = BASE_URL + "/playlist/GetTrendingPlayListInfo?";
 
     public static boolean IS_RETURNED_FROM_PLAYER = false;
 
@@ -259,6 +258,12 @@ public class GlobalConstants {
     public static final String YOB_SHOULD_BE_MUST_FOUR_CHARACTER = "Year of birth should contain 4 characters!";
     public static final String ENTER_ONLY_ALPHABETS = "Enter only alphabets!";
 
+
+
+    // public static final String JW_PLAYER_CSS_FILE_URL =  "file:///android_asset/UgaPlayer.css";
+    public static final String JW_PLAYER_CSS_FILE_URL =  "http://syncroapi.ncsavault.com/JWPlayerCss/Alabama/AlabamaPlayer.css";
+   // public static final String JW_PLAYER_CSS_FILE_URL =  "http://13.93.160.190/JWPlayerCss/Alabama/AlabamaPlayer.css";
+
     public static final String PREF_VAULT_USER_DATA = "u_name";
     public static final String PREF_VAULT_EMAIL = "email";
     public static final String PREF_VAULT_FIRST_NAME = "f_name";
@@ -271,11 +276,6 @@ public class GlobalConstants {
     public static final String PREF_VAULT_CONFIRM_PASSWORD = "confirm_passwd_";
     public static final String PREF_VAULT_URI_IMAGE = "uri_image";
     public static final String USER_SUCCESSFULLY_REGISTERED = "User successfully registered to the app!";
-
-    // public static final String JW_PLAYER_CSS_FILE_URL =  "file:///android_asset/UgaPlayer.css";
-    public static final String JW_PLAYER_CSS_FILE_URL =  "http://syncroapi.ncsavault.com/JWPlayerCss/Alabama/AlabamaPlayer.css";
-   // public static final String JW_PLAYER_CSS_FILE_URL =  "http://13.93.160.190/JWPlayerCss/Alabama/AlabamaPlayer.css";
-
 
     public static final String YOUR_PASSWORD_HAS_BEEN_REGISTERED_SUCCESSFULLY = "Your password has been reset successfully";
     public static final String YOUR_EMAIL_HAS_BEEN_VERIFIED_SUCCESSFULLY = "Your email has been verified successfully";
@@ -317,4 +317,7 @@ public class GlobalConstants {
     public static final String SUPPORT_MAIL_THROUGH_BROWSER =  "https://mail.google.com/mail/?view=cm&fs=1&to="
                                                               +SUPPORT_MAIL_ID+"&su="+SUPPORT_SUBJECT+"&body="+""+"&bcc="+"";
 
+    public static final String TEMP_AD_UNIT_FOR_FEATURED[] = {"ca-app-pub-3120536913205473/5975042732",
+            "ca-app-pub-8848124662104437/5318535900"};
 }
+

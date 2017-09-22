@@ -17,7 +17,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.ImageLoader;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -28,11 +27,16 @@ import com.ncsavault.alabamavault.dto.PlaylistDto;
 import com.ncsavault.alabamavault.dto.TopTenVideoDto;
 import com.ncsavault.alabamavault.dto.VideoDTO;
 import com.ncsavault.alabamavault.views.HomeScreen;
+import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.utils.StorageUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +50,6 @@ public class PlaylistDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public static final int TYPE_LIST_DATA = 2;
     public static final int TYPE_AD = 3;
     private ArrayList<PlaylistDto> mPlaylistDtoArrayList = new ArrayList<>();
-    ImageLoader imageLoader;
     public DisplayImageOptions options;
     PlaylistDataClickListener mPlaylistDataClickListener;
 
@@ -60,13 +63,24 @@ public class PlaylistDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         this.mContext = mContext;
         this.mPlaylistDtoArrayList = playlistDtoArrayList;
         mPlaylistDataClickListener = playlistDataClickListener;
+
+//        File cacheDir = StorageUtils.getCacheDirectory(mContext);
+//        ImageLoaderConfiguration config;
+//        config = new ImageLoaderConfiguration.Builder(mContext)
+//                .threadPoolSize(3) // default
+//                .denyCacheImageMultipleSizesInMemory()
+//                .diskCache(new UnlimitedDiscCache(cacheDir))
+//                .build();
+//        ImageLoader.getInstance().init(config);
+//        ImageLoader.getInstance().init(config);
         options = new DisplayImageOptions.Builder()
                 .cacheOnDisk(true).resetViewBeforeLoading(true)
                 .cacheInMemory(true)
                 .bitmapConfig(Bitmap.Config.RGB_565)
                 .imageScaleType(ImageScaleType.EXACTLY)
                 .build();
-        imageLoader = AppController.getInstance().getImageLoader();
+
+
         getScreenDimensions();
     }
 
@@ -158,6 +172,7 @@ public class PlaylistDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         long playlistId = mPlaylistDtoArrayList.get(position).getPlaylistId();
 
 
+        try{
         com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(playlistImageUrl,
                 viewHolder.thumbnail, options, new ImageLoadingListener() {
                     @Override
@@ -168,23 +183,27 @@ public class PlaylistDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     @Override
                     public void onLoadingFailed(String s, View view, FailReason failReason) {
                         viewHolder.progressBar.setVisibility(View.GONE);
-                        viewHolder.thumbnail.setImageResource(R.drawable.vault);
+                       // viewHolder.thumbnail.setImageResource(R.drawable.vault);
                     }
 
                     @Override
                     public void onLoadingComplete(String s, View view, Bitmap bitmap) {
                         viewHolder.progressBar.setVisibility(View.GONE);
                         if (playlistImageUrl == null) {
-                            viewHolder.thumbnail.setImageResource(R.drawable.vault);
+                          //  viewHolder.thumbnail.setImageResource(R.drawable.vault);
                         }
                     }
 
                     @Override
                     public void onLoadingCancelled(String s, View view) {
                         viewHolder.progressBar.setVisibility(View.GONE);
-                        viewHolder.thumbnail.setImageResource(R.drawable.vault);
+                       // viewHolder.thumbnail.setImageResource(R.drawable.vault);
                     }
                 });
+    }catch (OutOfMemoryError e)
+    {
+        e.printStackTrace();
+    }
 
 //        int aspectHeight = (displayWidth * 16) / 9;
 //

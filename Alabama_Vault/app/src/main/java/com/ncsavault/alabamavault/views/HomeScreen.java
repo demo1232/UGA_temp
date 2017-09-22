@@ -126,7 +126,15 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
         setContentView(R.layout.home_screen_layout);
 
         activity = this;
-        loadUniversalImageLoader();
+
+        File cacheDir = StorageUtils.getCacheDirectory(this);
+        ImageLoaderConfiguration config;
+        config = new ImageLoaderConfiguration.Builder(this)
+                .threadPoolSize(5) // default
+                .denyCacheImageMultipleSizesInMemory()
+                .diskCache(new UnlimitedDiscCache(cacheDir))
+                .build();
+        ImageLoader.getInstance().init(config);
 
         MobileAds.initialize(this, GlobalConstants.ADMOB_APP_ID);
 
@@ -135,17 +143,17 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
         View autoRefreshView = findViewById(R.id.auto_refresh_progress_main);
         autoRefreshProgressBar = (ProgressBar) autoRefreshView.findViewById(R.id.auto_refresh_progress_bar);
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            autoRefreshProgressBar.setIndeterminateDrawable(getResources().getDrawable(R.drawable.circle_progress_bar_lower));
-        } else {
-            autoRefreshProgressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.progress_large_material, null));
-        }
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+//            autoRefreshProgressBar.setIndeterminateDrawable(getResources().getDrawable(R.drawable.circle_progress_bar_lower));
+//        } else {
+//            autoRefreshProgressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.progress_large_material, null));
+//        }
 
         loadBottomNavigationItems();
 
         AppController.getInstance().setCurrentActivity(activity);
         autoRefresh();
-        setUpPullOptionHeader();
+        //gk setUpPullOptionHeader();
     }
 
     private void initializeToolbarIcons() {
@@ -547,7 +555,6 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
     public void onBackPressed() {
 
         try {
-
 
         int backStackEntryCount = getSupportFragmentManager().getBackStackEntryCount();
         if (backStackEntryCount > 1) {

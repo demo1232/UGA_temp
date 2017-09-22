@@ -513,6 +513,7 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
 //                    mVideoControlHandler.removeCallbacks(videoRunning);
 //                }
 //                unregisterReceiver(myReceiver);
+
             } catch (Exception e) {
 
             }
@@ -782,43 +783,38 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
             // Create your ad schedule
             List<AdBreak> adSchedule = new ArrayList<>();
 
-            Ad ad = new Ad(AdSource.VAST, "http://playertest.longtailvideo.com/adtags/preroll_newer.xml");
-            AdBreak adBreak = new AdBreak("pre", ad);
-            AdBreak adBreak1=new AdBreak("50%", ad);
-            AdBreak adBreak2=new AdBreak("post", ad);
-            adSchedule.add(adBreak);
-            adSchedule.add(adBreak1);
-            adSchedule.add(adBreak2);
-            // Set your ad schedule to your advertising object
-//            ImaAdvertising imaAdvertising = new ImaAdvertising(adSchedule);
-//            ImaSdkSettings imaSdkSettings = new ImaSdkSettings();
-//            imaSdkSettings.setAutoPlayAdBreaks(true);
+//            Ad ad = new Ad(AdSource.VAST, "http://playertest.longtailvideo.com/adtags/preroll_newer.xml");
+//            AdBreak adBreak = new AdBreak("pre", ad);
+//            AdBreak adBreak1=new AdBreak("50%", ad);
+//            AdBreak adBreak2=new AdBreak("post", ad);
+//            adSchedule.add(adBreak);
+//            adSchedule.add(adBreak1);
+//            adSchedule.add(adBreak2);
 
-            List<AdBreak> emptyList = new ArrayList<>();
-            List<PlaylistItem> playlist = new ArrayList<>();
-            Advertising advertising = new Advertising(AdSource.VAST, adSchedule);
 
-            advertising.setSkipOffset(5);
+//          List<PlaylistItem> playlist = new ArrayList<>();
+//            Advertising advertising = new Advertising(AdSource.VAST, adSchedule);
+
+//            advertising.setSkipOffset(5);
             // Load a media source
-            PlaylistItem pi = new PlaylistItem.Builder()
-                    .adSchedule(adSchedule)
-                    .file(videoObject.getVideoLongUrl())
-                    .image(videoObject.getVideoStillUrl())
-                    .build();
-            videoView.load(pi);
 
-            playlist.add(pi);
+
+            //playlist.add(pi);
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             PlayerConfig playerConfig = new PlayerConfig.Builder()
                     .autostart(false)
-                    .playlist(playlist)
-                    .advertising(advertising)
                     .captionsEdgeStyle("ec_seek")
                     .skinName("glow")
                     .stretching(PlayerConfig.STRETCHING_EXACT_FIT) //"exactfit"
                     .build();
 
             videoView.setup(playerConfig);
+
+            PlaylistItem pi = new PlaylistItem.Builder()
+                    .file(videoObject.getVideoLongUrl())
+                    .image(videoObject.getVideoStillUrl())
+                    .build();
+            videoView.load(pi);
 
             //jwPlayerLayout.setGravity(Gravity.CENTER);
 
@@ -1949,18 +1945,19 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
     String path = null;
     File file;
     String STORE_DIRECTORY;
-
+    Bitmap bitmap;
     private class ShareTwitter extends AsyncTask<Void, Void, Uri> {
 
         protected Uri doInBackground(Void... arg0) {
             try {
                 if (videoObject.getVideoStillUrl() != null) {
                     InputStream is = new URL(videoObject.getVideoStillUrl().trim()).openStream();
-                    Bitmap bitmap = BitmapFactory.decodeStream(is);
-
-//                    path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "Title", null);
-//                    imageUri = Uri.parse(path);
-
+                    try {
+                        bitmap = BitmapFactory.decodeStream(is);
+                    }catch (OutOfMemoryError e)
+                    {
+                        e.printStackTrace();
+                    }
                     File externalFilesDir = getExternalFilesDir(null);
                     if (externalFilesDir != null) {
                         STORE_DIRECTORY = externalFilesDir.getAbsolutePath() + "/abc/";
@@ -1980,8 +1977,13 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
                             String fname = "Image-" + n + ".jpg";
                             file = new File(storeDirectory, fname);
                             FileOutputStream out = new FileOutputStream(file);
-                            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                            out.flush();
+                            try{
+                              bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                            }catch (OutOfMemoryError e)
+                            {
+                                e.printStackTrace();
+                            }
+                                    out.flush();
                             out.close();
                             imageUri = Uri.parse(file.getAbsolutePath());
                         } catch (Exception e) {
@@ -2011,6 +2013,12 @@ public class VideoInfoActivity extends AppCompatActivity implements VideoPlayerE
                     sharingImageOnTwitter();
                 }
                 System.out.println("imageUri value ");
+                if(bitmap!=null)
+                {
+                    bitmap.recycle();
+                    bitmap=null;
+                    System.out.println("bitmap value null");
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();

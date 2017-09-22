@@ -34,6 +34,7 @@ import com.ncsavault.alabamavault.controllers.AppController;
 import com.ncsavault.alabamavault.customviews.CustomGridLayoutManager;
 import com.ncsavault.alabamavault.customviews.RecyclerViewDisabler;
 import com.ncsavault.alabamavault.database.VaultDatabaseHelper;
+import com.ncsavault.alabamavault.dto.PlaylistDto;
 import com.ncsavault.alabamavault.dto.VideoDTO;
 import com.ncsavault.alabamavault.globalconstants.GlobalConstants;
 import com.ncsavault.alabamavault.service.TrendingFeaturedVideoService;
@@ -44,6 +45,7 @@ import com.ncsavault.alabamavault.views.HomeScreen;
 import com.ncsavault.alabamavault.views.LoginEmailActivity;
 import com.ncsavault.alabamavault.views.VideoInfoActivity;
 import com.ncsavault.alabamavault.views.VideoSearchActivity;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -82,10 +84,7 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        IntentFilter filter = new IntentFilter(VideoResponseReceiver.ACTION_RESP);
-        filter.addCategory(Intent.CATEGORY_DEFAULT);
-        receiver = new VideoResponseReceiver();
-        mContext.registerReceiver(receiver, filter);
+
     }
 
     @Override
@@ -93,7 +92,8 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
         super.onDestroy();
         if(receiver != null)
         {
-            mContext.unregisterReceiver(receiver);
+            getActivity().unregisterReceiver(receiver);
+            receiver = null;
         }
     }
 
@@ -143,6 +143,11 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
         disable = new RecyclerViewDisabler();
         tvNoRecoredFound = (TextView) view.findViewById(R.id.tv_no_recored_found);
         progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
+
+        IntentFilter filter = new IntentFilter(VideoResponseReceiver.ACTION_RESP);
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        receiver = new VideoResponseReceiver();
+        getActivity().registerReceiver(receiver, filter);
 
         setToolbarIcons();
         ((HomeScreen) mContext).imageViewSearch.setOnClickListener(new View.OnClickListener() {
@@ -244,6 +249,15 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
                     tvNoRecoredFound.setVisibility(View.GONE);
                 }
 
+                Collections.sort(videoDtoArrayList, new Comparator<VideoDTO>() {
+                    @Override
+                    public int compare(VideoDTO lhs, VideoDTO rhs) {
+                        // TODO Auto-generated method stub
+                        return lhs.getVideoName().toLowerCase()
+                                .compareTo(rhs.getVideoName().toLowerCase());
+                    }
+                });
+
 
                 videoDetailAdapter = new VideoDetailAdapter(mContext, result, VideoDetailFragment.this);
                 mRecyclerView.setHasFixedSize(true);
@@ -305,6 +319,15 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
                 } else {
                     tvNoRecoredFound.setVisibility(View.GONE);
                 }
+
+                Collections.sort(videoDtoArrayList, new Comparator<VideoDTO>() {
+                    @Override
+                    public int compare(VideoDTO lhs, VideoDTO rhs) {
+                        // TODO Auto-generated method stub
+                        return lhs.getVideoName().toLowerCase()
+                                .compareTo(rhs.getVideoName().toLowerCase());
+                    }
+                });
 
 
                 videoDetailAdapter = new VideoDetailAdapter(mContext, videoDtoArrayList, VideoDetailFragment.this);
@@ -567,6 +590,15 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
                     tvNoRecoredFound.setVisibility(View.GONE);
                 }
 
+                Collections.sort(videoDtoArrayList, new Comparator<VideoDTO>() {
+                    @Override
+                    public int compare(VideoDTO lhs, VideoDTO rhs) {
+                        // TODO Auto-generated method stub
+                        return lhs.getVideoName().toLowerCase()
+                                .compareTo(rhs.getVideoName().toLowerCase());
+                    }
+                });
+
 
                 videoDetailAdapter = new VideoDetailAdapter(mContext, videoDtoArrayList, VideoDetailFragment.this);
                 mRecyclerView.setHasFixedSize(true);
@@ -614,6 +646,15 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
                     tvNoRecoredFound.setVisibility(View.GONE);
                 }
 
+                Collections.sort(videoDtoArrayList, new Comparator<VideoDTO>() {
+                    @Override
+                    public int compare(VideoDTO lhs, VideoDTO rhs) {
+                        // TODO Auto-generated method stub
+                        return lhs.getVideoName().toLowerCase()
+                                .compareTo(rhs.getVideoName().toLowerCase());
+                    }
+                });
+
 
                 videoDetailAdapter = new VideoDetailAdapter(mContext, videoDtoArrayList, VideoDetailFragment.this);
                 mRecyclerView.setHasFixedSize(true);
@@ -627,6 +668,8 @@ public class VideoDetailFragment extends Fragment implements VideoDetailAdapter.
             }
         }
     }
+
+
 
 
 }

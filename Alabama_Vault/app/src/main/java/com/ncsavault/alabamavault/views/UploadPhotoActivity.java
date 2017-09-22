@@ -69,7 +69,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ncsavault.alabamavault.models.LoginEmailModel;
 import com.ncsavault.alabamavault.service.TrendingFeaturedVideoService;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.reginald.editspinner.EditSpinner;
 import com.ncsavault.alabamavault.R;
 import com.ncsavault.alabamavault.controllers.AppController;
@@ -89,7 +88,6 @@ import com.ncsavault.alabamavault.wheeladapters.NumericWheelAdapter;
 import com.ncsavault.alabamavault.wheelwidget.OnWheelChangedListener;
 import com.ncsavault.alabamavault.wheelwidget.OnWheelScrollListener;
 import com.ncsavault.alabamavault.wheelwidget.WheelView;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.lang.reflect.Type;
@@ -565,9 +563,10 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
                         showToastMessage(GlobalConstants.FIRST_NAME_CAN_NOT_EMPTY);
                         //return true ;
 
-                    } else if (mFirstName.getText().toString().length() < 3) {
-                        showToastMessage(GlobalConstants.FIRST_NAME_SHOULD_CONTAIN_THREE_CHARACTER);
                     }
+//                    else if (mFirstName.getText().toString().length() < 3) {
+//                        showToastMessage(GlobalConstants.FIRST_NAME_SHOULD_CONTAIN_THREE_CHARACTER);
+//                    }
 
 
                     if (mFirstName.getText().toString().length() > 0) {
@@ -636,9 +635,10 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
                         showToastMessage(GlobalConstants.LAST_NAME_CAN_NOT_EMPTY);
                         //return true ;
 
-                    } else if (mLastName.getText().toString().length() < 3) {
-                        showToastMessage(GlobalConstants.LAST_NAME_SHOULD_CONTAIN_THREE_CHARACTER);
                     }
+//                    else if (mLastName.getText().toString().length() < 3) {
+//                        showToastMessage(GlobalConstants.LAST_NAME_SHOULD_CONTAIN_THREE_CHARACTER);
+//                    }
 
 
                     if (mLastName.getText().toString().length() > 0) {
@@ -1591,7 +1591,7 @@ public class UploadPhotoActivity extends PermissionActivity implements AbstractV
         alertDialog.show();
         Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         nbutton.setAllCaps(false);
-        nbutton.setTextColor(getResources().getColor(R.color.apptheme_color));
+        nbutton.setTextColor(Color.GRAY);
         Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
         pbutton.setTextColor(getResources().getColor(R.color.apptheme_color));
         pbutton.setAllCaps(false);

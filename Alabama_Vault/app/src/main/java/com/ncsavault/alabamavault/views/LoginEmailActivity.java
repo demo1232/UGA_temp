@@ -757,7 +757,7 @@ public class LoginEmailActivity extends AppCompatActivity implements GoogleApiCl
                     }
                 });
 
-        alertDialogBuilder.setNegativeButton("cancel",
+        alertDialogBuilder.setNegativeButton("Cancel",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {

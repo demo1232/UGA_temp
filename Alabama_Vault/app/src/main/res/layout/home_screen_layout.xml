@@ -76,7 +76,8 @@
                 android:id="@+id/rl_pull_option"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                layout="@layout/pull_option_layout"/>
+                layout="@layout/pull_option_layout"
+                android:visibility="gone"/>
 
             <include
                 android:id="@+id/llToast"

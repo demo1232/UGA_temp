@@ -15,7 +15,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.ImageLoader;
 import com.ncsavault.alabamavault.R;
 import com.ncsavault.alabamavault.controllers.AppController;
 import com.ncsavault.alabamavault.database.VaultDatabaseHelper;
@@ -23,11 +22,16 @@ import com.ncsavault.alabamavault.dto.PlaylistDto;
 import com.ncsavault.alabamavault.dto.VideoDTO;
 import com.ncsavault.alabamavault.utils.Utils;
 import com.ncsavault.alabamavault.views.VideoSearchActivity;
+import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.utils.StorageUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -41,7 +45,6 @@ public class VideoSearchAdapter extends RecyclerView.Adapter<VideoSearchAdapter.
     ArrayList<Object> objects;
 
     ArrayList<Object> filteredObjects;
-    ImageLoader imageLoader;
     public DisplayImageOptions options;
     SearchVideoClickListener searchVideoClickListener;
 
@@ -56,13 +59,22 @@ public class VideoSearchAdapter extends RecyclerView.Adapter<VideoSearchAdapter.
         this.filteredObjects = new ArrayList<Object>();
         this.filteredObjects.addAll(objects);
 
+//        File cacheDir = StorageUtils.getCacheDirectory(context);
+//        ImageLoaderConfiguration config;
+//        config = new ImageLoaderConfiguration.Builder(context)
+//                .threadPoolSize(3) // default
+//                .denyCacheImageMultipleSizesInMemory()
+//                .diskCache(new UnlimitedDiscCache(cacheDir))
+//                .build();
+//        ImageLoader.getInstance().init(config);
+
         options = new DisplayImageOptions.Builder()
                 .cacheOnDisk(true).resetViewBeforeLoading(true)
                 .cacheInMemory(true)
                 .bitmapConfig(Bitmap.Config.RGB_565)
                 .imageScaleType(ImageScaleType.EXACTLY)
                 .build();
-        imageLoader = AppController.getInstance().getImageLoader();
+
 
     }
 
@@ -87,6 +99,7 @@ public class VideoSearchAdapter extends RecyclerView.Adapter<VideoSearchAdapter.
             long videoDuration = newVideoDto.getVideoDuration();
 
 
+            try{
             com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(videoImageUrl,
                     viewHolder.videoImageView, options, new ImageLoadingListener() {
                         @Override
@@ -97,23 +110,27 @@ public class VideoSearchAdapter extends RecyclerView.Adapter<VideoSearchAdapter.
                         @Override
                         public void onLoadingFailed(String s, View view, FailReason failReason) {
                             viewHolder.progressBar.setVisibility(View.GONE);
-                            viewHolder.videoImageView.setImageResource(R.drawable.vault);
+                           // viewHolder.videoImageView.setImageResource(R.drawable.vault);
                         }
 
                         @Override
                         public void onLoadingComplete(String s, View view, Bitmap bitmap) {
                             viewHolder.progressBar.setVisibility(View.GONE);
                             if(videoImageUrl== null){
-                                viewHolder.videoImageView.setImageResource(R.drawable.vault);
+                              //  viewHolder.videoImageView.setImageResource(R.drawable.vault);
                             }
                         }
 
                         @Override
                         public void onLoadingCancelled(String s, View view) {
                             viewHolder.progressBar.setVisibility(View.GONE);
-                            viewHolder.videoImageView.setImageResource(R.drawable.vault);
+                           // viewHolder.videoImageView.setImageResource(R.drawable.vault);
                         }
                     });
+        }catch (OutOfMemoryError e)
+        {
+            e.printStackTrace();
+        }
 
             viewHolder.videoNameTextView.setText(videoName);
             viewHolder.videoDescriptionTextView.setText(videDescription);
@@ -153,7 +170,7 @@ public class VideoSearchAdapter extends RecyclerView.Adapter<VideoSearchAdapter.
                         @Override
                         public void onLoadingFailed(String s, View view, FailReason failReason) {
                             viewHolder.progressBar.setVisibility(View.GONE);
-                            viewHolder.videoImageView.setImageResource(R.drawable.alabama_vault_logo);
+                            //viewHolder.videoImageView.setImageResource(R.drawable.alabama_vault_logo);
                         }
 
                         @Override
@@ -164,7 +181,7 @@ public class VideoSearchAdapter extends RecyclerView.Adapter<VideoSearchAdapter.
                         @Override
                         public void onLoadingCancelled(String s, View view) {
                             viewHolder.progressBar.setVisibility(View.GONE);
-                            viewHolder.videoImageView.setImageResource(R.drawable.alabama_vault_logo);
+                            //viewHolder.videoImageView.setImageResource(R.drawable.alabama_vault_logo);
                         }
                     });
 
@@ -203,14 +220,14 @@ public class VideoSearchAdapter extends RecyclerView.Adapter<VideoSearchAdapter.
             videoDurationTextView = (TextView) view.findViewById(R.id.tv_video_duration);
             progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
             mLayoutSavedImage = (LinearLayout) view.findViewById(R.id.layout_saved_image);
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                progressBar.setIndeterminateDrawable(context.getResources().getDrawable(R.drawable
-                        .circle_progress_bar_lower));
-            } else {
-                System.out.println("progress bar not showing ");
-                progressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(context.getResources(),
-                        R.drawable.progress_large_material, null));
-            }
+//            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+//                progressBar.setIndeterminateDrawable(context.getResources().getDrawable(R.drawable
+//                        .circle_progress_bar_lower));
+//            } else {
+//                System.out.println("progress bar not showing ");
+//                progressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(context.getResources(),
+//                        R.drawable.progress_large_material, null));
+//            }
 
             videoRelativeLayout = (LinearLayout) view.findViewById(R.id.save_video_main_layout);
 

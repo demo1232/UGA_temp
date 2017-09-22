@@ -42,6 +42,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.ncsavault.alabamavault.service.TrendingFeaturedVideoService;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.twitter.sdk.android.Twitter;
 import com.ncsavault.alabamavault.R;
 import com.ncsavault.alabamavault.controllers.AppController;
@@ -76,7 +77,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.reginald.editspinner.EditSpinner;
 
@@ -136,6 +136,7 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
     private FirebaseAnalytics mFirebaseAnalytics;
     Bundle params = new Bundle();
     private boolean isImageProvided = false;
+    private boolean isFirstTime = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -171,15 +172,18 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
         mFirstName.setText(firstName);
         mLastName.setText(lastName);
         mUserName.setText(userName);
-        if (socialUser.getEmailID() != "") {
+        if(isFirstTime) {
+            isFirstTime = false;
+            if (socialUser.getEmailID() != "") {
 
-            mEmailIdFB.setText(socialUser.getEmailID().trim());
-            mEmailIdFB.setVisibility(View.VISIBLE);
-            mEmailId.setVisibility(View.GONE);
-        } else {
-            isBlankEmail = true;
-            mEmailIdFB.setVisibility(View.GONE);
-            mEmailId.setVisibility(View.VISIBLE);
+                mEmailIdFB.setText(socialUser.getEmailID().trim());
+                mEmailIdFB.setVisibility(View.VISIBLE);
+                mEmailId.setVisibility(View.GONE);
+            } else {
+                isBlankEmail = true;
+                mEmailIdFB.setVisibility(View.GONE);
+                mEmailId.setVisibility(View.VISIBLE);
+            }
         }
 
         mYOB.setText(mYOB.getText().toString().trim());
@@ -187,10 +191,12 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
         String profileImage = socialUser.getImageurl();
 
         if (profileImage != null) {
-            com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(profileImage, mProfileImage, options, new SimpleImageLoadingListener() {
+            com.nostra13.universalimageloader.core.ImageLoader.getInstance().
+                    displayImage(profileImage, mProfileImage, options, new
+                            ImageLoadingListener() {
                 @Override
                 public void onLoadingStarted(String imageUri, View view) {
-                    pBar.setVisibility(View.VISIBLE);
+                   // pBar.setVisibility(View.VISIBLE);
                     try {
                                     /*InputStream istr = getAssets().open("placeholder.jpg");
                                     //set drawable from stream
@@ -219,7 +225,12 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
                 public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                     pBar.setVisibility(View.GONE);
                 }
-            });
+
+                                @Override
+                                public void onLoadingCancelled(String s, View view) {
+                                    pBar.setVisibility(View.GONE);
+                                }
+                            });
         }
     }
 
@@ -230,6 +241,7 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
         mEditSpinner.setAdapter(adapter);
         Utils.getInstance().gethideKeyboard(RegistrationActivity.this);
     }
+
 
     private void facebookLogin(User socialUserData, String registerUser) {
 
@@ -1034,6 +1046,8 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
             @Override
             public void onClick(View v) {
 
+
+
                 if (yearWheel.isShown()) {
                     Animation anim = AnimationUtils.loadAnimation(RegistrationActivity.this, R.anim.slidedown);
                     yearWheel.setAnimation(anim);
@@ -1044,6 +1058,11 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
                     try {
                         //Marshmallow permissions for write external storage.
                         if (haveAllMustPermissions(writeExternalStorage, PERMISSION_REQUEST_MUST)) {
+                            if (twitter) {
+                                mEmailId.setVisibility(View.GONE);
+                            } else {
+                                mEmailIdFB.setVisibility(View.GONE);
+                            }
                             openImageIntent();
                         }
                     } catch (Exception e) {
@@ -1875,6 +1894,7 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
         mSignUpButton.setVisibility(View.VISIBLE);
         tvUploadPhoto.setVisibility(View.VISIBLE);
         tvSignUpWithoutProfile.setVisibility(View.VISIBLE);
+        pBar.setVisibility(View.VISIBLE);
     }
 
 
@@ -1919,6 +1939,7 @@ public class RegistrationActivity extends PermissionActivity implements Abstract
         mSignUpButton.setVisibility(View.GONE);
         tvUploadPhoto.setVisibility(View.GONE);
         tvSignUpWithoutProfile.setVisibility(View.GONE);
+        pBar.setVisibility(View.GONE);
 
     }
 

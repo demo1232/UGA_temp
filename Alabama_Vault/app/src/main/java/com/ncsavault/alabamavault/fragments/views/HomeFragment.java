@@ -111,11 +111,10 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        IntentFilter filter = new IntentFilter(HomeFragment.HomeResponseReceiver.ACTION_RESP);
-        filter.addCategory(Intent.CATEGORY_DEFAULT);
-        receiver = new HomeFragment.HomeResponseReceiver();
-        mContext.registerReceiver(receiver, filter);
+
+
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -130,6 +129,11 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
 
         String videoUrl = AppController.getInstance().getModelFacade().getLocalModel().getVideoUrl();
         String videoId = AppController.getInstance().getModelFacade().getLocalModel().getVideoId();
+
+        IntentFilter filter = new IntentFilter(HomeResponseReceiver.ACTION_RESP);
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        receiver = new HomeResponseReceiver();
+        getActivity().registerReceiver(receiver, filter);
 
         long tabId = AppController.getInstance().getModelFacade().getLocalModel().getTabId();
 //        if(tabId != 0) {
@@ -165,8 +169,6 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
             refreshLayout.setOnRefreshListener(refreshListener);
         }
 
-
-
         ArrayList<String> apiUrls = new ArrayList<>();
         apiUrls.add(GlobalConstants.FEATURED_API_URL);
         apiUrls.add(GlobalConstants.GET_TRENDING_PLAYLIST_URL);
@@ -176,6 +178,13 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
 
 
 // Create the bundle to pass to the service.
+
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
 
 
     }
@@ -866,8 +875,10 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
         super.onDestroy();
         try {
             if (receiver != null) {
-                mContext.unregisterReceiver(receiver);
+                getActivity().unregisterReceiver(receiver);
+                receiver = null;
             }
+
         }catch (Exception e){
             e.printStackTrace();
         }

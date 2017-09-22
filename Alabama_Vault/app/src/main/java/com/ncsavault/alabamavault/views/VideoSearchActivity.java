@@ -185,6 +185,8 @@ public class VideoSearchActivity extends AppCompatActivity implements VideoSearc
                         objects = new ArrayList<Object>();
                         objects.addAll(VaultDatabaseHelper.getInstance(VideoSearchActivity.this).getFavouriteVideosArrayList());
                     }
+
+
                     videoSearchAdapter = new VideoSearchAdapter(VideoSearchActivity.this, objects, VideoSearchActivity.this);
                 } catch (Exception e) {
                     e.printStackTrace();

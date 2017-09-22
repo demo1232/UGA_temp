@@ -25,7 +25,7 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
     private static VaultDatabaseHelper sInstance;
 
     // ------ Database Version----------
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 4;
     private static String DATABASE_PATH = "";
 
     // ----- Database Name------------
@@ -1328,6 +1328,10 @@ public class VaultDatabaseHelper extends SQLiteOpenHelper {
 
     public void removeAllPlaylistTabData(){
         PlaylistDatabaseTable.getInstance().removeAllPlaylistTabData(this.getWritableDatabase());
+    }
+
+    public void removePlaylistTabData(long categoriesId){
+        PlaylistDatabaseTable.getInstance().removePlaylistTabData(this.getWritableDatabase(),categoriesId);
     }
 
     //***********************************************************************//

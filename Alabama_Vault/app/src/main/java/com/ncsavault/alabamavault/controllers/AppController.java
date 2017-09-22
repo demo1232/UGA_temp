@@ -27,6 +27,7 @@ import android.widget.RelativeLayout;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
@@ -67,7 +68,6 @@ public class AppController {
 
     public static final String TAG = AppController.class.getSimpleName();
 
-    private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
 
     private static AppController mInstance;
@@ -362,12 +362,55 @@ public class AppController {
 //                , DISK_IMAGECACHE_QUALITY);
     }
 
+
+    /**
+     * Global request queue for Volley
+     */
+    private RequestQueue mRequestQueue;
+
+    /**
+     * Log or request VOLLEY_TAG
+     */
+    public static final String VOLLEY_TAG = "HE_VolleyTag";
+
+    /**
+     * @return The Volley Request queue, the queue will be created if it is null
+     */
     public RequestQueue getRequestQueue() {
+        // lazy initialize the request queue, the queue instance will be
+        // created when it is accessed for the first time
         if (mRequestQueue == null) {
             mRequestQueue = Volley.newRequestQueue(getApplicationContext());
         }
+
         return mRequestQueue;
     }
+
+
+    /**
+     * Adds the specified request to the global queue using the Default VOLLEY_TAG.
+     *
+     * @param req
+     */
+    public <T> void addToRequestQueue(Request<T> req) {
+        // set the default tag if tag is empty
+        req.setTag(VOLLEY_TAG);
+
+        getRequestQueue().add(req);
+    }
+
+    /**
+     * Cancels all pending requests by the specified VOLLEY_TAG, it is important
+     * to specify a VOLLEY_TAG so that the pending/ongoing requests can be cancelled.
+     *
+     * @param tag
+     */
+    public void cancelPendingRequests(Object tag) {
+        if (mRequestQueue != null) {
+            mRequestQueue.cancelAll(tag);
+        }
+    }
+
 
     public ImageLoader getImageLoader() {
         getRequestQueue();
@@ -376,23 +419,6 @@ public class AppController {
                     new BitmapLruCache());
         }
         return this.mImageLoader;
-    }
-
-    public <T> void addToRequestQueue(Request<T> req, String tag) {
-        // set the default tag if tag is empty
-        req.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
-        getRequestQueue().add(req);
-    }
-
-    public <T> void addToRequestQueue(Request<T> req) {
-        req.setTag(TAG);
-        getRequestQueue().add(req);
-    }
-
-    public void cancelPendingRequests(Object tag) {
-        if (mRequestQueue != null) {
-            mRequestQueue.cancelAll(tag);
-        }
     }
 
 

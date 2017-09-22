@@ -17,7 +17,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.ImageLoader;
 import com.ncsavault.alabamavault.R;
 import com.ncsavault.alabamavault.controllers.AppController;
 
@@ -25,11 +24,16 @@ import com.ncsavault.alabamavault.database.VaultDatabaseHelper;
 import com.ncsavault.alabamavault.dto.VideoDTO;
 import com.ncsavault.alabamavault.utils.Utils;
 import com.ncsavault.alabamavault.views.HomeScreen;
+import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.utils.StorageUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -41,7 +45,6 @@ public class VideoDetailAdapter extends RecyclerView.Adapter<VideoDetailAdapter.
 
     private Context mContext;
     private ArrayList<VideoDTO> mVideoDtoArrayList = new ArrayList<>();
-    ImageLoader imageLoader;
     public DisplayImageOptions options;
     private VideoClickListener mVideoClickListener;
 
@@ -56,6 +59,14 @@ public class VideoDetailAdapter extends RecyclerView.Adapter<VideoDetailAdapter.
         mVideoDtoArrayList = videoDtoArrayList;
         mVideoClickListener = videoClickListener;
 
+//        File cacheDir = StorageUtils.getCacheDirectory(mContext);
+//        ImageLoaderConfiguration config;
+//        config = new ImageLoaderConfiguration.Builder(mContext)
+//                .threadPoolSize(3) // default
+//                .denyCacheImageMultipleSizesInMemory()
+//                .diskCache(new UnlimitedDiscCache(cacheDir))
+//                .build();
+//        ImageLoader.getInstance().init(config);
 
         options = new DisplayImageOptions.Builder()
                 .cacheOnDisk(true).resetViewBeforeLoading(true)
@@ -63,7 +74,7 @@ public class VideoDetailAdapter extends RecyclerView.Adapter<VideoDetailAdapter.
                 .bitmapConfig(Bitmap.Config.RGB_565)
                 .imageScaleType(ImageScaleType.EXACTLY)
                 .build();
-        imageLoader = AppController.getInstance().getImageLoader();
+
         getScreenDimensions();
     }
 
@@ -93,6 +104,7 @@ public class VideoDetailAdapter extends RecyclerView.Adapter<VideoDetailAdapter.
         long videoDuration = newVideoDto.getVideoDuration();
 
 
+        try{
         com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(videoImageUrl,
                 viewHolder.videoImageView, options, new ImageLoadingListener() {
                     @Override
@@ -103,23 +115,27 @@ public class VideoDetailAdapter extends RecyclerView.Adapter<VideoDetailAdapter.
                     @Override
                     public void onLoadingFailed(String s, View view, FailReason failReason) {
                         viewHolder.progressBar.setVisibility(View.GONE);
-                        viewHolder.videoImageView.setImageResource(R.drawable.vault);
+                       // viewHolder.videoImageView.setImageResource(R.drawable.vault);
                     }
 
                     @Override
                     public void onLoadingComplete(String s, View view, Bitmap bitmap) {
                         viewHolder.progressBar.setVisibility(View.GONE);
                         if (videoImageUrl == null) {
-                            viewHolder.videoImageView.setImageResource(R.drawable.vault);
+                          //  viewHolder.videoImageView.setImageResource(R.drawable.vault);
                         }
                     }
 
                     @Override
                     public void onLoadingCancelled(String s, View view) {
                         viewHolder.progressBar.setVisibility(View.GONE);
-                        viewHolder.videoImageView.setImageResource(R.drawable.vault);
+                       // viewHolder.videoImageView.setImageResource(R.drawable.vault);
                     }
                 });
+    }catch (OutOfMemoryError e)
+    {
+        e.printStackTrace();
+    }
 
 //        int aspectHeight = (displayHeight * 9) / 16;
 //

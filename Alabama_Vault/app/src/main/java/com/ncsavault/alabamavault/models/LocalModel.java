@@ -29,7 +29,7 @@ public class LocalModel implements IModel {
     private boolean isOverride;
     private boolean isTwitterLogin;
     private long tabId;
-
+   private Bitmap selectedBitmap;
     public boolean isBannerActivated() {
         return isBannerActivated;
     }

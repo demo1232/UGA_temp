@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/vault" />
+           />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -50,6 +50,6 @@
         android:indeterminateTintMode="src_atop"
         android:indeterminateDuration="1100"
         android:indeterminateTint="@color/apptheme_color"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
 </RelativeLayout>

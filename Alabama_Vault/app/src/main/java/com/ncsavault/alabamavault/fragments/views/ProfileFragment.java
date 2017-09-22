@@ -12,6 +12,8 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -19,16 +21,21 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -40,6 +47,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -61,14 +69,14 @@ import com.ncsavault.alabamavault.globalconstants.GlobalConstants;
 import com.ncsavault.alabamavault.models.BaseModel;
 import com.ncsavault.alabamavault.models.UserProfileModel;
 import com.ncsavault.alabamavault.service.TrendingFeaturedVideoService;
+import com.ncsavault.alabamavault.utils.CircularImageView;
+import com.ncsavault.alabamavault.utils.CircularNetworkImageView;
+import com.ncsavault.alabamavault.utils.ImageLoaderController;
 import com.ncsavault.alabamavault.utils.Utils;
 import com.ncsavault.alabamavault.views.AbstractView;
 import com.ncsavault.alabamavault.views.HomeScreen;
 import com.ncsavault.alabamavault.views.LoginEmailActivity;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -93,11 +101,10 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
     private static Context mContext;
     private SwitchCompat mSwitchCompat;
     OnFragmentTouched listener;
-    private ImageView mPlayerBackgroundImage, mUserProfileImage;
+    private CircularImageView  mUserProfileImage;
     private TextView mFirstName, mLastName, mEmailId, mTwitterEmailId, mFacebookEmailId, mPushNotification;
     private EditText edFirstName, edLastName;
     private Button mResetPasswordButton, mLogoutButton;
-    private DisplayImageOptions options;
     private User responseUser = null;
     ProgressDialog pDialog;
     private UserProfileModel mUserProfileModel;
@@ -125,6 +132,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
     private Button loginButton;
     private TextView mContactSupportView;
     private LinearLayout resetButtonLayout;
+    public static final int PERMISSION_REQUEST_MUST = 101;
 
     public static Fragment newInstance(Context context, int centerX, int centerY) {
         mContext = context;
@@ -155,8 +163,8 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mSwitchCompat = (SwitchCompat) view.findViewById(R.id.toggle_button);
-        mPlayerBackgroundImage = (ImageView) view.findViewById(R.id.background_profile_image);
-        mUserProfileImage = (ImageView) view.findViewById(R.id.imgUserProfile);
+        mUserProfileImage = (CircularImageView) view.findViewById(R.id.imgUserProfile);
+
         mFirstName = (TextView) view.findViewById(R.id.tv_first_name);
         mLastName = (TextView) view.findViewById(R.id.tv_last_name);
         mEmailId = (TextView) view.findViewById(R.id.email_id);
@@ -179,10 +187,10 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                 } else if (((HomeScreen) mContext).textViewEdit.getText().toString().equalsIgnoreCase("SAVE")) {
 
 
-                    if (edFirstName.getText().toString().length()==0) {
+                    if (edFirstName.getText().toString().length() == 0) {
                         ((HomeScreen) mContext).showToastMessage(GlobalConstants.FIRST_NAME_CAN_NOT_EMPTY);
 
-                    } else if (edLastName.getText().toString().length()==0) {
+                    } else if (edLastName.getText().toString().length() == 0) {
                         ((HomeScreen) mContext).showToastMessage(GlobalConstants.LAST_NAME_CAN_NOT_EMPTY);
                     } else {
                         ((HomeScreen) mContext).textViewEdit.setText("EDIT");
@@ -205,13 +213,15 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
         edLastName = (EditText) view.findViewById(R.id.ed_last_name);
 
         pBar = (ProgressBar) view.findViewById(R.id.progressbar);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            pBar.setIndeterminateDrawable(mContext.getResources().getDrawable(R.drawable.circle_progress_bar_lower));
-        } else {
-            System.out.println("progress bar not showing ");
-            pBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(mContext.getResources(),
-                    R.drawable.progress_large_material, null));
-        }
+        pBar.setVisibility(View.VISIBLE);
+
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+//            pBar.setIndeterminateDrawable(mContext.getResources().getDrawable(R.drawable.circle_progress_bar_lower));
+//        } else {
+//            System.out.println("progress bar not showing ");
+//            pBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(mContext.getResources(),
+//                    R.drawable.progress_large_material, null));
+//        }
 
         edLinearLayout = (LinearLayout) view.findViewById(R.id.edit_linear_layout);
         tvLinearLayout = (LinearLayout) view.findViewById(R.id.text_linear_layout);
@@ -229,13 +239,6 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
         boolean isAllowed = prefs.getBoolean(GlobalConstants.PREF_IS_NOTIFICATION_ALLOW, false);
         long userId = prefs.getLong(GlobalConstants.PREF_VAULT_USER_ID_LONG, 0);
         mSwitchCompat.setChecked(isAllowed);
-
-        options = new DisplayImageOptions.Builder()
-                .cacheOnDisk(true).resetViewBeforeLoading(true)
-                .cacheInMemory(true)
-                .bitmapConfig(Bitmap.Config.RGB_565)
-                .imageScaleType(ImageScaleType.EXACTLY)
-                .build();
 
         if (userId == GlobalConstants.DEFAULT_USER_ID) {
             loginViewLayout.setVisibility(View.VISIBLE);
@@ -269,6 +272,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
     }
 
     private void initData() {
+        getScreenDimensions();
         Profile fbProfile = Profile.getCurrentProfile();
         if (fbProfile != null) {
             mFacebookEmailId.setText(fbProfile.getName());
@@ -294,8 +298,16 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                     try {
                         //Marshmallow permissions for write external storage.
                         //gk  if (haveAllMustPermissions(writeExternalStorage, PERMISSION_REQUEST_MUST)) {
+                        if (ActivityCompat.checkSelfPermission(getContext(),
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+                            ActivityCompat.requestPermissions(getActivity(),
+                                    new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                    PERMISSION_REQUEST_MUST);
+                        } else {
+                            Log.e("DB", "PERMISSION GRANTED");
+                            openImageIntent();
+                        }
 
-                        openImageIntent();
 
                         //gk    }
                     } catch (Exception e) {
@@ -364,7 +376,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                         if (session == null) {
                             twitterLoginButton.performClick();
                         } else {
-                           Twitter.logOut();
+                            Twitter.logOut();
                             mTwitterEmailId.setText("Link Twitter Account");
                         }
                     }
@@ -393,7 +405,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
         mLogoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 Twitter.logOut();
+                Twitter.logOut();
                 mContext.stopService(new Intent(mContext, TrendingFeaturedVideoService.class));
 //                VideoDataFetchingService.isServiceRunning = false;
                 if (LoginManager.getInstance() != null) {
@@ -748,23 +760,39 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 
     public void loadUserDataFromServer() {
 
-        pDialog = new ProgressDialog(mContext, R.style.CustomDialogTheme);
-        pDialog.show();
-        pDialog.setContentView(Utils.getInstance().setViewToProgressDialog((HomeScreen) mContext));
-        pDialog.setCanceledOnTouchOutside(false);
-        pDialog.setCancelable(false);
+        try {
+//            pDialog = new ProgressDialog(mContext, R.style.CustomDialogTheme);
+//            pDialog.show();
+//            pDialog.setContentView(Utils.getInstance().setViewToProgressDialog((HomeScreen) mContext));
+//            pDialog.setCanceledOnTouchOutside(false);
+//            pDialog.setCancelable(false);
+            loadUserDataFromLocal();
+            SharedPreferences pref = mContext.getSharedPreferences(GlobalConstants.PREF_PACKAGE_NAME, Context.MODE_PRIVATE);
+            final long userId = pref.getLong(GlobalConstants.PREF_VAULT_USER_ID_LONG, 0);
+            final String email = pref.getString(GlobalConstants.PREF_VAULT_USER_EMAIL, "");
 
-        SharedPreferences pref = mContext.getSharedPreferences(GlobalConstants.PREF_PACKAGE_NAME, Context.MODE_PRIVATE);
-        final long userId = pref.getLong(GlobalConstants.PREF_VAULT_USER_ID_LONG, 0);
-        final String email = pref.getString(GlobalConstants.PREF_VAULT_USER_EMAIL, "");
-
-
-        mUserProfileModel = AppController.getInstance().getModelFacade().getRemoteModel().getUserProfileModel();
-        mUserProfileModel.registerView(this);
-        mUserProfileModel.setProgressDialog(pDialog);
-        mUserProfileModel.loadFetchData(email, userId);
+            mUserProfileModel = AppController.getInstance().getModelFacade().getRemoteModel().getUserProfileModel();
+            mUserProfileModel.registerView(this);
+//            mUserProfileModel.setProgressDialog(pDialog);
+            mUserProfileModel.loadFetchData(email, userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == PERMISSION_REQUEST_MUST) {
+            if (permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openImageIntent();
+            }
+        }
+
+    }
+    Bitmap selectedBitmap;
     public void updateUserData() {
 
         pDialog = new ProgressDialog(mContext, R.style.CustomDialogTheme);
@@ -785,12 +813,18 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
             final String email = pref.getString(GlobalConstants.PREF_VAULT_USER_EMAIL, "");
             if (responseUser != null) {
                 if (selectedImageUri != null) {
-                    Bitmap selectedBitmap = Utils.getInstance().decodeUri(selectedImageUri, (HomeScreen) mContext);
-                    selectedBitmap = Utils.getInstance().
-                            rotateImageDetails(selectedBitmap, selectedImageUri,
-                                    (HomeScreen) mContext, sdImageMainDirectory);
-                    String convertedImage = ConvertBitmapToBase64Format(selectedBitmap);
-                    responseUser.setImageurl(convertedImage);
+                    try {
+                        selectedBitmap = Utils.getInstance().decodeUri(selectedImageUri, (HomeScreen) mContext);
+                        selectedBitmap = Utils.getInstance().
+                                rotateImageDetails(selectedBitmap, selectedImageUri,
+                                        (HomeScreen) mContext, sdImageMainDirectory);
+                        String convertedImage = ConvertBitmapToBase64Format(selectedBitmap);
+                        responseUser.setImageurl(convertedImage);
+
+                    } catch (OutOfMemoryError e) {
+                        e.printStackTrace();
+
+                    }
                 }
             }
 
@@ -808,6 +842,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 
     }
 
+
     public void loadUserDataFromLocal() {
         try {
             responseUser = AppController.getInstance().getModelFacade().getLocalModel().getUserData();
@@ -815,6 +850,8 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                 if (responseUser.getUserID() > 0) {
                     mFirstName.setText(responseUser.getFname());
                     mLastName.setText(responseUser.getLname());
+
+                    mEmailId.setText(responseUser.getEmailID());
 
                     edFirstName.setText(responseUser.getFname());
                     edLastName.setText(responseUser.getLname());
@@ -827,33 +864,15 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                     }
 
                     if (responseUser.getImageurl().length() > 0) {
-                        com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(responseUser.getImageurl(),
-                                mUserProfileImage, options, new SimpleImageLoadingListener() {
-                                    @Override
-                                    public void onLoadingStarted(String imageUri, View view) {
-                                        pBar.setVisibility(View.VISIBLE);
-                                        try {
-                                            mUserProfileImage.setImageDrawable(getResources().getDrawable(R.drawable.camera_background));
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
 
-                                    @Override
-                                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                                        pBar.setVisibility(View.GONE);
-                                        try {
-                                            mUserProfileImage.setImageDrawable(getResources().getDrawable(R.drawable.camera_background));
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
 
-                                    @Override
-                                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                                        pBar.setVisibility(View.GONE);
-                                    }
-                                });
+//                        com.android.volley.toolbox.ImageLoader volleyImageLoader =
+//                                ImageLoaderController.getInstance(getActivity()).getImageLoader();
+//
+//                        volleyImageLoader.get(responseUser.getImageurl(),
+//                                com.android.volley.toolbox.ImageLoader.getImageListener(mUserProfileImage,
+//                                        R.drawable.camera_background, R.drawable.camera_background));
+
                     }
                 } else {
 //                                Toast.makeText(ProfileUpdateActivity.this, "Error loading information!!! Please try again later.", Toast.LENGTH_LONG).show();
@@ -866,6 +885,26 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+
+    }
+
+    private int displayHeight = 0, displayWidth = 0;
+
+    public void getScreenDimensions() {
+
+        Point size = new Point();
+        WindowManager w = HomeScreen.activity.getWindowManager();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            w.getDefaultDisplay().getSize(size);
+            displayHeight = size.y;
+            displayWidth = size.x;
+        } else {
+            Display d = w.getDefaultDisplay();
+            displayHeight = d.getHeight();
+            displayWidth = d.getWidth();
         }
     }
 
@@ -891,7 +930,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
 
             if (selectedImageUri != null) {
                 try {
-                    Bitmap selectedBitmap = Utils.getInstance().decodeUri(selectedImageUri, (HomeScreen) mContext);
+                    selectedBitmap = Utils.getInstance().decodeUri(selectedImageUri, (HomeScreen) mContext);
                     selectedBitmap = Utils.getInstance().rotateImageDetails(selectedBitmap,
                             selectedImageUri, (HomeScreen) mContext, sdImageMainDirectory);
 
@@ -899,8 +938,6 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                         imgUserProfile.setImageDrawable(drawable);*/
                     ((HomeScreen) mContext).textViewEdit.setText("SAVE");
                     mUserProfileImage.setImageBitmap(selectedBitmap);
-
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -972,6 +1009,7 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                 } else if (mUserProfileModel != null && mUserProfileModel.getState() ==
                         BaseModel.STATE_SUCCESS_FETCH_ALL_DATA) {
                     mUserProfileModel.unRegisterView(ProfileFragment.this);
+
                     loadData();
                 }
             }
@@ -1009,36 +1047,40 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
                             }
 
                             if (responseUser.getImageurl().length() > 0) {
-                                com.nostra13.universalimageloader.core.ImageLoader.getInstance().
-                                        displayImage(responseUser.getImageurl(), mUserProfileImage, options,
-                                                new SimpleImageLoadingListener() {
-                                                    @Override
-                                                    public void onLoadingStarted(String imageUri, View view) {
-                                                        pBar.setVisibility(View.VISIBLE);
-                                                        try {
-                                                            mUserProfileImage.setImageDrawable(getResources().
-                                                                    getDrawable(R.drawable.camera_background));
-                                                        } catch (Exception e) {
-                                                            e.printStackTrace();
-                                                        }
-                                                    }
 
-                                                    @Override
-                                                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                                                        pBar.setVisibility(View.GONE);
-                                                        try {
-                                                            mUserProfileImage.setImageDrawable(getResources().
-                                                                    getDrawable(R.drawable.camera_background));
-                                                        } catch (Exception e) {
-                                                            e.printStackTrace();
-                                                        }
-                                                    }
 
-                                                    @Override
-                                                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                                                        pBar.setVisibility(View.GONE);
-                                                    }
-                                                });
+                                com.android.volley.toolbox.ImageLoader volleyImageLoader =
+                                        ImageLoaderController.getInstance(getActivity()).getImageLoader();
+
+                                volleyImageLoader.get(responseUser.getImageurl(),
+                                        com.android.volley.toolbox.ImageLoader.getImageListener(mUserProfileImage,
+                                        R.drawable.camera_background, R.drawable.camera_background));
+
+                               // mUserProfileImage.setImageUrl(GlobalSettings.BASE_URL + dto.getImageURl(), imageLoader);
+//
+//                                volleyImageLoader.get(responseUser.getImageurl(), new com.android.volley.toolbox.ImageLoader.ImageListener() {
+//                                    @Override
+//                                    public void onResponse(com.android.volley.toolbox.ImageLoader.ImageContainer response, boolean isImmediate) {
+//                                        if (response != null) {
+//                                            Bitmap avatar = response.getBitmap();
+//                                            mUserProfileImage.setImageBitmap(avatar);
+//                                            pBar.setVisibility(View.GONE);
+//                                        }
+//                                    }
+//
+//                                    @Override
+//                                    public void onErrorResponse(VolleyError error) {
+//                                        pBar.setVisibility(View.GONE);
+//                                        try {
+//                                            mUserProfileImage.setImageDrawable(getResources().
+//                                                    getDrawable(R.drawable.camera_background));
+//                                        } catch (Exception e) {
+//                                            e.printStackTrace();
+//                                        }
+//                                    }
+//
+//                                });
+
                             }
                         } else {
                             ((HomeScreen) mContext).showToastMessage("Error loading information");
@@ -1055,9 +1097,9 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
             } else {
                 ((HomeScreen) mContext).showToastMessage(GlobalConstants.MSG_NO_CONNECTION);
             }
-            pDialog.dismiss();
+            // pDialog.dismiss();
         } catch (Exception e) {
-            pDialog.dismiss();
+            // pDialog.dismiss();
             e.printStackTrace();
         }
 
@@ -1151,14 +1193,23 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
         super.onDestroyView();
 
         if ((((HomeScreen) mContext).textViewEdit.getText().toString().equalsIgnoreCase("SAVE"))) {
-            if (edFirstName.getText().toString().length()==0) {
+            if (edFirstName.getText().toString().length() == 0) {
                 ((HomeScreen) mContext).showToastMessage(GlobalConstants.FIRST_NAME_CAN_NOT_EMPTY);
 
-            } else if (edLastName.getText().toString().length()==0) {
+            } else if (edLastName.getText().toString().length() == 0) {
                 ((HomeScreen) mContext).showToastMessage(GlobalConstants.LAST_NAME_CAN_NOT_EMPTY);
             } else {
                 showConfirmationDialog();
             }
         }
+
+        if(selectedBitmap != null)
+        {
+            selectedBitmap.recycle();
+            selectedBitmap = null;
+        }
+
+
     }
+
 }

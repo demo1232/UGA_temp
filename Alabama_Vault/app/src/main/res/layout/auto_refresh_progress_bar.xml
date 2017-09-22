@@ -11,6 +11,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:indeterminate="false"
+        android:indeterminateTintMode="src_atop"
+        android:indeterminateDuration="1100"
+        android:indeterminateTint="@color/apptheme_color"
         android:visibility="gone" />
 
 

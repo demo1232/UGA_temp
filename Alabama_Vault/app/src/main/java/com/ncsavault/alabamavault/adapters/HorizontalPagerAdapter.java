@@ -18,22 +18,32 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
-import com.android.volley.toolbox.ImageLoader;
-import com.bumptech.glide.Glide;
+import com.android.volley.VolleyError;
 import com.ncsavault.alabamavault.R;
 import com.ncsavault.alabamavault.controllers.AppController;
 import com.ncsavault.alabamavault.dto.VideoDTO;
 import com.ncsavault.alabamavault.fragments.views.VideoDetailFragment;
 import com.ncsavault.alabamavault.globalconstants.GlobalConstants;
+import com.ncsavault.alabamavault.utils.ImageLoaderController;
 import com.ncsavault.alabamavault.utils.Utils;
 import com.ncsavault.alabamavault.views.HomeScreen;
 import com.ncsavault.alabamavault.views.VideoDetailActivity;
 import com.ncsavault.alabamavault.views.VideoInfoActivity;
+import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
+import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
+import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.nostra13.universalimageloader.core.decode.BaseImageDecoder;
+import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.utils.StorageUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 
 
@@ -44,28 +54,36 @@ public class HorizontalPagerAdapter extends PagerAdapter {
     public static final int ADAPTER_TYPE_TOP = 1;
     public static final int ADAPTER_TYPE_BOTTOM = 2;
     ArrayList<VideoDTO> trendingVideosList = new ArrayList<>();
-    ImageLoader imageLoader;
     public static DisplayImageOptions options;
 
     public HorizontalPagerAdapter(Context context, ArrayList<VideoDTO> trendingVideosList) {
         this.context = context;
         this.trendingVideosList = trendingVideosList;
+
+//        File cacheDir = StorageUtils.getCacheDirectory(context);
+//        ImageLoaderConfiguration config;
+//        config = new ImageLoaderConfiguration.Builder(context)
+//                .threadPoolSize(3) // default
+//                .denyCacheImageMultipleSizesInMemory()
+//                .diskCache(new UnlimitedDiscCache(cacheDir))
+//                .build();
+//        ImageLoader.getInstance().init(config);
+
         options = new DisplayImageOptions.Builder()
-                .cacheOnDisk(true)
-                .resetViewBeforeLoading(true)
+                .cacheOnDisk(true).resetViewBeforeLoading(true)
                 .cacheInMemory(true)
                 .bitmapConfig(Bitmap.Config.RGB_565)
                 .imageScaleType(ImageScaleType.EXACTLY)
                 .build();
-        imageLoader = AppController.getInstance().getImageLoader();
+
         getScreenDimensions();
     }
 
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_cover, null);
-        try {
 
+        try {
+            View view = LayoutInflater.from(context).inflate(R.layout.item_cover, null);
             RelativeLayout rrMain = (RelativeLayout) view.findViewById(R.id.linMain);
             final ImageView imageCover = (ImageView) view.findViewById(R.id.imageCover);
             final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progess_bar_trendingvideos);
@@ -78,6 +96,37 @@ public class HorizontalPagerAdapter extends PagerAdapter {
 //            }
 
 
+//            com.android.volley.toolbox.ImageLoader volleyImageLoader =
+//                    ImageLoaderController.getInstance(context).getImageLoader();
+//
+//            volleyImageLoader.get(trendingVideosList.get(position).getVideoStillUrl(),
+//                    com.android.volley.toolbox.ImageLoader.getImageListener(imageCover,
+//                            R.drawable.vault, R.drawable.vault));
+
+//            volleyImageLoader.get(trendingVideosList.get(position).getVideoStillUrl(), new com.android.volley.toolbox.ImageLoader.ImageListener() {
+//                @Override
+//                public void onResponse(com.android.volley.toolbox.ImageLoader.ImageContainer response, boolean isImmediate) {
+//                    if (response != null) {
+//                        Bitmap avatar = response.getBitmap();
+//                        imageCover.setImageBitmap(avatar);
+//                        progressBar.setVisibility(View.GONE);
+//                    }
+//                }
+//
+//                @Override
+//                public void onErrorResponse(VolleyError error) {
+//                     progressBar.setVisibility(View.GONE);
+//                    try {
+//                        imageCover.setImageResource(R.drawable.vault);
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//
+//
+//            });
+
+       try{
             com.nostra13.universalimageloader.core.ImageLoader.getInstance().
                     displayImage(trendingVideosList.get(position).getVideoStillUrl(),
                             imageCover, options, new ImageLoadingListener() {
@@ -89,23 +138,27 @@ public class HorizontalPagerAdapter extends PagerAdapter {
                                 @Override
                                 public void onLoadingFailed(String s, View view, FailReason failReason) {
                                     progressBar.setVisibility(View.GONE);
-                                    imageCover.setImageResource(R.drawable.vault);
+                                   // imageCover.setImageResource(R.drawable.vault);
                                 }
 
                                 @Override
                                 public void onLoadingComplete(String s, View view, Bitmap bitmap) {
                                     progressBar.setVisibility(View.GONE);
                                     if (trendingVideosList == null) {
-                                        imageCover.setImageResource(R.drawable.vault);
+                                      //  imageCover.setImageResource(R.drawable.vault);
                                     }
                                 }
 
                                 @Override
                                 public void onLoadingCancelled(String s, View view) {
                                     progressBar.setVisibility(View.GONE);
-                                    imageCover.setImageResource(R.drawable.vault);
+                                  //  imageCover.setImageResource(R.drawable.vault);
                                 }
                             });
+        }catch (OutOfMemoryError e)
+        {
+            e.printStackTrace();
+        }
 
             int aspectHeight = (displayWidth * 9) / 16;
 
@@ -144,12 +197,11 @@ public class HorizontalPagerAdapter extends PagerAdapter {
             });
 
             container.addView(view);
-
+            return view;
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-
-        return view;
     }
 
     private int displayHeight = 0, displayWidth = 0;

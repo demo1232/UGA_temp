@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.constraint.ConstraintLayout;
@@ -29,8 +30,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.ImageLoader;
-import com.bumptech.glide.Glide;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -47,11 +46,16 @@ import com.ncsavault.alabamavault.utils.Utils;
 import com.ncsavault.alabamavault.views.HomeScreen;
 import com.ncsavault.alabamavault.views.LoginEmailActivity;
 import com.ncsavault.alabamavault.views.VideoInfoActivity;
+import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.utils.StorageUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,13 +98,21 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         getScreenDimensions();
 //        screenSize  = mContext.getResources().getConfiguration().screenLayout &
 //                Configuration.SCREENLAYOUT_SIZE_MASK;
+//        File cacheDir = StorageUtils.getCacheDirectory(mContext);
+//        ImageLoaderConfiguration config;
+//        config = new ImageLoaderConfiguration.Builder(mContext)
+//                .threadPoolSize(3) // default
+//                .denyCacheImageMultipleSizesInMemory()
+//                .diskCache(new UnlimitedDiscCache(cacheDir))
+//                .build();
+//        ImageLoader.getInstance().init(config);
+
         options = new DisplayImageOptions.Builder()
                 .cacheOnDisk(true).resetViewBeforeLoading(true)
                 .cacheInMemory(true)
                 .bitmapConfig(Bitmap.Config.RGB_565)
                 .imageScaleType(ImageScaleType.EXACTLY)
                 .build();
-        imageLoader = AppController.getInstance().getImageLoader();
         this.bannerClickListener = bannerClickListener;
       //  this.mAdsResumeListener = adsResumeListener;
 
@@ -214,7 +226,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                         vhHeader.savedImage.setImageResource(R.drawable.video_save);
                     }
 
-
+try{
                     com.nostra13.universalimageloader.core.ImageLoader.getInstance().
                             displayImage(videoDTO.getVideoStillUrl(),
                                     vhHeader.videoImage, options, new ImageLoadingListener() {
@@ -226,23 +238,27 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                                         @Override
                                         public void onLoadingFailed(String s, View view, FailReason failReason) {
                                             vhHeader.progressBar.setVisibility(View.GONE);
-                                            vhHeader.videoImage.setImageResource(R.drawable.vault);
+                                           // vhHeader.videoImage.setImageResource(R.drawable.vault);
                                         }
 
                                         @Override
                                         public void onLoadingComplete(String s, View view, Bitmap bitmap) {
                                             vhHeader.progressBar.setVisibility(View.GONE);
                                             if (videoDTO.getVideoStillUrl() == null) {
-                                                vhHeader.videoImage.setImageResource(R.drawable.vault);
+                                              //  vhHeader.videoImage.setImageResource(R.drawable.vault);
                                             }
                                         }
 
                                         @Override
                                         public void onLoadingCancelled(String s, View view) {
                                             vhHeader.progressBar.setVisibility(View.GONE);
-                                            vhHeader.videoImage.setImageResource(R.drawable.vault);
+                                           // vhHeader.videoImage.setImageResource(R.drawable.vault);
                                         }
                                     });
+                }catch (OutOfMemoryError e)
+                {
+                    e.printStackTrace();
+                }
 
                     int aspectHeight = (displayWidth * 9) / 16;
 
@@ -541,12 +557,17 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public ImageView imageviewBanner;
         public LinearLayout bannerLayout;
         ProgressBar progressBar;
+        TextView featuredTextView;
 
         public BannerViewHolder(View itemView) {
             super(itemView);
             imageviewBanner = (ImageView) itemView.findViewById(R.id.imageview_banner);
             bannerLayout = (LinearLayout) itemView.findViewById(R.id.banner_layout);
             progressBar = (ProgressBar) itemView.findViewById(R.id.progressbar);
+            imageviewBanner = (ImageView) itemView.findViewById(R.id.imageview_banner);
+            featuredTextView = (TextView) itemView.findViewById(R.id.textView_featured);
+            Typeface face = Typeface.createFromAsset(mContext.getAssets(), "fonts/OpenSans-Bold.ttf");
+            featuredTextView.setTypeface(face);
         }
 
     }

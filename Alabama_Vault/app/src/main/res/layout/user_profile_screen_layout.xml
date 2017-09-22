@@ -25,7 +25,9 @@
             android:layout_height="0dp"
             android:layout_weight="1.9"
             android:scaleType="fitXY"
-            app:srcCompat="@drawable/vault_4_landscape" />
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/vault_4_landscape" />
 
         <View
             android:layout_width="match_parent"
@@ -59,8 +61,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:indeterminateTintMode="src_atop"
+            android:indeterminateTint="@color/apptheme_color"
             android:indeterminateDuration="1100"
-            android:visibility="gone" />
+             />
 
         <com.ncsavault.alabamavault.utils.CircularImageView
             android:id="@+id/imgUserProfile"
@@ -68,8 +72,10 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:alpha="1"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/app_name"
             android:scaleType="fitXY"
-            android:src="@drawable/vault_4"
+            android:src="@drawable/camera_background"
             app:siBorderColor="@color/apptheme_color"
             app:siBorderWidth="5dp" />
 

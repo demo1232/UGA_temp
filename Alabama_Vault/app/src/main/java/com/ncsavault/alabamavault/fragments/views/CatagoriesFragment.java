@@ -27,6 +27,7 @@ import com.ncsavault.alabamavault.dto.CatagoriesTabDao;
 import com.ncsavault.alabamavault.globalconstants.GlobalConstants;
 import com.ncsavault.alabamavault.utils.Utils;
 import com.ncsavault.alabamavault.views.HomeScreen;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -326,6 +327,12 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
         mRecyclerView.setLayoutManager(llm);
         mRecyclerView.setAdapter(mCatagoriesAdapter);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
     // }
 
 }
