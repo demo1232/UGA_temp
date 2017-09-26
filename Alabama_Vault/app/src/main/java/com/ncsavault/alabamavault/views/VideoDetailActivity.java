@@ -178,11 +178,8 @@ public class VideoDetailActivity extends AppCompatActivity implements VideoDetai
             protected void onPreExecute() {
                 super.onPreExecute();
                 if (progressBar != null) {
-                    if (videoDtoArrayList.size() == 0) {
-                        progressBar.setVisibility(View.VISIBLE);
-                    } else {
-                        progressBar.setVisibility(View.GONE);
-                    }
+                    progressBar.setVisibility(View.VISIBLE);
+
                 }
             }
 
@@ -210,19 +207,23 @@ public class VideoDetailActivity extends AppCompatActivity implements VideoDetai
             protected void onPostExecute(ArrayList<VideoDTO> result) {
                 super.onPostExecute(result);
 
-                if (progressBar != null) {
-                    if (result.size() == 0) {
-                        progressBar.setVisibility(View.VISIBLE);
-                    } else {
-                        progressBar.setVisibility(View.GONE);
-                    }
-                }
+//                if (progressBar != null) {
+//                    if (result.size() == 0) {
+//                        progressBar.setVisibility(View.VISIBLE);
+//                    } else {
+//                        progressBar.setVisibility(View.GONE);
+//                    }
+//                }
 
                 if (result.size() == 0) {
                     tvNoRecoredFound.setVisibility(View.VISIBLE);
                     tvNoRecoredFound.setText(GlobalConstants.NO_VIDEOS_FOUND);
                 } else {
                     tvNoRecoredFound.setVisibility(View.GONE);
+                }
+                if (progressBar != null) {
+                    progressBar.setVisibility(View.GONE);
+
                 }
 
 

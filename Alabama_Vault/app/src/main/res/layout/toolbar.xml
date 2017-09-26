@@ -70,7 +70,7 @@
                 android:id="@+id/textview_toolbar1"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:text="ALABAMA"
+                android:text="@string/app_name_text"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/white"
                 android:textSize="24sp"
@@ -117,7 +117,7 @@
                 android:id="@+id/toolbar_title_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ALABAMA"
+                android:text="@string/app_name_text"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
 
@@ -165,7 +165,7 @@
             android:layout_centerInParent="true"
             android:layout_gravity="left"
             android:background="@drawable/edittext_bg"
-            android:hint="search ALABAMAVAULT"
+            android:hint="@string/search_text"
             android:singleLine="true"
             android:imeOptions="actionDone"
             android:layout_marginRight="10dp"

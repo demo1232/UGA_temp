@@ -77,6 +77,7 @@
 
     <string name="toolbar_text">ALABAMA<b>VAULT</b></string>
     <string name="app_name_text">ALABAMA</string>
+    <string name="search_text">search ALABAMAVAULT</string>
     <string name="current_video_name_text">Current Top 10 Video Name</string>
 
     <string name="profile_alert_text">Do you want to save changes?</string>
