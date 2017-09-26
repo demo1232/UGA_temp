@@ -54,11 +54,14 @@ public class CatagoriesAdapter extends RecyclerView.Adapter<CatagoriesAdapter.Ca
     }
 
 
-    public CatagoriesAdapter(Context context, OnClickInterface onClickInterface,ArrayList<CatagoriesTabDao> CatagoriesTabList) {
+    public CatagoriesAdapter(Context context, OnClickInterface onClickInterface,ArrayList<CatagoriesTabDao>
+            CatagoriesTabList, DisplayImageOptions displayImageOptions) {
         super();
         this.mContext = context;
         mOnClickInterface = onClickInterface;
         mCatagoriesTabList = CatagoriesTabList;
+        options = displayImageOptions;
+
 
 //        File cacheDir = StorageUtils.getCacheDirectory(mContext);
 //        ImageLoaderConfiguration config;
@@ -69,12 +72,12 @@ public class CatagoriesAdapter extends RecyclerView.Adapter<CatagoriesAdapter.Ca
 //                .build();
 //        ImageLoader.getInstance().init(config);
 
-        options = new DisplayImageOptions.Builder()
-                .cacheOnDisk(true).resetViewBeforeLoading(true)
-                .cacheInMemory(true)
-                .bitmapConfig(Bitmap.Config.RGB_565)
-                .imageScaleType(ImageScaleType.EXACTLY)
-                .build();
+//        options = new DisplayImageOptions.Builder()
+//                .cacheOnDisk(true).resetViewBeforeLoading(true)
+//                .cacheInMemory(true)
+//                .bitmapConfig(Bitmap.Config.RGB_565)
+//                .imageScaleType(ImageScaleType.EXACTLY)
+//                .build();
 
         getScreenDimensions();
     }
@@ -85,7 +88,7 @@ public class CatagoriesAdapter extends RecyclerView.Adapter<CatagoriesAdapter.Ca
     }
 
     @Override
-    public CatagoriesAdapter.CatagoriesAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CatagoriesAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.catagories_tab_layout, parent, false);
@@ -97,6 +100,7 @@ public class CatagoriesAdapter extends RecyclerView.Adapter<CatagoriesAdapter.Ca
     public void onBindViewHolder(final CatagoriesAdapterViewHolder viewHolder, int position) {
 
         //CatagoriesTabDao catagoriesTabDao = mCatagoriesTabList.get(position);
+        System.out.println("tab is categories");
         final String catagoriesTabImageUrl = mCatagoriesTabList.get(position).getCategoriesUrl();
         String catagoriesTabName = mCatagoriesTabList.get(position).getCategoriesName();
         long categoriesId = mCatagoriesTabList.get(position).getCategoriesId();
@@ -151,7 +155,7 @@ public class CatagoriesAdapter extends RecyclerView.Adapter<CatagoriesAdapter.Ca
                             if (catagoriesTabImageUrl == null) {
                                 // viewHolder.playlistImageView.setImageResource(R.drawable.vault);
                             }
-                        }
+                           }
 
                         @Override
                         public void onLoadingCancelled(String s, View view) {
@@ -159,16 +163,18 @@ public class CatagoriesAdapter extends RecyclerView.Adapter<CatagoriesAdapter.Ca
                             // viewHolder.playlistImageView.setImageResource(R.drawable.vault);
                         }
                     });
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            System.out.println("Exception Catagories "+e.getMessage());
+        }
 
             int aspectHeight = (displayWidth * 8) / 16;
 
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
                     aspectHeight);
             viewHolder.playlistImageView.setLayoutParams(lp);
-        }catch (OutOfMemoryError e)
-        {
-            e.printStackTrace();
-        }
+
 
         viewHolder.playlistTabNametextView.setText(catagoriesTabName);
 
@@ -195,7 +201,7 @@ public class CatagoriesAdapter extends RecyclerView.Adapter<CatagoriesAdapter.Ca
 
 
 
-    public class CatagoriesAdapterViewHolder extends RecyclerView.ViewHolder {
+    public static class CatagoriesAdapterViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView playlistImageView;
         TextView playlistTabNametextView;
@@ -207,14 +213,7 @@ public class CatagoriesAdapter extends RecyclerView.Adapter<CatagoriesAdapter.Ca
             playlistImageView = (ImageView) view.findViewById(R.id.tv_playlist_image);
             playlistTabNametextView = (TextView) view.findViewById(R.id.tv_playlist_name);
             progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
-           // progressBar.setVisibility(View.VISIBLE);
             playlistLayout = (RelativeLayout)  view.findViewById(R.id.playlist_layout);
-//            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-//                progressBar.setIndeterminateDrawable(mContext.getResources().getDrawable(R.drawable.circle_progress_bar_lower));
-//            } else {
-//                System.out.println("progress bar not showing ");
-//                progressBar.setIndeterminateDrawable(ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.progress_large_material, null));
-//            }
 
         }
     }

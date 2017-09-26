@@ -154,8 +154,13 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.user_profile_screen_layout, container, false);
-
+        View rootView = null;
+        try {
+            rootView   = inflater.inflate(R.layout.user_profile_screen_layout, container, false);
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+        }
         return rootView;
     }
 

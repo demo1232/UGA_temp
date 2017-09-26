@@ -47,7 +47,7 @@ public class AndroidApplication extends Application {
        //gk CrashManager.initialize(this, GlobalConstants.HOCKEY_APP_ID, null);
 
         TwitterAuthConfig authConfig = new TwitterAuthConfig(GlobalConstants.TWITTER_CONSUMER_KEY, GlobalConstants.TWITTER_CONSUMER_SECRET);
-        Fabric.with(this, new Twitter(authConfig),new Crashlytics());
+        Fabric.with(this, new Twitter(authConfig)/*,new Crashlytics()*/);
 
         Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
         Fabric.with(this, new TweetComposer());

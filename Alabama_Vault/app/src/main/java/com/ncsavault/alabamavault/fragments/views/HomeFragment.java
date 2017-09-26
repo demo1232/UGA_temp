@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -44,7 +45,9 @@ import com.ncsavault.alabamavault.views.AbstractView;
 import com.ncsavault.alabamavault.views.HomeScreen;
 import com.ncsavault.alabamavault.views.VideoInfoActivity;
 import com.ncsavault.alabamavault.views.VideoSearchActivity;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 
 import java.io.File;
@@ -96,6 +99,7 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
     ArrayList<VideoDTO> trendingArraylist = new ArrayList<>();
     ArrayList<TabBannerDTO> bannerList = new ArrayList<>();
     private VideoDataTaskModel mVideoDataTaskModel;
+    public DisplayImageOptions options;
 
     public static Fragment newInstance(Activity context) {
         Fragment frag = new HomeFragment();
@@ -110,7 +114,12 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        options = new DisplayImageOptions.Builder()
+                .cacheOnDisk(true).resetViewBeforeLoading(true)
+                .cacheInMemory(true)
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .imageScaleType(ImageScaleType.EXACTLY)
+                .build();
 
 
     }
@@ -500,7 +509,8 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
                             trendingArraylist.clear();
                             trendingArraylist.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).getAllTrendingVideoList());
                         }
-                        adapter = new FilterSubtypesAdapter(mContext, mRecyclerViewItems, trendingArraylist, HomeFragment.this);
+                        adapter = new FilterSubtypesAdapter(mContext, mRecyclerViewItems, trendingArraylist,
+                                HomeFragment.this,options);
                         mRecyclerView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                         refreshLayout.setRefreshing(false);
@@ -670,7 +680,7 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
                     }
 
                 }
-                adapter = new FilterSubtypesAdapter(mContext, mRecyclerViewItems, trendingArraylist, HomeFragment.this);
+                adapter = new FilterSubtypesAdapter(mContext, mRecyclerViewItems, trendingArraylist, HomeFragment.this,options);
                 mRecyclerView.setAdapter(adapter);
                 mRecyclerView.setHasFixedSize(true);
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -754,7 +764,8 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
         {
             progressBar.setVisibility(View.GONE);
         }
-        adapter = new FilterSubtypesAdapter(mContext, mRecyclerViewItems, trendingArraylist, HomeFragment.this);
+        adapter = new FilterSubtypesAdapter(mContext, mRecyclerViewItems, trendingArraylist,
+                HomeFragment.this,options);
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -925,5 +936,7 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
             e.printStackTrace();
         }
     }
+
+
 
 }

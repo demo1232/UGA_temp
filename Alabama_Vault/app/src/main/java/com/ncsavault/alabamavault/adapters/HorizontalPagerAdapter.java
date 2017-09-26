@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,7 +72,8 @@ public class HorizontalPagerAdapter extends PagerAdapter {
 //        ImageLoader.getInstance().init(config);
 
         options = new DisplayImageOptions.Builder()
-                .cacheOnDisk(true).resetViewBeforeLoading(true)
+                .cacheOnDisk(true)
+                .resetViewBeforeLoading(true)
                 .cacheInMemory(true)
                 .bitmapConfig(Bitmap.Config.RGB_565)
                 .imageScaleType(ImageScaleType.EXACTLY)
@@ -127,7 +130,7 @@ public class HorizontalPagerAdapter extends PagerAdapter {
 //            });
 
        try{
-            com.nostra13.universalimageloader.core.ImageLoader.getInstance().
+           ImageLoader.getInstance().
                     displayImage(trendingVideosList.get(position).getVideoStillUrl(),
                             imageCover, options, new ImageLoadingListener() {
                                 @Override
@@ -155,9 +158,10 @@ public class HorizontalPagerAdapter extends PagerAdapter {
                                   //  imageCover.setImageResource(R.drawable.vault);
                                 }
                             });
-        }catch (OutOfMemoryError e)
+        }catch (Exception e)
         {
             e.printStackTrace();
+            System.out.println("Exception Horozontal "+e.getMessage());
         }
 
             int aspectHeight = (displayWidth * 9) / 16;
@@ -224,6 +228,7 @@ public class HorizontalPagerAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
+
         container.removeView((View) object);
     }
 

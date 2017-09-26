@@ -131,6 +131,7 @@ public class HomeScreen extends AppCompatActivity implements BottomNavigationBar
         ImageLoaderConfiguration config;
         config = new ImageLoaderConfiguration.Builder(this)
                 .threadPoolSize(5) // default
+                .memoryCache(new LruMemoryCache(2 * 1024 * 1024))
                 .denyCacheImageMultipleSizesInMemory()
                 .diskCache(new UnlimitedDiscCache(cacheDir))
                 .build();

@@ -49,11 +49,13 @@ public class SavedVideoAdapter extends RecyclerView.Adapter<SavedVideoAdapter.Sa
     {
         void onClick(SavedVideoAdapter.SavedVideoViewHolder videoViewHolder,int position);
     }
-    public SavedVideoAdapter(Context context,ArrayList<VideoDTO> favoriteVideoList,SavedClickListener savedClickListener ) {
+    public SavedVideoAdapter(Context context,ArrayList<VideoDTO> favoriteVideoList,
+                             SavedClickListener savedClickListener, DisplayImageOptions displayImageOptions ) {
         super();
         this.mContext = context;
         mFavoriteVideoList = favoriteVideoList;
         mSavedClickListener = savedClickListener;
+        options = displayImageOptions;
 
 //        File cacheDir = StorageUtils.getCacheDirectory(mContext);
 //        ImageLoaderConfiguration config;
@@ -64,12 +66,12 @@ public class SavedVideoAdapter extends RecyclerView.Adapter<SavedVideoAdapter.Sa
 //                .build();
 //        ImageLoader.getInstance().init(config);
 
-        options = new DisplayImageOptions.Builder()
-                .cacheOnDisk(true).resetViewBeforeLoading(true)
-                .cacheInMemory(true)
-                .bitmapConfig(Bitmap.Config.RGB_565)
-                .imageScaleType(ImageScaleType.EXACTLY)
-                .build();
+//        options = new DisplayImageOptions.Builder()
+//                .cacheOnDisk(true).resetViewBeforeLoading(true)
+//                .cacheInMemory(true)
+//                .bitmapConfig(Bitmap.Config.RGB_565)
+//                .imageScaleType(ImageScaleType.EXACTLY)
+//                .build();
 
     }
 
@@ -91,7 +93,7 @@ public class SavedVideoAdapter extends RecyclerView.Adapter<SavedVideoAdapter.Sa
     public void onBindViewHolder(final SavedVideoAdapter.SavedVideoViewHolder viewHolder, int position) {
 
         VideoDTO newVideoDto = mFavoriteVideoList.get(position);
-
+        System.out.println("tab is saved");
         final String videoImageUrl = newVideoDto.getVideoStillUrl();
         String videoName = newVideoDto.getVideoName();
         String videDescription = newVideoDto.getVideoShortDescription();
@@ -126,9 +128,10 @@ public class SavedVideoAdapter extends RecyclerView.Adapter<SavedVideoAdapter.Sa
                             viewHolder.progressBar.setVisibility(View.GONE);
                         }
                     });
-        }catch (OutOfMemoryError error)
+        }catch (Exception error)
         {
             error.printStackTrace();
+            System.out.println("Exception Saved "+error.getMessage());
         }
 
         viewHolder.videoNameTextView.setText(videoName);
@@ -154,7 +157,7 @@ public class SavedVideoAdapter extends RecyclerView.Adapter<SavedVideoAdapter.Sa
 
 
 
-    public class SavedVideoViewHolder extends RecyclerView.ViewHolder {
+    public static class SavedVideoViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView videoImageView,savedVideoImageView;
         TextView videoNameTextView,videoDescriptionTextView,videoDurationTextView;

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,7 +37,9 @@ import com.ncsavault.alabamavault.views.HomeScreen;
 import com.ncsavault.alabamavault.views.LoginEmailActivity;
 import com.ncsavault.alabamavault.views.VideoInfoActivity;
 import com.ncsavault.alabamavault.views.VideoSearchActivity;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -63,7 +66,7 @@ public class SavedVideoFragment extends Fragment implements SavedVideoAdapter.Sa
     private boolean isFavoriteChecked;
     private String postResult;
     RecyclerView.OnItemTouchListener disable;
-
+    public DisplayImageOptions options;
     public static Fragment newInstance(Context context) {
         Fragment frag = new SavedVideoFragment();
 
@@ -72,13 +75,22 @@ public class SavedVideoFragment extends Fragment implements SavedVideoAdapter.Sa
         return frag;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        options = new DisplayImageOptions.Builder()
+                .cacheOnDisk(true).resetViewBeforeLoading(true)
+                .cacheInMemory(true)
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .imageScaleType(ImageScaleType.EXACTLY)
+                .build();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.saved_video_fragment_layout, container, false);
-
 
     }
 
@@ -120,7 +132,8 @@ public class SavedVideoFragment extends Fragment implements SavedVideoAdapter.Sa
                 favoriteVideoList.addAll(VaultDatabaseHelper.getInstance(mContext.getApplicationContext()).
                         getFavouriteVideosArrayList());
                 System.out.println("favoriteVideoList size onResume: " + favoriteVideoList.size());
-                savedVideoAdapter = new SavedVideoAdapter(mContext, favoriteVideoList, SavedVideoFragment.this);
+                savedVideoAdapter = new SavedVideoAdapter(mContext, favoriteVideoList,
+                        SavedVideoFragment.this,options);
                 mRecyclerView.setAdapter(savedVideoAdapter);
                 savedVideoAdapter.notifyDataSetChanged();
                 GlobalConstants.IS_RETURNED_FROM_PLAYER = false;
@@ -225,7 +238,8 @@ public class SavedVideoFragment extends Fragment implements SavedVideoAdapter.Sa
                     }
                 });
 
-                savedVideoAdapter  = new SavedVideoAdapter(mContext,favoriteVideoList, SavedVideoFragment.this);
+                savedVideoAdapter  = new SavedVideoAdapter(mContext,favoriteVideoList,
+                        SavedVideoFragment.this,options);
                 if(favoriteVideoList.size() == 0)
                 {
                     tvNoRecoredFound.setVisibility(View.VISIBLE);
@@ -575,7 +589,8 @@ public class SavedVideoFragment extends Fragment implements SavedVideoAdapter.Sa
                 });
 
 
-                savedVideoAdapter  = new SavedVideoAdapter(mContext,favoriteVideoList,SavedVideoFragment.this);
+                savedVideoAdapter  = new SavedVideoAdapter(mContext,favoriteVideoList,
+                        SavedVideoFragment.this,options);
                 mRecyclerView.setHasFixedSize(true);
                 LinearLayoutManager llm = new LinearLayoutManager(mContext);
                 llm.setOrientation(LinearLayoutManager.VERTICAL);

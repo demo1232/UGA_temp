@@ -68,7 +68,7 @@ import me.crosswall.lib.coverflow.core.PagerContainer;
  */
 
 public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private Activity mContext;
+    private static Activity mContext;
     private List<VideoDTO> albumList;
     // Header view type
     private static final int HEADER_VIEW = 0;
@@ -90,11 +90,14 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
 
 
-    public FilterSubtypesAdapter(Activity mContext, List<VideoDTO> albumList, ArrayList<VideoDTO> trendingVideoList,
-                                 BannerClickListener bannerClickListener/*,AdsResumeListener adsResumeListener*/) {
+    public FilterSubtypesAdapter(Activity mContext, List<VideoDTO> albumList,
+                                 ArrayList<VideoDTO> trendingVideoList,
+                                 BannerClickListener bannerClickListener,DisplayImageOptions displayImageOptions) {
         this.mContext = mContext;
         this.albumList = albumList;
         this.trendingVideoList = trendingVideoList;
+        options = displayImageOptions;
+
         getScreenDimensions();
 //        screenSize  = mContext.getResources().getConfiguration().screenLayout &
 //                Configuration.SCREENLAYOUT_SIZE_MASK;
@@ -107,12 +110,12 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 //                .build();
 //        ImageLoader.getInstance().init(config);
 
-        options = new DisplayImageOptions.Builder()
-                .cacheOnDisk(true).resetViewBeforeLoading(true)
-                .cacheInMemory(true)
-                .bitmapConfig(Bitmap.Config.RGB_565)
-                .imageScaleType(ImageScaleType.EXACTLY)
-                .build();
+//        options = new DisplayImageOptions.Builder()
+//                .cacheOnDisk(true).resetViewBeforeLoading(true)
+//                .cacheInMemory(true)
+//                .bitmapConfig(Bitmap.Config.RGB_565)
+//                .imageScaleType(ImageScaleType.EXACTLY)
+//                .build();
         this.bannerClickListener = bannerClickListener;
       //  this.mAdsResumeListener = adsResumeListener;
 
@@ -129,7 +132,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
 
-    class VHHeader extends RecyclerView.ViewHolder {
+    public static class VHHeader extends RecyclerView.ViewHolder {
 
         private ViewPager pager;
         private TextView topTenText;
@@ -143,7 +146,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
             pager = pagerContainer.getViewPager();
             //pager = (ViewPager) itemView.findViewById(R.id.pager_introduction);
-              topTenText = (TextView) itemView.findViewById(R.id.textView_videoName_top);
+            topTenText = (TextView) itemView.findViewById(R.id.textView_videoName_top);
             horizontal_layout = (ConstraintLayout) itemView.findViewById(R.id.horizontal_layout);
 
         }
@@ -227,7 +230,7 @@ public class FilterSubtypesAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     }
 
 try{
-                    com.nostra13.universalimageloader.core.ImageLoader.getInstance().
+                    ImageLoader.getInstance().
                             displayImage(videoDTO.getVideoStillUrl(),
                                     vhHeader.videoImage, options, new ImageLoadingListener() {
                                         @Override
@@ -255,9 +258,10 @@ try{
                                            // vhHeader.videoImage.setImageResource(R.drawable.vault);
                                         }
                                     });
-                }catch (OutOfMemoryError e)
+                }catch (Exception e)
                 {
                     e.printStackTrace();
+                    System.out.println("Exception TYPE_LOW "+e.getMessage());
                 }
 
                     int aspectHeight = (displayWidth * 9) / 16;
@@ -359,35 +363,41 @@ try{
 //                    .placeholder(R.drawable.alabama_vault_logo)
 //                    .into(viewholer.imageviewBanner);
 
-            com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(videoDTO.getVideoStillUrl(),
-                    viewholer.imageviewBanner, options, new ImageLoadingListener() {
-                        @Override
-                        public void onLoadingStarted(String s, View view) {
-                            viewholer.progressBar.setVisibility(View.VISIBLE);
-                            viewholer.imageviewBanner.setImageResource(R.drawable.alabama_vault_logo);
+            try {
+                ImageLoader.getInstance().displayImage(videoDTO.getVideoStillUrl(),
+                        viewholer.imageviewBanner, options, new ImageLoadingListener() {
+                            @Override
+                            public void onLoadingStarted(String s, View view) {
+                                viewholer.progressBar.setVisibility(View.VISIBLE);
+                               // viewholer.imageviewBanner.setImageResource(R.drawable.alabama_vault_logo);
 
-                        }
-
-                        @Override
-                        public void onLoadingFailed(String s, View view, FailReason failReason) {
-                            viewholer.progressBar.setVisibility(View.GONE);
-                            viewholer.imageviewBanner.setImageResource(R.drawable.alabama_vault_logo);
-                        }
-
-                        @Override
-                        public void onLoadingComplete(String s, View view, Bitmap bitmap) {
-                            viewholer.progressBar.setVisibility(View.GONE);
-                            if (videoDTO.getVideoStillUrl() == null) {
-                                viewholer.imageviewBanner.setImageResource(R.drawable.alabama_vault_logo);
                             }
-                        }
 
-                        @Override
-                        public void onLoadingCancelled(String s, View view) {
-                            viewholer.progressBar.setVisibility(View.GONE);
-                            viewholer.imageviewBanner.setImageResource(R.drawable.vault);
-                        }
-                    });
+                            @Override
+                            public void onLoadingFailed(String s, View view, FailReason failReason) {
+                                viewholer.progressBar.setVisibility(View.GONE);
+                               // viewholer.imageviewBanner.setImageResource(R.drawable.alabama_vault_logo);
+                            }
+
+                            @Override
+                            public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                                viewholer.progressBar.setVisibility(View.GONE);
+                                if (videoDTO.getVideoStillUrl() == null) {
+                                //    viewholer.imageviewBanner.setImageResource(R.drawable.alabama_vault_logo);
+                                }
+                            }
+
+                            @Override
+                            public void onLoadingCancelled(String s, View view) {
+                                viewholer.progressBar.setVisibility(View.GONE);
+                              //  viewholer.imageviewBanner.setImageResource(R.drawable.vault);
+                            }
+                        });
+            }catch(Exception e)
+            {
+                e.printStackTrace();
+                System.out.println("Exception banner "+e.getMessage());
+            }
 
             bannerClickListener.onClick((BannerViewHolder) holder, position);
         } else {
@@ -511,7 +521,7 @@ try{
     }
 
 
-    protected class MyViewHolder extends RecyclerView.ViewHolder {
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView mVideoName;
         public ImageView videoImage, savedImage;
         public ProgressBar progressBar;
@@ -535,7 +545,7 @@ try{
     }
 
 
-    public class SubtypeViewHolder extends RecyclerView.ViewHolder {
+    public static class SubtypeViewHolder extends RecyclerView.ViewHolder {
 
        // public AdView adView;
         public NativeExpressAdView adView;
@@ -552,7 +562,7 @@ try{
 
     }
 
-    public class BannerViewHolder extends RecyclerView.ViewHolder {
+    public static class BannerViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView imageviewBanner;
         public LinearLayout bannerLayout;

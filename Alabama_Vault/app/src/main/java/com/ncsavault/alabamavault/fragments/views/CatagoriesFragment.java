@@ -2,6 +2,7 @@ package com.ncsavault.alabamavault.fragments.views;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,7 +28,9 @@ import com.ncsavault.alabamavault.dto.CatagoriesTabDao;
 import com.ncsavault.alabamavault.globalconstants.GlobalConstants;
 import com.ncsavault.alabamavault.utils.Utils;
 import com.ncsavault.alabamavault.views.HomeScreen;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,7 +52,7 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
     private PullRefreshLayout refreshLayout;
     PullRefreshTask pullTask;
     RecyclerView.OnItemTouchListener disable;
-
+    public DisplayImageOptions options;
     public static Fragment newInstance(Context context) {
         Fragment frag = new CatagoriesFragment();
         mContext = context;
@@ -70,6 +73,12 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        options = new DisplayImageOptions.Builder()
+                .cacheOnDisk(true).resetViewBeforeLoading(true)
+                .cacheInMemory(true)
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .imageScaleType(ImageScaleType.EXACTLY)
+                .build();
     }
 
     @Override
@@ -167,7 +176,8 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
                         getAllLocalCategoriesTabData());
 
             if (mRecyclerView != null) {
-                mCatagoriesAdapter = new CatagoriesAdapter(mContext, CatagoriesFragment.this, catagoriesTabList);
+                mCatagoriesAdapter = new CatagoriesAdapter(mContext, CatagoriesFragment.this,
+                        catagoriesTabList,options);
                 mRecyclerView.setHasFixedSize(true);
                 LinearLayoutManager llm = new LinearLayoutManager(mContext);
                 llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -292,7 +302,8 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
 
 
                         if (mRecyclerView != null) {
-                            mCatagoriesAdapter = new CatagoriesAdapter(mContext, CatagoriesFragment.this, result);
+                            mCatagoriesAdapter = new CatagoriesAdapter(mContext, CatagoriesFragment.this,
+                                    result,options);
                             mRecyclerView.setHasFixedSize(true);
                             LinearLayoutManager llm = new LinearLayoutManager(mContext);
                             llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -320,7 +331,7 @@ public class CatagoriesFragment extends Fragment implements CatagoriesAdapter.On
                         .compareTo(Long.valueOf(rhs.getIndex_position()));
             }
         });
-        mCatagoriesAdapter = new CatagoriesAdapter(mContext, CatagoriesFragment.this, catagoriesTabList);
+        mCatagoriesAdapter = new CatagoriesAdapter(mContext, CatagoriesFragment.this, catagoriesTabList,options);
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(mContext);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
