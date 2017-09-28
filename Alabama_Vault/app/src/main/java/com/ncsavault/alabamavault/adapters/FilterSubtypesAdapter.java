@@ -596,17 +596,18 @@ try{
 //            lp.setMargins(30,30,30,5);
 //            vhHeader.adViewLayout.setLayoutParams(lp);
             VideoDTO videoAdMob = albumList.get(postion);
-            NativeExpressAdView mAdView = new NativeExpressAdView(mContext);
+           //gk NativeExpressAdView mAdView = new NativeExpressAdView(mContext);
+            AdView mAdView = new AdView(mContext);
             System.out.println("unit id get : " + videoAdMob.getVideoName());
 
             mAdView.setAdSize(new AdSize(340, 80));
-            mAdView.setAdUnitId(videoAdMob.getVideoName());
+           // mAdView.setAdSize(AdSize.BANNER);
+            mAdView.setAdUnitId("ca-app-pub-3120536913205473/5975042732");
             vhHeader.adViewLayout.addView(mAdView);
             AdRequest request = new AdRequest.Builder()
                     .addTestDevice("20B52AAB529851184340334B73A36E8B")
 //        .addTestDevice("DABB24958D806248B7B399973C92A324")
                     .build();
-
 
             mAdView.loadAd(request);
         }

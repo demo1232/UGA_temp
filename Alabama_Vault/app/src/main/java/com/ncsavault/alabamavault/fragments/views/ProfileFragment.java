@@ -74,9 +74,11 @@ import com.ncsavault.alabamavault.utils.CircularNetworkImageView;
 import com.ncsavault.alabamavault.utils.ImageLoaderController;
 import com.ncsavault.alabamavault.utils.Utils;
 import com.ncsavault.alabamavault.views.AbstractView;
+import com.ncsavault.alabamavault.views.ContactActivity;
 import com.ncsavault.alabamavault.views.HomeScreen;
 import com.ncsavault.alabamavault.views.LoginEmailActivity;
 
+import com.ncsavault.alabamavault.views.SupportActivity;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -520,24 +522,27 @@ public class ProfileFragment extends BaseFragment implements AbstractView {
         mContactSupportView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = null;
-                intent = new Intent(Intent.ACTION_SENDTO);
-                intent.setData(Uri.parse("mailto:" + GlobalConstants.SUPPORT_MAIL_ID));
-                intent.setPackage("com.google.android.gm");
-                intent.putExtra(Intent.EXTRA_SUBJECT, GlobalConstants.SUPPORT_SUBJECT);
-                //intent.putExtra(Intent.EXTRA_TEXT, "Gaurav");
-                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    try {
-                        startActivity(Intent.createChooser(intent, "Choose an email client"));
-                    } catch (ActivityNotFoundException anfe) {
-                        anfe.printStackTrace();
-                    }
-                } else {
-//                    Intent intentForBrowser = new Intent(Intent.ACTION_VIEW);
-//                    intentForBrowser.setData(Uri.parse(GlobalConstants.SUPPORT_MAIL_THROUGH_BROWSER));
-//                    startActivity(intentForBrowser);
-                    Toast.makeText(getActivity(), "Gmail app is not installed. Please install Gmaill app for support.", Toast.LENGTH_SHORT).show();
-                }
+//                Intent intent = null;
+//                intent = new Intent(Intent.ACTION_SENDTO);
+//                intent.setData(Uri.parse("mailto:" + GlobalConstants.SUPPORT_MAIL_ID));
+//                intent.setPackage("com.google.android.gm");
+//                intent.putExtra(Intent.EXTRA_SUBJECT, GlobalConstants.SUPPORT_SUBJECT);
+//                //intent.putExtra(Intent.EXTRA_TEXT, "Gaurav");
+//                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+//                    try {
+//                        startActivity(Intent.createChooser(intent, "Choose an email client"));
+//                    } catch (ActivityNotFoundException anfe) {
+//                        anfe.printStackTrace();
+//                    }
+//                } else {
+////                    Intent intentForBrowser = new Intent(Intent.ACTION_VIEW);
+////                    intentForBrowser.setData(Uri.parse(GlobalConstants.SUPPORT_MAIL_THROUGH_BROWSER));
+////                    startActivity(intentForBrowser);
+//                    Toast.makeText(getActivity(), "Gmail app is not installed. Please install Gmaill app for support.", Toast.LENGTH_SHORT).show();
+//                }
+                Intent intent = new Intent(mContext, SupportActivity.class);
+                mContext.startActivity(intent);
+
             }
         });
 

@@ -60,4 +60,8 @@
     <dimen name="overlap_pager_margin">-200dp</dimen>
     <dimen name="player_name">25dp</dimen>
     <dimen name="app_name_size">20dp</dimen>
+
+    <dimen name="support_screen_top_text_size">16sp</dimen>
+    <dimen name="support_screen_text_size">18sp</dimen>
+    <dimen name="activity_top_margin">10dp</dimen>
 </resources>

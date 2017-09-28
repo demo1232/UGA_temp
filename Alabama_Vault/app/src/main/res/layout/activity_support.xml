@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.ncsavault.alabamavault.views.SupportActivity">
+
+    <RelativeLayout
+        android:id="@+id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@color/apptheme_color"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/img_close"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="5dp"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/close" />
+
+
+        <TextView
+            android:id="@+id/textView_support"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/support"
+            android:textColor="@color/white"
+            android:layout_centerInParent="true"
+            android:textAllCaps="true"
+            android:textSize="@dimen/player_name"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+
+
+    <TextView
+        android:id="@+id/textView_supportYouNeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:text="@string/support_you_need"
+        android:textColor="@color/apptheme_color"
+        android:textSize="@dimen/support_screen_top_text_size"
+        android:textStyle="bold" />
+
+
+    <Button
+        android:id="@+id/button_somethingWentWrong"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/margin_short"
+        android:background="@drawable/button_shape_filled"
+        android:text="@string/something_went_wrong"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textAllCaps="false"
+        android:textSize="@dimen/support_screen_text_size" />
+
+    <Button
+        android:id="@+id/button_suggestion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_top_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_top_margin"
+        android:background="@drawable/button_shape_filled"
+        android:text="@string/suggestion"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textAllCaps="false"
+        android:textSize="@dimen/support_screen_text_size" />
+
+    <Button
+        android:id="@+id/button_highlight_request"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:background="@drawable/button_shape_filled"
+        android:text="@string/highlight_request"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        android:textSize="@dimen/support_screen_text_size"
+        android:textStyle="bold" />
+
+</LinearLayout>

@@ -12,6 +12,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ncsavault.alabamavault.R;
@@ -32,8 +33,8 @@ import java.util.regex.Pattern;
 public class ContactActivity extends BaseActivity implements AbstractView {
 
     private TextView tvTitle, tvSubTitle, tvGuestText;
-    private TextView tvClose;
-    private TextView tvSubmit;
+    private ImageView tvClose;
+    private Button tvSubmit;
     private EditText edMessage, edName, edEmail;
     private Animation animation;
 
@@ -71,12 +72,12 @@ public class ContactActivity extends BaseActivity implements AbstractView {
 
     @Override
     public void initViews() {
-        tvTitle = (TextView) findViewById(R.id.tv_title);
+       // tvTitle = (TextView) findViewById(R.id.tv_title);
         tvSubTitle = (TextView) findViewById(R.id.tv_sub_title);
         tvGuestText = (TextView) findViewById(R.id.tv_guest_text);
 
-        tvClose = (TextView) findViewById(R.id.tv_close);
-        tvSubmit = (TextView) findViewById(R.id.tv_submit);
+        tvClose = (ImageView) findViewById(R.id.img_close);
+        tvSubmit = (Button) findViewById(R.id.tv_submit);
 
         edMessage = (EditText) findViewById(R.id.ed_message);
         edName = (EditText) findViewById(R.id.ed_name);
@@ -87,20 +88,20 @@ public class ContactActivity extends BaseActivity implements AbstractView {
     public void initData() {
         long userID = AppController.getInstance().getModelFacade().getLocalModel().getUserId();
         if (userID == GlobalConstants.DEFAULT_USER_ID) {
-            tvTitle.setVisibility(View.GONE);
+           // tvTitle.setVisibility(View.GONE);
             tvSubTitle.setVisibility(View.GONE);
 
             tvGuestText.setVisibility(View.VISIBLE);
             edName.setVisibility(View.VISIBLE);
             edEmail.setVisibility(View.VISIBLE);
         } else {
-            String title = getIntent().getStringExtra("title");
-            String subTitle = getIntent().getStringExtra("subtitle");
+           // String title = getIntent().getStringExtra("title");
+            String subTitle = getIntent().getStringExtra("button_text");
 
-            tvTitle.setText(title);
+           // tvTitle.setText(title);
             tvSubTitle.setText(subTitle);
 
-            tvTitle.setVisibility(View.VISIBLE);
+            //tvTitle.setVisibility(View.VISIBLE);
             tvSubTitle.setVisibility(View.VISIBLE);
 
             tvGuestText.setVisibility(View.GONE);

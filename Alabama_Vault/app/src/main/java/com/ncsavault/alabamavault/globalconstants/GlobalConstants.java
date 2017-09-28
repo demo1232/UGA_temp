@@ -29,6 +29,7 @@ public class GlobalConstants {
     //Asana API key for NCSA workspace
     public static final String ASANA_WORKSPACE_API_KEY_OLD = "be6Qonxo.Fq4lCk3Kh2uxhp11TD83Rfz";
     public static final String ASANA_WORKSPACE_API_KEY = "bOYidKTG.o2d02z31v2uEZbHOYOnDyeO";
+    public static final String ASANA_WORKSPACE_ACCESS_TOKEN = "0/27361a0a4ba92d4a206531c9b9a75feb";
 
 
     //WorkspaceId for NCSA Workspace on Asana

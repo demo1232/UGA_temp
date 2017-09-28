@@ -530,8 +530,8 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnScrollLi
 
     private String getRandomId()
     {
-        int i = new Random().nextInt(GlobalConstants.AD_UNIT_FOR_FEATURED.length);
-        String random = (GlobalConstants.AD_UNIT_FOR_FEATURED[i]);
+        int i = new Random().nextInt(GlobalConstants.TEMP_AD_UNIT_FOR_FEATURED.length);
+        String random = (GlobalConstants.TEMP_AD_UNIT_FOR_FEATURED[i]);
 
         return random;
     }

@@ -949,7 +949,7 @@ public class VaultApiCallImpl extends VaultService implements VaultApiInterface 
 
         //API key for workspace along with : which represents password which is empty
         String base64EncodedCredentials = "Basic " + Base64.encodeToString(
-                (GlobalConstants.ASANA_WORKSPACE_API_KEY + ":").getBytes(),
+                (GlobalConstants.ASANA_WORKSPACE_ACCESS_TOKEN + ":").getBytes(),
                 Base64.NO_WRAP);
 
         System.out.println("Authorization : " + base64EncodedCredentials);
@@ -1015,7 +1015,7 @@ public class VaultApiCallImpl extends VaultService implements VaultApiInterface 
 
         //API key for workspace along with : which represents password which is empty
         String base64EncodedCredentials = "Basic " + Base64.encodeToString(
-                (GlobalConstants.ASANA_WORKSPACE_API_KEY + ":").getBytes(),
+                (GlobalConstants.ASANA_WORKSPACE_ACCESS_TOKEN + ":").getBytes(),
                 Base64.NO_WRAP);
 
         System.out.println("Authorization : " + base64EncodedCredentials);
