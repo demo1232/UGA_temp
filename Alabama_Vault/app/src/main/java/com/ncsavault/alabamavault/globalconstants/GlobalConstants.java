@@ -90,10 +90,10 @@ public class GlobalConstants {
     // public static final String BASE_URL = "http://0b78b111a9d0410784caa8a634aa3b90.cloudapp.net/api";
 
     //new Staging url
-    public static String BASE_URL = "http://syncroapi-staging.ncsavault.com/api";
+   // public static String BASE_URL = "http://syncroapi-staging.ncsavault.com/api";
 
     //new Production Url
-   // public static final String BASE_URL = "http://syncroapi.ncsavault.com/api";
+    public static final String BASE_URL = "http://syncroapi.ncsavault.com/api";
 
     public static final String PUSH_REGISTER_URL = BASE_URL + "/MobileUsers/PostPushData";
 
