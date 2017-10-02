@@ -91,6 +91,25 @@ android {
         }
     }
 
+    productFlavors {
+
+        alabama {
+            applicationId "com.ncsavault.alabamavault"
+            minSdkVersion 16
+            targetSdkVersion 25
+            versionCode 2
+            versionName "1.0.11"
+        }
+        florida {
+            applicationId "com.ncsavault.floridavault"
+            minSdkVersion 16
+            targetSdkVersion 25
+            versionCode 2
+            versionName "1.0.11"
+        }
+
+    }
+
 }
 
 dependencies {
