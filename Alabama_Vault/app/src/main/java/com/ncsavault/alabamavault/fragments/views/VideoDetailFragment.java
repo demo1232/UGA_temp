@@ -31,14 +31,12 @@ import com.ncsavault.alabamavault.adapters.FilterSubtypesAdapter;
 import com.ncsavault.alabamavault.adapters.VideoDetailAdapter;
 import com.ncsavault.alabamavault.controllers.AppController;
 
-import com.ncsavault.alabamavault.customviews.CustomGridLayoutManager;
 import com.ncsavault.alabamavault.customviews.RecyclerViewDisabler;
 import com.ncsavault.alabamavault.database.VaultDatabaseHelper;
 import com.ncsavault.alabamavault.dto.PlaylistDto;
 import com.ncsavault.alabamavault.dto.VideoDTO;
 import com.ncsavault.alabamavault.globalconstants.GlobalConstants;
 import com.ncsavault.alabamavault.service.TrendingFeaturedVideoService;
-import com.ncsavault.alabamavault.service.VideoDataService;
 import com.ncsavault.alabamavault.utils.Utils;
 import com.ncsavault.alabamavault.views.BaseActivity;
 import com.ncsavault.alabamavault.views.HomeScreen;

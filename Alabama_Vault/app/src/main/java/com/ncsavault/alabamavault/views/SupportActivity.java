@@ -28,6 +28,7 @@ public class SupportActivity extends AppCompatActivity implements View.OnClickLi
         buttonSomethingWentWrong.setOnClickListener(this);
         buttoSuggestion.setOnClickListener(this);
         buttonHighlightRequest.setOnClickListener(this);
+        closeButton.setOnClickListener(this);
     }
 
     private void initviews() {

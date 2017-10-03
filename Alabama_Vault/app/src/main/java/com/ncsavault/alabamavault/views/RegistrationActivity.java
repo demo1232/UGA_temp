@@ -57,7 +57,6 @@ import com.ncsavault.alabamavault.models.FBLoginModel;
 import com.ncsavault.alabamavault.models.FetchingAllDataModel;
 import com.ncsavault.alabamavault.models.LoginEmailModel;
 import com.ncsavault.alabamavault.models.MailChimpDataModel;
-import com.ncsavault.alabamavault.service.VideoDataService;
 import com.ncsavault.alabamavault.utils.Utils;
 import com.ncsavault.alabamavault.wheeladapters.NumericWheelAdapter;
 import com.ncsavault.alabamavault.wheelwidget.OnWheelChangedListener;

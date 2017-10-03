@@ -174,9 +174,9 @@
 
 
         <!-- <service android:name=".GCMIntentService" /> -->
-        <service
-            android:name=".service.VideoDataService"
-            android:enabled="true" />
+        <!--<service-->
+            <!--android:name=".service.VideoDataService"-->
+            <!--android:enabled="true" />-->
         <service
             android:name=".service.TrendingFeaturedVideoService"
             android:enabled="true" />

@@ -57,7 +57,6 @@ import com.ncsavault.alabamavault.models.LoginPasswordModel;
 import com.ncsavault.alabamavault.models.MailChimpDataModel;
 import com.ncsavault.alabamavault.models.UserDataModel;
 import com.ncsavault.alabamavault.service.TrendingFeaturedVideoService;
-import com.ncsavault.alabamavault.service.VideoDataService;
 import com.ncsavault.alabamavault.utils.Utils;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -989,7 +988,6 @@ public class LoginEmailActivity extends AppCompatActivity implements GoogleApiCl
 
                                               overridePendingTransition(R.anim.slideup, R.anim.nochange);
                                               finish();
-                                              startService(new Intent(LoginEmailActivity.this, VideoDataService.class));
                                               Intent intent = new Intent(LoginEmailActivity.this, TrendingFeaturedVideoService.class);
                                               startService(intent);
                                           }else {

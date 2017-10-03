@@ -59,14 +59,6 @@ public class VideoSearchAdapter extends RecyclerView.Adapter<VideoSearchAdapter.
         this.filteredObjects = new ArrayList<Object>();
         this.filteredObjects.addAll(objects);
 
-//        File cacheDir = StorageUtils.getCacheDirectory(context);
-//        ImageLoaderConfiguration config;
-//        config = new ImageLoaderConfiguration.Builder(context)
-//                .threadPoolSize(3) // default
-//                .denyCacheImageMultipleSizesInMemory()
-//                .diskCache(new UnlimitedDiscCache(cacheDir))
-//                .build();
-//        ImageLoader.getInstance().init(config);
 
         options = new DisplayImageOptions.Builder()
                 .cacheOnDisk(true).resetViewBeforeLoading(true)
