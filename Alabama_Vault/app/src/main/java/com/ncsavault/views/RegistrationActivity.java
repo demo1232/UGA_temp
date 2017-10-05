@@ -44,7 +44,7 @@ import android.widget.TextView;
 import com.ncsavault.service.TrendingFeaturedVideoService;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.twitter.sdk.android.Twitter;
-import com.ncsavault.R;
+import applicationId.R;
 import com.ncsavault.controllers.AppController;
 import com.ncsavault.customviews.VerticalScrollview;
 import com.ncsavault.database.VaultDatabaseHelper;

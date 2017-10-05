@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1052118994678",
+    "firebase_url": "https://florida-vault.firebaseio.com",
+    "project_id": "florida-vault",
+    "storage_bucket": "florida-vault.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1052118994678:android:968ca67ea007714b",
+        "android_client_info": {
+          "package_name": "com.ncsavault.floridavault"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1052118994678-ap7vtngfhbk7ac70tj68lqg6vubil0nt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbcsO6Lm1KOpwIMd70KqviEV2HKnY-wak"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

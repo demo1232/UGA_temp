@@ -15,7 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ncsavault.R;
+import applicationId.R;
 import com.ncsavault.controllers.AppController;
 import com.ncsavault.globalconstants.GlobalConstants;
 import com.ncsavault.models.BaseModel;

@@ -29,7 +29,7 @@ import android.widget.TextView;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.ncsavault.AsyncTask.VideoPlayTask;
-import com.ncsavault.R;
+import applicationId.R;
 import com.ncsavault.adapters.CarouselPagerAdapter;
 import com.ncsavault.adapters.FilterSubtypesAdapter;
 import com.ncsavault.controllers.AppController;

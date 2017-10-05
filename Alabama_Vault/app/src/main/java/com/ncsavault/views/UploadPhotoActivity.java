@@ -70,7 +70,7 @@ import com.google.gson.reflect.TypeToken;
 import com.ncsavault.models.LoginEmailModel;
 import com.ncsavault.service.TrendingFeaturedVideoService;
 import com.reginald.editspinner.EditSpinner;
-import com.ncsavault.R;
+import applicationId.R;
 import com.ncsavault.controllers.AppController;
 import com.ncsavault.customviews.VerticalScrollview;
 import com.ncsavault.database.VaultDatabaseHelper;

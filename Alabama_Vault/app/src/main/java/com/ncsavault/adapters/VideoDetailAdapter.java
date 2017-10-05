@@ -17,7 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.ncsavault.R;
+import applicationId.R;
 import com.ncsavault.controllers.AppController;
 
 import com.ncsavault.database.VaultDatabaseHelper;

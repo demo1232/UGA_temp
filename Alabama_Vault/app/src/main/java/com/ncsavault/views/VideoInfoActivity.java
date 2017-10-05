@@ -50,7 +50,7 @@ import com.longtailvideo.jwplayer.media.ads.Ad;
 import com.longtailvideo.jwplayer.media.ads.AdBreak;
 import com.longtailvideo.jwplayer.media.ads.AdSource;
 import com.longtailvideo.jwplayer.media.ads.Advertising;
-import com.ncsavault.R;
+import applicationId.R;
 import com.ncsavault.controllers.AppController;
 import com.ncsavault.database.VaultDatabaseHelper;
 import com.ncsavault.dto.VideoDTO;

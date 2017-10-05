@@ -20,7 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.ncsavault.R;
+import applicationId.R;
 import com.ncsavault.dto.CatagoriesTabDao;
 import com.ncsavault.utils.ImageLoaderController;
 import com.ncsavault.views.HomeScreen;

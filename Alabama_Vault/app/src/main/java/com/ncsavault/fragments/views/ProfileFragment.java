@@ -60,7 +60,7 @@ import com.facebook.login.LoginResult;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.ncsavault.R;
+import applicationId.R;
 import com.ncsavault.controllers.AppController;
 import com.ncsavault.database.VaultDatabaseHelper;
 import com.ncsavault.defines.AppDefines;

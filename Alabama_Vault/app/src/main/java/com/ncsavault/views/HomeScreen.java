@@ -33,7 +33,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.MobileAds;
-import com.ncsavault.R;
+import applicationId.R;
 import com.ncsavault.bottomnavigation.BottomNavigationBar;
 import com.ncsavault.bottomnavigation.NavigationPage;
 import com.ncsavault.controllers.AppController;

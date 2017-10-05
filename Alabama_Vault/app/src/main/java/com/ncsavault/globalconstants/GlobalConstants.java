@@ -18,7 +18,6 @@ public class GlobalConstants {
     public static final String DEVICE_TYPE = "Android";
     public static final String APP_FULL_NAME = "Alabama Vault";
     public static final String APP_SCHOOL_NAME = "Alabama";
-
     // --------Banner image url-----------
     public static final String URL_FEATUREDBANNER = "http://www.ncsavault.com/banner/uga/gfeatured.png";
 

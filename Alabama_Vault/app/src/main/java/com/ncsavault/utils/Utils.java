@@ -66,7 +66,7 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
-import com.ncsavault.R;
+import applicationId.R;
 
 import com.ncsavault.controllers.AppController;
 import com.ncsavault.database.VaultDatabaseHelper;

@@ -64,7 +64,7 @@
         android:layout_height="0dp"
         android:layout_weight="4.4">
 
-        <com.ncsavault.alabamavault.customviews.VerticalScrollview
+        <com.ncsavault.customviews.VerticalScrollview
             android:id="@+id/scroll_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -98,7 +98,7 @@
                             android:indeterminateDuration="1100"
                             android:visibility="gone" />
 
-                        <com.ncsavault.alabamavault.utils.CircularImageView
+                        <com.ncsavault.utils.CircularImageView
                             android:id="@+id/imgUserProfile"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -418,7 +418,7 @@
                     android:textColor="@android:color/white"
                     android:textSize="20dp" />
             </LinearLayout>
-        </com.ncsavault.alabamavault.customviews.VerticalScrollview>
+        </com.ncsavault.customviews.VerticalScrollview>
 
 
         <include
@@ -429,7 +429,7 @@
 
     </FrameLayout>
 
-    <com.ncsavault.alabamavault.wheelwidget.WheelView
+    <com.ncsavault.wheelwidget.WheelView
         android:id="@+id/year_wheel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

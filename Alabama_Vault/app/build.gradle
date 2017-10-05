@@ -48,7 +48,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
     defaultConfig {
-        applicationId "com.ncsavault.alabamavault"
+        //applicationId "com.ncsavault.alabamavault"
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 2
@@ -98,14 +98,16 @@ android {
             minSdkVersion 19
             targetSdkVersion 25
             versionCode 2
-            versionName "1.0.11"
+            versionName "2.1"
+            resValue "string", "fb_provider_test_id","2221643334726999"
         }
         florida {
             applicationId "com.ncsavault.floridavault"
             minSdkVersion 19
             targetSdkVersion 25
-            versionCode 2
-            versionName "1.0.11"
+            versionCode 10
+            versionName "2.0"
+            resValue "string", "fb_provider_test_id" ,"1695717030674630"
         }
 
     }

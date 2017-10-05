@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.ncsavault.R;
+import applicationId.R;
 
     public abstract class BaseActivity extends FragmentActivity {
 

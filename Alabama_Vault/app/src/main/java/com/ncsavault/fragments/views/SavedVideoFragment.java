@@ -24,7 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baoyz.widget.PullRefreshLayout;
-import com.ncsavault.R;
+import applicationId.R;
 import com.ncsavault.adapters.SavedVideoAdapter;
 import com.ncsavault.controllers.AppController;
 import com.ncsavault.customviews.RecyclerViewDisabler;

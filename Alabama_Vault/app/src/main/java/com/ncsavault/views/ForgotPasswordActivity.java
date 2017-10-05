@@ -27,7 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.Profile;
-import com.ncsavault.R;
+import applicationId.R;
 import com.ncsavault.controllers.AppController;
 import com.ncsavault.database.VaultDatabaseHelper;
 import com.ncsavault.defines.AppDefines;

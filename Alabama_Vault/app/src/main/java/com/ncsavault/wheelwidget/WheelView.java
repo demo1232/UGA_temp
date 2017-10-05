@@ -32,7 +32,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
 
-import com.ncsavault.R;
+import applicationId.R;
 import com.ncsavault.wheeladapters.WheelViewAdapter;
 
 import java.util.LinkedList;

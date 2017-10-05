@@ -4,6 +4,9 @@
     <!--<string name="app_id">1643922295861554</string>-->
     <string name="app_id">1510709295909401</string>
     <string name="facebook_test_app_id">1695717030674630</string>
+    <string name="fb_provider_id">com.facebook.app.FacebookContentProvider1510709295909401</string>
+    <string name="fb_provider_test_id">com.facebook.app.FacebookContentProvider1695717030674630</string>
+    com.facebook.app.FacebookContentProvider2221643334726999
     <string name="app_name">Florida Vault</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
@@ -79,5 +82,11 @@
 
     <string name="profile_alert_text">Do you want to save changes?</string>
 
+    <string name="support_choose_text">Support choice text from button</string>
 
+    <string name="support">Support</string>
+    <string name="support_you_need">What type of support you need?</string>
+    <string name="something_went_wrong">Something Went Wrong</string>
+    <string name="suggestion">I Have A Suggestion</string>
+    <string name="highlight_request">Clip or Highlight Request</string>
 </resources>

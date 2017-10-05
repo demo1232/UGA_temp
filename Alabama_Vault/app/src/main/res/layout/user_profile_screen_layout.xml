@@ -66,7 +66,7 @@
             android:indeterminateDuration="1100"
              />
 
-        <com.ncsavault.alabamavault.utils.CircularImageView
+        <com.ncsavault.utils.CircularImageView
             android:id="@+id/imgUserProfile"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

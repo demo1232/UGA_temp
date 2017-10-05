@@ -34,7 +34,7 @@ import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
-import com.ncsavault.R;
+import applicationId.R;
 import com.ncsavault.app.AndroidApplication;
 import com.ncsavault.defines.AppDefines;
 import com.ncsavault.factory.ViewFactory;

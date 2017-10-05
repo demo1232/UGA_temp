@@ -26,7 +26,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.baoyz.widget.PullRefreshLayout;
-import com.ncsavault.R;
+import applicationId.R;
 import com.ncsavault.adapters.FilterSubtypesAdapter;
 import com.ncsavault.adapters.VideoDetailAdapter;
 import com.ncsavault.controllers.AppController;

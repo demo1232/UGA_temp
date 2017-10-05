@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.android.volley.toolbox.ImageLoader;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.ncsavault.R;
 import com.ncsavault.controllers.AppController;
 import com.ncsavault.dto.PlaylistDto;
 import com.ncsavault.dto.TopTenVideoDto;
@@ -23,6 +22,8 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import applicationId.R;
 
 /**
  * Created by Ravi Tamada on 18/05/16.

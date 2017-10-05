@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.ncsavault.R;
+import applicationId.R;
 import com.ncsavault.utils.CarouselLinearLayout;
 import com.ncsavault.views.HomeScreen;
 

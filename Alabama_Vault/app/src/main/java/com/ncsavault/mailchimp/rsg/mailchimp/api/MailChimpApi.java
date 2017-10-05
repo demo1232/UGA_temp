@@ -2,7 +2,7 @@ package com.ncsavault.mailchimp.rsg.mailchimp.api;
 
 import android.content.Context;
 
-import com.ncsavault.R;
+import applicationId.R;
 import com.ncsavault.mailchimp.org.xmlrpc.android.XMLRPCClient;
 import com.ncsavault.mailchimp.org.xmlrpc.android.XMLRPCException;
 

@@ -5,10 +5,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
-import com.ncsavault.R;
 import com.ncsavault.fragments.views.ItemFragment;
 import com.ncsavault.utils.CarouselLinearLayout;
 import com.ncsavault.views.HomeScreen;
+
+import applicationId.R;
 
 public class CarouselPagerAdapter extends FragmentPagerAdapter implements ViewPager.OnPageChangeListener {
 

@@ -15,7 +15,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.widget.Button;
 
-import com.ncsavault.R;
+import applicationId.R;
 
 import java.util.ArrayList;
 

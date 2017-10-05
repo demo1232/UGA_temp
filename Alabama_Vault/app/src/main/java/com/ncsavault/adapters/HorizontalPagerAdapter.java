@@ -21,7 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.android.volley.VolleyError;
-import com.ncsavault.R;
+import applicationId.R;
 import com.ncsavault.controllers.AppController;
 import com.ncsavault.dto.VideoDTO;
 import com.ncsavault.fragments.views.VideoDetailFragment;
@@ -49,7 +49,8 @@ import java.io.File;
 import java.util.ArrayList;
 
 
-public class HorizontalPagerAdapter extends PagerAdapter {
+public class
+HorizontalPagerAdapter extends PagerAdapter {
 
     Context context;
     int adapterType = 1;

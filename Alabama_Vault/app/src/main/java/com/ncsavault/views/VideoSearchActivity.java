@@ -29,7 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.ncsavault.R;
+import applicationId.R;
 import com.ncsavault.adapters.FilterSubtypesAdapter;
 import com.ncsavault.adapters.VideoDetailAdapter;
 import com.ncsavault.adapters.VideoSearchAdapter;

@@ -32,7 +32,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.ncsavault.R;
+import applicationId.R;
 import com.ncsavault.controllers.AppController;
 import com.ncsavault.dto.APIResponse;
 import com.ncsavault.globalconstants.GlobalConstants;

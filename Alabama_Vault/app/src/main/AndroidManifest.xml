@@ -17,10 +17,10 @@
 
     <!-- Creates a custom permission so only this app can receive its messages. -->
     <permission
-        android:name="com.ncsavault.alabamavault.permission.C2D_MESSAGE"
+        android:name="${applicationId}.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.ncsavault.alabamavault.permission.C2D_MESSAGE" />
+    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
 
     <!-- This app has permission to register and receive data message. -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
@@ -51,8 +51,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme_1"
             android:windowSoftInputMode="adjustPan" />
+
         <activity
-            android:name="com.ncsavault.views.SplashActivity"
+            android:name="${applicationId}.SplashActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
@@ -71,8 +72,9 @@
                 <data android:scheme="alabamavault" />
             </intent-filter>
         </activity>
+
         <activity
-            android:name=".views.LoginEmailActivity"
+            android:name="com.ncsavault.views.LoginEmailActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/VaultTheme">
@@ -88,22 +90,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".views.ForgotPasswordActivity"
+            android:name="com.ncsavault.views.ForgotPasswordActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/VaultTheme" />
         <activity
-            android:name=".views.RegistrationActivity"
+            android:name="com.ncsavault.views.RegistrationActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/VaultTheme" />
         <activity
-            android:name=".views.VerificationEmailActivity"
+            android:name="com.ncsavault.views.VerificationEmailActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/VaultTheme" />
         <activity
-            android:name=".views.VideoInfoActivity"
+            android:name="com.ncsavault.views.VideoInfoActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensor"
             android:windowSoftInputMode="adjustPan"
@@ -153,44 +155,26 @@
 
         <provider
             android:name="com.facebook.FacebookContentProvider"
-            android:authorities="com.facebook.app.FacebookContentProvider2221643334726999"
+            android:authorities="@string/fb_provider_test_id"
             android:exported="true" />
 
-        <!-- <receiver -->
-        <!-- android:name="com.google.android.gcm.GCMBroadcastReceiver" -->
-        <!-- android:permission="com.google.android.c2dm.permission.SEND" > -->
-        <!-- <intent-filter> -->
-
-
-        <!-- &lt;!&ndash; Receives the actual messages. &ndash;&gt; -->
-        <!-- <action android:name="com.google.android.c2dm.intent.RECEIVE" /> -->
-        <!-- &lt;!&ndash; Receives the registration id. &ndash;&gt; -->
-        <!-- <action android:name="com.google.android.c2dm.intent.REGISTRATION" /> -->
-
-
-        <!-- <category android:name="com.ncsavault.alabamavault" /> -->
-        <!-- </intent-filter> -->
-        <!-- </receiver> -->
-
-
-        <!-- <service android:name=".GCMIntentService" /> -->
-        <service
-            android:name=".service.VideoDataService"
+          <service
+            android:name="com.ncsavault.service.VideoDataService"
             android:enabled="true" />
         <service
-            android:name=".service.TrendingFeaturedVideoService"
+            android:name="com.ncsavault.service.TrendingFeaturedVideoService"
             android:enabled="true" />
 
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <service android:name=".firebase.MyFirebaseMessagingService">
+        <service android:name="com.ncsavault.firebase.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".firebase.MyFirebaseInstanceIDService">
+        <service android:name="com.ncsavault.firebase.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
@@ -201,7 +185,7 @@
             android:value="d2dd67ebb04ae3a478d630a28bef8ead1270834c" />
 
         <activity
-            android:name=".views.HomeScreen"
+            android:name="com.ncsavault.views.HomeScreen"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
             android:launchMode="singleTask"
@@ -210,15 +194,15 @@
 
         </activity>
         <activity
-            android:name=".views.VideoDetailActivity"
+            android:name="com.ncsavault.views.VideoDetailActivity"
             android:theme="@style/AppTheme_1" />
         <activity
-            android:name=".views.VideoSearchActivity"
+            android:name="com.ncsavault.views.VideoSearchActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme_1"></activity>
 
         <activity
-            android:name=".views.SupportActivity"
+            android:name="com.ncsavault.views.SupportActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme_1"></activity>
 

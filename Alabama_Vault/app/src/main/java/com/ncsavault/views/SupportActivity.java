@@ -8,7 +8,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ncsavault.R;
+import applicationId.R;
+
+import applicationId.R;
 
 public class SupportActivity extends AppCompatActivity implements View.OnClickListener {
 

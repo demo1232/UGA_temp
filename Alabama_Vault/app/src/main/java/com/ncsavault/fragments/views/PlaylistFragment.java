@@ -30,7 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.baoyz.widget.PullRefreshLayout;
-import com.ncsavault.R;
+import applicationId.R;
 import com.ncsavault.adapters.PlaylistDataAdapter;
 import com.ncsavault.controllers.AppController;
 import com.ncsavault.customviews.RecyclerViewDisabler;

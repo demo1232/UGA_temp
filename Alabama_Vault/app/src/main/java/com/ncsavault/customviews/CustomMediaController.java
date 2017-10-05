@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.ContextThemeWrapper;
 import android.widget.MediaController;
 
-import com.ncsavault.R;
+import applicationId.R;
 
 
 /**

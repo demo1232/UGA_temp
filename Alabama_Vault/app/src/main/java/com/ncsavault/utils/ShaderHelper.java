@@ -14,7 +14,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 
-import com.ncsavault.R;
+import applicationId.R;
 
 
 @SuppressWarnings("WeakerAccess")

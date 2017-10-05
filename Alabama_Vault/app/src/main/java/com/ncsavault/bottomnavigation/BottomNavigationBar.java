@@ -11,7 +11,7 @@ import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.ncsavault.R;
+import applicationId.R;
 
 import java.util.ArrayList;
 import java.util.List;

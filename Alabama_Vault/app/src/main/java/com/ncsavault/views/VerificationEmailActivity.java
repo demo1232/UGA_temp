@@ -24,7 +24,7 @@ import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.ncsavault.R;
+import applicationId.R;
 import com.ncsavault.controllers.AppController;
 import com.ncsavault.database.VaultDatabaseHelper;
 import com.ncsavault.defines.AppDefines;
