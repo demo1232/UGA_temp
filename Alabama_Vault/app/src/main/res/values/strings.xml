@@ -1,1 +1,113 @@
-<resources></resources>
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="build_version">v2.0</string>
+    <string name="test_device_id">20B52AAB529851184340334B73A36E8B</string>
+    <string name="edit">EDIT</string>
+    <string name="save">SAVE</string>
+    <string name="at">\@</string>
+    <string name="link_facebook">Link Facebook Account</string>
+    <string name="link_twitter">Link Twitter Account</string>
+    <string name="facebook_url">https://play.google.com/store/apps/details?id=com.facebook.katana&amp;hl=en</string>
+    <string name="facebook_install_msg">Facebook app is not installed would you like to install it now?</string>
+    <string name="twitter_url">https://play.google.com/store/apps/details?id=com.twitter.android&amp;hl=en</string>
+    <string name="twitter_install_msg">Twitter app is not installed would you like to install it now?</string>
+    <string name="verification_code">ENTER THE VERIFICATION CODE EMAILED TO YOU</string>
+    <string name="valid_password">Please enter valid password</string>
+    <string name="password_not_entered">Password not entered</string>
+    <string name="password_minimum_char">Password should contain minimum 6 characters!</string>
+    <string name="flyer_key">i6ZusgQ8L8qW9ADfXbqgre</string>
+    <string name="enter_registered_email">Please enter registered email id.</string>
+    <string name="connect_to_server">Can not connect to server. Please try again…</string>
+    <string name="unable_to_process">We are unable to process your request</string>
+    <string name="enter_more_than_6_character">Please enter the password more than 6 character!</string>
+    <string name="no_record_found">NO RECORD FOUND</string>
+    <string name="player_name">Player Name</string>
+    <string name="player">Player</string>
+    <string name="msg">Since you are not logged in,\nwe need to know how to get in touch with you.</string>
+    <string name="name">name</string>
+    <string name="email">email</string>
+    <string name="verification">VERIFICATION CODE</string>
+    <string name="e_mail">E-Mail</string>
+    <string name="enter_your_msg">Enter your message here</string>
+    <string name="send">SEND</string>
+    <string name="no_favorites">No favorites have been saved</string>
+    <string name="featured_cap">Featured</string>
+    <string name="enter_registered_email_add">ENTER YOUR REGISTERED EMAIL ADDRESS</string>
+    <string name="next">NEXT</string>
+    <string name="cancel">CANCEL</string>
+    <string name="resend_code">Resend code</string>
+    <string name="enter_password_confirm_password">ENTER THE PASSWORD AND CONFIRM PASSWORD</string>
+    <string name="new_password">NEW PASSWORD</string>
+    <string name="confirm_new_password">CONFIRM NEW PASSWORD</string>UPDATE PASSWORD
+    <string name="update_password">UPDATE PASSWORD</string>
+    <string name="top_video">ACME\'S Top 10 Videos</string>
+    <string name="video_name">Video Name</string>
+    <string name="email_cap">E-MAIL</string>
+    <string name="password">PASSWORD</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="login_or_sign_in">LOGIN OR SIGN IN WITH</string>
+    <string name="forgot_password">FORGOT PASSWORD</string>
+    <string name="register">REGISTER</string>
+    <string name="skip">SKIP</string>
+    <string name="old_password">OLD PASSWORD</string>
+    <string name="confirm_password_cap">CONFIRM PASSWORD</string>
+    <string name="show_password">show password</string>
+    <string name="save_password">RESET PASSWORD</string>
+    <string name="check_for_updates">Check for updates by pulling to refresh</string>
+    <string name="got_it">Got It</string>
+    <string name="no_fav_video_found">NO FAVORITE VIDEO FOUND</string>
+    <string name="please_login_to_access">PLEASE LOGIN TO ACCESS SAVED VIDEOS</string>
+    <string name="login">LOGIN</string>
+    <string name="share_with_friends">Share with Friends</string>
+    <string name="facebook">Facebook</string>
+    <string name="twitter">Twitter</string>
+    <string name="first">First</string>
+    <string name="last">Last</string>
+    <string name="already_registered">ALREADY REGISTERED?</string>
+    <string name="birth_year">Birth Year</string>
+    <string name="gender">Gender</string>
+    <string name="username">Username</string>
+    <string name="password_small">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="sign_up">SIGN UP</string>
+    <string name="upload_profile_photo">UPLOAD A PROFILE PHOTO</string>
+    <string name="sign_up_without_uploading">SIGNUP WITHOUT UPLOADING A PHOTO</string>
+    <string name="staging">STAGING</string>
+    <string name="vault">VAULT</string>
+    <string name="last_name">LastName</string>
+    <string name="first_name">FIRST NAME</string>
+    <string name="last_name_cap">LAST NAME</string>
+    <string name="email_id">Email Id</string>
+    <string name="push_notification">Push Notifications</string>
+    <string name="reset_password">RESET PASSWORD</string>
+    <string name="logout">LOGOUT</string>
+    <string name="contact_support">CONTACT SUPPORT</string>
+    <string name="please_login_to_access_setting">PLEASE LOGIN TO ACCESS SETTINGS SCREEN</string>
+    <string name="enter_registered_mail">Enter registered Email Id</string>
+    <string name="image_msg">Will fit the image for the entire background. That means it will stretch the image to fill that background entirely even if the image size is too small.</string>
+    <string name="name_cap">NAME</string>
+    <string name="mail_cap">EMAIL</string>
+    <string name="search">Search</string>
+    <!-- pull to refresh strings-->
+    <integer-array name="google_colors">
+        <item>@color/red</item>
+        <item>@color/dark_grey</item>
+        <item>@color/dark_red</item>
+        <item>@color/grey</item>
+    </integer-array>
+    <string name="support_text_skip">Since you are not logged in,\nwe need to know how to get in touch with you.</string>
+    <string name="no_playlist_found">NO PLAYLIST FOUND</string>
+    <string name="signup_password">Password</string>
+    <string name="character_limit">Character Limit</string>
+    <string name="save_data">Save</string>
+    <string name="add_profile_pic">Please add a profile photo</string>
+
+    <string name="support_choose_text">Support choice text from button</string>
+    <string name="support">Support</string>
+    <string name="support_you_need">What type of support do you need?</string>
+    <string name="something_went_wrong">Something Went Wrong</string>
+    <string name="suggestion">I Have A Suggestion</string>
+    <string name="highlight_request">Clip or Highlight Request</string>
+    <string name="vault_text">VAULT</string>
+
+</resources>

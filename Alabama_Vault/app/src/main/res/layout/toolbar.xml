@@ -3,42 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:custom="http://schemas.android.com/tools"
     android:background="?attr/colorPrimary"
     app:contentInsetLeft="0dp"
     app:contentInsetStart="0dp"
-    android:contentInsetStartWithNavigation="0dp"
     app:layout_scrollFlags="scroll|enterAlways"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
 
-    <!-- <LinearLayout
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:orientation="horizontal"
-         android:weightSum="2">
-         <TextView
-             android:layout_width="0dp"
-             android:layout_height="wrap_content"
-             android:text="UGA"
-             android:textColor="@color/white"
-             android:gravity="end"
-             android:id="@+id/toolbar_title_1"
-             android:layout_weight="1"
-             android:layout_marginLeft="15dp"
-             />
-
-         <TextView
-             android:layout_width="0dp"
-             android:layout_height="wrap_content"
-             android:text="VAULT"
-             android:textStyle="bold"
-             android:textColor="@color/white"
-             android:gravity="start"
-             android:layout_weight="1"
-             android:id="@+id/toolbar_title_2"
-             />
-
-     </LinearLayout>-->
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -46,30 +18,60 @@
         android:background="@color/accent">
 
         <ImageView
-            android:id="@+id/imageview_back"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentLeft="true"
+            android:id="@+id/image_view_back"
+            android:layout_width="@dimen/header_bar_height"
+            android:layout_height="@dimen/header_bar_height"
             android:layout_alignParentStart="true"
-            android:padding="10dp"
+            android:padding="@dimen/activity_top_margin"
             android:src="@drawable/back"
-            android:visibility="visible" />
+            android:visibility="visible"
+            custom:ignore="ContentDescription" />
 
         <LinearLayout
+            android:id="@+id/ll_toolbarText"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_toLeftOf="@+id/textview_edit"
-            android:layout_toRightOf="@+id/imageview_back"
+            android:layout_height="@dimen/header_bar_height"
+            android:layout_toStartOf="@+id/textview_edit"
+            android:layout_toEndOf="@+id/image_view_back"
+            android:visibility="visible"
             android:gravity="center">
 
+
+            <TextView
+                android:id="@+id/textview_toolbar1"
+                android:layout_marginBottom="@dimen/card_margin"
+                android:layout_marginTop="@dimen/card_margin"
+                android:text="@string/app_name_text"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+            <TextView
+                android:id="@+id/textview_toolbar2"
+                android:layout_marginBottom="@dimen/card_margin"
+                android:layout_marginTop="@dimen/card_margin"
+                android:text="@string/vault"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+
             <ImageView
-                android:id="@+id/imageview_logo"
+                android:id="@+id/image_view_logo"
                 android:layout_width="200dp"
-                android:layout_height="25dp"
+                android:layout_height="@dimen/margin_20"
                 android:layout_gravity="center"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/alabama_vault_logo" />
+                android:layout_marginBottom="@dimen/activity_top_margin"
+                android:layout_marginTop="@dimen/activity_top_margin"
+                android:visibility="gone"
+                custom:ignore="ContentDescription" />
 
         </LinearLayout>
 
@@ -86,49 +88,33 @@
                 android:id="@+id/toolbar_title_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ALABAMA"
+                android:text="@string/app_name_text"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/toolbar_title_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="VAULT"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textSize="@dimen/text_size_20" />
 
         </LinearLayout>
 
 
-        <!--<RelativeLayout-->
-        <!--android:id="@+id/rr_search_close"-->
-        <!--android:layout_width="30dp"-->
-        <!--android:layout_height="30dp"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_centerVertical="true"-->
-        <!--android:layout_margin="10dp"-->
-        <!--android:padding="2dp">-->
 
         <ImageView
-            android:id="@+id/imageview_search"
+            android:id="@+id/image_view_search"
             android:layout_width="48dp"
-            android:layout_height="50dp"
-            android:layout_alignParentRight="true"
-            android:padding="10dp"
+            android:layout_height="@dimen/header_bar_height"
+            android:layout_alignParentEnd="true"
+            android:padding="@dimen/margin_15"
             android:src="@drawable/search"
-            android:visibility="invisible" />
+            android:visibility="visible"
+            custom:ignore="ContentDescription" />
 
 
         <TextView
             android:id="@+id/textview_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:padding="10dp"
-            android:text="EDIT"
+            android:padding="@dimen/activity_top_margin"
+            android:text="@string/edit"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:visibility="invisible" />
@@ -141,13 +127,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_gravity="left"
-            android:background="@drawable/edittext_bg"
-            android:hint="Search"
-            android:layout_marginRight="10dp"
-            android:paddingBottom="5dp"
-            android:paddingLeft="10dp"
-            android:paddingTop="5dp"
+            android:layout_gravity="start"
+            android:background="@drawable/edit_text_bg"
+            android:hint="@string/search_text"
+            android:maxLines="1"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            android:textCursorDrawable="@drawable/text_cursor"
+            android:layout_marginEnd="@dimen/activity_top_margin"
+            android:paddingBottom="@dimen/card_margin"
+            android:paddingStart="@dimen/activity_top_margin"
+            android:paddingEnd="@dimen/margin_1"
+            android:paddingTop="@dimen/card_margin"
             android:textColorHint="@color/app_light_grey"
             android:textSize="16sp"
             android:visibility="gone" />

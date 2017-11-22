@@ -15,11 +15,11 @@
         <clip>
             <shape>
 
-                <solid android:color="@color/apptheme_color" />
+                <solid android:color="@color/app_theme_color" />
             </shape>
         </clip>
 
-        <color android:color="@color/apptheme_color" />
+        <color android:color="@color/app_theme_color" />
     </item>
 
 </layer-list>

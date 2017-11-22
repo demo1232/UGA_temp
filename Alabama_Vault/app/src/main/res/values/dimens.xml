@@ -54,10 +54,30 @@
     <dimen name="ic_album_overflow_width">20dp</dimen>
     <dimen name="ic_album_overflow_height">30dp</dimen>
     <dimen name="ic_album_overflow_margin_top">10dp</dimen>
-    <dimen name="abc_action_bar_default_height_material">20dp</dimen>
     <dimen name="header_height">300dp</dimen>
     <dimen name="float_title_size_large">36sp</dimen>
     <dimen name="overlap_pager_margin">-200dp</dimen>
-    <dimen name="player_name">25dp</dimen>
+    <dimen name="player_name">25sp</dimen>
     <dimen name="app_name_size">20dp</dimen>
+    <dimen name="text_size_20">20sp</dimen>
+    <dimen name="text_size_15">15sp</dimen>
+    <dimen name="text_size_10">10sp</dimen>
+    <dimen name="text_size_28">28sp</dimen>
+    <dimen name="support_screen_top_text_size">16sp</dimen>
+    <dimen name="support_screen_text_size">18sp</dimen>
+    <dimen name="activity_top_margin">10dp</dimen>
+    <dimen name="toolbar_text_size">8dp</dimen>
+    <dimen name="toolbar_playlist_text_size">6dp</dimen>
+
+    <dimen name="ad_width_size">340dp</dimen>
+    <dimen name="ad_height_size">80dp</dimen>
+    <dimen name="margin_1">1dp</dimen>
+    <dimen name="margin_2">2dp</dimen>
+    <dimen name="margin_20">20dp</dimen>
+    <dimen name="margin_15">15dp</dimen>
+    <dimen name="margin_25">25dp</dimen>
+    <dimen name="margin_30">30dp</dimen>
+    <dimen name="margin_35">35dp</dimen>
+    <dimen name="margin_45">45dp</dimen>
+
 </resources>

@@ -1,192 +1,198 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F1F1F1"
     android:fitsSystemWindows="true"
-    android:orientation="vertical"
-    android:weightSum="10">
+    android:orientation="vertical">
+
 
     <RelativeLayout
+        android:id="@+id/rl_header"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:layout_weight="1.5"
-        android:background="#666666"
-        android:paddingTop="10dp">
-        <TextView
-            android:id="@+id/tv_support_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#FFFFFF"
-            android:text="Support"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@color/app_theme_color"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/img_close"
+            android:layout_width="@dimen/header_bar_height"
+            android:layout_height="@dimen/header_bar_height"
+            android:layout_alignParentStart="true"
+            android:padding="@dimen/card_margin"
+            android:src="@drawable/close"
+            tools:ignore="ContentDescription" />
+
 
         <TextView
-            android:id="@+id/tv_submit"
+            android:id="@+id/textView_support"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="@drawable/text_selector"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginRight="8dp"
-            android:text="Send" />
+            android:layout_centerInParent="true"
+            android:text="@string/support"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/app_name_size"
+            android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tv_close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="@drawable/text_selector"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="8dp"
-            android:text="Cancel" />
     </RelativeLayout>
 
-    <View
+    <LinearLayout
+        android:id="@+id/mesg_text"
         android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:background="@color/apptheme_color" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_header"
+        android:background="@color/app_dark_grey"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_top_margin">
 
-    <FrameLayout
+
+        <TextView
+            android:id="@+id/tv_sub_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/card_margin"
+            android:text="@string/support_choose_text"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="8.5"
-        android:background="#F1F1F1">
-        <ScrollView
+        android:layout_height="match_parent"
+        android:layout_below="@+id/mesg_text">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/card_margin"
+            android:layout_marginRight="@dimen/card_margin"
+            android:layout_marginTop="@dimen/card_margin"
+            android:background="#F1F1F1"
+            android:orientation="vertical">
+
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:weightSum="10"
-                android:background="#F1F1F1">
+                android:background="@drawable/rounded_corner"
+                android:layout_marginTop="@dimen/activity_top_margin"
+                android:layout_marginLeft="@dimen/activity_top_margin"
+                android:layout_marginRight="@dimen/activity_top_margin"
+                android:id="@+id/linear_layout_without_login"
+                >
 
-                <LinearLayout
+                <EditText
+                    android:id="@+id/ed_name"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="2"
-                    android:orientation="vertical"
-                    android:background="#D4D4D4"
-                    android:padding="10dp">
+                    android:layout_height="wrap_content"
+                    android:hint="@string/name_cap"
+                    android:padding="@dimen/margin_15"
+                    android:textColor="@color/Gray"
+                    android:textCursorDrawable="@drawable/text_cursor"
+                    android:textColorHint="@color/Gray"
+                    android:textSize="@dimen/support_screen_text_size"
+                    android:background="@android:color/transparent"
+                    android:visibility="visible" />
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="2"
-                        android:orientation="horizontal"
-                        android:background="#D4D4D4"
-                        android:padding="10dp">
-
-                    <TextView
-                        android:id="@+id/tv_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_marginTop="5dp"
-                        android:textStyle="bold"
-                        android:text="@string/clip_request_title"
-                        android:textColor="#666666"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="@string/build_version"
-                        android:id="@+id/textView"
-                        android:layout_alignParentRight="true"/>
-
-                    </RelativeLayout>
-
-                    <TextView
-                        android:id="@+id/tv_sub_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_marginTop="5dp"
-                        android:text="@string/clip_request_sub_title"
-                        android:textColor="#666666"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/tv_guest_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:textColor="#666666"
-                        android:textSize="18sp"
-                        android:layout_gravity="left"
-                        android:textStyle="bold"
-                        android:text="Since you are not logged in,\nwe need to know how to get in touch with you."
-                        android:visibility="gone"/>
-                </LinearLayout>
-
-
-                <LinearLayout
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="8"
-                    android:padding="10dp"
-                    android:background="#F1F1F1"
-                    android:orientation="vertical">
+                    android:layout_height="@dimen/margin_1"
+                    android:background="@color/Gray"/>
 
-                    <EditText
-                        android:id="@+id/ed_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="name"
-                        android:padding="15dp"
-                        android:textColor="#666666"
-                        android:textColorHint="#666666"
-                        android:textSize="20sp"
-                        android:visibility="gone"/>
-
-                    <EditText
-                        android:id="@+id/ed_email"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="email"
-                        android:padding="15dp"
-                        android:textColor="#666666"
-                        android:textColorHint="#666666"
-                        android:textSize="20sp"
-                        android:inputType="textEmailAddress"
-                        android:visibility="gone"/>
-
-                    <EditText
-                        android:id="@+id/ed_message"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:gravity="top"
-                        android:layout_marginTop="10dp"
-                        android:hint="Enter your message here"
-                        android:inputType="textMultiLine|textCapSentences"
-                        android:maxLines="10"
-                        android:minLines="10"
-                        android:padding="3dp"
-                        android:scrollbars="vertical"
-                        android:maxLength="300"
-                        android:textColor="#4A90E2"
-                        android:textColorHint="#4A90E2"
-                        android:textSize="20sp" />
-                </LinearLayout>
+                <EditText
+                    android:id="@+id/ed_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/mail_cap"
+                    android:inputType="textEmailAddress"
+                    android:padding="@dimen/margin_15"
+                    android:textCursorDrawable="@drawable/text_cursor"
+                    android:textColor="@color/Gray"
+                    android:textColorHint="@color/Gray"
+                    android:textSize="@dimen/support_screen_text_size"
+                    android:background="@android:color/transparent"
+                    android:visibility="visible" />
             </LinearLayout>
-        </ScrollView>
+
+
+                <EditText
+                    android:id="@+id/ed_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="215dp"
+                    android:layout_margin="@dimen/activity_top_margin"
+                    android:gravity="top"
+                    android:background="@drawable/rounded_corner"
+                    android:hint="@string/enter_your_msg"
+                    android:textCursorDrawable="@drawable/text_cursor"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:maxLength="250"
+                    android:padding="@dimen/activity_top_margin"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/Gray"
+                    android:textSize="@dimen/text_size_20"
+                    android:visibility="visible"
+                    />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/margin_20"
+                    android:text="@string/build_version"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textSize="@dimen/text_size_15" />
+
+                <TextView
+                    android:id="@+id/tv_character_limit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="@dimen/margin_20"
+                    android:textColor="@color/app_theme_color"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textSize="@dimen/margin_15" />
+
+            </RelativeLayout>
+
+
+
+            <Button
+                android:id="@+id/tv_submit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_15"
+                android:layout_marginLeft="@dimen/margin_15"
+                android:layout_marginRight="@dimen/margin_15"
+                android:layout_marginTop="@dimen/card_margin"
+                android:background="@drawable/button_shape_filled"
+                android:text="@string/send"
+                android:textStyle="bold"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_header">
+
         <include
             android:id="@+id/llToast"
+            layout="@layout/toast_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/toast_layout"/>
-    </FrameLayout>
-
-</LinearLayout>
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</RelativeLayout>

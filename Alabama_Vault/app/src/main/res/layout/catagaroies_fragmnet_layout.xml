@@ -1,38 +1,41 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/LightGrey"
-    >
+    android:background="@color/LightGrey">
+
+
+    <com.baoyz.widget.PullRefreshLayout
+        android:id="@+id/refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/toolbar_playlist_text_size">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/catagories_recycler_view"
+            android:id="@+id/categories_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/LightGrey"
-            android:scrollbars="vertical"
-            />
+            android:scrollbars="vertical" />
+    </com.baoyz.widget.PullRefreshLayout>
 
-        <FrameLayout
-            android:id="@+id/container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-            android:background="@color/VDarkGray">
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/LightGrey"
+        android:visibility="gone">
 
-        </FrameLayout>
+    </FrameLayout>
 
     <ProgressBar
         android:id="@+id/progressbar"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="@dimen/header_bar_height"
+        android:layout_height="@dimen/header_bar_height"
         android:layout_centerInParent="true"
         android:indeterminateDuration="1100"
-        android:visibility="gone"
-        />
-
+        android:theme="@style/ProgressBar"
+        android:visibility="gone" />
 
 
 </RelativeLayout>

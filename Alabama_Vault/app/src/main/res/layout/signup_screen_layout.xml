@@ -18,7 +18,8 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        android:src="@drawable/vault_4" />
+        android:src="@drawable/vault_4"
+        tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -31,7 +32,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageView"
         app:layout_constraintVertical_bias="0.0"
-        />
+        tools:ignore="ContentDescription" />
 
 
 
@@ -41,7 +42,7 @@
         android:id="@+id/guideline2"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.03"
-        tools:layout_editor_absoluteY="15dp"
+        tools:layout_editor_absoluteY="@dimen/margin_15"
         tools:layout_editor_absoluteX="0dp" />
 
 
@@ -67,12 +68,13 @@
     <EditText
         android:id="@+id/fname"
         android:layout_width="0dp"
-        android:layout_height="45dp"
+        android:layout_height="@dimen/margin_45"
         android:ems="10"
         android:textColor="@color/white"
-        android:paddingLeft="20dp"
-        android:background="@drawable/rounded_border_edittext"
-        android:hint="First"
+        android:paddingStart="@dimen/margin_20"
+        android:paddingEnd="@dimen/margin_1"
+        android:background="@drawable/rounded_border_edit_text"
+        android:hint="@string/first"
         android:textColorHint="@color/gray"
         android:inputType="textPersonName"
         app:layout_constraintHorizontal_bias="0.0"
@@ -103,13 +105,14 @@
     <EditText
         android:id="@+id/lname"
         android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:paddingLeft="20dp"
+        android:layout_height="@dimen/margin_45"
+        android:paddingStart="@dimen/margin_20"
+        android:paddingEnd="@dimen/margin_1"
         android:ems="10"
         android:textColorHint="@color/Gray"
         android:textColor="@color/white"
-        android:background="@drawable/rounded_border_edittext"
-        android:hint="Last"
+        android:background="@drawable/rounded_border_edit_text"
+        android:hint="@string/last"
         android:inputType="textPersonName"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="@+id/guideline16"
@@ -119,17 +122,18 @@
         />
 
     <Button
-        android:id="@+id/btn_signup"
+        android:id="@+id/btn_sign_up"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/apptheme_color"
-        android:text="NEXT"
+        android:background="@color/app_theme_color"
+        android:text="@string/next"
         android:textColor="@color/white"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="@+id/guideline16"
         app:layout_constraintRight_toLeftOf="@+id/guideline17"
         app:layout_constraintBottom_toTopOf="@+id/guideline20"
         android:visibility="visible"
+        android:textStyle="bold"
         android:layout_marginBottom="24dp" />
 
 
@@ -148,11 +152,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:text="ALREADY REGISTERED?"
+        android:layout_marginEnd="@dimen/toolbar_playlist_text_size"
+        android:layout_marginLeft="@dimen/toolbar_playlist_text_size"
+        android:layout_marginRight="@dimen/toolbar_playlist_text_size"
+        android:layout_marginStart="@dimen/toolbar_playlist_text_size"
+        android:text="@string/already_registered"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -164,12 +168,13 @@
     <EditText
         android:id="@+id/yob"
         android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:background="@drawable/rounded_border_edittext"
+        android:layout_height="@dimen/margin_45"
+        android:background="@drawable/rounded_border_edit_text"
         android:ems="10"
-        android:hint="Birthdate"
+        android:hint="@string/birth_year"
         android:inputType="textPersonName"
-        android:paddingLeft="20dp"
+        android:paddingStart="@dimen/margin_20"
+        android:paddingEnd="@dimen/margin_1"
         android:textColor="@color/white"
         android:textColorHint="@color/Gray"
         app:layout_constraintLeft_toLeftOf="@+id/guideline16"
@@ -181,14 +186,16 @@
     <com.reginald.editspinner.EditSpinner
         android:id="@+id/edit_spinner"
         android:layout_width="0dp"
-        android:layout_height="45dp"
+        android:layout_height="@dimen/margin_45"
         android:ems="10"
         android:inputType="textPersonName"
-        android:hint="Gender"
-        android:paddingLeft="20dp"
+        android:hint="@string/gender"
+        android:paddingStart="@dimen/margin_20"
+        android:paddingEnd="@dimen/margin_1"
         android:textColor="@color/white"
         android:textColorHint="@color/Gray"
-        android:background="@drawable/rounded_border_edittext"
+        android:focusable="false"
+        android:background="@drawable/rounded_border_edit_text"
         app:layout_constraintBottom_toTopOf="@+id/Email"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="@+id/guideline8"
@@ -209,31 +216,33 @@
     <EditText
         android:id="@+id/Email"
         android:layout_width="0dp"
-        android:layout_height="45dp"
+        android:layout_height="@dimen/margin_45"
         android:ems="10"
-        android:paddingLeft="20dp"
+        android:paddingStart="@dimen/margin_20"
+        android:paddingEnd="@dimen/margin_1"
         android:textColor="@color/white"
         android:textColorHint="@color/Gray"
-        android:background="@drawable/rounded_border_edittext"
+        android:background="@drawable/rounded_border_edit_text"
         android:inputType="textPersonName"
-        android:hint="E-Mail"
-        android:editable="false"
+        android:hint="@string/e_mail"
         app:layout_constraintLeft_toLeftOf="@+id/guideline16"
         app:layout_constraintRight_toLeftOf="@+id/guideline17"
         app:layout_constraintTop_toBottomOf="@+id/yob"
         app:layout_constraintHorizontal_bias="0.0"
-        android:visibility="visible"/>
+        android:visibility="visible"
+        tools:ignore="TextFields" />
 
     <EditText
         android:id="@+id/username"
         android:layout_width="0dp"
-        android:layout_height="45dp"
+        android:layout_height="@dimen/margin_45"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Username"
-        android:background="@drawable/rounded_border_edittext"
+        android:inputType="textPersonName|textNoSuggestions"
+        android:hint="@string/username"
+        android:background="@drawable/rounded_border_edit_text"
         android:textColorHint="@color/Gray"
-        android:paddingLeft="20dp"
+        android:paddingStart="@dimen/margin_20"
+        android:paddingEnd="@dimen/margin_1"
         android:textColor="@color/white"
         app:layout_constraintLeft_toLeftOf="@+id/guideline16"
         app:layout_constraintRight_toLeftOf="@+id/guideline17"
@@ -241,43 +250,85 @@
         android:visibility="visible"
         />
 
-    <EditText
-        android:id="@+id/password"
+
+    <RelativeLayout
+        android:id="@+id/rr_password"
         android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Password"
-        android:background="@drawable/rounded_border_edittext"
-        android:textColorHint="@color/Gray"
-        android:paddingLeft="20dp"
-        android:textColor="@color/white"
+        android:layout_height="@dimen/margin_45"
         app:layout_constraintLeft_toLeftOf="@+id/guideline16"
         app:layout_constraintRight_toLeftOf="@+id/guideline17"
-        app:layout_constraintTop_toBottomOf="@+id/username"
-        android:visibility="visible"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/username">
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:ems="10"
+            android:background="@drawable/rounded_border_edit_text"
+            android:inputType="textPassword|textNoSuggestions"
+            android:hint="@string/signup_password"
+            android:textAllCaps="false"
+            android:textColorHint="@color/Gray"
+            android:paddingStart="@dimen/margin_20"
+            android:paddingEnd="@dimen/margin_1"
+            android:textColor="@color/white"
+            android:visibility="visible"
+            />
+
+        <ImageView
+            android:id="@+id/image_view_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/activity_top_margin"
+            android:layout_alignEnd="@+id/password"
+            android:clickable="true"
+            android:src="@drawable/eye_on"
+            tools:ignore="ContentDescription" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rr_confirm_password"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/margin_45"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
+        app:layout_constraintRight_toLeftOf="@+id/guideline17"
+        app:layout_constraintTop_toBottomOf="@+id/rr_password"
+        >
+
 
     <EditText
         android:id="@+id/confirm_pass"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Confirm Password"
-        android:background="@drawable/rounded_border_edittext"
+        android:inputType="textPassword|textNoSuggestions"
+        android:hint="@string/confirm_password"
+        android:background="@drawable/rounded_border_edit_text"
         android:textColorHint="@color/Gray"
-        android:paddingLeft="20dp"
+        android:paddingStart="@dimen/margin_20"
+        android:paddingEnd="@dimen/margin_1"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/btn_signup"
-        app:layout_constraintLeft_toLeftOf="@+id/guideline16"
-        app:layout_constraintRight_toLeftOf="@+id/guideline17"
-        app:layout_constraintTop_toBottomOf="@+id/password"
         app:layout_constraintVertical_bias="0.0"
         app:layout_constraintHorizontal_bias="0.0"
         android:visibility="visible"
         />
 
+        <ImageView
+            android:id="@+id/image_view_confirm_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/activity_top_margin"
+            android:layout_alignEnd="@+id/confirm_pass"
+            android:clickable="true"
+            android:src="@drawable/eye_on"
+            tools:ignore="ContentDescription" />
+
+
+    </RelativeLayout>
 
 
     <FrameLayout
@@ -288,14 +339,16 @@
         app:layout_constraintTop_toTopOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.0">
 
-        <ImageView
-            android:id="@+id/imageView3"
+
+
+        <include
+            android:id="@+id/splash_text"
+            layout="@layout/splash_logo"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="30dp"
-            android:src="@drawable/alabama_vault_logo"
+            android:layout_height="wrap_content"
             app:layout_constraintHorizontal_bias="0.62"
-            app:layout_constraintTop_toBottomOf="@+id/llToast" />
+            app:layout_constraintTop_toBottomOf="@+id/llToast"
+            android:layout_marginTop="@dimen/margin_30" />
 
         <include
             android:id="@+id/llToast"
@@ -310,27 +363,28 @@
     </FrameLayout>
 
     <Button
-        android:id="@+id/tv_signup_button"
+        android:id="@+id/tv_sign_up_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="SIGN UP"
+        android:text="@string/sign_up"
         app:layout_constraintTop_toTopOf="@+id/guideline42"
-        android:background="@color/apptheme_color"
+        android:background="@color/app_theme_color"
         app:layout_constraintBottom_toTopOf="@+id/guideline20"
         app:layout_constraintRight_toLeftOf="@+id/guideline17"
         android:textColor="@color/white"
         app:layout_constraintLeft_toLeftOf="@+id/guideline16"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintVertical_bias="0.244"
+        android:textStyle="bold"
         android:visibility="gone"/>
 
     <TextView
-        android:id="@+id/upload_phototextView"
+        android:id="@+id/tv_upload_photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="UPLOAD A PROFILE PHOTO"
+        android:text="@string/upload_profile_photo"
         android:textColor="@color/white"
-        android:textSize="15dp"
+        android:textSize="@dimen/text_size_15"
         app:layout_constraintRight_toLeftOf="@+id/guideline17"
         app:layout_constraintLeft_toLeftOf="@+id/guideline16"
         app:layout_constraintTop_toTopOf="@+id/guideline15"
@@ -340,36 +394,37 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/upload_phototextView"
-        android:layout_marginLeft="8dp"
+        android:layout_marginTop="@dimen/toolbar_playlist_text_size"
+        app:layout_constraintTop_toBottomOf="@+id/tv_upload_photo"
+        android:layout_marginLeft="@dimen/toolbar_playlist_text_size"
         app:layout_constraintLeft_toLeftOf="@+id/guideline16"
         app:layout_constraintRight_toLeftOf="@+id/guideline17"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginRight="@dimen/toolbar_playlist_text_size"
+        android:layout_marginBottom="@dimen/toolbar_playlist_text_size"
         app:layout_constraintBottom_toTopOf="@+id/guideline42"
         app:layout_constraintHorizontal_bias="1.0"
         android:visibility="visible"
         app:layout_constraintVertical_bias="0.56"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp">
+        android:layout_marginStart="@dimen/toolbar_playlist_text_size"
+        android:layout_marginEnd="@dimen/toolbar_playlist_text_size">
 
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp">
+            android:layout_marginBottom="@dimen/activity_top_margin"
+            android:layout_marginTop="@dimen/activity_top_margin"
+            tools:ignore="UselessParent">
 
             <ProgressBar
-                android:id="@+id/registerprogressbar"
+                android:id="@+id/register_progressbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:indeterminateDuration="1100"
                 android:visibility="gone" />
 
-            <com.ncsavault.alabamavault.utils.CircularImageView
+            <com.ncsavault.utils.CircularImageView
                 android:id="@+id/imgUserProfile"
                 android:layout_width="200dp"
                 android:layout_height="400dp"
@@ -377,47 +432,48 @@
                 android:alpha="1"
                 android:src="@drawable/camera_background"
                 android:visibility="gone"
-                app:siBorderColor="@color/apptheme_color"
-                app:siBorderWidth="5dp" />
+                app:siBorderColor="@color/app_theme_color"
+                app:siBorderWidth="@dimen/card_margin" />
 
         </FrameLayout>
 
     </LinearLayout>
 
     <TextView
-        android:id="@+id/tv_singup_withput"
+        android:id="@+id/tv_sing_up_with_put"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="SIGNUP WITHOUT UPLOADING A PHOTO"
+        android:text="@string/sign_up_without_uploading"
         android:textColor="@color/white"
         android:gravity="center"
+        android:layout_marginTop="@dimen/margin_20"
         android:visibility="gone"
         app:layout_constraintLeft_toLeftOf="@+id/guideline16"
         app:layout_constraintRight_toLeftOf="@+id/guideline17"
-        app:layout_constraintTop_toBottomOf="@+id/tv_signup_button"
+        app:layout_constraintTop_toBottomOf="@+id/tv_sign_up_button"
         app:layout_constraintHorizontal_bias="0.0" />
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginBottom="@dimen/toolbar_playlist_text_size"
+        android:layout_marginLeft="@dimen/toolbar_playlist_text_size"
+        android:layout_marginRight="@dimen/toolbar_playlist_text_size"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp">
+        android:layout_marginStart="@dimen/toolbar_playlist_text_size"
+        android:layout_marginEnd="@dimen/toolbar_playlist_text_size">
 
-        <com.ncsavault.alabamavault.wheelwidget.WheelView
+        <com.ncsavault.wheelwidget.WheelView
             android:id="@+id/year_wheel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:visibility="gone"
             tools:layout_editor_absoluteY="0dp"
-            tools:layout_editor_absoluteX="8dp" />
+            tools:layout_editor_absoluteX="@dimen/toolbar_playlist_text_size" />
     </LinearLayout>
 
 

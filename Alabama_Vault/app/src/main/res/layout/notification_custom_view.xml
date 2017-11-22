@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/Black"
-    android:padding="5dp" >
+    android:padding="@dimen/card_margin" >
 
     <ImageView
         android:id="@+id/notification_icon"
@@ -16,11 +16,8 @@
         android:id="@+id/notification_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="@dimen/toolbar_playlist_text_size"
         android:layout_toEndOf="@id/notification_icon"
-        android:layout_toRightOf="@id/notification_icon"
-        android:layout_toLeftOf="@+id/tv_notification_time"
         android:layout_toStartOf="@+id/tv_notification_time"
         android:textColor="@color/White"
         android:textSize="16sp" />
@@ -30,11 +27,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/notification_title"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="@dimen/toolbar_playlist_text_size"
         android:layout_toEndOf="@id/notification_icon"
-        android:layout_toRightOf="@id/notification_icon"
-        android:layout_toLeftOf="@+id/tv_notification_time"
         android:layout_toStartOf="@+id/tv_notification_time"
         android:textColor="@color/AntiqueWhite"
         android:textSize="14sp" />
@@ -44,7 +38,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:textColor="@color/LightGrey"
         android:textSize="12sp" />

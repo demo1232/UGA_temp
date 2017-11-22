@@ -1,0 +1,58 @@
+{
+  "project_info": {
+    "project_number": "415348294438",
+    "firebase_url": "https://auburn-vault.firebaseio.com",
+    "project_id": "auburn-vault",
+    "storage_bucket": "auburn-vault.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:415348294438:android:b8c82dfbc2a66a86",
+        "android_client_info": {
+          "package_name": "com.auburn.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "415348294438-vpuvvd2f6jijg5b73j48vf6s977pic1a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.auburn.android",
+            "certificate_hash": "8beafc0ee64c9bafc81051f8630c0c2f88353f05"
+          }
+        },
+        {
+          "client_id": "415348294438-kj1jvvumia5snivuf1t1k0drdv7q2to2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.auburn.android",
+            "certificate_hash": "ff3a2b102a2d96d666a7c7aae9201b66c76f4659"
+          }
+        },
+        {
+          "client_id": "415348294438-7gr6502ep71l9jffqumqh4ro936t4s9p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiBkEiAYdx4WhwKiBWH3s9-iGYDyeAyQI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

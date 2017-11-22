@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ncsavault.alabamavault.views.VideoSearchActivity"
-    android:background="@color/LightGrey">
+    tools:context="com.ncsavault.views.VideoSearchActivity"
+    android:background="@color/LightGrey"
+    tools:ignore="Overdraw">
 
     <LinearLayout
         android:id="@+id/container_toolbar"
@@ -33,7 +33,7 @@
         android:id="@+id/recycler_view_search"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/container_toolbar"
+        android:layout_below="@+id/ll_toast"
         android:background="@color/LightGrey"
         android:scrollbars="vertical" />
 
@@ -42,17 +42,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="NO RECORD FOUND"
+        android:text="@string/no_record_found"
         android:gravity="center"
         android:visibility="gone"
-        android:textColor="@color/black"
-        android:textSize="20dp"/>
+        android:textColor="@color/app_theme_color"
+        android:textSize="@dimen/text_size_20"/>
 
-    <include
-        android:id="@+id/llToast"
+    <LinearLayout
+        android:id="@+id/ll_toast"
+        android:layout_below="@+id/container_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/toast_layout"/>
+        android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/llToast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/toast_layout"/>
+
+
+    </LinearLayout>
+
+
 
 
 </RelativeLayout>

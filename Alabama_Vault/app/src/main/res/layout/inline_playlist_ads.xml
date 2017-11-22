@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/LightGrey"
+    >
+
+
+    <RelativeLayout
+        android:id="@+id/adView_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/header_bar_height"
+        android:orientation="vertical"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:layout_marginRight="@dimen/toolbar_playlist_text_size"
+        android:layout_marginLeft="@dimen/toolbar_playlist_text_size"
+        android:layout_marginBottom="@dimen/toolbar_playlist_text_size"
+        >
+
+    </RelativeLayout>
+</RelativeLayout>

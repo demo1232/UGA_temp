@@ -1,0 +1,66 @@
+{
+  "project_info": {
+    "project_number": "78012600207",
+    "firebase_url": "https://ugavault.firebaseio.com",
+    "project_id": "firebase-ugavault",
+    "storage_bucket": "firebase-ugavault.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:78012600207:android:7ed07640395bf076",
+        "android_client_info": {
+          "package_name": "com.ugavault.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "78012600207-6rtl1g95f49saap3qhh1mptkig23q3ml.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ugavault.android",
+            "certificate_hash": "c25d89b38d4b466baeccd7b62677f2f5cdeb89aa"
+          }
+        },
+        {
+          "client_id": "78012600207-4ak1hsos5i24veh6a96dv1e2j8vg7n9o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ugavault.android",
+            "certificate_hash": "ff3a2b102a2d96d666a7c7aae9201b66c76f4659"
+          }
+        },
+        {
+          "client_id": "78012600207-08s9e1n25dfh81f30u6qkveul1pbfido.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ugavault.android",
+            "certificate_hash": "8beafc0ee64c9bafc81051f8630c0c2f88353f05"
+          }
+        },
+        {
+          "client_id": "78012600207-4afhm5vnalk7mvr9ipq7v4sb9cahqtbk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6futZpAAbxXiHPimGe2cq7ZPDU8Zr9tA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

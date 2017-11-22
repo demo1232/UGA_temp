@@ -13,17 +13,7 @@ buildscript {
 
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
-//apply plugin: 'sonar-runner'
 
-/*sonarRunner {
-    sonarProperties {
-        property "sonar.host.url", "http://localhost:9000" // Address of Sonar server
-        property "sonar.sources", "src" // Sources
-        property "sonar.projectName", "ALABAMA Vault" // Name of your project
-        property "sonar.projectVersion", "0.2-SNAPSHOT" // Version of your project
-        property "sonar.projectDescription", "A wonderful project to analyse" // Description of your project
-    }
-}*/
 
 repositories {
     maven {
@@ -34,37 +24,46 @@ repositories {
     }
     maven { url "https://jitpack.io" }
     mavenCentral()
+    google()
 }
 
 android {
-/*    signingConfigs {
-        config {
-            keyAlias 'alabama'
-            keyPassword 'alabamavault'
-            storeFile file('D:/UgaProject_latest/Android-Alabama-App/keystore/keystore.jks')
-            storePassword 'alabamavault'
-        }
-    }*/
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion '26.0.2'
     defaultConfig {
-        applicationId "com.ncsavault.alabamavault"
-        minSdkVersion 16
-        targetSdkVersion 25
-        versionCode 1
-        versionName "2.0"
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
+        versionName "${versions.versionName}"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
+        flavorDimensions "default"
+
     }
     dexOptions {
         javaMaxHeapSize "4g"
     }
+
     packagingOptions {
         exclude 'jsr305_annotations/Jsr305_annotations.gwt.xml'
         exclude 'error_prone/Annotations.gwt.xml'
         exclude 'third_party/java_src/error_prone/project/annotations/Annotations.gwt.xml'
         exclude 'third_party/java_src/error_prone/project/annotations/Google_internal.gwt.xml'
+        exclude 'build-data.properties'
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/nanohttpd/default-mimetypes.properties'
+        exclude 'META-INF/nanohttpd/mimetypes.properties'
     }
 
     buildTypes {
@@ -73,45 +72,69 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    productFlavors {
+
+        alabama {
+            applicationId "com.ncsavault.alabamavault"
+            versionCode 4
+            resValue "string", "fb_provider_id","1288909714506755"
+        }
+        florida {
+            applicationId "com.ncsavault.floridavault"
+            versionCode 6
+            resValue "string", "fb_provider_id" ,"1510709295909401"
+        }
+        uga {
+            applicationId "com.ugavault.android"
+            versionCode 14
+            resValue "string", "fb_provider_id","1382048512122348"
+
+        }
+        auburn {
+            applicationId "com.auburn.android"
+            versionCode 14
+            resValue "string", "fb_provider_id" ,"810767459007784"
+        }
+
+    }
+
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    //    compile 'com.facebook.android:facebook-android-sdk:4.1.0'
     compile('com.twitter.sdk.android:twitter:2.3.2@aar') {
         transitive = true;
     }
-    compile files('libs/universal-image-loader-1.9.3.jar')
     compile files('libs/AF-Android-SDK-v2.3.1.19.jar')
     compile files('libs/FlurryAnalytics-6.1.0.jar')
-    compile project(':stickylistviewlibrary')
-    compile project(':pullRefreshLibrary')
-    compile project(':indicatorlibrary')
+    compile('com.baoyz.pullrefreshlayout:library:1.0.1')
     compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
         transitive = true;
     }
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:cardview-v7:25.3.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.google.code.gson:gson:2.2.4'
+    compile "com.android.support:appcompat-v7:${versions.supportLibrary}"
+    compile "com.android.support:design:${versions.supportLibrary}"
+    compile "com.android.support:cardview-v7:${versions.supportLibrary}"
+    compile "com.android.support.constraint:constraint-layout:${versions.constraintLayout}"
+    compile "com.google.code.gson:gson:${versions.gson}"
     compile 'com.facebook.android:facebook-android-sdk:4.+'
     compile 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
-    compile 'com.mcxiaoke.volley:library:1.0.19'
+    compile "com.mcxiaoke.volley:library:${versions.volley}"
     compile 'com.reginald:editspinner:1.0.0'
-    compile 'com.google.android.gms:play-services-ads:10.2.6'
-    compile 'com.google.firebase:firebase-auth:10.2.6'
-    compile 'com.google.firebase:firebase-messaging:10.2.6'
-    compile 'com.google.android.gms:play-services-auth:10.2.6'
-    compile 'com.google.firebase:firebase-core:10.2.6'
-    compile 'com.longtailvideo.jwplayer:jwplayer-android-sdk:+'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile "com.google.android.gms:play-services-ads:${versions.googlePlayServices}"
+    compile "com.google.firebase:firebase-auth:${versions.firebase}"
+    compile "com.google.firebase:firebase-messaging:${versions.firebase}"
+    compile "com.google.android.gms:play-services-auth:${versions.firebase}"
+    compile "com.google.firebase:firebase-core:${versions.firebase}"
+    compile 'com.longtailvideo.jwplayer:jwplayer-android-sdk:2.5.3+164'
     compile 'com.github.crosswall:Android-Coverflow:release-v1.0.4'
-    testCompile 'junit:junit:4.12'
-}
+    compile "com.google.firebase:firebase-ads:${versions.firebase}"
+    compile 'com.github.bumptech.glide:glide:3.7.0'
 
+}
 apply plugin: 'com.google.gms.google-services'

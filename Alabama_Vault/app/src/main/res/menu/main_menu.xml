@@ -1,46 +1,32 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/action_search"
         android:actionLayout="@xml/searchable"
         android:actionViewClass="android.widget.SearchView"
-        android:showAsAction="always"
+        app:showAsAction="ifRoom"
         android:visible="false"
-        android:title="Search"/>
+        android:title="@string/search"/>
 
     <item
         android:id="@+id/action_contact"
-        android:showAsAction="never"
-        android:title="Support">
+        app:showAsAction="never"
+        android:title="@string/support">
         <menu>
         </menu>
     </item>
 
-    <!--<item
-        android:id="@+id/action_support"
-        android:showAsAction="never"
-        android:title="Support"/>
-    <item
-        android:id="@+id/action_cliprequest"
-        android:showAsAction="never"
-        android:title="Clip Request"/>
-    <item
-        android:id="@+id/action_feedback"
-        android:showAsAction="never"
-        android:title="Feedback"/>-->
-    <!--<item
-        android:id="@+id/action_sync_now"
-        android:showAsAction="never"
-        android:title="Sync Now"/>-->
+
     <item
         android:id="@+id/action_toggle_notifications"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:icon="@android:drawable/ic_menu_preferences"
         android:title="@string/notifications"/>
 
     <item
         android:id="@+id/action_profile"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:icon="@android:drawable/ic_menu_preferences"
         android:title="@string/profile"/>
 

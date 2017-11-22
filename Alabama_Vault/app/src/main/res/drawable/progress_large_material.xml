@@ -21,10 +21,10 @@
 
     <target
         android:name="progressBar"
-        android:animation="@anim/progress_indeterminate_material" />
+        android:animation="@animator/progress_indeterminate_material" />
 
     <target
         android:name="root"
-        android:animation="@anim/progress_indeterminate_rotation_material" />
+        android:animation="@animator/progress_indeterminate_rotation_material" />
 
 </animated-vector>

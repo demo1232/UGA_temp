@@ -1,0 +1,58 @@
+{
+  "project_info": {
+    "project_number": "1052118994678",
+    "firebase_url": "https://florida-vault.firebaseio.com",
+    "project_id": "florida-vault",
+    "storage_bucket": "florida-vault.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1052118994678:android:968ca67ea007714b",
+        "android_client_info": {
+          "package_name": "com.ncsavault.floridavault"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1052118994678-qpu5cb6df1viq1eso1d94u2ka6drbdf1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ncsavault.floridavault",
+            "certificate_hash": "2a0cf7c99608a13e0132288a0d5d56d15cb12654"
+          }
+        },
+        {
+          "client_id": "1052118994678-6dq1o7lkaodmlasden7idaufj2aa3vci.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ncsavault.floridavault",
+            "certificate_hash": "ff3a2b102a2d96d666a7c7aae9201b66c76f4659"
+          }
+        },
+        {
+          "client_id": "1052118994678-ap7vtngfhbk7ac70tj68lqg6vubil0nt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbcsO6Lm1KOpwIMd70KqviEV2HKnY-wak"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -7,12 +7,13 @@
             android:shape="ring"
             android:thicknessRatio="40.0" >
             <gradient
-                android:centerColor="@color/red"
+                android:centerColor="@color/app_theme_color"
                 android:centerX="0.3"
                 android:endColor="@color/grey"
-                android:startColor="@color/red"
+                android:startColor="@color/app_theme_color"
                 android:type="sweep" />
         </shape>
+
     </item>
 
 </layer-list>

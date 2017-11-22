@@ -1,60 +1,57 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/LightGrey"
-    android:layout_marginLeft="10dp"
-    android:layout_marginBottom="10dp"
-    android:layout_marginRight="10dp"
-    >
+    android:layout_marginLeft="@dimen/toolbar_playlist_text_size"
+    android:layout_marginBottom="@dimen/toolbar_playlist_text_size"
+    android:layout_marginRight="@dimen/toolbar_playlist_text_size"
+    tools:ignore="Overdraw">
 
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/LightGrey">
-        <!-- android:layout_marginLeft="5dp"
-      android:layout_marginTop="5dp"
-      android:layout_marginRight="5dp"-->
+        android:layout_height="wrap_content"
+        android:id="@+id/main_layout"
+        android:background="@color/app_theme_color"
+        >
 
         <ImageView
             android:id="@+id/thumbnail"
             android:layout_width="wrap_content"
-            android:layout_height="120dp"
+            android:layout_height="wrap_content"
             android:clickable="true"
             android:scaleType="fitXY"
-            android:background="@drawable/playlist_item_shape"
-            android:src="@drawable/vault_4"
-            android:transitionName="contact_details"/>
+            tools:ignore="ContentDescription" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="40dp"
+            android:background="@color/app_theme_color"
             android:layout_below="@id/thumbnail"
-            android:background="@color/apptheme_color">
+           >
             <TextView
                 android:id="@+id/video_name"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Player Name"
+                android:layout_height="match_parent"
+                android:text="@string/player_name"
                 android:gravity="center"
-                android:paddingLeft="@dimen/album_title_padding"
-                android:paddingRight="@dimen/album_title_padding"
-                android:paddingTop="@dimen/album_title_padding"
+                android:maxLines="1"
                 android:textColor="@color/white"
-                android:textSize="15dp" />
-        </LinearLayout>
+                android:textSize="@dimen/text_size_15" />
+        </RelativeLayout>
 
 
         <ProgressBar
             android:id="@+id/progressbar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/margin_25"
+            android:layout_height="@dimen/margin_25"
             android:layout_centerInParent="true"
             android:indeterminateDuration="1100"
+            android:theme="@style/ProgressBar"
             android:visibility="gone" />
 
     </RelativeLayout>
 
 
-</LinearLayout>
+</RelativeLayout>

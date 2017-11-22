@@ -1,5 +1,5 @@
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -26,9 +26,12 @@
 
         </LinearLayout>
 
+
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/container_toolbar">
 
             <include
                 android:id="@+id/auto_refresh_progress_main"
@@ -38,49 +41,47 @@
 
         </LinearLayout>
 
-    <include
-        android:id="@+id/llToast"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/toast_layout"/>
 
             <FrameLayout
                 android:id="@+id/container"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:background="@color/VDarkGray">
+                android:layout_height="match_parent"
+                android:background="@color/LightGrey"
+                android:layout_below="@+id/container_toolbar"
+                android:layout_above="@+id/bottom_layout">
 
            </FrameLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/bottom_layout">
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
 
                 <include
+                    android:id="@+id/bottom_navigation"
                     layout="@layout/bottom_nav_bar"
                     />
-            </FrameLayout>
+
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/container_toolbar">
+
 
             <include
                 android:id="@+id/llToast"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                layout="@layout/toast_layout"/>
+                layout="@layout/toast_layout"
+                />
+
 
         </FrameLayout>
 
 
-
-        <!--<FrameLayout-->
-            <!--android:id="@+id/container_body"-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="0dp"-->
-            <!--android:layout_weight="1" />-->
-
-
-    </LinearLayout>
+    </RelativeLayout>

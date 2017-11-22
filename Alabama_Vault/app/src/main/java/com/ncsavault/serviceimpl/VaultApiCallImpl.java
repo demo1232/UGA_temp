@@ -1,0 +1,1224 @@
+package com.ncsavault.serviceimpl;
+
+import android.util.Base64;
+import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.ncsavault.controllers.AppController;
+import com.ncsavault.dto.APIResponse;
+import com.ncsavault.dto.AssigneeDto;
+import com.ncsavault.dto.CategoriesTabDao;
+import com.ncsavault.dto.FavoritePostData;
+import com.ncsavault.dto.MailChimpData;
+
+import com.ncsavault.dto.NotificationData;
+import com.ncsavault.dto.PlaylistDto;
+import com.ncsavault.dto.TabBannerDTO;
+import com.ncsavault.dto.TaskDto;
+import com.ncsavault.dto.User;
+import com.ncsavault.dto.VideoDTO;
+import com.ncsavault.globalconstants.GlobalConstants;
+import com.ncsavault.service.BusinessException;
+import com.ncsavault.service.ServiceManager;
+import com.ncsavault.service.VaultApiInterface;
+import com.ncsavault.service.VaultService;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.protocol.HTTP;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
+
+import applicationId.R;
+
+/**
+ * Class used for web api call.
+ */
+@SuppressWarnings("deprecation")
+public class VaultApiCallImpl extends VaultService implements VaultApiInterface {
+
+    private Gson gson;
+
+    //Parameters that are returned from server in form of JSON
+    private static final String KEY_PLAYLIST_ID = "playlistId";
+    private static final String KEY_PLAYLIST_NAME = "playlistName";
+    //private static final String KEY_PLAYLIST_TYPE = "playlistType";
+    private static final String KEY_PLAYLIST_REFERENCED = "playlistReferenceId";
+    private static final String KEY_PLAYLIST_THUMBNAIL_URL = "playlistThumbnailUrl";
+    private static final String KEY_PLAYLIST_SHORT_DESCRIPTION = "playlistShortDescription";
+    private static final String KEY_PLAYLIST_LONG_DESCRIPTION = "playlistLongDescription";
+    private static final String KEY_PLAYLIST_TAGS = "playlistTags";
+    private static final String KEY_VIDEO_ID = "videoId";
+    private static final String KEY_VIDEO_NAME = "videoName";
+    private static final String KEY_VIDEO_SHORT_DESCRIPTION = "videoShortDescription";
+    private static final String KEY_VIDEO_LONG_DESCRIPTION = "videoLongDescription";
+    private static final String KEY_VIDEO_THUMBNAIL_URL = "videoThumbnailUrl";
+    private static final String KEY_VIDEO_STILL_URL = "videoStillUrl";
+    private static final String KEY_VIDEO_DURATION = "videoDuration";
+    private static final String KEY_VIDEO_IS_FAVORITE = "videoIsFavorite";
+    private static final String KEY_VIDEO_LONG_URL = "videoLongUrl";
+    private static final String KEY_VIDEO_SHORT_URL = "videoShortUrl";
+    private static final String KEY_VIDEO_TAGS = "videoTags";
+    private static final String KEY_VIDEO_COVER_URL = "videoCoverUrl";
+    private static final String KEY_VIDEO_WIDE_STILL_URL = "videoWideStillUrl";
+    private static final String KEY_VIDEO_BADGE_URL = "videoBadgeUrl";
+    private static final String KEY_VIDEO_INDEX = "videoIndex";
+    private static final String KEY_VIDEO_SOCIAL_URL = "videoSocialUrl";
+
+
+    public VaultApiCallImpl(ServiceManager serviceManager) {
+        super(serviceManager);
+        init();
+    }
+
+    @Override
+    public void init() {
+        super.init();
+        gson = new Gson();
+    }
+
+    @Override
+    public ArrayList<VideoDTO> getVideosListFromServer(String url) throws BusinessException {
+
+        url = url.replaceAll(" ", "%20");
+        ArrayList<VideoDTO> videoList = new ArrayList<>();
+        try {
+            String result = getData(url);
+
+            JSONArray jsonArray = new JSONArray(result);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+
+                videoList.add(setDtoValue(obj));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+
+        return videoList;
+    }
+
+    @Override
+    public VideoDTO getVideosDataFromServer(String url) throws BusinessException {
+        try {
+            JSONObject obj = null;
+            String result = doGet(url);
+            Log.d("Json", "Response of video Data : " + result);
+            obj = new JSONObject(result);
+            return setDtoValue(obj);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * this method is used to set json values in video dto
+     *
+     * @param obj gets JSONObject
+     * @return video dto
+     */
+    private VideoDTO setDtoValue(JSONObject obj) {
+        VideoDTO vidObj = new VideoDTO();
+        try {
+
+            vidObj.setVideoDuration(!obj.isNull(KEY_VIDEO_DURATION) ? obj.getLong(KEY_VIDEO_DURATION) : 0);
+            vidObj.setPlaylistId(!obj.isNull(KEY_PLAYLIST_ID) ? obj.getLong(KEY_PLAYLIST_ID) : 0);
+            vidObj.setPlaylistName(!obj.isNull(KEY_PLAYLIST_NAME) ? obj.getString(KEY_PLAYLIST_NAME) : "");
+            vidObj.setVideoShortDescription(!obj.isNull(KEY_VIDEO_SHORT_DESCRIPTION) ? obj.getString(KEY_VIDEO_SHORT_DESCRIPTION) : "");
+            vidObj.setVideoId(!obj.isNull(KEY_VIDEO_ID) ? obj.getLong(KEY_VIDEO_ID) : 0);
+            vidObj.setVideoName(!obj.isNull(KEY_VIDEO_NAME) ? obj.getString(KEY_VIDEO_NAME) : "");
+            vidObj.setVideoStillUrl(!obj.isNull(KEY_VIDEO_STILL_URL) ? obj.getString(KEY_VIDEO_STILL_URL) : "");
+            vidObj.setVideoCoverUrl(!obj.isNull(KEY_VIDEO_COVER_URL) ? obj.getString(KEY_VIDEO_COVER_URL) : "");
+            vidObj.setVideoWideStillUrl(!obj.isNull(KEY_VIDEO_WIDE_STILL_URL) ? obj.getString(KEY_VIDEO_WIDE_STILL_URL) : "");
+            vidObj.setVideoBadgeUrl(!obj.isNull(KEY_VIDEO_BADGE_URL) ? obj.getString(KEY_VIDEO_BADGE_URL) : "");
+            vidObj.setVideoThumbnailUrl(!obj.isNull(KEY_VIDEO_THUMBNAIL_URL) ? obj.getString(KEY_VIDEO_THUMBNAIL_URL) : "");
+            vidObj.setVideoLongUrl(!obj.isNull(KEY_VIDEO_LONG_URL) ? obj.getString(KEY_VIDEO_LONG_URL) : "");
+            vidObj.setVideoShortUrl(!obj.isNull(KEY_VIDEO_SHORT_URL) ? obj.getString(KEY_VIDEO_SHORT_URL) : "");
+            vidObj.setVideoIndex(!obj.isNull(KEY_VIDEO_INDEX) ? obj.getInt(KEY_VIDEO_INDEX) : 0);
+            vidObj.setPlaylistReferenceId(!obj.isNull(KEY_PLAYLIST_REFERENCED) ? obj.getString(KEY_PLAYLIST_REFERENCED) : "");
+
+            vidObj.setVideoTags(!obj.isNull(KEY_VIDEO_TAGS) ? obj.getString(KEY_VIDEO_TAGS) : "");
+            vidObj.setVideoLongDescription(!obj.isNull(KEY_VIDEO_LONG_DESCRIPTION) ? obj.getString(KEY_VIDEO_LONG_DESCRIPTION) : "");
+            vidObj.setPlaylistTags(!obj.isNull(KEY_PLAYLIST_TAGS) ? obj.getString(KEY_PLAYLIST_TAGS) : "");
+            vidObj.setPlaylistThumbnailUrl(!obj.isNull(KEY_PLAYLIST_THUMBNAIL_URL) ? obj.getString(KEY_PLAYLIST_THUMBNAIL_URL) : "");
+            vidObj.setPlaylistLongDescription(!obj.isNull(KEY_PLAYLIST_LONG_DESCRIPTION) ? obj.getString(KEY_PLAYLIST_LONG_DESCRIPTION) : "");
+            vidObj.setPlaylistShortDescription(!obj.isNull(KEY_PLAYLIST_SHORT_DESCRIPTION) ? obj.getString(KEY_PLAYLIST_SHORT_DESCRIPTION) : "");
+            vidObj.setVideoSocialUrl(!obj.isNull(KEY_VIDEO_SOCIAL_URL) ? obj.getString(KEY_VIDEO_SOCIAL_URL) : "");
+
+            vidObj.setVideoIsFavorite(!obj.isNull(KEY_VIDEO_IS_FAVORITE) && obj.getBoolean(KEY_VIDEO_IS_FAVORITE));
+
+            if (vidObj.isVideoIsFavorite())
+                vidObj.setVideoIsFavorite(true);
+            else
+                vidObj.setVideoIsFavorite(false);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return vidObj;
+    }
+
+    @Override
+    public ArrayList<CategoriesTabDao> getCategoriesData(String url) throws BusinessException {
+        try {
+            //
+            url = url.replaceAll(" ", "%20");
+            ArrayList<CategoriesTabDao> categoriesList = new ArrayList<>();
+            try {
+                String result = getData(url);
+//
+                if (result == null) {
+//
+                    return null;
+                }
+                Type classType = new TypeToken<ArrayList<CategoriesTabDao>>() {
+                }.getType();
+                categoriesList = gson.fromJson(result.trim(), classType);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            Log.d("Json", "Size of video list : " + categoriesList.size());
+
+            return categoriesList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public ArrayList<PlaylistDto> getPlaylistData(String url) throws BusinessException {
+        try {
+            //
+            url = url.replaceAll(" ", "%20");
+            ArrayList<PlaylistDto> playlistDtoArrayList = new ArrayList<>();
+            try {
+                String result = getData(url);
+
+                Type classType = new TypeToken<ArrayList<PlaylistDto>>() {
+                }.getType();
+                playlistDtoArrayList = gson.fromJson(result.trim(), classType);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            Log.d("Size", "Size of video list : " + playlistDtoArrayList.size());
+
+            return playlistDtoArrayList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public ArrayList<VideoDTO> getNewVideoData(String url) throws BusinessException {
+        try {
+            //
+            url = url.replaceAll(" ", "%20");
+            ArrayList<VideoDTO> newVideoDtoArrayList = new ArrayList<>();
+            try {
+                String result = getData(url);
+
+                Type classType = new TypeToken<ArrayList<VideoDTO>>() {
+                }.getType();
+                newVideoDtoArrayList = gson.fromJson(result.trim(), classType);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            Log.d("Size", "Size of video list : " + newVideoDtoArrayList.size());
+
+            return newVideoDtoArrayList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    @Override
+    public ArrayList<VideoDTO> getTrendingVideoData(String url) throws BusinessException {
+        try {
+            //
+            url = url.replaceAll(" ", "%20");
+            ArrayList<VideoDTO> videoDTOArrayList = new ArrayList<>();
+            try {
+                String result = getData(url);
+
+                Type classType = new TypeToken<ArrayList<VideoDTO>>() {
+                }.getType();
+                videoDTOArrayList = gson.fromJson(result.trim(), classType);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            Log.d("Size", "Size of video list : " + videoDTOArrayList.size());
+            Log.d("Size", "Updated Size of video list : " + videoDTOArrayList.size());
+            return videoDTOArrayList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public ArrayList<VideoDTO> getVideoListByCategory(String url) throws BusinessException {
+        try {
+            //
+            url = url.replaceAll(" ", "%20");
+            ArrayList<VideoDTO> newVideoDtoArrayList = new ArrayList<>();
+            try {
+                String result = getData(url);
+                Type classType = new TypeToken<ArrayList<VideoDTO>>() {
+                }.getType();
+                newVideoDtoArrayList = gson.fromJson(result.trim(), classType);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            Log.d("Size", "Size of video list : " + newVideoDtoArrayList.size());
+
+            return newVideoDtoArrayList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * API call with POST request for storing Favorite status on server
+     *
+     * @param userId     userId
+     * @param videoId    videoId
+     * @param playListId playListId
+     * @param status     status
+     * @return id
+     * @throws BusinessException Exception
+     */
+    @SuppressWarnings("deprecation")
+    @Override
+    public String postFavoriteStatus(long userId, long videoId, long playListId, boolean status) throws BusinessException {
+
+        FavoritePostData postData = new FavoritePostData();
+        postData.setUserid(userId);
+        postData.setPlayListId(playListId);
+        postData.setVideoId(videoId);
+        postData.setFavStatus(status);
+
+        String postStr;
+        try {
+            BasicHttpParams httpParameters = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(httpParameters, 60000);
+            HttpConnectionParams.setSoTimeout(httpParameters, 60000);
+
+            // create HttpClient
+            HttpClient httpClient = new DefaultHttpClient(httpParameters);
+            InputStream inputStream;
+
+            HttpPost httpPost = new HttpPost(GlobalConstants.FAVORITE_POST_STATUS_URL);
+            httpPost.setHeader("Accept", "application/json");
+            httpPost.setHeader("Content-type", "application/json");
+            httpPost.setHeader("appID", String.valueOf(AppController.getInstance().getApplicationContext().getResources()
+                    .getString(R.string.app_id)));
+            httpPost.setHeader("appVersion", AppController.getInstance().getApplicationContext().getResources()
+                    .getString(R.string.app_version));
+            httpPost.setHeader("deviceType", AppController.getInstance().getApplicationContext().getResources()
+                    .getString(R.string.device_type));
+            if (postData != null) {
+                postStr = new Gson().toJson(postData);
+                Log.d("Json", "Json String For Favorite Status Change : " + postStr);
+                httpPost.setEntity(new StringEntity(postStr, HTTP.UTF_8));
+            }
+            HttpResponse httpResponse = httpClient.execute(httpPost);
+
+            // receive response as inputStream
+            inputStream = httpResponse.getEntity().getContent();
+
+
+            if (inputStream != null) {
+                try {
+                    String result = getStringFromInputStream(inputStream);
+                    Log.d("Result", "result favorite : " + result);
+                    return result;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // convert input stream to string
+
+
+        return null;
+    }
+
+    @Override
+    public String postSharingInfo(String videoId) throws BusinessException {
+
+        try {
+            BasicHttpParams httpParameters = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(httpParameters, 60000);
+            HttpConnectionParams.setSoTimeout(httpParameters, 60000);
+
+            // create HttpClient
+            HttpClient httpClient = new DefaultHttpClient(httpParameters);
+            InputStream inputStream;
+            HttpPost httpPost = new HttpPost(GlobalConstants.SOCIAL_SHARING_INFO + "?videoId=" + videoId);
+            httpPost.setHeader("Accept", "application/json");
+            httpPost.setHeader("Content-type", "application/json");
+            httpPost.setHeader("appID", String.valueOf(AppController.getInstance().getApplicationContext().getResources()
+                    .getString(R.string.app_id)));
+            httpPost.setHeader("appVersion", AppController.getInstance().getApplicationContext().getResources()
+                    .getString(R.string.app_version));
+            httpPost.setHeader("deviceType", AppController.getInstance().getApplicationContext().getResources()
+                    .getString(R.string.device_type));
+            HttpResponse httpResponse = httpClient.execute(httpPost);
+
+            // receive response as inputStream
+            inputStream = httpResponse.getEntity().getContent();
+
+
+            if (inputStream != null) {
+                try {
+                    return getStringFromInputStream(inputStream);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // convert input stream to string
+
+
+        return null;
+    }
+
+    /**
+     * API call with GET request having parameters in QueryString for validating EmailID
+     *
+     * @param emailId emailId
+     * @return emailId
+     * @throws BusinessException Exception
+     */
+    @Override
+    public String validateEmail(String emailId) throws BusinessException {
+        try {
+            APIResponse response;
+            String url = GlobalConstants.VALIDATE_EMAIL_URL + URLEncoder.encode(emailId, "UTF-8");
+            url = url.replaceAll(" ", "%20");
+            String result = doGet(url);
+            Log.d("Response", "Response of url : " + result);
+            Type classType = new TypeToken<APIResponse>() {
+            }.getType();
+            response = gson.fromJson(result.trim(), classType);
+            if (response != null)
+                return response.getReturnStatus();
+            else
+                return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public String validateUsername(String userName) throws BusinessException {
+        try {
+            APIResponse response;
+            String url = GlobalConstants.VALIDATE_USERNAME_URL + URLEncoder.encode(userName, "UTF-8");
+            url = url.replaceAll(" ", "%20");
+            String result = doGet(url);
+            Log.d("Json", "Response of url : " + result);
+            Type classType = new TypeToken<APIResponse>() {
+            }.getType();
+            response = gson.fromJson(result.trim(), classType);
+            if (response != null)
+                return response.getReturnStatus();
+            else
+                return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * API call with GET request, having parameters in QueryString for fetching user data
+     *
+     * @param userId  userId
+     * @param emailId emailId
+     * @return user data
+     * @throws BusinessException Exception
+     */
+    @Override
+    public String getUserData(long userId, String emailId) throws BusinessException {
+        try {
+            String url = GlobalConstants.GET_USER_DATA_URL + "?emailID=" + URLEncoder.encode(emailId, "UTF-8") + "&userID=" + URLEncoder.encode(String.valueOf(userId), "UTF-8");
+            url = url.replaceAll(" ", "%20");
+            String result = doGet(url);
+            Log.d("Json", "Response of getUserData : " + result);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public String changeUserPassword(long userID, String oldPassword, String newPassword) throws BusinessException {
+        try {
+            String url = GlobalConstants.CHANGE_PASSWORD_URL + "?userID=" + URLEncoder.encode(String.valueOf(userID), "UTF-8") + "&oldpass=" + URLEncoder.encode(oldPassword, "UTF-8") + "&newpass=" + URLEncoder.encode(newPassword, "UTF-8");
+            url = url.replaceAll(" ", "%20");
+            return doGet(url);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    @Override
+    public String forgotPassword(String emailId, boolean isResetPassword) throws BusinessException {
+        try {
+            String url = GlobalConstants.FORGOT_PASSWORD_URL + "?ToEmail=" + emailId + "&isForPasswordReset=" + isResetPassword;
+            url = url.replaceAll(" ", "%20");
+            return doGet(url);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public String confirmPassword(long userID, String newPassword) throws BusinessException {
+        try {
+            String url = GlobalConstants.CONFIRM_PASSWORD_URL + "?userID=" + URLEncoder.encode(String.valueOf(userID), "UTF-8") + "&newpass=" + newPassword;
+            url = url.replaceAll(" ", "%20");
+            return doGet(url);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public String socialLoginExits(String tokenId, String email) throws BusinessException {
+        try {
+            String url = GlobalConstants.SOCIAL_LOGIN_EXIST_URL + "?socialLoginToken=" + URLEncoder.encode(String.valueOf(tokenId), "UTF-8") + "&emailID=" + email;
+            url = url.replaceAll(" ", "%20");
+            return doGet(url);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    /**
+     * API call for updating user data by POST request for updating user data on server
+     *
+     * @param updatedUser updatedUser
+     * @return response
+     * @throws BusinessException Exception
+     */
+    @Override
+    public String updateUserData(User updatedUser) throws BusinessException {
+        BasicHttpParams httpParameters = new BasicHttpParams();
+        HttpConnectionParams.setConnectionTimeout(httpParameters, 60000);
+        HttpConnectionParams.setSoTimeout(httpParameters, 60000);
+
+        // create HttpClient
+        HttpClient httpClient = new DefaultHttpClient(httpParameters);
+        InputStream inputStream = null;
+
+        HttpPost httpPost = new HttpPost(GlobalConstants.POST_UPDATED_USER_DATA_URL);
+        httpPost.setHeader("Accept", "application/json");
+        httpPost.setHeader("Content-type", "application/json");
+        httpPost.setHeader("appID", String.valueOf(AppController.getInstance().getApplicationContext().getResources()
+                .getString(R.string.app_id)));
+        httpPost.setHeader("appVersion", AppController.getInstance().getApplicationContext().getResources()
+                .getString(R.string.app_version));
+        httpPost.setHeader("deviceType", AppController.getInstance().getApplicationContext().getResources()
+                .getString(R.string.device_type));
+        String postStr;
+        try {
+            if (updatedUser != null) {
+                postStr = new Gson().toJson(updatedUser);
+
+                Log.d("Json", "Json String For POST User Data : " + postStr);
+                httpPost.setEntity(new StringEntity(postStr, HTTP.UTF_8));
+            }
+            HttpResponse httpResponse = httpClient.execute(httpPost);
+
+            // receive response as inputStream
+            inputStream = httpResponse.getEntity().getContent();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // convert input stream to string
+        if (inputStream != null) {
+            try {
+                return getStringFromInputStream(inputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * API call with GET request having parameters in QueryString for validating user
+     *
+     * @param emailId  emailId
+     * @param password password
+     * @return response
+     * @throws BusinessException Exception
+     */
+    @Override
+    public String validateUserCredentials(String emailId, String password) throws BusinessException {
+        try {
+            String url = GlobalConstants.VALIDATE_USER_CREDENTIALS_URL + "?emailID=" + emailId + "&pass=" + password;
+            url = url.replaceAll(" ", "%20");
+            String result = doGet(url);
+            Log.d("Json", "Response of url : " + result);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Request for storing User data on server with POST request
+     *
+     * @param user user
+     * @return response
+     * @throws BusinessException Exception
+     */
+    @Override
+    public String postUserData(User user) throws BusinessException {
+        BasicHttpParams httpParameters = new BasicHttpParams();
+        HttpConnectionParams.setConnectionTimeout(httpParameters, 60000);
+        HttpConnectionParams.setSoTimeout(httpParameters, 60000);
+
+        // create HttpClient
+        HttpClient httpClient = new DefaultHttpClient(httpParameters);
+        InputStream inputStream = null;
+
+        HttpPost httpPost = new HttpPost(GlobalConstants.POST_USER_DATA_URL);
+        httpPost.setHeader("Accept", "application/json");
+        httpPost.setHeader("Content-type", "application/json");
+        httpPost.setHeader("appID", String.valueOf(AppController.getInstance().getApplicationContext().getResources()
+                .getString(R.string.app_id)));
+        httpPost.setHeader("appVersion", AppController.getInstance().getApplicationContext().getResources()
+                .getString(R.string.app_version));
+        httpPost.setHeader("deviceType", AppController.getInstance().getApplicationContext().getResources()
+                .getString(R.string.device_type));
+        String postStr;
+        try {
+            if (user != null) {
+                postStr = new Gson().toJson(user);
+
+                Log.d("Json", "Json String For POST User Data : " + postStr);
+                httpPost.setEntity(new StringEntity(postStr, HTTP.UTF_8));
+            }
+            HttpResponse httpResponse = httpClient.execute(httpPost);
+
+            // receive response as inputStream
+            inputStream = httpResponse.getEntity().getContent();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // convert input stream to string
+        if (inputStream != null) {
+            try {
+                return getStringFromInputStream(inputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Request for storing User data on server with POST request
+     *
+     * @param mailChimpData mailChimpData
+     * @return response
+     * @throws BusinessException Exception
+     */
+    @Override
+    public String postMailChimpData(MailChimpData mailChimpData) throws BusinessException {
+        BasicHttpParams httpParameters = new BasicHttpParams();
+        HttpConnectionParams.setConnectionTimeout(httpParameters, 60000);
+        HttpConnectionParams.setSoTimeout(httpParameters, 60000);
+
+        // create HttpClient
+        HttpClient httpClient = new DefaultHttpClient(httpParameters);
+        InputStream inputStream = null;
+
+        HttpPost httpPost = new HttpPost(GlobalConstants.POST_MAIL_CHIMP_DATA);
+        httpPost.setHeader("Accept", "application/json");
+        httpPost.setHeader("Content-type", "application/json");
+        httpPost.setHeader("appID", String.valueOf(AppController.getInstance().getApplicationContext()
+                .getResources().getString(R.string.app_id)));
+        httpPost.setHeader("appVersion", AppController.getInstance().getApplicationContext().getResources()
+                .getString(R.string.app_version));
+        httpPost.setHeader("deviceType", AppController.getInstance().getApplicationContext().getResources()
+                .getString(R.string.device_type));
+        String postStr;
+        try {
+            if (mailChimpData != null) {
+                postStr = new Gson().toJson(mailChimpData);
+                Log.d("Json", "Json String For POST User Data : " + postStr);
+                httpPost.setEntity(new StringEntity(postStr, HTTP.UTF_8));
+            }
+            HttpResponse httpResponse = httpClient.execute(httpPost);
+
+            // receive response as inputStream
+            inputStream = httpResponse.getEntity().getContent();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // convert input stream to string
+        if (inputStream != null) {
+            try {
+                return getStringFromInputStream(inputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
+    }
+
+
+    /**
+     * API call with GET request having parameters in QueryString
+     *
+     * @param emailId    emailId
+     * @param flagStatus flagStatus
+     * @return validation response
+     * @throws BusinessException Exception
+     */
+    @Override
+    public String validateSocialLogin(String emailId, String flagStatus) throws BusinessException {
+        try {
+            String url = GlobalConstants.VALIDATE_SOCIAL_LOGIN_URL + "?emailID=" + emailId + "&flagStatus=" + flagStatus;
+            url = url.replaceAll(" ", "%20");
+            String result = doGet(url);
+            Log.d("Json", "Response of url : " + result);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public String sendPushNotificationRegistration(String url, String regId, String deviceId,
+                   boolean isAllowed,long userId) throws BusinessException {
+        Log.d("Json", "Url for Push Notification : " + url);
+        NotificationData postObj = new NotificationData();
+        postObj.setRegId(regId);
+        postObj.setDeviceId(deviceId);
+        postObj.setDeviceType(AppController.getInstance().getApplicationContext().getResources()
+                .getString(R.string.device_type));
+        postObj.setAppName(AppController.getInstance().getApplicationContext().getResources()
+                .getString(R.string.app_name));
+        postObj.setAppVersion(AppController.getInstance().getApplicationContext().getResources()
+                .getString(R.string.app_version));
+        postObj.setAppID(Integer.parseInt(AppController.getInstance().getApplicationContext().getResources()
+                .getString(R.string.app_id)));
+        postObj.setStatus(String.valueOf(isAllowed));
+        postObj.setUserId(userId);
+
+        BasicHttpParams httpParameters = new BasicHttpParams();
+        HttpConnectionParams.setConnectionTimeout(httpParameters, 60000);
+        HttpConnectionParams.setSoTimeout(httpParameters, 60000);
+
+        // create HttpClient
+        HttpClient httpClient = new DefaultHttpClient(httpParameters);
+        InputStream inputStream = null;
+
+        HttpPost httpPost = new HttpPost(url);
+        httpPost.setHeader("Accept", "application/json");
+        httpPost.setHeader("Content-type", "application/json");
+
+        String postStr;
+        try {
+            if (postObj != null) {
+                postStr = new Gson().toJson(postObj);
+                Log.d("Json", "Json String For Notification Registration : " + postStr);
+                httpPost.setEntity(new StringEntity(postStr, HTTP.UTF_8));
+            }
+            HttpResponse httpResponse = httpClient.execute(httpPost);
+
+            // receive response as inputStream
+            inputStream = httpResponse.getEntity().getContent();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // convert input stream to string
+        if (inputStream != null) {
+            try {
+                return getStringFromInputStream(inputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public String createTaskOnAsana(String nameAndEmail, String taskNotes, String tagId) throws BusinessException {
+        Log.d("URL", "Url for Task Creation : " + GlobalConstants.ASANA_TASK_API_URL);
+
+        AssigneeDto assigneeDto = new AssigneeDto();
+        if (tagId.equalsIgnoreCase(AppController.getInstance().getApplicationContext().getResources()
+                .getString(R.string.feedback_tag_id))) {
+            assigneeDto.setId(Long.parseLong(AppController.getInstance().getApplicationContext().getResources()
+                    .getString(R.string.feedback_assignee_id)));
+            assigneeDto.setName(GlobalConstants.FEEDBACK_ASSIGNEE_NAME);
+        } else if (tagId.equalsIgnoreCase(AppController.getInstance().getApplicationContext().getResources()
+                .getString(R.string.clip_request_tag_id))) {
+            assigneeDto.setId(Long.parseLong(AppController.getInstance().getApplicationContext().getResources()
+                    .getString(R.string.clip_request_assignee_id)));
+            assigneeDto.setName(GlobalConstants.CLIP_REQUEST_ASSIGNEE_NAME);
+        } else if (tagId.equalsIgnoreCase(AppController.getInstance().getApplicationContext().getResources()
+                .getString(R.string.support_tag_id)) || tagId.equalsIgnoreCase(AppController.getInstance().getApplicationContext().getResources()
+                .getString(R.string.no_login_tag_id))) {
+            assigneeDto.setId(Long.parseLong(AppController.getInstance().getApplicationContext().getResources()
+                    .getString(R.string.support_assignee_id)));
+            assigneeDto.setName(GlobalConstants.SUPPORT_ASSIGNEE_NAME);
+        }
+
+//        ArrayList<TagsDto> tagsDtoArrayList = new ArrayList<>();
+//        TagsDto tagsDto = new TagsDto();
+//        tagsDto.setId(Long.parseLong(tas);
+//        tagsDto.setName("v2.0");
+//        tagsDtoArrayList.add(tagsDto);
+
+        TaskDto postObj = new TaskDto();
+        postObj.setName(nameAndEmail);
+        postObj.setNotes(taskNotes);
+        postObj.setAssignee_status(GlobalConstants.ASSIGNEE_STATUS);
+        postObj.setAssignee(assigneeDto);
+        postObj.setWorkspace(Long.parseLong(AppController.getInstance().getApplicationContext().getResources()
+                .getString(R.string.workspace_id)));
+        postObj.setProjects(AppController.getInstance().getApplicationContext().getResources()
+                .getString(R.string.project_id));
+       // postObj.setTags(tagsDtoArrayList);
+        BasicHttpParams httpParameters = new BasicHttpParams();
+        HttpConnectionParams.setConnectionTimeout(httpParameters, 60000);
+        HttpConnectionParams.setSoTimeout(httpParameters, 60000);
+
+        // create HttpClient
+        HttpClient httpClient = new DefaultHttpClient(httpParameters);
+        InputStream inputStream = null;
+
+        HttpPost httpPost = new HttpPost(GlobalConstants.ASANA_TASK_API_URL);
+
+        //API key for workspace along with : which represents password which is empty
+        String base64EncodedCredentials = "Basic " + Base64.encodeToString(
+                (AppController.getInstance().getApplicationContext().getResources()
+                        .getString(R.string.asana_workspace_access_token) + ":").getBytes(),
+                Base64.NO_WRAP);
+
+        Log.d("Authorization", "Authorization : " + base64EncodedCredentials);
+
+        httpPost.setHeader("Authorization", base64EncodedCredentials);
+        httpPost.setHeader("Accept", "application/json");
+        httpPost.setHeader("Content-type", "application/json");
+
+        String postStr;
+        try {
+            if (postObj != null) {
+                postStr = new Gson().toJson(postObj);
+                String data = "{\"data\":" + postStr + "}";
+
+                StringEntity stringEntity = new StringEntity(data);
+                Log.d("Json", "Json String For Task Creation : " + data);
+                httpPost.setEntity(stringEntity);
+            }
+
+            HttpResponse httpResponse = httpClient.execute(httpPost);
+
+            // receive response as inputStream
+            inputStream = httpResponse.getEntity().getContent();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // convert input stream to string
+        if (inputStream != null) {
+            try {
+                String result = getStringFromInputStream(inputStream);
+                Log.d("Asana", "$$$$$$$$$$ Response from Asana for Task creation : " + result);
+                return result;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public String createTagForAsanaTask(String tagId, String taskId) throws BusinessException {
+        Log.d("URL", "Url for Task Tag Creation : " + GlobalConstants.ASANA_TAG_API_URL);
+
+        BasicHttpParams httpParameters = new BasicHttpParams();
+        HttpConnectionParams.setConnectionTimeout(httpParameters, 60000);
+        HttpConnectionParams.setSoTimeout(httpParameters, 60000);
+
+        List<NameValuePair> nameValuePairs = new ArrayList<>(1);
+
+        nameValuePairs.add(new BasicNameValuePair("tag", tagId));
+
+        // create HttpClient
+        HttpClient httpClient = new DefaultHttpClient(httpParameters);
+        InputStream inputStream = null;
+
+        HttpPost httpPost = new HttpPost(GlobalConstants.ASANA_TAG_API_URL + taskId + "/addTag");
+
+        //API key for workspace along with : which represents password which is empty
+        String base64EncodedCredentials = "Basic " + Base64.encodeToString(
+                (AppController.getInstance().getApplicationContext().getResources()
+                        .getString(R.string.asana_workspace_access_token) + ":").getBytes(),
+                Base64.NO_WRAP);
+
+        Log.d("Authorization", "Authorization : " + base64EncodedCredentials);
+
+        httpPost.setHeader("Authorization", base64EncodedCredentials);
+        httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded");
+        try {
+            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            HttpResponse httpResponse = httpClient.execute(httpPost);
+            // receive response as inputStream
+            inputStream = httpResponse.getEntity().getContent();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // convert input stream to string
+        if (inputStream != null) {
+            try {
+                String result = getStringFromInputStream(inputStream);
+                Log.d("Asana", "$$$$$$$$$$ Response from Asana for Tag creation : " + result);
+                return result;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
+    }
+
+    //Tab Columns
+    private static final String KEY_TAB_ID = "tabId";
+    private static final String KEY_TAB_NAME = "tabName";
+    private static final String KEY_TAB_POSITION = "tabIndexPosition";
+    private static final String KEY_TAB_CREATED = "tabCreated";
+    private static final String KEY_TAB_MODIFIED = "tabModified";
+    private static final String KEY_TAB_DATA_CREATED = "tabDataCreated";
+    private static final String KEY_TAB_DATA_MODIFIED = "tabDataModified";
+    private static final String KEY_TAB_KEYWORD = "tabKeyword";
+    private static final String KEY_TAB_DISPLAY_TYPE = "tabDisplayType";
+
+    //Banner Columns
+    private static final String KEY_BANNER_ID = "tabBannerId";
+    private static final String KEY_BANNER_NAME = "tabBannerName";
+    private static final String KEY_BANNER_URL = "bannerURL";
+    private static final String KEY_IS_BANNER_ACTIVATED = "isBannerActive";
+    private static final String KEY_IS_HYPER_LINK_AVAILABLE = "isHyperlinkActive";
+    private static final String KEY_ACTION_URL = "bannerActionURL";
+    private static final String KEY_BANNER_CREATED = "bannerCreated";
+    private static final String KEY_BANNER_MODIFIED = "bannerModified";
+
+    @Override
+    public ArrayList<TabBannerDTO> getAllTabBannerData() throws BusinessException {
+        ArrayList<TabBannerDTO> listTabBannerData = new ArrayList<>();
+        try {
+            String result = doGet(GlobalConstants.GET_ALL_TAB_BANNER_DATA_URL);
+            if (result == null) {
+                return null;
+            }
+
+            Log.d("banner", "Response for Banner Tab Data : " + result);
+            JSONArray jsonArray = new JSONArray(result);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+
+                listTabBannerData.add(setTabBannerDtoValues(obj));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listTabBannerData;
+    }
+
+    private TabBannerDTO setTabBannerDtoValues(JSONObject obj) {
+        TabBannerDTO tabBannerDTO = new TabBannerDTO();
+
+        try {
+            tabBannerDTO.setTabId(!obj.isNull(KEY_TAB_ID) ? obj.getLong(KEY_TAB_ID) : 0);
+            tabBannerDTO.setTabName(!obj.isNull(KEY_TAB_NAME) ? obj.getString(KEY_TAB_NAME) : "");
+            tabBannerDTO.setTabIndexPosition(!obj.isNull(KEY_TAB_POSITION) ? obj.getLong(KEY_TAB_POSITION) : 0);
+            tabBannerDTO.setTabCreated(!obj.isNull(KEY_TAB_CREATED) ? Long.parseLong(obj.getString(KEY_TAB_CREATED)) : 0);
+            tabBannerDTO.setTabModified(!obj.isNull(KEY_TAB_MODIFIED) ? Long.parseLong(obj.getString(KEY_TAB_MODIFIED)) : 0);
+            tabBannerDTO.setTabDataCreated(!obj.isNull(KEY_TAB_DATA_CREATED) ? Long.parseLong(obj.getString(KEY_TAB_DATA_CREATED)) : 0);
+            tabBannerDTO.setTabDataModified(!obj.isNull(KEY_TAB_DATA_MODIFIED) ? Long.parseLong(obj.getString(KEY_TAB_DATA_MODIFIED)) : 0);
+            tabBannerDTO.setTabKeyword(!obj.isNull(KEY_TAB_KEYWORD) ? obj.getString(KEY_TAB_KEYWORD) : "");
+            tabBannerDTO.setTabDisplayType(!obj.isNull(KEY_TAB_DISPLAY_TYPE) ? obj.getString(KEY_TAB_DISPLAY_TYPE) : "");
+
+            tabBannerDTO.setTabBannerId(!obj.isNull(KEY_BANNER_ID) ? obj.getLong(KEY_BANNER_ID) : 0);
+            tabBannerDTO.setTabBannerName(!obj.isNull(KEY_BANNER_NAME) ? obj.getString(KEY_BANNER_NAME) : "");
+
+            tabBannerDTO.setBannerURL(!obj.isNull(KEY_BANNER_URL) ? obj.getString(KEY_BANNER_URL) : "");
+            tabBannerDTO.setBannerURL(tabBannerDTO.getBannerURL().replace(" ", "%20"));
+
+            tabBannerDTO.setIsBannerActive(!obj.isNull(KEY_IS_BANNER_ACTIVATED) && obj.getBoolean(KEY_IS_BANNER_ACTIVATED));
+            tabBannerDTO.setIsHyperlinkActive(!obj.isNull(KEY_IS_HYPER_LINK_AVAILABLE) && obj.getBoolean(KEY_IS_HYPER_LINK_AVAILABLE));
+            tabBannerDTO.setBannerActionURL(!obj.isNull(KEY_ACTION_URL) ? obj.getString(KEY_ACTION_URL) : "");
+            tabBannerDTO.setBannerCreated(!obj.isNull(KEY_BANNER_CREATED) ? Long.parseLong(obj.getString(KEY_BANNER_CREATED)) : 0);
+            tabBannerDTO.setBannerModified(!obj.isNull(KEY_BANNER_MODIFIED) ? Long.parseLong(obj.getString(KEY_BANNER_MODIFIED)) : 0);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return tabBannerDTO;
+    }
+
+    @Override
+    public TabBannerDTO getTabBannerDataById(long bannerId, String tabKeyword, long tabId) throws BusinessException {
+        try {
+            String result = doGet(GlobalConstants.GET_TAB_BANNER_DATA_URL + "?tab_id=" + tabId + "&tab_keyword=" + tabKeyword);
+
+            Log.d("Banner Tab", "Response of Tab Banner Data : " + result);
+            JSONArray jsonArray = new JSONArray(result);
+            TabBannerDTO tabBannerDTO = null;
+            if (jsonArray != null) {
+                if (jsonArray.length() == 1)
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject obj = jsonArray.getJSONObject(i);
+                        tabBannerDTO = setTabBannerDtoValues(obj);
+                    }
+            }
+            return tabBannerDTO;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private String getStringFromInputStream(InputStream is)
+            throws IOException {
+
+        BufferedReader br = null;
+        StringBuilder sb = new StringBuilder();
+
+        String line;
+        try {
+
+            br = new BufferedReader(new InputStreamReader(is));
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return sb.toString();
+
+    }
+
+
+    private String getData(String serverUrl) {
+        URL url;
+        HttpURLConnection connection = null;
+        try {
+            Log.i("URL", serverUrl);
+            //Create connection
+            url = new URL(serverUrl);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Content-Type",
+                    "application/json");
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setRequestProperty("appID", String.valueOf(AppController.getInstance()
+                    .getApplicationContext().getResources()
+                    .getString(R.string.app_id)));
+            connection.setRequestProperty("appVersion", AppController.getInstance()
+                    .getApplicationContext().getResources()
+                    .getString(R.string.app_version));
+            connection.setRequestProperty("deviceType", AppController.getInstance()
+                    .getApplicationContext().getResources()
+                    .getString(R.string.device_type));
+            connection.setConnectTimeout(60000);
+            connection.setReadTimeout(60000);
+            connection.connect();
+            //Get Response
+            InputStream is = connection.getInputStream();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+            String line;
+            String result = "";
+            while ((line = bufferedReader.readLine()) != null)
+                result += line;
+
+            is.close();
+            return result;
+        } catch (Exception e) {
+            Log.e("Exception ", e.toString());
+            return null;
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+    }
+
+    private String doGet(String serverUrl) {
+        URL url;
+        HttpURLConnection connection = null;
+        try {
+            Log.i("URL", serverUrl);
+            //Create connection
+            url = new URL(serverUrl);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Content-Type",
+                    "application/json");
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setRequestProperty("appID", String.valueOf(AppController.getInstance()
+                    .getApplicationContext().getResources()
+                    .getString(R.string.app_id)));
+            connection.setRequestProperty("appVersion", AppController.getInstance()
+                    .getApplicationContext().getResources()
+                    .getString(R.string.app_version));
+            connection.setRequestProperty("deviceType", AppController.getInstance()
+                    .getApplicationContext().getResources()
+                    .getString(R.string.device_type));
+            connection.setConnectTimeout(25000);
+            connection.setReadTimeout(25000);
+            connection.connect();
+            //Get Response
+            InputStream is = connection.getInputStream();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+            String line;
+            String result = "";
+            while ((line = bufferedReader.readLine()) != null)
+                result += line;
+
+            is.close();
+            return result;
+        } catch (Exception e) {
+            Log.e("Exception ", e.toString());
+            return null;
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public String doGet1(String url) {
+
+        try {
+            Log.d("URL", url);
+            BasicHttpParams httpParameters = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(httpParameters, 600000);
+            HttpConnectionParams.setSoTimeout(httpParameters, 600000);
+
+            // create HttpClient
+            HttpClient httpClient = new DefaultHttpClient(httpParameters);
+            InputStream inputStream = null;
+            // make GET request to the given URL
+            HttpGet httpget = new HttpGet(url);
+            httpget.setHeader("Accept", "application/json"); // or
+            // application/json request
+            httpget.setHeader("Content-Type", "application/json");
+            httpget.setHeader("appID", String.valueOf(AppController.getInstance()
+                    .getApplicationContext().getResources()
+                    .getString(R.string.app_id)));
+            httpget.setHeader("appVersion", AppController.getInstance()
+                    .getApplicationContext().getResources()
+                    .getString(R.string.app_version));
+            httpget.setHeader("deviceType", AppController.getInstance()
+                    .getApplicationContext().getResources()
+                    .getString(R.string.device_type));
+            try {
+                HttpResponse httpResponse = httpClient.execute(httpget);
+                // receive response as inputStream
+                inputStream = httpResponse.getEntity().getContent();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            // convert input stream to string
+            if (inputStream != null) {
+                try {
+                    return getStringFromInputStream(inputStream);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+}
+

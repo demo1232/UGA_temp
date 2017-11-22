@@ -15,7 +15,7 @@
         <attr name="border_width" format="dimension" />
         <attr name="border_color" format="color" />
     </declare-styleable>-->
-	<declare-styleable name="CircularSeekBar">
+    <declare-styleable name="CircularSeekBar">
         <!-- <attr name="progress" format="integer"></attr> -->
         <attr name="max" format="integer"></attr>
         <attr name="move_outside_circle" format="boolean"></attr>
@@ -49,7 +49,7 @@
         <attr name="siRadius" format="dimension" />
         <!--BubbleImageView-->
         <!--<attr name="siArrowPosition"/>-->
-        <attr name="siTriangleHeight" format="dimension"/>
+        <attr name="siTriangleHeight" format="dimension" />
         <!--PorterImageView-->
         <attr name="siShape" format="integer|reference" />
         <!--ShaderImageView-->
@@ -95,12 +95,23 @@
         <attr name="cpv_animDuration" format="integer" />
         <attr name="cpv_animSwoopDuration" format="integer" />
         <attr name="cpv_animSyncDuration" format="integer" />
-        <attr name="cpv_color" format="color"/>
-        <attr name="cpv_thickness" format="dimension"/>
+        <attr name="cpv_color" format="color" />
+        <attr name="cpv_thickness" format="dimension" />
         <attr name="cpv_indeterminate" format="boolean" />
         <attr name="cpv_animAutostart" format="boolean" />
         <attr name="cpv_animSteps" format="integer" />
         <attr name="cpv_startAngle" format="float" />
+    </declare-styleable>
+
+    <!--used in pull to refresh-->
+    <declare-styleable name="PullRefreshLayout">
+        <attr name="refreshType" format="enum">
+            <enum name="material" value="0" />
+            <enum name="circles" value="1" />
+            <enum name="water_drop" value="2" />
+            <enum name="ring" value="3" />
+        </attr>
+        <attr name="refreshColors" format="reference" />
     </declare-styleable>
 
 </resources>
